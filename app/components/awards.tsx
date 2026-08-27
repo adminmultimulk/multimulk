@@ -1,0 +1,49 @@
+import Image from "next/image";
+import { AnimatedTitle } from "./animated-title";
+import { Container } from "./container";
+import { awards } from "@/app/lib/content";
+import { Diamond } from "./icons";
+
+export function Awards() {
+  return (
+    <section className="bg-white pb-[72px] lg:pb-24">
+      <Container>
+        <div className="flex flex-col items-center text-center">
+          <p className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-gold">
+            {awards.eyebrow}
+          </p>
+          <h2 className="mt-4 font-display text-[32px] leading-[1.28] text-ink sm:text-[40px]">
+            <AnimatedTitle align="center" variant="section">
+              {awards.heading}
+            </AnimatedTitle>
+          </h2>
+          <Diamond className="mt-5 w-3 text-ink/45" />
+        </div>
+
+        <ul className="mt-14 grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-6">
+          {awards.items.map((item, i) => (
+            <li
+              key={`${item.logo}-${i}`}
+              className="flex min-w-0 flex-col items-center"
+            >
+              <div className="flex h-12 w-full items-center justify-center">
+                <Image
+                  src={item.logo}
+                  alt=""
+                  width={140}
+                  height={item.height}
+                  unoptimized={item.logo.endsWith(".svg")}
+                  style={{ height: item.height, width: "auto" }}
+                  className="max-w-full object-contain"
+                />
+              </div>
+              <p className="mt-5 text-center text-[9px] font-bold uppercase leading-[14px] tracking-[0.05em] text-gold">
+                {item.caption}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+  );
+}

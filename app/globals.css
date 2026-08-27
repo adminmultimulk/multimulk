@@ -1,26 +1,182 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Multi Mulk brand palette, sampled from the logo. */
+  --color-ink: #222a2c;
+  --color-forest: #12402a;
+  --color-forest-deep: #071f13;
+  --color-gold: #b38a1e;
+  --color-gold-light: #cfa53c;
+  --color-sand: #e3d9be;
+  --color-mist: #edf2ee;
+  --color-cream: #f5f4f2;
+
+  /* The Seasons, self-hosted (see app/layout.tsx). Georgia leads the
+     fallbacks because it covers the Cyrillic The Seasons lacks, and is a
+     serif — so the one headline that needs it stays in the same voice. */
+  --font-display: var(--font-the-seasons), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Display type on this brand is set light and slightly open. The Seasons is a
+ * high-contrast serif, so it runs visually larger and tighter than the Inter it
+ * replaced — the tracking below is eased out a touch to compensate.
+ */
+.font-display {
+  font-weight: 300;
+  letter-spacing: 0.005em;
+}
+
+/* Mega-menu contents rise into place; children stagger via animation-delay. */
+@keyframes menu-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-menu-rise {
+  animation: menu-rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Select menus open with a short nudge from whichever edge they hang off. */
+@keyframes select-open {
+  from {
+    opacity: 0;
+    transform: translateY(var(--select-shift, -6px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-select-open {
+  animation: select-open 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/*
+ * Media Centre hero: the active pager bar fills across the slide's dwell time,
+ * so the pager also reads as a countdown. Duration is set inline by the JS.
+ */
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-hero-progress {
+  animation: hero-progress linear both;
+}
+
+/*
+ * Retreat imagery is uncovered left-to-right by a curtain, with a bright bar
+ * riding the leading edge — the reveal used on the resort list.
+ */
+@keyframes image-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes wipe-edge {
+  from {
+    left: 0;
+    opacity: 1;
+  }
+  to {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-image-wipe {
+  animation: image-wipe 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-wipe-edge {
+  animation: wipe-edge 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/*
+ * The retreats section opens with a curtain: the stage pins for the length of
+ * this runway while a clip-path rectangle widens over the island backdrop. The
+ * overhang past one viewport is the scrub distance, so the runway's height sets
+ * how long the opening takes.
+ */
+.retreat-runway {
+  height: 170svh;
+}
+
+/*
+ * Türkiye portfolio: the image/list pair pins while this runway is consumed,
+ * so scrolling pages through the properties. One extra viewport-chunk per
+ * remaining name. Phones and reduced-motion skip the pin and just tap.
+ */
+.turkiye-runway {
+  height: auto;
+}
+
+@media (min-width: 1024px) {
+  .turkiye-runway {
+    height: calc(100svh + var(--turkiye-holds, 5) * 60svh);
+  }
+}
+
+@media (max-width: 1023px) {
+  .turkiye-runway-pin {
+    position: static;
+  }
+}
+
+/* Nothing to scrub through when motion is unwelcome: open it and move on. */
+@media (prefers-reduced-motion: reduce) {
+  .retreat-runway {
+    height: 100svh;
+  }
+
+  .turkiye-runway {
+    height: auto;
+  }
+
+  .turkiye-runway-pin {
+    position: static;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
