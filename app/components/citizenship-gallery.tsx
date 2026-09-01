@@ -32,8 +32,13 @@ export async function CitizenshipGallery({
         />
       </Container>
 
-      {/* Full-bleed past the container, so the strip runs to both edges. */}
-      <div className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 [scrollbar-width:none] sm:px-10 lg:mt-16 lg:px-[72px] [&::-webkit-scrollbar]:hidden">
+      {/* Full-bleed past the container, so the strip runs to both edges.
+
+          `scroll-px-*` has to mirror `px-*`. Snap alignment is measured against
+          the scrollport, not the padding box, so without it the first card
+          snaps flush to the viewport edge and swallows the page gutter — which
+          it did, in both directions. */}
+      <div className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 pb-4 [scrollbar-width:none] sm:scroll-px-10 sm:px-10 lg:mt-16 lg:scroll-px-[72px] lg:px-[72px] [&::-webkit-scrollbar]:hidden">
         {programme.gallery.map((shot, i) => (
           <figure
             key={`${shot.image}-${i}`}

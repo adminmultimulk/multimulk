@@ -96,16 +96,28 @@ export async function CitizenshipIndustry({
                 }`}
               >
                 {placeLabel(t, entry.place)}
+                {/* What the gold says, for a reader who cannot see it. The
+                    visible equivalent is the legend below, said once — the
+                    Caribbean page highlights five of six entries, and a label
+                    repeated under nearly every one stops carrying meaning. */}
+                {here ? (
+                  <span className="sr-only"> — {copy.thisProgramme}</span>
+                ) : null}
               </p>
-              {here ? (
-                <p className="mt-1.5 text-[9px] uppercase tracking-[0.08em] text-gold">
-                  {copy.thisProgramme}
-                </p>
-              ) : null}
             </li>
           );
         })}
       </ol>
+
+      <Container>
+        <p
+          aria-hidden="true"
+          className="mt-2 flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.1em] text-ink/55"
+        >
+          <span className="block h-2 w-2 rounded-full bg-gold" />
+          {copy.thisProgramme}
+        </p>
+      </Container>
     </section>
   );
 }
