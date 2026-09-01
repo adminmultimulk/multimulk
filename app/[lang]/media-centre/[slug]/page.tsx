@@ -7,28 +7,35 @@ import { Container } from "@/app/components/container";
 import { MediaNewsletter } from "@/app/components/media-newsletter";
 import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
+import { alternatesFor, getDictionary, getLocale } from "@/app/lib/i18n";
+import { formatDate } from "@/app/lib/i18n/format";
 import {
-  articlePage,
-  formatArticleDate,
   getArticle,
   mediaArticles,
   relatedArticles,
+  resolveArticle,
 } from "@/app/lib/media";
+import { locales } from "@/app/lib/i18n/config";
 
 export function generateStaticParams() {
-  return mediaArticles.map((article) => ({ slug: article.slug }));
+  return locales.flatMap((lang) =>
+    mediaArticles.map((article) => ({ lang, slug: article.slug })),
+  );
 }
 
 export async function generateMetadata({
   params,
-}: PageProps<"/media-centre/[slug]">): Promise<Metadata> {
+}: PageProps<"/[lang]/media-centre/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
-  if (!article) return { title: "Article | Multi Mulk" };
+  const t = await getDictionary();
+  const source = getArticle(slug);
+  if (!source) return { title: t.meta.articleFallback };
 
+  const article = resolveArticle(source, t.articles.copy[slug]);
   return {
     title: `${article.title} | Multi Mulk`,
     description: article.body[0],
+    alternates: await alternatesFor(`/media-centre/${slug}`),
     openGraph: {
       title: article.title,
       description: article.body[0],
@@ -41,11 +48,14 @@ export async function generateMetadata({
 
 export default async function ArticlePage({
   params,
-}: PageProps<"/media-centre/[slug]">) {
+}: PageProps<"/[lang]/media-centre/[slug]">) {
   const { slug } = await params;
-  const article = getArticle(slug);
-  if (!article) notFound();
+  const source = getArticle(slug);
+  if (!source) notFound();
 
+  const locale = await getLocale();
+  const t = await getDictionary(locale);
+  const article = resolveArticle(source, t.articles.copy[slug]);
   const related = relatedArticles(slug);
 
   return (
@@ -81,15 +91,21 @@ export default async function ArticlePage({
                 {/* Meta sits tight under the headline, as one block with the
                     standfirst — the design leaves no gap between them. */}
                 <p className="mt-[14.4px] flex flex-wrap items-center gap-x-[7.2px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink">
-                  <span className="text-ink/60">{articlePage.categoryLabel}</span>
-                  <span>{article.category}</span>
-                  <span className="text-ink/60">{articlePage.publishedLabel}</span>
-                  <time dateTime={article.date}>
-                    {formatArticleDate(article.date)}
+                  <span className="text-ink/60">
+                    {t.media.article.categoryLabel}
+                  </span>
+                  <span>{t.articles.categories[article.category]}</span>
+                  <span className="text-ink/60">
+                    {t.media.article.publishedLabel}
+                  </span>
+                  <time className="num" dateTime={article.date}>
+                    {formatDate(locale, article.date)}
                   </time>
                   {article.source ? (
                     <>
-                      <span className="text-ink/60">{articlePage.sourceLabel}</span>
+                      <span className="text-ink/60">
+                        {t.media.article.sourceLabel}
+                      </span>
                       <span>{article.source}</span>
                     </>
                   ) : null}
@@ -108,14 +124,14 @@ export default async function ArticlePage({
                     rel="noreferrer"
                     className="mt-[28.8px] inline-block rounded-full bg-ink px-[28.8px] py-3 text-[13.8px] text-white transition-colors hover:bg-forest"
                   >
-                    {articlePage.readMore}
+                    {t.common.readMore}
                   </a>
                 ) : null}
               </article>
 
               {related.length ? (
                 <aside>
-                  <h2 className="sr-only">{articlePage.relatedHeading}</h2>
+                  <h2 className="sr-only">{t.media.article.relatedHeading}</h2>
                   <ul className="grid gap-[28.8px] sm:grid-cols-2 lg:grid-cols-1">
                     {related.map((item) => (
                       <li key={item.slug}>

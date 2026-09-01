@@ -3,6 +3,11 @@
  * /media-centre, the article pages at /media-centre/<slug>, and the
  * newsletter band that closes both.
  *
+ * The articles below are the English source. Headlines and bodies are staged
+ * for translation: a language supplies whatever it has under
+ * `dictionary.articles.copy[slug]` and anything missing falls back to the text
+ * here — see `resolveArticle`.
+ *
  * This is the single source of truth for articles — the home page's "Latest
  * Articles" strip takes the four most recent from here (see content.ts), and
  * every article link on the site resolves against a slug in this file.
@@ -11,6 +16,12 @@
  * photography are stand-ins pending Multi Mulk's real press archive. See the
  * note at the top of content.ts.
  */
+
+import {
+  pick,
+  pickAll,
+  type ArticleCopy,
+} from "./i18n/format";
 
 export type ArticleCategory = "Press Media" | "Blog";
 
@@ -217,14 +228,18 @@ export const mediaArticles: Article[] = [
   },
 ];
 
-/** Locale and time zone are pinned so server and client render the same string. */
-export function formatArticleDate(iso: string, style: "long" | "short" = "long") {
-  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", {
-    month: style === "long" ? "long" : "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+/**
+ * An article with this language's headline and body swapped in where they
+ * exist. Everything else — slug, date, source, photography — is the same in
+ * every language, so it passes straight through.
+ */
+export function resolveArticle(article: Article, copy: ArticleCopy | undefined): Article {
+  if (!copy) return article;
+  return {
+    ...article,
+    title: pick(copy.title, article.title),
+    body: pickAll(copy.body, article.body),
+  };
 }
 
 export function getArticle(slug: string) {
@@ -244,54 +259,22 @@ export function relatedArticles(slug: string, count = 2) {
     .slice(0, count);
 }
 
-/** Chrome around the article body — labels, not content. */
-export const articlePage = {
-  categoryLabel: "Category:",
-  publishedLabel: "Published on:",
-  sourceLabel: "Source:",
-  readMore: "Read More",
-  relatedHeading: "Related Articles",
-};
-
 export type MediaHeroSlide = {
   /** Matches an article slug so the feature and its card stay in step. */
   slug: string;
-  title: string;
   image: string;
 };
 
 export const mediaHero = {
-  eyebrow: "Media Centre",
-  cta: "Read More",
+  /** Titles are read from the article each slug points at, so the two cannot drift. */
   slides: [
-    {
-      slug: "levent-residences-tops-out",
-      title: "Levent Residences Tops Out as Şişli’s Newest Landmark Address",
-      image: "/images/hero-beach-residences.webp",
-    },
-    {
-      slug: "aegean-bay-residences-opens",
-      title: "Aegean Bay Residences Opens Above a Quiet Bodrum Bay",
-      image: "/images/hero-beach-house.webp",
-    },
-    {
-      slug: "six-senses-la-sagesse-michelin-key",
-      title: "Six Senses La Sagesse Named a One-MICHELIN-Key Retreat",
-      image: "/images/hero-six-senses.webp",
-    },
+    { slug: "levent-residences-tops-out", image: "/images/hero-beach-residences.webp" },
+    { slug: "aegean-bay-residences-opens", image: "/images/hero-beach-house.webp" },
+    { slug: "six-senses-la-sagesse-michelin-key", image: "/images/hero-six-senses.webp" },
   ] satisfies MediaHeroSlide[],
 };
 
-export const mediaIndex = {
-  heading: "All Articles",
-  body: "Discover all the latest updates, insights, and valuable resources right here. This hub provides blog posts, press releases, and detailed guides to keep you up to date on our projects.",
-  loadMore: "Load More",
-};
-
 export const mediaNewsletter = {
-  heading: "Dive deeper, stay informed",
-  body: "Never miss a wave — stay in the loop with every update.",
-  cta: "Enquire Now",
   href: "/contact-us",
   image: "/images/hero-la-sagesse.webp",
 };

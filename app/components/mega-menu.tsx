@@ -1,54 +1,72 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
-import type { MegaMenu, MenuCard } from "@/app/lib/content";
+import { Link } from "./link";
+import type { MegaMenu, MenuCard, NavKey } from "@/app/lib/content";
+import { useI18n } from "@/app/lib/i18n/context";
+import { lookup } from "@/app/lib/i18n/format";
+import { placeLine } from "@/app/lib/i18n/units";
+import type { Dictionary } from "@/app/lib/i18n";
 
 /** Children enter one after another rather than all at once. */
 const stagger = (i: number) => ({ animationDelay: `${60 + i * 55}ms` });
 
-export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
+export function MegaMenuPanel({
+  menu,
+  navKey,
+}: {
+  menu: MegaMenu;
+  navKey: NavKey;
+}) {
+  const { t } = useI18n();
+
   switch (menu.kind) {
-    case "feature":
+    case "feature": {
+      const copy = t.menus.about;
       return (
         <div className="grid grid-cols-[300px_1fr] gap-12">
-          <Intro heading={menu.heading} body={menu.body} />
+          <Intro heading={copy.heading} body={copy.body} />
           <div className="grid grid-cols-2 gap-2">
             {menu.cards.map((card, i) => (
-              <a
-                key={card.title}
-                href="#"
+              <Link
+                key={card.key}
+                href={card.href ?? "#"}
                 style={stagger(i)}
                 className="group animate-menu-rise relative block aspect-[660/362] overflow-hidden"
               >
                 <CardImage src={card.image} sizes="480px" />
                 <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-forest-deep/85 to-transparent" />
                 <span className="absolute inset-x-0 bottom-7 text-center font-display text-[26px] text-cream">
-                  {card.title}
+                  {copy[card.key]}
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
       );
+    }
 
-    case "portfolio":
+    case "portfolio": {
+      const copy = navKey === "turkiye" ? t.menus.turkiye : t.menus.caribbean;
       return (
         <div className="grid grid-cols-[220px_1fr] gap-7">
-          <Intro heading={menu.heading} body={menu.body}>
+          <Intro heading={copy.heading} body={copy.body}>
             <Link
               href={menu.viewAllHref}
               style={stagger(1)}
               className="animate-menu-rise mt-7 inline-block rounded-full border border-cream/70 px-8 py-3 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
             >
-              {menu.viewAll}
+              {t.common.viewAll}
             </Link>
           </Intro>
           <div className="grid grid-cols-6 gap-2">
             {menu.cards.map((card, i) => (
-              <PortfolioCard key={card.title} card={card} index={i} />
+              <PortfolioCard key={card.title} card={card} index={i} t={t} />
             ))}
           </div>
         </div>
       );
+    }
 
     case "programmes": {
       // Two programmes read best side by side in a wider frame; three or more
@@ -56,50 +74,40 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
       const wide = menu.cards.length < 3;
       return (
         <div className={`grid gap-3 ${wide ? "grid-cols-2" : "grid-cols-3"}`}>
-          {menu.cards.map((card, i) => (
-            <a
-              key={card.country}
-              href="#"
-              style={stagger(i)}
-              className={`group animate-menu-rise relative block overflow-hidden ${
-                wide ? "aspect-[660/300]" : "aspect-[430/300]"
-              }`}
-            >
-              <CardImage src={card.image} sizes={wide ? "660px" : "430px"} />
-              <div className="absolute inset-x-0 bottom-0 bg-forest-deep/90 px-5 py-4">
-                <p className="text-[10px] text-cream/70">{menu.label}</p>
-                <div className="mt-1 flex items-end justify-between gap-4">
-                  <span className="font-display text-[26px] leading-tight text-cream">
-                    {card.country}
-                  </span>
-                  <ul className="text-right text-[11px] leading-[18px] text-cream/85">
-                    {card.projects.map((project) => (
-                      <li key={project}>{project}</li>
-                    ))}
-                  </ul>
+          {menu.cards.map((card, i) => {
+            // Türkiye lists the programme's terms, which are translated;
+            // the Caribbean lists development names, which are not.
+            const lines =
+              card.projects ?? t.menus.cbi.turkiyeRoutes;
+            return (
+              <Link
+                key={card.key}
+                href={card.href}
+                style={stagger(i)}
+                className={`group animate-menu-rise relative block overflow-hidden ${
+                  wide ? "aspect-[660/300]" : "aspect-[430/300]"
+                }`}
+              >
+                <CardImage src={card.image} sizes={wide ? "660px" : "430px"} />
+                <div className="absolute inset-x-0 bottom-0 bg-forest-deep/90 px-5 py-4">
+                  <p className="text-[10px] text-cream/70">{t.menus.cbi.label}</p>
+                  <div className="mt-1 flex items-end justify-between gap-4">
+                    <span className="font-display text-[26px] leading-tight text-cream">
+                      {lookup(t.places, card.key === "turkiye" ? "Türkiye" : "Caribbean")}
+                    </span>
+                    <ul className="text-end text-[11px] leading-[18px] text-cream/85">
+                      {lines.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </a>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       );
     }
-
-    case "languages":
-      return (
-        <ul className="flex flex-col gap-1">
-          {menu.items.map((item, i) => (
-            <li key={item} style={stagger(i)} className="animate-menu-rise">
-              <a
-                href="#"
-                className="block px-4 py-2 text-[13px] text-cream/85 transition-colors hover:text-cream"
-              >
-                {item}
-              </a>
-            </li>
-          ))}
-        </ul>
-      );
   }
 }
 
@@ -131,7 +139,19 @@ function Intro({
   );
 }
 
-function PortfolioCard({ card, index }: { card: MenuCard; index: number }) {
+function PortfolioCard({
+  card,
+  index,
+  t,
+}: {
+  card: MenuCard;
+  index: number;
+  t: Dictionary;
+}) {
+  const detail = card.detailKey
+    ? lookup(t.menus.detail, card.detailKey)
+    : undefined;
+
   return (
     <Link
       href={card.href ?? "#"}
@@ -141,20 +161,20 @@ function PortfolioCard({ card, index }: { card: MenuCard; index: number }) {
       <CardImage src={card.image} sizes="200px" />
       <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/65 via-45% to-transparent" />
       <div className="absolute inset-x-0 bottom-0 p-3.5">
-        {card.eyebrow?.map((line) => (
+        {card.eyebrow?.map((line, i) => (
           <p
-            key={line}
+            key={i}
             className="text-[8px] uppercase leading-[12px] tracking-[0.08em] text-cream/75"
           >
-            {line}
+            {placeLine(t, line)}
           </p>
         ))}
         <p className="mt-2 font-display text-[14.5px] leading-[19px] text-cream">
           {card.title}
         </p>
-        {card.detail ? (
+        {detail ? (
           <p className="mt-2 text-[9.5px] leading-[14px] text-cream/70">
-            {card.detail}
+            {detail}
           </p>
         ) : null}
       </div>

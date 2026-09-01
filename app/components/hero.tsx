@@ -4,6 +4,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { heroSlides } from "@/app/lib/content";
+import { useI18n } from "@/app/lib/i18n/context";
+import { interpolate } from "@/app/lib/i18n/format";
+import {
+  bedroomOptionLabel,
+  placeLabel,
+  typeLabel,
+} from "@/app/lib/i18n/units";
 import {
   bedroomOptions,
   currencies,
@@ -19,6 +26,7 @@ import { SelectMenu } from "./select-menu";
 const ROTATE_MS = 6500;
 
 export function Hero() {
+  const { t } = useI18n();
   const [active, setActive] = useState(0);
 
   useEffect(() => {
@@ -53,8 +61,8 @@ export function Hero() {
 
       <div className="relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-6 sm:px-10 lg:px-[72px]">
         <h1 className="mx-auto mt-[clamp(112px,17svh,150px)] max-w-[1160px] font-display text-[length:clamp(26px,5svh,34px)] leading-[1.18] text-white sm:text-[length:clamp(32px,6svh,46px)] lg:mt-[clamp(128px,18svh,190px)] lg:text-[length:min(64px,7svh)]">
-          <AnimatedTitle key={slide.title} align="center">
-            {slide.title}
+          <AnimatedTitle key={slide.key} align="center">
+            {t.hero.slides[slide.key as keyof typeof t.hero.slides]}
           </AnimatedTitle>
         </h1>
 
@@ -65,7 +73,7 @@ export function Hero() {
                 key={s.image}
                 type="button"
                 onClick={() => setActive(i)}
-                aria-label={`Show ${s.location}`}
+                aria-label={interpolate(t.hero.showSlide, { name: s.name })}
                 aria-current={i === active}
                 className="py-2"
               >
@@ -80,8 +88,12 @@ export function Hero() {
 
           <div className="mt-2 flex items-center justify-center gap-2 text-white lg:justify-end">
             <MapPin className="w-3" />
+            {/* "Marmara Vista, İstanbul" — a Latin name beside a translated
+                place. `<bdi>` isolates the name so the comma stays with it
+                instead of being reordered by the bidi algorithm in Arabic. */}
             <span className="text-[11px] uppercase tracking-[0.11em]">
-              {slide.location}
+              <bdi>{slide.name}</bdi>
+              {slide.place ? <>, {placeLabel(t, slide.place)}</> : null}
             </span>
           </div>
         </div>
@@ -95,6 +107,7 @@ export function Hero() {
 }
 
 function SearchBar() {
+  const { t, locale, href, num } = useI18n();
   const router = useRouter();
   const [type, setType] = useState("Any");
   const [bedroom, setBedroom] = useState("Any");
@@ -109,7 +122,7 @@ function SearchBar() {
     if (bedroom !== "Any") params.set("bedroom", bedroom);
     if (location !== "Any") params.set("location", location);
     if (max !== "Any") params.set("max", max);
-    router.push(`/search-property?${params}`);
+    router.push(href(`/search-property?${params}`));
   };
 
   return (
@@ -119,30 +132,35 @@ function SearchBar() {
     >
       <div className="grid flex-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-9">
         <HeroSelect
-          label="Property Type"
+          label={t.hero.propertyType}
           value={type}
           onChange={setType}
           options={["Any", ...propertyTypes]}
+          format={(v) => (v === "Any" ? t.common.any : typeLabel(t, v))}
         />
         <HeroSelect
-          label="Bedroom"
+          label={t.hero.bedroom}
           value={bedroom}
           onChange={setBedroom}
           options={["Any", ...bedroomOptions]}
+          format={(v) =>
+            v === "Any" ? t.common.any : bedroomOptionLabel(locale, t, v)
+          }
         />
         <HeroSelect
-          label="Country"
+          label={t.hero.country}
           value={location}
           onChange={setLocation}
           options={["Any", ...locations]}
+          format={(v) => (v === "Any" ? t.common.any : placeLabel(t, v))}
         />
         <div className="flex flex-col gap-2.5">
           <span className="text-[11px] tracking-[0.02em] text-white/70">
-            Starting From
+            {t.common.startingFrom}
           </span>
           <div className="flex items-end gap-4">
             <BareSelect
-              label="Currency"
+              label={t.hero.currency}
               value={currency}
               onChange={(v) => {
                 setCurrency(v as Currency);
@@ -152,13 +170,11 @@ function SearchBar() {
               className="w-[68px] shrink-0"
             />
             <BareSelect
-              label="Maximum price"
+              label={t.hero.maximumPrice}
               value={max}
               onChange={setMax}
               options={["Any", ...priceCeilings[currency].map(String)]}
-              format={(v) =>
-                v === "Any" ? "Any" : Number(v).toLocaleString("en-US")
-              }
+              format={(v) => (v === "Any" ? t.common.any : num(Number(v)))}
               className="flex-1"
             />
           </div>
@@ -170,7 +186,7 @@ function SearchBar() {
         type="submit"
         className="shrink-0 rounded-full border border-white/85 bg-white/10 px-8 py-3.5 text-[13px] font-medium text-white transition-colors hover:bg-white hover:text-ink"
       >
-        Search Properties
+        {t.common.searchProperties}
       </button>
     </form>
   );
@@ -181,6 +197,7 @@ function HeroSelect(props: {
   value: string;
   onChange: (value: string) => void;
   options: readonly string[];
+  format?: (value: string) => string;
 }) {
   return (
     <div className="flex flex-col gap-2.5">
@@ -209,7 +226,7 @@ function BareSelect({
     <SelectMenu
       {...props}
       className={className}
-      triggerClassName="pr-1 text-[13.5px] text-white"
+      triggerClassName="pe-1 text-[13.5px] text-white"
       chevronClassName="text-white/80"
       panelClassName="w-[max(100%,190px)]"
     />

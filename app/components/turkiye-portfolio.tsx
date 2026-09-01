@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "./link";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Container, SectionIntro } from "./container";
-import { turkiyeProperties, turkiyeSection } from "@/app/lib/content";
+import { turkiyeProperties } from "@/app/lib/content";
+import { useI18n } from "@/app/lib/i18n/context";
 import { projects } from "@/app/lib/projects";
 
 const projectHref = Object.fromEntries(
@@ -25,6 +26,7 @@ function indexFromProgress(value: number, count: number) {
 }
 
 export function TurkiyePortfolio() {
+  const { t } = useI18n();
   const [active, setActive] = useState(0);
   const runway = useRef<HTMLDivElement>(null);
   const count = turkiyeProperties.length;
@@ -47,8 +49,8 @@ export function TurkiyePortfolio() {
     offset: ["start start", "end end"],
   });
 
-  // Scrolling pins the pair and pages through the list; a name still takes
-  // over on hover until the next scroll, and a click jumps to that property.
+  // Scrolling pins the pair and pages through the list; clicking a name jumps
+  // the runway to that property. Hovering deliberately does nothing.
   useMotionValueEvent(scrollYProgress, "change", (value) => {
     if (locked.current || !scrollDriven()) return;
     const index = indexFromProgress(value, count);
@@ -93,8 +95,8 @@ export function TurkiyePortfolio() {
         <div className="turkiye-runway-pin sticky top-0 z-10 flex flex-col justify-center bg-white py-[72px] lg:min-h-svh lg:py-14">
           <Container>
             <SectionIntro
-              heading={turkiyeSection.heading}
-              body={turkiyeSection.body}
+              heading={t.turkiyeSection.heading}
+              body={t.turkiyeSection.body}
             />
           </Container>
 
@@ -117,7 +119,7 @@ export function TurkiyePortfolio() {
 
               <div className="lg:pt-1">
                 <p className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-gold">
-                  {turkiyeSection.eyebrow}
+                  {t.turkiyeSection.eyebrow}
                 </p>
 
                 <ul className="mt-8 flex flex-col gap-[30px]">
@@ -127,11 +129,10 @@ export function TurkiyePortfolio() {
                       <li key={property.name}>
                         <button
                           type="button"
-                          onMouseEnter={() => activate(i)}
                           onFocus={() => activate(i)}
                           onClick={() => activate(i, true)}
                           aria-current={isActive}
-                          className={`block text-left font-display text-[24px] leading-[40px] transition-colors sm:text-[30px] ${
+                          className={`block text-start font-display text-[24px] leading-[40px] transition-colors sm:text-[30px] ${
                             isActive
                               ? "text-ink"
                               : "text-ink/25 hover:text-ink/50"
@@ -153,7 +154,11 @@ export function TurkiyePortfolio() {
                           >
                             <div className="mt-4 max-w-[520px]">
                               <p className="text-[13.5px] leading-[22px] text-ink">
-                                {property.description}
+                                {
+                                  t.turkiyeSection.descriptions[
+                                    property.key as keyof typeof t.turkiyeSection.descriptions
+                                  ]
+                                }
                               </p>
                               <Link
                                 href={
@@ -162,7 +167,7 @@ export function TurkiyePortfolio() {
                                 }
                                 className="mt-[18px] inline-block border-b border-ink pb-1 text-[12.5px] font-medium text-ink"
                               >
-                                Learn More
+                                {t.common.learnMore}
                               </Link>
                             </div>
                           </div>

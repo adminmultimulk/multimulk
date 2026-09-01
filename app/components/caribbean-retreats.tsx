@@ -11,11 +11,8 @@ import {
 } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { Container, SectionIntro } from "./container";
-import {
-  caribbeanResorts,
-  caribbeanSection,
-  type Resort,
-} from "@/app/lib/content";
+import { caribbeanResorts, type Resort } from "@/app/lib/content";
+import { useI18n } from "@/app/lib/i18n/context";
 import { Diamond } from "./icons";
 
 /**
@@ -23,16 +20,19 @@ import { Diamond } from "./icons";
  * so it frames the centred text rather than sitting in a row with it.
  */
 const SLOT = {
-  left: "left-0 top-1/2 w-[128px] -translate-y-1/2 aspect-[3/4]",
-  rightTop: "right-0 -top-[70px] w-[150px] aspect-[4/3]",
-  rightBottom: "right-[5%] -bottom-[80px] w-[130px] aspect-[3/4]",
+  // Logical insets, so the whole arrangement mirrors in Arabic and Urdu and
+  // the photography still frames the text from its outer edges.
+  leading: "start-0 top-1/2 w-[128px] -translate-y-1/2 aspect-[3/4]",
+  trailingTop: "end-0 -top-[70px] w-[150px] aspect-[4/3]",
+  trailingBottom: "end-[5%] -bottom-[80px] w-[130px] aspect-[3/4]",
 };
 
 /** Balance whatever imagery a resort has: a lone photo alternates sides. */
 function slotsFor(count: number, index: number) {
-  if (count >= 3) return [SLOT.left, SLOT.rightTop, SLOT.rightBottom];
-  if (count === 2) return [SLOT.left, SLOT.rightTop];
-  return [index % 2 === 0 ? SLOT.rightTop : SLOT.left];
+  if (count >= 3)
+    return [SLOT.leading, SLOT.trailingTop, SLOT.trailingBottom];
+  if (count === 2) return [SLOT.leading, SLOT.trailingTop];
+  return [index % 2 === 0 ? SLOT.trailingTop : SLOT.leading];
 }
 
 /**
@@ -136,7 +136,7 @@ export function CaribbeanRetreats() {
           <ul className="flex flex-col items-center gap-[10px] pt-[72px] lg:pt-20">
             {caribbeanResorts.map((resort, i) => (
               <ResortRow
-                key={resort.name}
+                key={resort.key}
                 ref={(el) => {
                   rows.current[i] = el;
                 }}
@@ -160,6 +160,7 @@ export function CaribbeanRetreats() {
  * sits above the clip in its own layer, so its type never stretches.
  */
 function OpeningStage({ ref }: { ref: React.Ref<HTMLDivElement> }) {
+  const { t } = useI18n();
   const stage = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
@@ -211,8 +212,8 @@ function OpeningStage({ ref }: { ref: React.Ref<HTMLDivElement> }) {
           {/* Held to the closed panel's width so the copy never outruns it. */}
           <div className="w-full max-w-[520px]">
             <SectionIntro
-              heading={caribbeanSection.heading}
-              body={caribbeanSection.body}
+              heading={t.caribbeanSection.heading}
+              body={t.caribbeanSection.body}
               tone="dark"
             />
           </div>
@@ -248,11 +249,13 @@ function ResortRow({
   isActive: boolean;
   onActivate: () => void;
 }) {
+  const { t } = useI18n();
+
   return (
     <li ref={ref} className="relative w-full">
       {isActive ? (
         // Keyed on the resort so switching rows replays the wipe.
-        <FloatingImages key={resort.name} resort={resort} index={index} />
+        <FloatingImages key={resort.key} resort={resort} index={index} />
       ) : null}
 
       <Rule show={isActive} />
@@ -311,7 +314,11 @@ function ResortRow({
         >
           <div className="overflow-hidden">
             <p className="mx-auto mt-[18px] max-w-[520px] text-[12px] leading-5 text-cream/80">
-              {resort.description}
+              {
+                t.caribbeanSection.descriptions[
+                  resort.key as keyof typeof t.caribbeanSection.descriptions
+                ]
+              }
             </p>
           </div>
         </div>

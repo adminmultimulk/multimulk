@@ -95,6 +95,30 @@ export function Facebook({ className }: IconProps) {
   );
 }
 
+export function YouTube({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+      <path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.28 5 12 5 12 5s-6.28 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2C2 8.78 2 12 2 12s0 3.22.4 4.8a2.5 2.5 0 0 0 1.76 1.77C5.72 19 12 19 12 19s6.28 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77C22 15.22 22 12 22 12s0-3.22-.4-4.8ZM10 15.2V8.8l5.5 3.2-5.5 3.2Z" />
+    </svg>
+  );
+}
+
+export function X({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+      <path d="M17.53 3h3.2l-6.99 7.99L22 21h-6.3l-4.93-6.44L5.13 21H1.92l7.28-8.32L2 3h6.46l4.6 6.08L17.53 3Zm-1.12 16.06h1.77L7.66 4.84H5.76l10.65 14.22Z" />
+    </svg>
+  );
+}
+
+export function TikTok({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={className}>
+      <path d="M16.6 2h-3.2v13.2a2.35 2.35 0 1 1-1.72-2.27V9.66a5.55 5.55 0 1 0 4.92 5.52V8.9a6.1 6.1 0 0 0 3.6 1.17V6.86A3.5 3.5 0 0 1 16.6 2Z" />
+    </svg>
+  );
+}
+
 export function Mail({ className }: IconProps) {
   return (
     <svg

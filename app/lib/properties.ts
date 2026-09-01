@@ -12,10 +12,19 @@
 
 export type Currency = "USD" | "EUR" | "TRY";
 
+/**
+ * A unit's specs double as their own translation keys: `type`, `bathrooms`,
+ * `bedroom`, `level` and `view` are written in English here and resolved
+ * through `formatUnit` against `dictionary.unit`, which falls back to the
+ * English when a language has not overridden a term. `size` is a number range
+ * plus a unit, so only the unit is translated.
+ */
 export type Unit = {
   slug: string;
+  /** A development name plus its layout; the name half is never translated. */
   title: string;
   project: string;
+  /** Place names, resolved through `dictionary.places`. */
   location: string;
   country: string;
   prices: Record<Currency, number>;

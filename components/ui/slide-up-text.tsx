@@ -27,6 +27,13 @@ interface SlideUpTextProps {
   onComplete?: () => void;
   inView?: boolean;
   once?: boolean;
+  /**
+   * Direction for the word/character track. The text is laid out as flex
+   * items, so the container's direction — not the page's — decides their
+   * order. Pass "auto" to have the browser infer it from the text itself,
+   * which is what keeps a Latin headline in order on a right-to-left page.
+   */
+  dir?: "ltr" | "rtl" | "auto";
 }
 
 export interface SlideUpTextRef {
@@ -60,6 +67,7 @@ const SlideUpText = forwardRef<SlideUpTextRef, SlideUpTextProps>(
       onComplete,
       inView = false,
       once = true,
+      dir,
       ...props
     },
     ref,
@@ -142,6 +150,7 @@ const SlideUpText = forwardRef<SlideUpTextRef, SlideUpTextProps>(
 
     return (
       <motion.span
+        dir={dir}
         className={cn(
           className,
           "flex flex-wrap whitespace-pre-wrap",

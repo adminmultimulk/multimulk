@@ -1,20 +1,20 @@
 import Image from "next/image";
 import type { Metadata } from "next";
-import { AnimatedTitle } from "../components/animated-title";
-import { Container } from "../components/container";
+import { AnimatedTitle } from "@/app/components/animated-title";
+import { Container } from "@/app/components/container";
 import {
   PropertySearch,
   type InitialFilters,
-} from "../components/property-search";
-import { SiteFooter } from "../components/site-footer";
-import { SiteNav } from "../components/site-nav";
-import { currencies, type Currency } from "../lib/properties";
+} from "@/app/components/property-search";
+import { SiteFooter } from "@/app/components/site-footer";
+import { SiteNav } from "@/app/components/site-nav";
+import { alternatesFor, getDictionary } from "@/app/lib/i18n";
+import { currencies, type Currency } from "@/app/lib/properties";
 
-export const metadata: Metadata = {
-  title: "Search Property | Multi Mulk",
-  description:
-    "Browse residences with resort access, sweeping views, and effortless coastal living — filtered to your preferences.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getDictionary();
+  return { ...t.meta.search, alternates: await alternatesFor("/search-property") };
+}
 
 /** Query params arrive as string | string[] | undefined; normalise to a list. */
 function list(value: string | string[] | undefined): string[] {
@@ -31,7 +31,8 @@ function one(value: string | string[] | undefined, fallback: string) {
 
 export default async function SearchPropertyPage({
   searchParams,
-}: PageProps<"/search-property">) {
+}: PageProps<"/[lang]/search-property">) {
+  const t = await getDictionary();
   const params = await searchParams;
   const currency = one(params.currency, "USD").toUpperCase();
 
@@ -60,19 +61,16 @@ export default async function SearchPropertyPage({
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/85 via-forest-deep/45 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/85 via-forest-deep/45 to-transparent rtl:bg-gradient-to-l" />
           <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-forest-deep/70 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-[260px] bg-gradient-to-t from-forest-deep/80 to-transparent" />
 
           <Container className="relative pb-14">
             <h1 className="max-w-[662px] font-display text-[40px] leading-[1.14] text-white sm:text-[54px]">
-              <AnimatedTitle>Your Next Address Starts Here</AnimatedTitle>
+              <AnimatedTitle>{t.search.heading}</AnimatedTitle>
             </h1>
             <p className="mt-6 max-w-[500px] text-[13px] leading-[21px] text-cream/90">
-              Browse residences with resort access, sweeping views, and
-              effortless coastal living—tailored to your search. Explore curated
-              beachfront homes across the UAE and the Caribbean—filtered to your
-              preferences.
+              {t.search.body}
             </p>
           </Container>
         </section>

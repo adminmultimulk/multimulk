@@ -1,6 +1,11 @@
 /**
- * All landing-page copy and asset references. Keeping it here leaves the
- * section components purely presentational.
+ * Landing-page structure and asset references.
+ *
+ * Since the site went multilingual this file holds only what is the same in
+ * every language: images, hrefs, figures, and the proper nouns that are never
+ * translated — development names, resort operators, award bodies. Every string
+ * a reader reads in their own language lives in `app/lib/i18n/dictionaries`,
+ * reached through the `key` on each entry here.
  *
  * NOTE: project names, photography and award badges are still placeholders
  * carried over from the reference site. The photography in particular shows
@@ -10,186 +15,179 @@
 
 import { mediaArticles } from "./media";
 
-export { formatArticleDate, type Article } from "./media";
+export { type Article } from "./media";
 
 export const company = {
   name: "Multi Mulk",
-  tagline: "Global Solutions for Global Citizens",
 };
 
+/** Keys into `dictionary.nav`; the language control is not one of these. */
+export type NavKey = "about" | "turkiye" | "caribbean" | "cbi" | "media";
+
 export type NavLink = {
-  label: string;
+  key: NavKey;
   hasMenu: boolean;
   /** Only meaningful for links without a menu; unset ones are not built yet. */
   href?: string;
 };
 
-export const nav = {
-  links: [
-    { label: "About", hasMenu: true },
-    { label: "Türkiye", hasMenu: true },
-    { label: "Caribbean", hasMenu: true },
-    { label: "Citizenship by Investment", hasMenu: true },
-    { label: "Media Centre", hasMenu: false, href: "/media-centre" },
-    { label: "EN", hasMenu: true },
-  ] satisfies NavLink[],
-  actions: ["Get in Touch"],
-};
+export const navLinks: NavLink[] = [
+  { key: "about", hasMenu: true },
+  { key: "turkiye", hasMenu: true },
+  { key: "caribbean", hasMenu: true },
+  { key: "cbi", hasMenu: true },
+  { key: "media", hasMenu: false, href: "/media-centre" },
+];
 
 export type MenuCard = {
-  /** Small uppercase lines above the title, e.g. country then locality. */
-  eyebrow?: string[];
+  /**
+   * Small uppercase lines above the title. Each line is a list of place names
+   * looked up in `dictionary.places` and joined with a middot, so a card reads
+   * "Türkiye / İstanbul · Beyoğlu" in English and its equivalent elsewhere.
+   */
+  eyebrow?: string[][];
+  /** A development or resort name — rendered as written, in every language. */
   title: string;
-  detail?: string;
+  /** Key into `dictionary.menus.detail` for the line under the title. */
+  detailKey?: string;
   image: string;
   href?: string;
 };
 
 export type MegaMenu =
-  | { kind: "feature"; heading: string; body: string; cards: MenuCard[] }
+  | {
+      kind: "feature";
+      cards: { key: "ourStory" | "ourTeam"; image: string; href?: string }[];
+    }
   | {
       kind: "portfolio";
-      heading: string;
-      body: string;
-      viewAll: string;
       viewAllHref: string;
       cards: MenuCard[];
     }
   | {
       kind: "programmes";
-      label: string;
-      cards: { country: string; image: string; projects: string[] }[];
-    }
-  | { kind: "languages"; items: string[] };
+      cards: {
+        key: "turkiye" | "caribbean";
+        image: string;
+        /** The programme page the card opens — /citizenship/[programme]. */
+        href: string;
+        /** Caribbean lists development names; Türkiye lists translated routes. */
+        projects?: string[];
+      }[];
+    };
 
-/** Keyed by the nav link label they hang from. */
-export const menus: Record<string, MegaMenu> = {
-  About: {
+/** Keyed by the nav key the menu hangs from. */
+export const menus: Partial<Record<NavKey, MegaMenu>> = {
+  about: {
     kind: "feature",
-    heading: "About Us",
-    body: "Multi Mulk is an international property and citizenship advisory, specialising in Turkish citizenship by investment and connecting global citizens with landmark residences across Türkiye and the Caribbean.",
     cards: [
-      {
-        title: "Our Story",
-        href: "/about",
-        image: "/images/about-our-story.webp",
-      },
-      { title: "Our Team", image: "/images/region-turkiye.avif" },
+      { key: "ourStory", href: "/about", image: "/images/about-our-story.webp" },
+      { key: "ourTeam", image: "/images/region-turkiye.avif" },
     ],
   },
 
-  Türkiye: {
+  turkiye: {
     kind: "portfolio",
-    heading: "Türkiye",
-    body: "From İstanbul’s two shores to the Aegean and Mediterranean coasts, Türkiye offers a setting where continents, culture and coastline converge — and a direct route to citizenship.",
-    viewAll: "View All",
     viewAllHref: "/search-property?currency=USD&location=T%C3%BCrkiye",
     cards: [
       {
-        eyebrow: ["Türkiye", "İstanbul · Beyoğlu"],
+        eyebrow: [["Türkiye"], ["İstanbul", "Beyoğlu"]],
         title: "Bosphorus Heights",
         href: "/properties/bosphorus-heights",
-        detail: "165 Apartments",
+        detailKey: "bosphorus-heights",
         image: "/images/bosphorus-heights.webp",
       },
       {
-        eyebrow: ["Türkiye", "İstanbul · Beylikdüzü"],
+        eyebrow: [["Türkiye"], ["İstanbul", "Beylikdüzü"]],
         title: "Marmara Vista",
         href: "/properties/marmara-vista",
-        detail: "151 Apartments",
+        detailKey: "marmara-vista",
         image: "/images/marmara-vista.webp",
       },
       {
-        eyebrow: ["Türkiye", "İstanbul · Şişli"],
+        eyebrow: [["Türkiye"], ["İstanbul", "Şişli"]],
         title: "Levent Residences",
         href: "/properties/levent-residences",
-        detail: "420 Apartments + 11 Townhouses",
+        detailKey: "levent-residences",
         image: "/images/levent-residences.webp",
       },
       {
-        eyebrow: ["Türkiye", "Muğla · Bodrum"],
+        eyebrow: [["Türkiye"], ["Muğla", "Bodrum"]],
         title: "Aegean Bay Residences",
         href: "/properties/aegean-bay-residences",
-        detail: "88 Apartments",
+        detailKey: "aegean-bay-residences",
         image: "/images/aegean-bay.webp",
       },
       {
-        eyebrow: ["Türkiye", "Antalya · Konyaaltı"],
+        eyebrow: [["Türkiye"], ["Antalya", "Konyaaltı"]],
         title: "Antalya Coast",
-        detail: "1,023 Apartments in 3 Buildings",
+        detailKey: "antalya-coast",
         image: "/images/antalya-coast.webp",
       },
       {
-        eyebrow: ["Türkiye", "İstanbul · Sarıyer"],
+        eyebrow: [["Türkiye"], ["İstanbul", "Sarıyer"]],
         title: "Anatolian Villas",
-        detail: "Private villas in exclusive neighbourhoods",
+        detailKey: "anatolian-villas",
         image: "/images/anatolian-villas.webp",
       },
     ],
   },
 
-  Caribbean: {
+  caribbean: {
     kind: "portfolio",
-    heading: "Caribbean",
-    body: "Our Caribbean destinations embrace the essence of island life, crafting considered retreats where nature, architecture, and well-being exist in perfect balance.",
-    viewAll: "View All",
     viewAllHref: "/search-property?currency=USD&location=Caribbean",
     cards: [
       {
-        eyebrow: ["Grenada", "La Sagesse Bay"],
+        eyebrow: [["Grenada"], ["La Sagesse Bay"]],
         title: "The La Sagesse Collection Residences",
-        detail: "94 premier Apartments",
+        detailKey: "la-sagesse-collection",
         image: "/images/cb-la-sagesse-residences.webp",
       },
       {
-        eyebrow: ["Grenada", "La Sagesse Bay"],
+        eyebrow: [["Grenada"], ["La Sagesse Bay"]],
         title: "InterContinental Grenada - La Sagesse",
-        detail: "120 rooms including 30 private suites",
+        detailKey: "intercontinental-grenada",
         image: "/images/caribbean-grenada.webp",
       },
       {
-        eyebrow: ["Grenada", "La Sagesse Bay"],
+        eyebrow: [["Grenada"], ["La Sagesse Bay"]],
         title: "Six Senses La Sagesse",
-        detail: "56 pool suites with 15 pool villas",
+        detailKey: "six-senses-la-sagesse",
         image: "/images/hero-six-senses.webp",
       },
       {
-        eyebrow: ["Dominica", "Cabrits National Park"],
+        eyebrow: [["Dominica"], ["Cabrits National Park"]],
         title: "InterContinental Dominica Cabrits Resort & Spa",
-        detail: "151 Guest Rooms & 10 Private Suites",
+        detailKey: "intercontinental-dominica",
         image: "/images/cb-ic-dominica.webp",
       },
       {
-        eyebrow: ["St. Kitts & Nevis", "Christophe Harbour"],
+        eyebrow: [["St. Kitts & Nevis"], ["Christophe Harbour"]],
         title: "Park Hyatt St. Kitts",
-        detail: "126 rooms and an exclusive yacht marina",
+        detailKey: "park-hyatt-st-kitts",
         image: "/images/cb-park-hyatt.webp",
       },
       {
-        eyebrow: ["Dominica", "Portsmouth"],
+        eyebrow: [["Dominica"], ["Portsmouth"]],
         title: "Port Cabrits Marina",
-        detail: "150-berth superyacht facility",
+        detailKey: "port-cabrits-marina",
         image: "/images/cb-port-cabrits.png",
       },
     ],
   },
 
-  "Citizenship by Investment": {
+  cbi: {
     kind: "programmes",
-    label: "Citizenship by Investment",
     cards: [
       {
-        country: "Türkiye",
+        key: "turkiye",
         image: "/images/bosphorus-heights.webp",
-        projects: [
-          "USD 400,000 property route",
-          "3-year holding period",
-          "Spouse and children under 18 included",
-        ],
+        href: "/citizenship/turkiye",
       },
       {
-        country: "Caribbean",
+        key: "caribbean",
         image: "/images/hero-la-sagesse.webp",
+        href: "/citizenship/caribbean",
         projects: [
           "The La Sagesse Collection Residences",
           "InterContinental Grenada - La Sagesse",
@@ -201,245 +199,155 @@ export const menus: Record<string, MegaMenu> = {
       },
     ],
   },
-
-  EN: {
-    kind: "languages",
-    items: ["EN", "AR", "RU", "FR", "ES"],
-  },
 };
 
 export type HeroSlide = {
-  title: string;
-  location: string;
+  /** Key into `dictionary.hero.slides`. */
+  key: string;
+  /** A development name, and the place it stands in, if the design shows one. */
+  name: string;
+  place?: string;
   image: string;
 };
 
 export const heroSlides: HeroSlide[] = [
+  { key: "six-senses", name: "Six Senses La Sagesse", image: "/images/hero-six-senses.webp" },
   {
-    title: "A Sanctuary Shaped by Sea & Forests",
-    location: "Six Senses La Sagesse",
-    image: "/images/hero-six-senses.webp",
-  },
-  {
-    title: "Escape to the Centre of It All",
-    location: "Marmara Vista, İstanbul",
+    key: "marmara-vista",
+    name: "Marmara Vista",
+    place: "İstanbul",
     image: "/images/hero-beach-vista.webp",
   },
   {
-    title: "A Landmark Address in İstanbul",
-    location: "Levent Residences, İstanbul",
+    key: "levent-residences",
+    name: "Levent Residences",
+    place: "İstanbul",
     image: "/images/hero-beach-residences.webp",
   },
   {
-    title: "Wake Up to the Aegean",
-    location: "Aegean Bay Residences, Bodrum",
+    key: "aegean-bay",
+    name: "Aegean Bay Residences",
+    place: "Bodrum",
     image: "/images/hero-beach-house.webp",
   },
   {
-    title: "Beachfront Living Next to Two Iconic Resorts",
-    location: "The La Sagesse Collection Residences",
+    key: "la-sagesse",
+    name: "The La Sagesse Collection Residences",
     image: "/images/hero-la-sagesse.webp",
   },
 ];
 
-export const welcome = {
-  eyebrow: "Welcome to Multi Mulk",
-  heading: "Global Solutions for Global Citizens",
-  body: "Multi Mulk helps internationally minded families and investors put down roots in the world’s most desirable places. Turkish citizenship by investment is at the centre of what we do — from landmark İstanbul addresses to the Aegean coast — alongside select Caribbean programmes. We guide every step: property selection, purchase, and the citizenship application itself, with offices across Türkiye, the UAE and Pakistan.",
-};
-
 export const regions = [
   {
-    label: "Türkiye",
-    caption: "İstanbul · Bodrum · Antalya",
+    key: "turkiye" as const,
+    /** The caption is a run of place names, joined with a middot. */
+    places: ["İstanbul", "Bodrum", "Antalya"],
     image: "/images/region-turkiye.avif",
   },
   {
-    label: "Caribbean",
-    caption: "Caribbean",
+    key: "caribbean" as const,
+    places: ["Caribbean"],
     image: "/images/region-caribbean.avif",
   },
 ];
 
 export type Property = {
+  /** Key into `dictionary.turkiyeSection.descriptions`. */
+  key: string;
   name: string;
-  description: string;
   image: string;
 };
 
-export const turkiyeSection = {
-  heading: "Turkish Citizenship Living",
-  body: "Discover our portfolio of Türkiye properties, featuring contemporary architecture, prime İstanbul and coastal settings, and residences that qualify for citizenship by investment.",
-  eyebrow: "Türkiye Property",
-};
-
 export const turkiyeProperties: Property[] = [
-  {
-    name: "Bosphorus Heights",
-    description:
-      "In Beyoğlu, moments from Galata and the ferry piers, Bosphorus Heights offers 165 residences framing the strait and the historic peninsula beyond.",
-    image: "/images/bosphorus-heights.webp",
-  },
-  {
-    name: "Marmara Vista",
-    description:
-      "Marmara Vista offers 151 exquisite studio, 1- and 2-bedroom residences on İstanbul’s western shore, with serene, panoramic views across the Marmara Sea.",
-    image: "/images/marmara-vista.webp",
-  },
-  {
-    name: "Levent Residences",
-    description:
-      "A landmark Şişli address minutes from the Levent financial district, with 420 apartments and 11 exclusive townhouses.",
-    image: "/images/levent-residences.webp",
-  },
-  {
-    name: "Aegean Bay Residences",
-    description:
-      "A haven above a quiet Bodrum bay, offering 88 luxurious studio, 1-bedroom, and 2-bedroom residences.",
-    image: "/images/aegean-bay.webp",
-  },
-  {
-    name: "Antalya Coast",
-    description:
-      "On the Konyaaltı shoreline, Antalya Coast offers 1,023 residences across three signature buildings, blending apartments, penthouses, and amenities.",
-    image: "/images/antalya-coast.webp",
-  },
-  {
-    name: "Anatolian Villas",
-    description:
-      "Discover our four villa types in Sarıyer, designed for residents seeking privacy, elegance, and a tailored approach to modern luxury.",
-    image: "/images/anatolian-villas.webp",
-  },
+  { key: "bosphorus-heights", name: "Bosphorus Heights", image: "/images/bosphorus-heights.webp" },
+  { key: "marmara-vista", name: "Marmara Vista", image: "/images/marmara-vista.webp" },
+  { key: "levent-residences", name: "Levent Residences", image: "/images/levent-residences.webp" },
+  { key: "aegean-bay-residences", name: "Aegean Bay Residences", image: "/images/aegean-bay.webp" },
+  { key: "antalya-coast", name: "Antalya Coast", image: "/images/antalya-coast.webp" },
+  { key: "anatolian-villas", name: "Anatolian Villas", image: "/images/anatolian-villas.webp" },
 ];
 
-export const awards = {
-  eyebrow: "Awards & Achievements",
-  heading: "Recognized for Excellence",
-  items: [
-    {
-      logo: "/logos/award-uae-realty.svg",
-      caption: "Best Beachfront Property of the Year",
-      height: 46,
-    },
-    {
-      logo: "/logos/award-michelin.webp",
-      caption: "One Michelin Key - A Very Special Stay",
-      height: 43,
-    },
-    {
-      logo: "/logos/award-conde-badge.webp",
-      caption: "The Best Eco-Friendly Resort of the Year - 2025",
-      height: 43,
-    },
-    {
-      logo: "/logos/award-conde-badge.webp",
-      caption: "The Best in Travel 2025",
-      height: 43,
-    },
-    {
-      logo: "/logos/award-conde-traveler.svg",
-      caption: "The Best New Hotels in North America & the Caribbean",
-      height: 34,
-    },
-    {
-      logo: "/logos/award-people.svg",
-      caption: "31 Incredible Luxury Hotels Opening Around the World This Year",
-      height: 34,
-    },
-  ],
-};
+/** Award badges. `key` selects the caption from `dictionary.awards.captions`. */
+export const awardItems = [
+  { key: "beachfront" as const, logo: "/logos/award-uae-realty.svg", height: 46 },
+  { key: "michelin" as const, logo: "/logos/award-michelin.webp", height: 43 },
+  { key: "eco" as const, logo: "/logos/award-conde-badge.webp", height: 43 },
+  { key: "travel" as const, logo: "/logos/award-conde-badge.webp", height: 43 },
+  { key: "newHotels" as const, logo: "/logos/award-conde-traveler.svg", height: 34 },
+  { key: "luxuryHotels" as const, logo: "/logos/award-people.svg", height: 34 },
+];
 
 export type Resort = {
+  /** Key into `dictionary.caribbeanSection.descriptions`. */
+  key: string;
   name: string;
-  description: string;
   logo?: string;
   /** Photography of this resort, revealed alongside it in the retreats list. */
   images?: string[];
 };
 
-export const caribbeanSection = {
-  heading: "Caribbean Island Retreats",
-  body: "Discover our expanding portfolio across the Caribbean—beachfront resorts and iconic branded developments that offer long-term value, immersive experiences and global appeal, with select government-approved projects also providing an approved pathway to Citizenship by Investment.",
-};
-
 export const caribbeanResorts: Resort[] = [
   {
+    key: "park-hyatt-st-kitts",
     name: "Park Hyatt St. Kitts",
-    description:
-      "Park Hyatt St. Kitts, opened in 2017, presents 126 luxurious rooms and suites with island-inspired design, expansive ocean views, and access to Christophe Harbour’s marina.",
     images: ["/images/cb-park-hyatt.webp"],
   },
   {
+    key: "intercontinental-grenada",
     name: "InterContinental Grenada - La Sagesse",
-    description:
-      "Opening in 2026, the resort presents 120 rooms, 30+ luxury suites, exceptional dining, spa experiences, and stunning Caribbean-inspired design and architecture.",
     images: ["/images/caribbean-grenada.webp"],
   },
   {
+    key: "intercontinental-dominica",
     name: "InterContinental Dominica Cabrits Resort & Spa",
-    description:
-      "A luxurious retreat on Dominica’s white-sand beaches, embracing rainforest and sea, with elegant design, stunning Caribbean views, and adventure at your doorstep.",
     images: ["/images/cb-ic-dominica.webp"],
   },
   {
+    key: "six-senses-la-sagesse",
     name: "Six Senses La Sagesse",
-    description:
-      "A sanctuary of wellness and luxury, Six Senses La Sagesse offers low-rise villas, ocean vistas, and an intimate, culturally rich Grenada experience.",
     images: ["/images/hero-six-senses.webp", "/images/article-six-senses.avif"],
   },
   {
+    key: "la-sagesse-collection",
     name: "The La Sagesse Collection Residences",
-    description:
-      "Experience 96 exclusive residences on La Sagesse Bay, where natural beauty meets luxury, with crystal waters, sun-kissed sands, and neighbours Six Senses La Sagesse and InterContinental Grenada La Sagesse.",
     images: [
       "/images/cb-la-sagesse-residences.webp",
       "/images/hero-la-sagesse.webp",
     ],
   },
   {
+    key: "port-cabrits-marina",
     name: "Port Cabrits Marina",
-    description:
-      "In Bell Hall near Portsmouth, this premier waterfront destination blends seclusion, natural beauty, and world-class hospitality with superyacht berths, luxury dining, and boutique retail.",
     images: ["/images/cb-port-cabrits.png"],
     logo: "/logos/port-cabrits.svg",
   },
 ];
 
-export type DestinationMarker = {
-  name: string;
-  /** Percentage position within the map illustration. */
-  x: number;
-  y: number;
-  side: "left" | "right" | "below";
-};
-
+/**
+ * The two destination panels. Place lists and stat *values* live here; their
+ * headings, prose and stat labels come from `dictionary.destinations`.
+ */
 export const destinations = {
   turkiye: {
-    label: "Türkiye",
-    eyebrow: "İstanbul, Türkiye",
-    heading: "Where Two Continents Meet",
-    body: "Türkiye pairs one of the world’s great cities with a coastline that runs from the Aegean to the Mediterranean. İstanbul alone spans two continents, and the citizenship-by-investment programme makes a property purchase here a route to a second passport — a combination no other market offers at this scale.",
+    /** Each entry is a run of place names joined with a middot. */
     places: [
-      "İstanbul · Beyoğlu",
-      "İstanbul · Şişli",
-      "İstanbul · Beylikdüzü",
-      "İstanbul · Sarıyer",
-      "Bodrum · Muğla",
-      "Antalya · Konyaaltı",
+      ["İstanbul", "Beyoğlu"],
+      ["İstanbul", "Şişli"],
+      ["İstanbul", "Beylikdüzü"],
+      ["İstanbul", "Sarıyer"],
+      ["Bodrum", "Muğla"],
+      ["Antalya", "Konyaaltı"],
     ],
     stats: [
-      { value: "$400K", label: "Citizenship Threshold" },
-      { value: "3–6", label: "Months to Passport" },
-      { value: "110+", label: "Visa-Free Destinations" },
+      { key: "threshold" as const, value: "$400K" },
+      { key: "months" as const, value: "3–6" },
+      { key: "visaFree" as const, value: "110+" },
     ],
     map: "/images/region-turkiye.avif",
   },
   caribbean: {
-    label: "Caribbean",
-    eyebrow: "Caribbean",
-    heading: "Home to the Caribbean’s Most Iconic Destinations",
-    body: "The Caribbean is home to a growing collection of the residences and resort developments we represent, spread across several island destinations — many of them tied to government-approved citizenship-by-investment routes.",
-    places: [
+    /** Development names, so they are listed rather than looked up. */
+    names: [
       "The La Sagesse Collection Residences",
       "InterContinental Grenada - La Sagesse",
       "Six Senses La Sagesse",
@@ -448,20 +356,15 @@ export const destinations = {
       "Port Cabrits Marina",
     ],
     stats: [
-      { value: "15", label: "Years" },
-      { value: "5,500+", label: "Jobs Created" },
-      { value: "15,000", label: "Individuals Assisted in Second Citizenship" },
+      { key: "years" as const, value: "15" },
+      { key: "jobs" as const, value: "5,500+" },
+      { key: "assisted" as const, value: "15,000" },
     ],
     map: "/images/caribbean-grenada.webp",
   },
 };
 
-export const articlesSection = {
-  heading: "The Latest Articles",
-  body: "Discover all the latest updates, insights, and valuable resources right here. This hub provides blog posts, press releases, and detailed guides to keep you up to date on our projects.",
-  categories: ["All", "Press Media", "Blog"],
-};
-
+export type DestinationKey = keyof typeof destinations;
 
 /**
  * The home page shows the four most recent pieces; the full index and its
@@ -469,69 +372,89 @@ export const articlesSection = {
  */
 export const articles = mediaArticles.slice(0, 4);
 
-export const footer = {
-  columns: [
-    {
-      title: "Türkiye",
-      items: [
-        "Bosphorus Heights",
-        "Marmara Vista",
-        "Levent Residences",
-        "Aegean Bay Residences",
-        "Antalya Coast",
-        "Anatolian Villas",
-      ],
-    },
-    {
-      title: "Caribbean",
-      items: [
-        "The La Sagesse Collection Residences",
-        "InterContinental Grenada - La Sagesse",
-        "Six Senses La Sagesse",
-        "InterContinental Dominica Cabrits Resort & Spa",
-        "Park Hyatt St. Kitts",
-        "Port Cabrits Marina",
-      ],
-    },
-    {
-      title: "About Us",
-      items: [
-        "Our Story",
-        "Our Team",
-        "Media Centre",
-        "Construction Updates",
-        "Terms & Conditions",
-        "Privacy Policy",
-      ],
-    },
-  ],
-  contact: {
-    title: "Contact Us",
-    address:
-      "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J, Kat:5, Ofis No:48-49, Beykent / Istanbul",
-    email: "info@multimulk.com",
-    phones: [
-      { label: "UAE", number: "+971 50 169 4283" },
-      { label: "Türkiye", number: "+90 543 337 7899" },
-      { label: "Pakistan", number: "+92 300 847 8644" },
+/**
+ * Footer link columns. The two portfolio columns list development names, which
+ * read the same in every language; the About column is keyed into
+ * `dictionary.footer.aboutItems`.
+ */
+export const footerColumns = [
+  {
+    key: "turkiye" as const,
+    names: [
+      "Bosphorus Heights",
+      "Marmara Vista",
+      "Levent Residences",
+      "Aegean Bay Residences",
+      "Antalya Coast",
+      "Anatolian Villas",
     ],
   },
-  entities: ["Multi Mulk"],
-  copyright: "© 2026 Multi Mulk. All Rights Reserved.",
+  {
+    key: "caribbean" as const,
+    names: [
+      "The La Sagesse Collection Residences",
+      "InterContinental Grenada - La Sagesse",
+      "Six Senses La Sagesse",
+      "InterContinental Dominica Cabrits Resort & Spa",
+      "Park Hyatt St. Kitts",
+      "Port Cabrits Marina",
+    ],
+  },
+];
+
+/** The About column, keyed; `href` is unset for pages that do not exist yet. */
+export const footerAboutItems = [
+  { key: "ourStory" as const, href: "/about" },
+  { key: "ourTeam" as const },
+  { key: "turkishCitizenship" as const, href: "/citizenship/turkiye" },
+  { key: "caribbeanCbi" as const, href: "/citizenship/caribbean" },
+  { key: "mediaCentre" as const, href: "/media-centre" },
+  { key: "construction" as const },
+  { key: "terms" as const },
+  { key: "privacy" as const },
+];
+
+export const contact = {
+  email: "info@multimulk.com",
+  phones: [
+    { key: "UAE" as const, number: "+971 50 169 4283" },
+    { key: "Türkiye" as const, number: "+90 543 337 7899" },
+    { key: "Pakistan" as const, number: "+92 300 847 8644" },
+  ],
+  /** The Beykent office as Google Maps resolves it, for the embed and the link out. */
+  mapQuery: "Burc Plaza, Gökevler Mah. 2312 Sk. No:18J, Beykent, Esenyurt/İstanbul",
 };
 
-/**
- * Footer items are plain labels; the ones whose page exists are routed here.
- * Anything unlisted still renders, inert, until its page lands.
- */
+/** The office on Google Maps: the keyless embed for the frame, `href` to open it. */
+export function officeMap(locale: string) {
+  const q = encodeURIComponent(contact.mapQuery);
+  return {
+    embed: `https://www.google.com/maps?q=${q}&hl=${locale}&z=15&output=embed`,
+    href: `https://www.google.com/maps/search/?api=1&query=${q}`,
+  };
+}
+
+export const entities = ["Multi Mulk"];
+
+/** The live company profiles, in the order the footer renders their icons. */
+export const socialLinks = [
+  { key: "linkedin" as const, name: "LinkedIn", href: "https://www.linkedin.com/company/multimulk/" },
+  { key: "instagram" as const, name: "Instagram", href: "https://www.instagram.com/multimulk" },
+  { key: "facebook" as const, name: "Facebook", href: "https://www.facebook.com/share/1BdLzoe5ki/" },
+  { key: "youtube" as const, name: "YouTube", href: "https://youtube.com/@multimulk" },
+  { key: "x" as const, name: "X", href: "https://x.com/multimulk" },
+  { key: "tiktok" as const, name: "TikTok", href: "https://www.tiktok.com/@multimulkrealty" },
+];
+
+/** Footer names whose page exists are routed here; the rest render inert. */
 export const footerLinks: Record<string, string> = {
-  "Our Story": "/about",
-  "Media Centre": "/media-centre",
+  "Bosphorus Heights": "/properties/bosphorus-heights",
+  "Marmara Vista": "/properties/marmara-vista",
+  "Levent Residences": "/properties/levent-residences",
+  "Aegean Bay Residences": "/properties/aegean-bay-residences",
 };
 
 export const whatsapp = {
   /** The UAE line doubles as the WhatsApp business number. */
   number: "+971 50 169 4283",
-  label: "Hello!",
-  message: "Hello Multi Mulk, I'd like to know more about your properties.",
 };

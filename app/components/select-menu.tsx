@@ -14,6 +14,20 @@ import { Chevron } from "./icons";
 /** Panel height budget; below this it flips above the trigger. */
 const PANEL_MAX_H = 320;
 
+/**
+ * The nearest ancestor that would crop the panel — anything that is not
+ * `overflow: visible`. Returns null when the panel is free to overhang the
+ * page, in which case the viewport is the only boundary that matters.
+ */
+function clippingAncestor(el: HTMLElement | null): HTMLElement | null {
+  for (let node = el?.parentElement; node; node = node.parentElement) {
+    const style = getComputedStyle(node);
+    const overflow = style.overflow + style.overflowX + style.overflowY;
+    if (/hidden|clip|auto|scroll/.test(overflow)) return node;
+  }
+  return null;
+}
+
 export type SelectMenuProps = {
   label: string;
   value: string;
@@ -76,13 +90,22 @@ export function SelectMenu({
     if (!open) return;
     const rect = trigger.current?.getBoundingClientRect();
     if (!rect) return;
-    const below = window.innerHeight - rect.bottom;
-    setDrop(
-      below < Math.min(PANEL_MAX_H, options.length * 46 + 24) &&
-        rect.top > below
-        ? "up"
-        : "down",
-    );
+
+    // Room is measured against whatever would actually clip the panel, not the
+    // viewport. The hero is `overflow-hidden`, so once the page is scrolled
+    // past it there is plenty of window below the trigger and none of it is
+    // reachable: the panel would open downward and be sheared off at the
+    // hero's edge, hiding the last options. Falls back to the viewport where
+    // nothing clips, which is the case on the search page.
+    const clip = clippingAncestor(trigger.current)?.getBoundingClientRect();
+    const floor = Math.min(window.innerHeight, clip?.bottom ?? Infinity);
+    const ceiling = Math.max(0, clip?.top ?? 0);
+
+    const below = floor - rect.bottom;
+    const above = rect.top - ceiling;
+    const needed = Math.min(PANEL_MAX_H, options.length * 46 + 24);
+
+    setDrop(below < needed && above > below ? "up" : "down");
     setHighlight(selected);
   }, [open, options.length, selected]);
 
@@ -169,7 +192,7 @@ export function SelectMenu({
             setOpen(true);
           }
         }}
-        className={`flex w-full cursor-pointer items-center justify-between gap-3 text-left outline-none ${triggerClassName}`}
+        className={`flex w-full cursor-pointer items-center justify-between gap-3 text-start outline-none ${triggerClassName}`}
       >
         <span className="truncate">{text(value)}</span>
         <Chevron
@@ -194,7 +217,7 @@ export function SelectMenu({
               "--select-shift": drop === "up" ? "6px" : "-6px",
             } as CSSProperties
           }
-          className={`absolute left-0 z-50 min-w-full origin-top overflow-y-auto bg-cream py-3 text-left shadow-[0_18px_44px_-14px_rgba(34,42,44,0.45)] outline-none animate-select-open ${
+          className={`absolute start-0 z-50 min-w-full origin-top overflow-y-auto bg-cream py-3 text-start shadow-[0_18px_44px_-14px_rgba(34,42,44,0.45)] outline-none animate-select-open ${
             drop === "up" ? "bottom-full mb-3 origin-bottom" : "top-full mt-3"
           } ${panelClassName}`}
         >

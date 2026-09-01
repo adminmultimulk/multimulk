@@ -11,11 +11,34 @@
   --color-mist: #edf2ee;
   --color-cream: #f5f4f2;
 
-  /* The Seasons, self-hosted (see app/layout.tsx). Georgia leads the
-     fallbacks because it covers the Cyrillic The Seasons lacks, and is a
-     serif — so the one headline that needs it stays in the same voice. */
-  --font-display: var(--font-the-seasons), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  /*
+   * The Seasons and Manrope, then Vazirmatn, then the Latin fallbacks.
+   *
+   * This block is `@theme inline`, so Tailwind copies these values straight
+   * into the `.font-display` / `font-sans` utilities rather than making them
+   * read the variable at runtime — which means a per-language override of
+   * `--font-display` would do nothing. The Arabic face has to be in the stack
+   * here, and it is fine on every page: fallback resolves per glyph, so Latin
+   * always lands on the brand faces and only Arabic ever reaches Vazirmatn.
+   *
+   * Georgia sits after it because it covers the Cyrillic The Seasons lacks,
+   * and is a serif — so the one Russian headline stays in the same voice.
+   */
+  --font-display: var(--font-the-seasons), var(--font-arabic), Georgia,
+    "Times New Roman", serif;
+  /*
+   * Manrope is named directly rather than through `var(--font-manrope)`,
+   * because that variable expands to `"Manrope", "Manrope Fallback"` and the
+   * metric-matched fallback next/font synthesises is Arial-derived — which
+   * carries Arabic, and so swallowed every Arabic glyph before Vazirmatn was
+   * reached. (`adjustFontFallback: false` turns this off for
+   * `next/font/local`, but is ignored by `next/font/google`.) Splitting the
+   * pair puts Vazirmatn between them: Latin lands on Manrope, Arabic on
+   * Vazirmatn, and while both webfonts are still loading the fallback is
+   * right there holding the Latin metrics.
+   */
+  --font-sans: "Manrope", var(--font-arabic), "Manrope Fallback",
+    ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -41,6 +64,116 @@ body {
 .font-display {
   font-weight: 300;
   letter-spacing: 0.005em;
+}
+
+/*
+ * Arabic and Urdu.
+ *
+ * Neither The Seasons nor Manrope carries a single Arabic glyph, so on those
+ * two languages a face that does is appended rather than leaving the page to
+ * fall through to whatever the device supplies. Vazirmatn covers both, in the
+ * display and the body role alike: it is a contemporary Naskh that holds its
+ * colour at headline sizes and stays even at 12px, and its Latin sidebearings
+ * are close enough to Manrope's that a mixed line does not look patched.
+ *
+ * The stack itself is declared once, in the `@theme` block above — the brand
+ * faces first, Vazirmatn behind them. Fallback resolves per glyph, so Latin
+ * still renders in The Seasons and Manrope — and these pages are full of
+ * Latin, since development and operator names are never translated — while
+ * every Arabic glyph drops through to Vazirmatn. What is left here is the
+ * handful of adjustments the script needs.
+ *
+ * Urdu is set in the same Naskh rather than a Nastaliq. Nastaliq is the
+ * traditional register, but it is drawn on a steep diagonal that needs roughly
+ * double leading and shears inside any masked animation; Naskh is what Urdu
+ * web interfaces and Pakistani news sites overwhelmingly use, and it sits in
+ * this layout without special-casing.
+ */
+/* Arabic sits on a lower x-height run of ascenders than Latin; a touch more
+   leading keeps body copy from looking cramped at the same font-size. */
+[lang="ar"] body,
+[lang="ur"] body {
+  line-height: 1.85;
+}
+
+/* Both scripts are unicase, so uppercasing is a no-op that only widens
+   tracking — the eyebrows and small caps read better set plainly. */
+[lang="ar"] .uppercase,
+[lang="ur"] .uppercase {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/*
+ * Arabic and Urdu are cursive: letter-spacing pulls the joins apart and the
+ * word stops reading as a word. This outranks the tracking utilities on the
+ * same element by specificity, so the display type set with wide tracking in
+ * Latin — the region wordmarks above all — closes back up here.
+ */
+[lang="ar"] .font-display,
+[lang="ur"] .font-display {
+  letter-spacing: 0;
+}
+
+/*
+ * A leading floor for cursive display type. The Latin scale sets headings as
+ * tight as 1.05, which is fine for capitals sitting on a baseline and far too
+ * close for a script whose marks ride above the letters and whose tails drop
+ * below — successive lines collide. Anything already looser than this is left
+ * alone.
+ */
+[lang="ar"] h1 .font-display,
+[lang="ur"] h1 .font-display,
+[lang="ar"] h1,
+[lang="ur"] h1,
+[lang="ar"] h2,
+[lang="ur"] h2,
+[lang="ar"] h3,
+[lang="ur"] h3 {
+  line-height: max(1.4em, 1lh);
+}
+
+/*
+ * Right-to-left.
+ *
+ * Layout mirrors through Tailwind's logical utilities in the components; what
+ * is left here is the handful of things that cannot be expressed that way —
+ * the wipe animations, which run along a physical axis, and the numeric runs
+ * inside otherwise-RTL prose.
+ */
+[dir="rtl"] .animate-image-wipe {
+  animation-name: image-wipe-rtl;
+}
+
+@keyframes image-wipe-rtl {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+[dir="rtl"] .animate-wipe-edge {
+  animation-name: wipe-edge-rtl;
+}
+
+@keyframes wipe-edge-rtl {
+  from {
+    right: 0;
+    opacity: 1;
+  }
+  to {
+    right: 100%;
+    opacity: 0;
+  }
+}
+
+/* Prices, phone numbers and dates are Latin-digit runs inside RTL prose; the
+   isolation stops the bidi algorithm reordering a leading currency or sign. */
+[dir="rtl"] .num {
+  unicode-bidi: isolate;
+  direction: ltr;
 }
 
 /* Mega-menu contents rise into place; children stagger via animation-delay. */

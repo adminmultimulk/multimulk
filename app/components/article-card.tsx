@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
-import { formatArticleDate, type Article } from "@/app/lib/media";
+import { Link } from "./link";
+import { resolveArticle, type Article } from "@/app/lib/media";
+import { useI18n } from "@/app/lib/i18n/context";
 
 /**
  * The article card: thumbnail, meta line, headline. Shared by the Media Centre
@@ -19,7 +22,9 @@ export function ArticleCard({
   aspect?: string;
   headingLevel?: 2 | 3;
 }) {
+  const { t, date } = useI18n();
   const Heading = headingLevel === 3 ? "h3" : "h2";
+  const copy = resolveArticle(article, t.articles.copy[article.slug]);
 
   return (
     <Link
@@ -40,9 +45,9 @@ export function ArticleCard({
       </div>
 
       <p className="flex flex-wrap items-center gap-x-[7.2px] text-[11.5px] leading-[17.28px] tracking-[0.02em] text-ink">
-        <span>{article.category}</span>
+        <span>{t.articles.categories[article.category]}</span>
         <span aria-hidden>|</span>
-        <span>{formatArticleDate(article.date)}</span>
+        <span className="num">{date(article.date)}</span>
         {article.source ? (
           <>
             <span aria-hidden>|</span>
@@ -52,7 +57,7 @@ export function ArticleCard({
       </p>
 
       <Heading className="text-[15.8px] leading-[23.76px] tracking-[0.02em] text-ink transition-colors group-hover:text-forest">
-        {article.title}
+        {copy.title}
       </Heading>
     </Link>
   );

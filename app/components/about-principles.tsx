@@ -5,9 +5,12 @@ import { motion, useReducedMotion } from "motion/react";
 import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
 import { aboutPrinciples } from "@/app/lib/about";
+import { useI18n } from "@/app/lib/i18n/context";
 
 export function AboutPrinciples() {
+  const { t } = useI18n();
   const reduced = useReducedMotion();
+  const copy = t.about.principles;
 
   return (
     <section className="relative overflow-hidden bg-mist py-[72px] lg:py-[104px]">
@@ -26,14 +29,14 @@ export function AboutPrinciples() {
       <Container className="relative">
         <h2 className="text-center font-display text-[30px] leading-[1.25] text-ink sm:text-[40px]">
           <AnimatedTitle align="center" variant="section">
-            {aboutPrinciples.heading}
+            {copy.heading}
           </AnimatedTitle>
         </h2>
 
         <ul className="mt-12 grid gap-6 md:grid-cols-3 lg:mt-16 lg:gap-7">
           {aboutPrinciples.items.map((item, i) => (
             <motion.li
-              key={item.number}
+              key={item.key}
               className="bg-white p-7 shadow-[0_18px_50px_-30px_rgba(7,31,19,0.55)] lg:p-8"
               initial={reduced ? false : { opacity: 0, y: 56 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -45,15 +48,15 @@ export function AboutPrinciples() {
               }}
             >
               <div className="flex items-start justify-between gap-5 border-b border-ink/12 pb-4">
-                <span className="font-display text-[40px] leading-none text-ink/75">
+                <span className="num font-display text-[40px] leading-none text-ink/75">
                   {item.number}
                 </span>
-                <h3 className="max-w-[190px] pt-2 text-right text-[10.5px] font-medium uppercase leading-[15px] tracking-[0.1em] text-gold">
-                  {item.title}
+                <h3 className="max-w-[190px] pt-2 text-end text-[10.5px] font-medium uppercase leading-[15px] tracking-[0.1em] text-gold">
+                  {copy.items[item.key].title}
                 </h3>
               </div>
               <p className="mt-5 text-[12.5px] leading-[21px] text-ink/80">
-                {item.body}
+                {copy.items[item.key].body}
               </p>
             </motion.li>
           ))}

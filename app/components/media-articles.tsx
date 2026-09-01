@@ -5,17 +5,19 @@ import {
   ARTICLES_PER_PAGE,
   articleCategories,
   mediaArticles,
-  mediaIndex,
   sortOptions,
   type ArticleFilter,
   type SortOption,
 } from "@/app/lib/media";
+import { useI18n } from "@/app/lib/i18n/context";
+import { interpolate } from "@/app/lib/i18n/format";
 import { AnimatedTitle } from "./animated-title";
 import { ArticleCard } from "./article-card";
 import { Container } from "./container";
 import { SelectMenu } from "./select-menu";
 
 export function MediaArticles() {
+  const { t } = useI18n();
   const [filter, setFilter] = useState<ArticleFilter>("All");
   const [sort, setSort] = useState<SortOption>("Newest");
   const [page, setPage] = useState(1);
@@ -44,10 +46,12 @@ export function MediaArticles() {
       <Container>
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-[64px]">
           <h1 className="font-display text-[34px] leading-[1.36] text-ink sm:text-[42px] lg:text-[48px]">
-            <AnimatedTitle variant="banner">{mediaIndex.heading}</AnimatedTitle>
+            <AnimatedTitle variant="banner">
+              {t.media.indexHeading}
+            </AnimatedTitle>
           </h1>
-          <p className="max-w-[713px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink lg:text-right">
-            {mediaIndex.body}
+          <p className="max-w-[713px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink lg:text-end">
+            {t.media.indexBody}
           </p>
         </div>
 
@@ -69,23 +73,24 @@ export function MediaArticles() {
                       : "text-ink hover:bg-ink/[0.06]"
                   }`}
                 >
-                  {name}
+                  {t.articles.categories[name]}
                 </button>
               );
             })}
           </div>
 
-          <div className="flex items-center self-start rounded-full border border-ink py-[7.2px] pl-[21.6px] pr-[14.4px] sm:self-auto">
-            <span className="border-r border-ink pr-[14.4px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink">
-              Sort by
+          <div className="flex items-center self-start rounded-full border border-ink py-[7.2px] ps-[21.6px] pe-[14.4px] sm:self-auto">
+            <span className="border-e border-ink pe-[14.4px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink">
+              {t.common.sortBy}
             </span>
             <SelectMenu
-              label="Sort articles"
+              label={t.articles.sortLabel}
               value={sort}
               onChange={(v) => apply({ sort: v as SortOption })}
               options={sortOptions}
-              className="pl-[8.64px]"
-              triggerClassName="pr-[9px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink"
+              format={(v) => t.articles.sort[v as SortOption]}
+              className="ps-[8.64px]"
+              triggerClassName="pe-[9px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink"
               chevronClassName="text-ink"
               panelClassName="w-[max(100%,180px)]"
             />
@@ -105,7 +110,9 @@ export function MediaArticles() {
           </ul>
         ) : (
           <p className="py-16 text-center text-[14.4px] text-ink/70">
-            Nothing filed under {filter} yet.
+            {interpolate(t.articles.empty, {
+              filter: t.articles.categories[filter],
+            })}
           </p>
         )}
 
@@ -116,7 +123,7 @@ export function MediaArticles() {
               onClick={() => setPage((p) => p + 1)}
               className="rounded-full bg-ink px-[28.8px] py-[13px] text-[13.8px] text-white transition-colors hover:bg-forest"
             >
-              {mediaIndex.loadMore}
+              {t.common.loadMore}
             </button>
           </div>
         ) : null}

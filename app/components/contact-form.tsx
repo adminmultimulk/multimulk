@@ -1,20 +1,34 @@
 "use client";
 
 import { useState } from "react";
+import { useI18n } from "@/app/lib/i18n/context";
 import { SelectMenu } from "./select-menu";
 
+/** Option keys; the labels beside them come from the dictionary. */
 const ENQUIRY_TYPES = [
-  "Turkish citizenship enquiry",
-  "Türkiye property enquiry",
-  "Caribbean CBI enquiry",
-  "General enquiry",
-];
+  "turkishCitizenship",
+  "turkiyeProperty",
+  "caribbeanCbi",
+  "general",
+] as const;
 
+export type EnquiryType = (typeof ENQUIRY_TYPES)[number];
 type Status = "idle" | "sent";
 
-export function ContactForm() {
+/**
+ * `defaultEnquiry` lets a page that already knows what the reader is here for
+ * — a citizenship programme page, say — open the form on that option rather
+ * than making them re-state it. Unset, it opens where /contact-us does.
+ */
+export function ContactForm({
+  defaultEnquiry = ENQUIRY_TYPES[0],
+}: {
+  defaultEnquiry?: EnquiryType;
+} = {}) {
+  const { t } = useI18n();
+  const form = t.contact.form;
   const [status, setStatus] = useState<Status>("idle");
-  const [enquiryType, setEnquiryType] = useState(ENQUIRY_TYPES[0]);
+  const [enquiryType, setEnquiryType] = useState<EnquiryType>(defaultEnquiry);
 
   // No backend is wired up yet — this confirms locally so the flow is
   // testable. Point `onSubmit` at the real endpoint when it exists.
@@ -26,17 +40,18 @@ export function ContactForm() {
   if (status === "sent") {
     return (
       <div className="flex min-h-[420px] flex-col items-center justify-center border border-ink/10 bg-white px-8 text-center">
-        <h3 className="font-display text-[26px] text-ink">Thank You</h3>
+        <h3 className="font-display text-[26px] text-ink">
+          {form.sentHeading}
+        </h3>
         <p className="mt-3 max-w-[340px] text-[13px] leading-[21px] text-ink/70">
-          Thank you for getting in touch. A member of the Multi Mulk team will
-          reply shortly.
+          {form.sentBody}
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
           className="mt-7 rounded-full border border-ink/25 px-7 py-2.5 text-[12.5px] text-ink transition-colors hover:border-ink"
         >
-          Send another message
+          {form.sentAgain}
         </button>
       </div>
     );
@@ -44,62 +59,67 @@ export function ContactForm() {
 
   return (
     <form onSubmit={submit} className="grid gap-5 sm:grid-cols-2">
-      <Field label="Name" name="name" placeholder="Insert your name" required />
       <Field
-        label="Phone Number"
-        name="phone"
-        type="tel"
-        placeholder="Phone Number"
+        label={form.name}
+        name="name"
+        placeholder={form.namePlaceholder}
         required
       />
       <Field
-        label="Email"
+        label={form.phone}
+        name="phone"
+        type="tel"
+        placeholder={form.phonePlaceholder}
+        required
+      />
+      <Field
+        label={form.email}
         name="email"
         type="email"
-        placeholder="myemail@email.com"
+        placeholder={form.emailPlaceholder}
         required
         className="sm:col-span-2"
       />
 
       <div className="sm:col-span-2">
         <span className="mb-2 block text-[12.5px] text-ink/70">
-          What is your enquiry about? <span className="text-gold">*</span>
+          {form.enquiryAbout} <span className="text-gold">*</span>
         </span>
         <SelectMenu
-          label="What is your enquiry about?"
+          label={form.enquiryAbout}
           name="enquiryType"
           required
           value={enquiryType}
-          onChange={setEnquiryType}
+          onChange={(v) => setEnquiryType(v as EnquiryType)}
           options={ENQUIRY_TYPES}
+          format={(v) => form.types[v as EnquiryType]}
           triggerClassName="rounded-sm border border-ink/15 bg-white px-4 py-3 text-[13.5px] text-ink focus-visible:border-gold"
         />
       </div>
 
       <Field
-        label="Subject"
+        label={form.subject}
         name="subject"
-        placeholder="What would you like to enquire about?"
+        placeholder={form.subjectPlaceholder}
         required
         className="sm:col-span-2"
       />
 
       <label className="sm:col-span-2">
         <span className="mb-2 block text-[12.5px] text-ink/70">
-          Message <span className="text-gold">*</span>
+          {form.message} <span className="text-gold">*</span>
         </span>
         <textarea
           name="message"
           required
           rows={5}
-          placeholder="Type your message.."
+          placeholder={form.messagePlaceholder}
           className="w-full resize-y rounded-sm border border-ink/15 bg-white px-4 py-3 text-[13.5px] text-ink outline-none placeholder:text-ink/35 focus:border-gold"
         />
       </label>
 
       <p className="text-[11px] leading-[17px] text-ink/60 sm:col-span-2">
-        By submitting this form, you consent to us contacting you regarding your
-        enquiry. See our Privacy Policy for details on how we handle your data.
+        {form.consent}
       </p>
 
       <div className="sm:col-span-2">
@@ -107,7 +127,7 @@ export function ContactForm() {
           type="submit"
           className="rounded-full bg-forest px-9 py-3.5 text-[13px] text-cream transition-colors hover:bg-forest-deep"
         >
-          Send Enquiry
+          {form.submit}
         </button>
       </div>
     </form>

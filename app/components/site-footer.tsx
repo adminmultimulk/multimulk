@@ -1,11 +1,41 @@
 import Image from "next/image";
-import Link from "next/link";
-import { footer, footerLinks } from "@/app/lib/content";
-import { Facebook, Instagram, LinkedIn, Mail, MapPin, Phone } from "./icons";
+import {
+  contact,
+  entities,
+  footerAboutItems,
+  footerColumns,
+  footerLinks,
+  socialLinks,
+} from "@/app/lib/content";
+import { getDictionary } from "@/app/lib/i18n";
+import { interpolate } from "@/app/lib/i18n/format";
+import { Link } from "./link";
+import {
+  Facebook,
+  Instagram,
+  LinkedIn,
+  Mail,
+  MapPin,
+  Phone,
+  TikTok,
+  X,
+  YouTube,
+} from "./icons";
 
-const socials = [LinkedIn, Instagram, Facebook];
+const socialIcons = {
+  linkedin: LinkedIn,
+  instagram: Instagram,
+  facebook: Facebook,
+  youtube: YouTube,
+  x: X,
+  tiktok: TikTok,
+};
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const t = await getDictionary();
+  const itemStyle =
+    "text-[11.5px] leading-[17px] text-cream/90 transition-colors hover:text-white";
+
   return (
     <footer className="relative min-h-[720px] overflow-hidden bg-forest lg:min-h-[900px]">
       <Image
@@ -24,7 +54,7 @@ export function SiteFooter() {
               <Link href="/" aria-label="Multi Mulk">
                 <Image
                   src="/logos/multi-mulk-light.png"
-                  alt="Multi Mulk — Global Solutions for Global Citizens"
+                  alt={t.common.logoAlt}
                   width={400}
                   height={113}
                   className="h-auto w-[230px] lg:w-[280px]"
@@ -32,50 +62,57 @@ export function SiteFooter() {
               </Link>
 
               <div className="mt-6 flex flex-col gap-2.5">
-                {footer.entities.map((entity) => (
+                {entities.map((entity) => (
                   <div key={entity} className="flex items-center gap-2.5">
                     <span className="text-[11.5px] text-cream/90">{entity}</span>
                     <div className="flex items-center gap-[7px]">
-                      {socials.map((Icon, i) => (
-                        <a
-                          key={i}
-                          href="#"
-                          aria-label={`${entity} social profile`}
-                          className="flex h-[17px] w-[17px] items-center justify-center rounded-full border border-cream/70 text-cream/90 transition-colors hover:border-cream hover:text-cream"
-                        >
-                          <Icon className="w-2.5" />
-                        </a>
-                      ))}
+                      {socialLinks.map((social) => {
+                        const Icon = socialIcons[social.key];
+                        return (
+                          <a
+                            key={social.key}
+                            href={social.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={interpolate(t.common.socialProfile, {
+                              name: `${entity} ${social.name}`,
+                            })}
+                            className="flex h-[17px] w-[17px] items-center justify-center rounded-full border border-cream/70 text-cream/90 transition-colors hover:border-cream hover:text-cream"
+                          >
+                            <Icon className="w-2.5" />
+                          </a>
+                        );
+                      })}
                     </div>
                   </div>
                 ))}
               </div>
 
               <p className="mt-6 text-[10.5px] text-cream/80">
-                {footer.copyright}
+                {t.footer.copyright}
               </p>
             </div>
 
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-              {footer.columns.map((column) => (
-                <div key={column.title}>
+              {/* Portfolio columns list development names, which read the same
+                  in every language. */}
+              {footerColumns.map((column) => (
+                <div key={column.key}>
                   <h2 className="text-[12px] font-medium uppercase tracking-[0.08em] text-cream">
-                    {column.title}
+                    {t.footer.columns[column.key]}
                   </h2>
                   <ul className="mt-[18px] flex flex-col gap-[11px]">
-                    {column.items.map((item) => {
-                      const href = footerLinks[item];
-                      const style =
-                        "text-[11.5px] leading-[17px] text-cream/90 transition-colors hover:text-white";
+                    {column.names.map((name) => {
+                      const href = footerLinks[name];
                       return (
-                        <li key={item}>
+                        <li key={name}>
                           {href ? (
-                            <Link href={href} className={style}>
-                              {item}
+                            <Link href={href} className={itemStyle}>
+                              {name}
                             </Link>
                           ) : (
-                            <a href="#" className={style}>
-                              {item}
+                            <a href="#" className={itemStyle}>
+                              {name}
                             </a>
                           )}
                         </li>
@@ -87,33 +124,56 @@ export function SiteFooter() {
 
               <div>
                 <h2 className="text-[12px] font-medium uppercase tracking-[0.08em] text-cream">
-                  {footer.contact.title}
+                  {t.footer.columns.about}
+                </h2>
+                <ul className="mt-[18px] flex flex-col gap-[11px]">
+                  {footerAboutItems.map((item) => (
+                    <li key={item.key}>
+                      {item.href ? (
+                        <Link href={item.href} className={itemStyle}>
+                          {t.footer.aboutItems[item.key]}
+                        </Link>
+                      ) : (
+                        <a href="#" className={itemStyle}>
+                          {t.footer.aboutItems[item.key]}
+                        </a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="text-[12px] font-medium uppercase tracking-[0.08em] text-cream">
+                  {t.footer.contactTitle}
                 </h2>
                 <ul className="mt-[18px] flex flex-col gap-[11px] text-[11.5px] leading-[17px] text-cream/90">
                   <li className="flex gap-2">
                     <MapPin className="mt-0.5 w-3 shrink-0" />
-                    <span>{footer.contact.address}</span>
+                    <span>{t.footer.address}</span>
                   </li>
                   <li className="flex gap-2">
                     <Mail className="mt-0.5 w-3.5 shrink-0" />
                     <a
-                      href={`mailto:${footer.contact.email}`}
-                      className="transition-colors hover:text-white"
+                      href={`mailto:${contact.email}`}
+                      className="transition-colors hover:text-white num"
                     >
-                      {footer.contact.email}
+                      {contact.email}
                     </a>
                   </li>
                   <li className="flex gap-2">
                     <Phone className="mt-0.5 w-3.5 shrink-0" />
                     <span className="flex flex-col gap-1">
-                      {footer.contact.phones.map((phone) => (
+                      {contact.phones.map((phone) => (
                         <a
                           key={phone.number}
                           href={`tel:${phone.number.replace(/\s/g, "")}`}
                           className="transition-colors hover:text-white"
                         >
-                          <span className="text-cream/60">{phone.label}</span>{" "}
-                          {phone.number}
+                          <span className="text-cream/60">
+                            {t.footer.offices[phone.key]}
+                          </span>{" "}
+                          <span className="num">{phone.number}</span>
                         </a>
                       ))}
                     </span>

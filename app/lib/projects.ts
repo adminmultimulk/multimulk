@@ -1,6 +1,11 @@
 /**
  * Development/project pages served at /properties/[slug].
  *
+ * The copy here is the English source. Short strings — taglines, overview
+ * headings, highlight titles, stat labels, amenity names — are translated in
+ * the dictionaries and looked up by the page; the long prose is staged under
+ * `dictionary.property.copy[slug]` and falls back to what is written here.
+ *
  * NOTE: placeholder content — names, copy, figures and photography are
  * stand-ins and must be replaced with Multi Mulk's real Türkiye developments
  * before launch. See the note at the top of content.ts.
@@ -11,6 +16,7 @@
 
 export type Project = {
   slug: string;
+  /** Never translated — the name a buyer searches for, in every language. */
   name: string;
   tagline: string;
   description: string;

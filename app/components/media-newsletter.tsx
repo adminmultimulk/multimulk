@@ -1,6 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "./link";
 import { mediaNewsletter } from "@/app/lib/media";
+import { getDictionary } from "@/app/lib/i18n";
 import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
 
@@ -9,7 +10,9 @@ import { Container } from "./container";
  * lays the type straight onto the photograph; a scrim is added here so it
  * stays legible whichever image is swapped in.
  */
-export function MediaNewsletter() {
+export async function MediaNewsletter() {
+  const t = await getDictionary();
+
   return (
     <section className="bg-white pb-[72px] lg:pb-[144px]">
       <Container>
@@ -27,17 +30,17 @@ export function MediaNewsletter() {
           <div className="relative flex flex-col items-center px-6 text-center">
             <h2 className="max-w-[760px] font-display text-[28px] leading-[1.4] text-white sm:text-[34px] lg:text-[40px]">
               <AnimatedTitle align="center" variant="section">
-                {mediaNewsletter.heading}
+                {t.media.newsletter.heading}
               </AnimatedTitle>
             </h2>
             <p className="mt-[14.4px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-white/90">
-              {mediaNewsletter.body}
+              {t.media.newsletter.body}
             </p>
             <Link
               href={mediaNewsletter.href}
               className="mt-[28.8px] rounded-full border border-white/85 px-[28.8px] py-3 text-[13.8px] text-white transition-colors hover:bg-white hover:text-ink"
             >
-              {mediaNewsletter.cta}
+              {t.media.newsletter.cta}
             </Link>
           </div>
         </div>

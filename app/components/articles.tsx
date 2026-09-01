@@ -1,19 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
 import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
-import { articles, articlesSection, formatArticleDate } from "@/app/lib/content";
+import { Link } from "./link";
+import { articles } from "@/app/lib/content";
+import { articleCategories, resolveArticle } from "@/app/lib/media";
+import { useI18n } from "@/app/lib/i18n/context";
 import { Diamond } from "./icons";
 
 export function Articles() {
-  const [category, setCategory] = useState("All");
-  const visible =
+  const { t, date } = useI18n();
+  const [category, setCategory] = useState<string>("All");
+
+  const visible = (
     category === "All"
       ? articles
-      : articles.filter((a) => a.category === category);
+      : articles.filter((a) => a.category === category)
+  ).map((article) => resolveArticle(article, t.articles.copy[article.slug]));
 
   return (
     <section className="bg-white py-[72px] lg:py-[100px]">
@@ -21,11 +26,11 @@ export function Articles() {
         <div className="grid gap-6 lg:grid-cols-[1fr_660px] lg:gap-10">
           <h2 className="font-display text-[32px] leading-[52px] text-ink sm:text-[40px]">
             <AnimatedTitle variant="section">
-              {articlesSection.heading}
+              {t.articlesSection.heading}
             </AnimatedTitle>
           </h2>
           <p className="max-w-[660px] self-center text-[12.5px] leading-[21px] text-ink">
-            {articlesSection.body}
+            {t.articlesSection.body}
           </p>
         </div>
 
@@ -36,10 +41,10 @@ export function Articles() {
         <div className="grid gap-10 lg:grid-cols-[176px_1fr] lg:gap-[52px]">
           <div>
             <p className="text-[10px] font-medium uppercase tracking-[0.12em] text-gold">
-              Articles Category
+              {t.articlesSection.categoryLabel}
             </p>
             <div className="mt-[14px] flex flex-wrap gap-3.5 lg:flex-col">
-              {articlesSection.categories.map((name) => {
+              {articleCategories.map((name) => {
                 const isActive = name === category;
                 return (
                   <button
@@ -53,7 +58,7 @@ export function Articles() {
                         : "border-ink/30 text-ink hover:border-ink"
                     }`}
                   >
-                    {name}
+                    {t.articles.categories[name]}
                   </button>
                 );
               })}
@@ -77,7 +82,8 @@ export function Articles() {
                     />
                   </div>
                   <p className="mt-4 text-[10.5px] text-ink/65">
-                    {article.category} &nbsp;|&nbsp; {formatArticleDate(article.date, "short")}
+                    {t.articles.categories[article.category]} &nbsp;|&nbsp;{" "}
+                    <span className="num">{date(article.date, "short")}</span>
                   </p>
                   <h3 className="mt-4 text-[13px] leading-[21px] text-ink">
                     {article.title}

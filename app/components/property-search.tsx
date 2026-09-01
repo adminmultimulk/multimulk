@@ -11,6 +11,14 @@ import {
   CBI_THRESHOLD_USD,
   type Currency,
 } from "@/app/lib/properties";
+import { useI18n } from "@/app/lib/i18n/context";
+import { interpolate } from "@/app/lib/i18n/format";
+import {
+  bedroomOptionLabel,
+  placeLabel,
+  typeLabel,
+  unitTitle,
+} from "@/app/lib/i18n/units";
 import { Search } from "./icons";
 import { SelectMenu } from "./select-menu";
 import { UnitCard } from "./unit-card";
@@ -45,6 +53,7 @@ function matchesLocation(
 }
 
 export function PropertySearch({ initial }: { initial: InitialFilters }) {
+  const { t, locale, num, plural } = useI18n();
   const [query, setQuery] = useState(initial.query);
   const [types, setTypes] = useState<string[]>(initial.types);
   const [bedrooms, setBedrooms] = useState<string[]>(initial.bedrooms);
@@ -58,7 +67,11 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
     const ceiling = maxPrice === "Any" ? null : Number(maxPrice);
 
     return units.filter((unit) => {
-      if (q && !unit.title.toLowerCase().includes(q)) return false;
+      // Matched against what the reader actually sees, so a search typed in
+      // this language finds the card it is looking at.
+      const title = unitTitle(locale, t, unit).toLowerCase();
+      if (q && !title.includes(q) && !unit.title.toLowerCase().includes(q))
+        return false;
       if (types.length && !types.includes(unit.type)) return false;
       if (!matchesBedroom(unit.bedroom, bedrooms)) return false;
       if (!matchesLocation(unit.location, unit.country, location)) return false;
@@ -66,7 +79,7 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
       if (cbiOnly && !unit.cbiEligible) return false;
       return true;
     });
-  }, [query, types, bedrooms, location, maxPrice, currency, cbiOnly]);
+  }, [query, types, bedrooms, location, maxPrice, currency, cbiOnly, locale, t]);
 
   const toggle = (
     value: string,
@@ -91,27 +104,26 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
       <aside className="lg:sticky lg:top-8 lg:self-start">
         <div className="bg-mist p-7">
           <h2 className="font-display text-[22px] leading-[30px] text-ink">
-            Find the Finest Residences
+            {t.search.panelHeading}
           </h2>
           <p className="mt-2 text-[12px] text-ink/70">
-            Showing <span className="text-gold">{results.length}</span>{" "}
-            {results.length === 1 ? "Unit" : "Units"}
+            {plural(t.search.showing, results.length)}
           </p>
 
-          <Field label="Search">
+          <Field label={t.search.searchLabel}>
             <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 w-4 -translate-y-1/2 text-ink/40" />
+              <Search className="pointer-events-none absolute start-3 top-1/2 w-4 -translate-y-1/2 text-ink/40" />
               <input
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Residence name"
-                className="w-full rounded-sm border border-transparent bg-white py-2.5 pl-9 pr-3 text-[13px] text-ink outline-none placeholder:text-ink/40 focus:border-gold"
+                placeholder={t.search.searchPlaceholder}
+                className="w-full rounded-sm border border-transparent bg-white py-2.5 ps-9 pe-3 text-[13px] text-ink outline-none placeholder:text-ink/40 focus:border-gold"
               />
             </div>
           </Field>
 
-          <Field label="Property Type">
+          <Field label={t.search.propertyType}>
             <div className="flex flex-wrap gap-x-5 gap-y-3">
               {propertyTypes.map((type) => (
                 <label
@@ -124,13 +136,13 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
                     onChange={() => toggle(type, types, setTypes)}
                     className="h-4 w-4 shrink-0 appearance-none rounded-[2px] border border-ink/25 bg-white checked:border-gold checked:bg-gold"
                   />
-                  {type}
+                  {typeLabel(t, type)}
                 </label>
               ))}
             </div>
           </Field>
 
-          <Field label="Bedroom">
+          <Field label={t.search.bedroom}>
             <div className="flex flex-wrap gap-1">
               {bedroomOptions.map((option) => {
                 const on = bedrooms.includes(option);
@@ -146,7 +158,7 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
                         : "border-ink/15 bg-white text-ink hover:border-gold"
                     }`}
                   >
-                    {option}
+                    {bedroomOptionLabel(locale, t, option)}
                   </button>
                 );
               })}
@@ -155,30 +167,29 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
 
           <div className="mt-5 grid grid-cols-[86px_1fr] gap-3">
             <Select
-              label="Currency"
+              label={t.search.currency}
               value={currency}
               onChange={(v) => setCurrency(v as Currency)}
               options={currencies}
             />
             <Select
-              label="Starting From"
+              label={t.common.startingFrom}
               value={maxPrice}
               onChange={setMaxPrice}
               options={[
                 "Any",
                 ...priceCeilings[currency].map((n) => String(n)),
               ]}
-              format={(v) =>
-                v === "Any" ? "Any" : Number(v).toLocaleString("en-US")
-              }
+              format={(v) => (v === "Any" ? t.common.any : num(Number(v)))}
             />
           </div>
 
           <Select
-            label="Location"
+            label={t.search.location}
             value={location}
             onChange={setLocation}
             options={["Any", ...locations]}
+            format={(v) => (v === "Any" ? t.common.any : placeLabel(t, v))}
             className="mt-5"
           />
 
@@ -190,10 +201,11 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
               className="mt-0.5 h-4 w-4 shrink-0 appearance-none rounded-[2px] border border-ink/25 bg-white checked:border-gold checked:bg-gold"
             />
             <span>
-              Citizenship eligible only
+              {t.search.cbiOnly}
               <span className="mt-0.5 block text-[11px] text-ink/55">
-                From USD {CBI_THRESHOLD_USD.toLocaleString("en-US")} — the
-                Türkiye CBI property threshold
+                {interpolate(t.search.cbiHint, {
+                  amount: num(CBI_THRESHOLD_USD),
+                })}
               </span>
             </span>
           </label>
@@ -203,7 +215,7 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
             onClick={reset}
             className="mt-5 w-full rounded-full border border-ink/25 py-2.5 text-[12.5px] text-ink transition-colors hover:border-ink"
           >
-            Reset All
+            {t.common.resetAll}
           </button>
         </div>
       </aside>
@@ -218,14 +230,14 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
         ) : (
           <div className="border border-ink/10 px-8 py-20 text-center">
             <p className="font-display text-[22px] text-ink">
-              No residences match those filters
+              {t.search.noResults}
             </p>
             <button
               type="button"
               onClick={reset}
               className="mt-5 rounded-full border border-ink/25 px-7 py-2.5 text-[12.5px] text-ink transition-colors hover:border-ink"
             >
-              Reset All
+              {t.common.resetAll}
             </button>
           </div>
         )}
@@ -273,7 +285,7 @@ function Select({
         onChange={onChange}
         options={options}
         format={format}
-        triggerClassName="rounded-sm border border-transparent bg-white py-2.5 pl-3 pr-3 text-[13px] text-ink focus-visible:border-gold"
+        triggerClassName="rounded-sm border border-transparent bg-white py-2.5 px-3 text-[13px] text-ink focus-visible:border-gold"
       />
     </div>
   );
