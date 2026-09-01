@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Manrope, Vazirmatn } from "next/font/google";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { WhatsAppButton } from "@/app/components/whatsapp-button";
+import { analyticsEnabled, gaId } from "@/app/lib/analytics";
 import { dirFor, isLocale, locales } from "@/app/lib/i18n/config";
 import { I18nProvider } from "@/app/lib/i18n/context";
 import { getDictionary } from "@/app/lib/i18n";
@@ -114,6 +116,7 @@ export default async function RootLayout({
           <WhatsAppButton />
         </I18nProvider>
       </body>
+      {analyticsEnabled && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }
