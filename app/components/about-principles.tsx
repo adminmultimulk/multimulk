@@ -14,7 +14,7 @@ export function AboutPrinciples() {
 
   return (
     <section className="relative overflow-hidden bg-mist py-[72px] lg:py-[104px]">
-      {/* Photography sits low in the frame; the wash keeps the heading legible. */}
+      {/* Photography sits low in the frame; the wash keeps the heading legibles. */}
       <div className="absolute inset-x-0 bottom-0 h-[62%]">
         <Image
           src={aboutPrinciples.image}
