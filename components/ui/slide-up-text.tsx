@@ -30,7 +30,7 @@ interface SlideUpTextProps {
   /**
    * Direction for the word/character track. The text is laid out as flex
    * items, so the container's direction — not the page's — decides their
-   * order. Pass "auto" to have the browser infer it from the text itself,
+   * order. Pass "auto" to have the browser infer it from the text itselsf,
    * which is what keeps a Latin headline in order on a right-to-left page.
    */
   dir?: "ltr" | "rtl" | "auto";
