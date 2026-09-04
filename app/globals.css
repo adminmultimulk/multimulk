@@ -134,6 +134,47 @@ body {
 }
 
 /*
+ * Simplified Chinese.
+ *
+ * The webfonts this site loads — The Seasons, Manrope, Vazirmatn — carry no Han
+ * glyphs between them, so `zh` is served from the system faces every major
+ * platform already ships. That is not a compromise: a subsetted Simplified
+ * face is measured in megabytes, and these are the fonts Chinese readers see
+ * everywhere else. Latin proper nouns — development and operator names, which
+ * are never translated — fall through to Manrope as usual.
+ *
+ * The selector matches the routing segment, but `<html lang>` publishes the
+ * BCP 47 tag `zh-Hans`, so it is written as a prefix match rather than an
+ * equality one.
+ */
+[lang|="zh"] body,
+[lang|="zh"] .font-display {
+  font-family:
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC",
+    var(--font-sans);
+}
+
+/* Han is unicase; uppercasing does nothing but widen the tracking. */
+[lang|="zh"] .uppercase {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Han squares want a little air between them, but nothing like the tracking
+   Latin display type is set with here. */
+[lang|="zh"] .font-display {
+  letter-spacing: 0.02em;
+}
+
+/* Full-width glyphs fill their em box, so the tight Latin heading leading
+   closes up entirely. Anything already looser is left alone. */
+[lang|="zh"] h1,
+[lang|="zh"] h2,
+[lang|="zh"] h3 {
+  line-height: max(1.35em, 1lh);
+}
+
+/*
  * Right-to-left.
  *
  * Layout mirrors through Tailwind's logical utilities in the components; what

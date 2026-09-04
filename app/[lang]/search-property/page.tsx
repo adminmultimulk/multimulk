@@ -8,12 +8,27 @@ import {
 } from "@/app/components/property-search";
 import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
-import { alternatesFor, getDictionary } from "@/app/lib/i18n";
-import { currencies, type Currency } from "@/app/lib/properties";
+import { alternatesFor, getDictionary, getLocale } from "@/app/lib/i18n";
+import { JsonLd } from "@/app/components/json-ld";
+import { breadcrumbs } from "@/app/lib/seo/jsonld";
+import { currencies, locations, type Currency } from "@/app/lib/properties";
+import { mergedLocations, mergedUnits } from "@/app/lib/cms/properties";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: PageProps<"/[lang]/search-property">): Promise<Metadata> {
   const t = await getDictionary();
-  return { ...t.meta.search, alternates: await alternatesFor("/search-property") };
+  const filtered = Object.keys(await searchParams).length > 0;
+
+  return {
+    ...t.meta.search,
+    alternates: await alternatesFor("/search-property"),
+    // Every combination of filters is its own URL, and there are effectively
+    // unlimited combinations of near-identical, thin pages. The unfiltered
+    // page is the one worth indexing; the rest stay crawlable so the listings
+    // they link to are still discovered.
+    ...(filtered ? { robots: { index: false, follow: true } } : {}),
+  };
 }
 
 /** Query params arrive as string | string[] | undefined; normalise to a list. */
@@ -32,9 +47,17 @@ function one(value: string | string[] | undefined, fallback: string) {
 export default async function SearchPropertyPage({
   searchParams,
 }: PageProps<"/[lang]/search-property">) {
-  const t = await getDictionary();
+  const locale = await getLocale();
+  const t = await getDictionary(locale);
   const params = await searchParams;
   const currency = one(params.currency, "USD").toUpperCase();
+
+  // The units that ship with the site, plus everything published from the
+  // dashboard, and a place filter wide enough to cover both.
+  const [units, places] = await Promise.all([
+    mergedUnits(),
+    mergedLocations(locations),
+  ]);
 
   const initial: InitialFilters = {
     query: one(params.q, ""),
@@ -50,6 +73,9 @@ export default async function SearchPropertyPage({
 
   return (
     <>
+      <JsonLd
+        graph={[breadcrumbs({ locale, id: "search", labels: t.routes })]}
+      />
       <div className="relative">
         <SiteNav />
         <section className="relative flex h-[495px] items-end overflow-hidden bg-forest">
@@ -61,9 +87,9 @@ export default async function SearchPropertyPage({
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/85 via-forest-deep/45 to-transparent rtl:bg-gradient-to-l" />
-          <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-forest-deep/70 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-[260px] bg-gradient-to-t from-forest-deep/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/45 to-transparent rtl:bg-gradient-to-l" />
+          <div className="absolute inset-x-0 top-0 h-[180px] bg-gradient-to-b from-black/70 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-[260px] bg-gradient-to-t from-black/80 to-transparent" />
 
           <Container className="relative pb-14">
             <h1 className="max-w-[662px] font-display text-[40px] leading-[1.14] text-white sm:text-[54px]">
@@ -78,7 +104,7 @@ export default async function SearchPropertyPage({
 
       <main className="flex-1 py-16 lg:py-20">
         <Container>
-          <PropertySearch initial={initial} />
+          <PropertySearch initial={initial} units={units} locations={places} />
         </Container>
       </main>
 

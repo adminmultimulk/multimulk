@@ -5,6 +5,10 @@ import {
   locales,
   type Locale,
 } from "./app/lib/i18n/config";
+import { legacyGone } from "./app/lib/legacy-redirects";
+
+/** Lookup rather than a scan; this runs on every request. */
+const gone = new Set(legacyGone);
 
 /** Remembers the reader's choice from the language switcher, for a year. */
 export const LOCALE_COOKIE = "NEXT_LOCALE";
@@ -37,6 +41,18 @@ function fromAcceptLanguage(header: string | null): Locale | null {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Theme demos and page-builder scratch pages from the site this one
+  // replaces. Answered here rather than by a rewrite because the proxy runs
+  // first, so a rewrite never sees them — and giving them a locale prefix
+  // would turn a dead URL into a dead URL in seven languages.
+  const bare = pathname.replace(/\/$/, "");
+  if (gone.has(bare)) {
+    return new NextResponse("Gone", {
+      status: 410,
+      headers: { "content-type": "text/plain; charset=utf-8" },
+    });
+  }
+
   // Already localised — nothing to do.
   const first = pathname.split("/")[1];
   if (first && isLocale(first)) return;
@@ -59,12 +75,17 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   /**
-   * Everything except Next's internals, the files under `public/`, and the
-   * well-known metadata routes — none of which should ever gain a locale
-   * prefix. The trailing clause skips any path with a file extension.
+   * Everything except Next's internals, the dashboard, the files under
+   * `public/`, and the well-known metadata routes — none of which should ever
+   * gain a locale prefix. The trailing clause skips any path with a file
+   * extension.
+   *
+   * `/admin` is excluded because it is a tool, not a page of the site: it is
+   * English-only and has no localised twin, so prefixing it would send every
+   * sign-in to a URL that does not exist.
    */
   matcher: [
-    "/((?!_next/|api/|favicon\\.ico|robots\\.txt|sitemap\\.xml|images/|logos/|.*\\.[\\w]+$).*)",
+    "/((?!_next/|api/|admin(?:/|$)|favicon\\.ico|robots\\.txt|sitemap\\.xml|images/|logos/|.*\\.[\\w]+$).*)",
   ],
 };
 

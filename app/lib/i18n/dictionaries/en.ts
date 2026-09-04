@@ -24,40 +24,40 @@ const en = {
         "Multi Mulk connects global citizens with luxury residences and citizenship-by-investment opportunities across the UAE, Türkiye and the Caribbean.",
     },
     about: {
-      title: "About Us | Multi Mulk",
+      title: "About Us",
       description:
         "Multi Mulk is an international property and citizenship advisory, connecting global citizens with landmark residences across Türkiye and the Caribbean.",
     },
     media: {
-      title: "Media Centre | Multi Mulk",
+      title: "Media Centre",
       description:
         "Press coverage, announcements and guides from Multi Mulk — Turkish citizenship by investment, İstanbul and coastal developments, and our Caribbean portfolio.",
     },
     search: {
-      title: "Search Property | Multi Mulk",
+      title: "Search Property",
       description:
         "Browse residences with resort access, sweeping views, and effortless coastal living — filtered to your preferences.",
     },
     contact: {
-      title: "Contact Us | Multi Mulk",
+      title: "Contact Us",
       description:
         "Speak to the Multi Mulk team about Turkish citizenship by investment, Türkiye property, and Caribbean CBI programmes.",
     },
     /** Keyed by programme slug, matching `citizenship.ts`. */
     citizenship: {
       turkiye: {
-        title: "Turkish Citizenship by Investment | Multi Mulk",
+        title: "Turkish Citizenship by Investment",
         description:
           "Turkish citizenship through a USD 400,000 property purchase — thresholds, timelines, and the İstanbul and coastal residences that qualify.",
       },
       caribbean: {
-        title: "Caribbean Citizenship by Investment | Multi Mulk",
+        title: "Caribbean Citizenship by Investment",
         description:
           "Second citizenship in Grenada, Dominica and St. Kitts & Nevis through government-approved resort investments — thresholds, timelines and approved developments.",
       },
     },
-    propertyFallback: "Property | Multi Mulk",
-    articleFallback: "Article | Multi Mulk",
+    propertyFallback: "Property",
+    articleFallback: "Article",
   },
 
   /** Strings that recur across more than one section. */
@@ -75,17 +75,281 @@ const en = {
     searchProperties: "Search Properties",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+    close: "Close",
     logoAlt: "Multi Mulk — Global Solutions for Global Citizens",
     chooseLanguage: "Choose a language",
     socialProfile: "{name} social profile",
   },
 
+  /** Breadcrumb names, keyed by `labelKey` in `app/lib/routes.ts`. */
+  /** Sourcing and review lines shown wherever the site states a figure. */
+  review: {
+    line: "Last reviewed {date}",
+    by: "Reviewed by {name}",
+    sources: "Sources",
+    retrieved: "retrieved {date}",
+    /** Shown when a figure's review has lapsed, rather than hiding the page. */
+    stale: "This page is due for review. Confirm any figure with us before acting on it.",
+  },
+
+  figures: {
+    /** What kind of claim a number is. Rendered with the number, always. */
+    qualifiers: {
+      statutory: "Set in law.",
+      estimated:
+        "Estimated — subject to government processing and to the circumstances of each applicant. Not a guarantee.",
+      indicative: "Indicative. Confirm the figure for your own circumstances.",
+      market: "A market estimate, which varies by property and by date.",
+    },
+    units: {
+      months: "months",
+      years: "years",
+      days: "days",
+      count: "destinations",
+      percent: "%",
+    },
+  },
+
+  /** Ask Multi Mulk, client outcomes, the calculators and the author pages. */
+  faq: {
+    eyebrow: "Ask Multi Mulk",
+    heading: "The Questions People Actually Ask",
+    body: "Answers that end. Where the answer genuinely depends on something, the something is stated rather than left as a reason to call us.",
+    fullAnswer: "Read the full answer",
+    topics: {
+      eligibility: "Eligibility",
+      cost: "Cost",
+      timeline: "Timeline",
+      family: "Family",
+      property: "Property",
+      tax: "Tax",
+      process: "Process",
+      travel: "Travel",
+    },
+  },
+
+  caseStudies: {
+    eyebrow: "Client Outcomes",
+    heading: "What the Work Looks Like",
+    body: "Anonymised engagements, with the reasoning and the complications left in. A case study without a complication is a brochure.",
+    objective: "Objective",
+    family: "Family",
+    invested: "Invested",
+    timeline: "Start to finish",
+    afterwards: "Afterwards",
+    reasoning: "Why this, and what was rejected",
+    complication: "What went wrong",
+    consentPending: "No client outcomes are published yet. These require written client consent, which Multi Mulk holds for none of them so far.",
+  },
+
+  tools: {
+    eyebrow: "Tools",
+    heading: "Work the Numbers Yourself",
+    body: "Every calculator reads the same programme records the rest of the site does, so nothing here can quote a threshold the programme page contradicts.",
+    calculator: {
+      heading: "What it costs, all in",
+      body: "The threshold is the investment, not the cost. This adds the transaction on top of it, using the assumptions listed below the total.",
+      programme: "Programme",
+      adults: "Adults",
+      children: "Children under 18",
+      total: "Estimated total",
+      lines: {
+      investment: "Qualifying investment",
+      transferTax: "Title transfer tax",
+      legal: "Legal and advisory fees",
+      documentation: "Valuation, translation and notary",
+      government: "Government fees",
+      },
+      assumptions: "Assumes a {tax} transfer tax, {legal} in legal and advisory fees, {docs} in documentation, and {gov} per person for {people} applicants.",
+      caveat: "An estimate for planning, not a quotation. Rates vary by property, by jurisdiction and by date, and VAT treatment is not included. We put the real figure in writing before you commit to anything.",
+    },
+  },
+
+  authors: {
+    eyebrow: "Our Team",
+    heading: "Who Is Advising You",
+    body: "Immigration and investment advice is only as good as the person giving it. These are the people behind what is written here.",
+    credentials: "Credentials",
+    knowsAbout: "Areas of practice",
+    noCredentials: "Credentials pending confirmation.",
+    reviewedContent: "Reviewed content",
+    roles: {
+      founder: "Founder & Chief Executive",
+      advisory: "Advisory Director",
+      team: "Advisory Team",
+    },
+  },
+
+  /** The four pillars, their hubs and the pages built on programme data. */
+  /** The Investor Protection framework: the three filters, the twenty checks
+   *  and the scoring model. Structure lives in `app/lib/due-diligence.ts`. */
+  legal: { pending: "This page is awaiting its final text from Multi Mulk. Until it is published here, write to info@multimulk.com for the current terms." },
+
+  protection: {
+    filtersHeading: "Three filters, in order",
+    filters: {
+      eligible: { heading: "Eligible", body: "Does the property legally qualify under the programme? This is a yes or no, and a no ends the conversation." },
+      sensible: { heading: "Financially sensible", body: "Is the price close to what the property is actually worth? Meeting a threshold says nothing about value, and a property bought to clear a threshold is usually bought badly." },
+      exitReady: { heading: "Exit ready", body: "Can it be let, and can it be sold when the holding period ends? An asset you cannot leave is not an investment, it is a commitment." },
+    },
+    checksHeading: "What we check before you invest",
+    checksIntro: "Twenty questions, asked in the same order every time. They are written as questions because that is what they are — each one has an answer we hold on file, or the property does not go forward.",
+    checks: {
+      developerRecord: "Who is the developer, and what have they finished before?",
+      developerFinances: "What do the developer's accounts and filings show?",
+      titleDeed: "Is the title deed clean, and is it in the seller's name?",
+      ownershipHistory: "Who has owned this property, and when did it last change hands?",
+      citizenshipEligibility: "Does the property satisfy the programme's eligibility rules?",
+      gyoStatus: "Is the seller a REIT (GYO), and does that change anything here?",
+      valuation: "Does the official valuation support the price being asked?",
+      sellerEligibility: "Is the seller eligible to sell to a citizenship applicant?",
+      buildingPermits: "Are the building permits in place and current?",
+      constructionStage: "What stage is construction at, and against what schedule?",
+      comparablePrices: "What have comparable properties nearby actually sold for?",
+      pricePerSqm: "How does the price per square metre sit against the district?",
+      rentalDemand: "Is there real rental demand here, or only projected demand?",
+      rentalYield: "What net yield does that demand support after costs?",
+      resaleLiquidity: "How quickly does stock like this resell in this market?",
+      exitStrategy: "What is the exit, and what does it depend on?",
+      hiddenCosts: "What costs are not in the headline price?",
+      vatPosition: "What is the VAT position, and does an exemption apply?",
+      titleDeedCosts: "What will the title deed transfer actually cost?",
+      deliveryRisk: "What happens if the project is delivered late, or not at all?",
+    },
+    scoreHeading: "The Multi Mulk Investment Score",
+    scoreIntro: "Every property we recommend is scored out of a hundred against eight weighted factors. The weights are published here because a score whose workings are hidden is a number, not an assessment.",
+    scoreCaveat: "A score is one assessor's judgement on a stated date, not a forecast and not a guarantee. Every score carries the name of who made it and when. Ask us for the reasoning behind any figure.",
+    factorLabel: "Factor",
+    weightLabel: "Weight",
+    factors: {
+      citizenshipSafety: "Citizenship safety",
+      developerStrength: "Developer strength",
+      location: "Location",
+      priceVsMarket: "Price against market",
+      rentalPotential: "Rental potential",
+      resaleLiquidity: "Resale liquidity",
+      capitalAppreciation: "Capital appreciation",
+      deliveryRisk: "Delivery risk",
+    },
+  },
+
+  pillars: {
+    citizenship: {
+      eyebrow: "Citizenship by Investment",
+      heading: "A Second Citizenship, Held as an Asset",
+      body: "Programmes that grant full citizenship in return for a qualifying investment. We advise on which one fits — and, as often, on which does not.",
+      hubIntro:
+        "Each programme below is set out in the same fields, so they can be read against one another rather than one brochure at a time. Figures carry their source and the date they were last checked.",
+    },
+    goldenVisa: {
+      eyebrow: "Golden Visa & Residency",
+      heading: "Residency Without Relocation",
+      body: "Residence permits obtained through investment — a base, a tax position, and in several cases a route to citizenship over time.",
+      hubIntro:
+        "Residency programmes differ from citizenship in one decisive way: they are permissions to stay, renewable and revocable, not a nationality. The table below sets out what each actually grants.",
+    },
+    realEstate: {
+      eyebrow: "Real Estate",
+      heading: "Property That Works as an Investment",
+      body: "Developments in İstanbul, on the Turkish coast, in Dubai and across the Caribbean — assessed before they enter our portfolio, not after.",
+    },
+    protection: {
+      eyebrow: "Investor Protection",
+      heading: "Not Every Qualifying Property Is a Good Investment",
+      body: "A property can satisfy a programme's threshold and still be a poor asset. These are the checks we run before we put anything in front of a client.",
+    },
+  },
+
+  /** Column headings for a generated programme comparison. */
+  compare: {
+    eyebrow: "Compare",
+    heading: "Programmes, Side by Side",
+    intro:
+      "Every figure in these tables is read from the same programme record, so a threshold cannot say one thing here and another on the programme's own page.",
+    factor: "Factor",
+    unknownLabel: "Not confirmed",
+    noneRequired: "None required",
+    noAgeLimit: "No age limit",
+    grantedDirectly: "Granted directly",
+    noRoute: "No route",
+    yes: "Yes",
+    no: "No",
+    bestLabel: "Most favourable",
+    rows: {
+      minimumInvestment: "Minimum investment",
+      holdingPeriod: "Holding period",
+      processingTime: "Processing time",
+      visaFree: "Visa-free destinations",
+      schengen: "Schengen access",
+      dualCitizenship: "Dual citizenship allowed",
+      residencyRequired: "Time required in country",
+      physicalVisit: "Visit required",
+      dependentChildren: "Dependent children up to",
+      parentsIncluded: "Parents can be included",
+      citizenshipAfter: "Citizenship after",
+      worldwideTax: "Taxes worldwide income",
+    },
+  },
+
+  programmes: {
+    routes: {
+      "real-estate": "Real estate",
+      donation: "Government fund donation",
+      bonds: "Government bonds",
+      business: "Business investment",
+      deposit: "Bank deposit",
+      fund: "Investment fund",
+    },
+    offeredLabel: "We advise on this route",
+    notOfferedLabel: "Recognised, but not a route we transact",
+    routesHeading: "Qualifying routes",
+    statusHeading: "Programme status",
+    status: {
+      open: "Open",
+      suspended: "Suspended",
+      closed: "Closed",
+      announced: "Announced",
+    },
+    sinceLabel: "Open since",
+    /** Shown on a programme whose figures are not yet signed off. */
+    unreviewed:
+      "The figures on this page have not yet completed legal review and are not published. Confirm every one with us before acting on it.",
+  },
+
+  routes: {
+    home: "Home",
+    about: "About Us",
+    contact: "Contact Us",
+    search: "Properties",
+    knowledge: "Knowledge Centre",
+    article: "Article",
+    development: "Development",
+    citizenshipHub: "Citizenship by Investment",
+    citizenshipProgramme: "Programme",
+    goldenVisaHub: "Golden Visa & Residency",
+    goldenVisaProgramme: "Programme",
+    realEstateHub: "Real Estate",
+    country: "Country",
+    compareIndex: "Compare Programmes",
+    comparison: "Comparison",
+    investorProtection: "Investor Protection",
+    faqIndex: "Ask Multi Mulk",
+    faq: "Question",
+    caseStudies: "Client Outcomes",
+    caseStudy: "Case Study",
+    tools: "Tools",
+    authors: "Our Team",
+    author: "Profile",
+    legal: "Legal",
+  },
+
   nav: {
+    citizenship: "Citizenship",
+    goldenVisa: "Golden Visa",
+    realEstate: "Real Estate",
+    protection: "Investor Protection",
+    knowledge: "Knowledge",
     about: "About",
-    turkiye: "Türkiye",
-    caribbean: "Caribbean",
-    cbi: "Citizenship by Investment",
-    media: "Media Centre",
   },
 
   menus: {
@@ -95,19 +359,15 @@ const en = {
       ourStory: "Our Story",
       ourTeam: "Our Team",
     },
-    turkiye: {
-      heading: "Türkiye",
-      body: "From İstanbul’s two shores to the Aegean and Mediterranean coasts, Türkiye offers a setting where continents, culture and coastline converge — and a direct route to citizenship.",
+    realEstate: {
+      heading: "Real Estate",
+      body: "Developments in İstanbul, on the Turkish coast and across the Caribbean — each assessed against its market before it enters the portfolio.",
     },
-    caribbean: {
-      heading: "Caribbean",
-      body: "Our Caribbean destinations embrace the essence of island life, crafting considered retreats where nature, architecture, and well-being exist in perfect balance.",
-    },
-    cbi: {
+    citizenship: {
       label: "Citizenship by Investment",
       turkiyeRoutes: [
-        "USD 400,000 property route",
-        "3-year holding period",
+        "{investment} property route",
+        "Held for {holding}",
         "Spouse and children under 18 included",
       ],
     },
@@ -130,12 +390,19 @@ const en = {
 
   /** Home page. */
   hero: {
+    heading: "Citizenship, Residency & Global Investment",
+    body: "Invest globally. Secure residency. Build a second-home strategy — advised by people who will tell you when a programme does not fit.",
+    pathsLabel: "Where would you like to start?",
+    paths: {
+      citizenship: "Get Citizenship",
+      residency: "Get Residency",
+      property: "Invest in Property",
+    },
     slides: {
-      "six-senses": "A Sanctuary Shaped by Sea & Forests",
-      "marmara-vista": "Escape to the Centre of It All",
-      "levent-residences": "A Landmark Address in İstanbul",
-      "aegean-bay": "Wake Up to the Aegean",
-      "la-sagesse": "Beachfront Living Next to Two Iconic Resorts",
+      "istanbul-dusk": "Where two continents meet",
+      "island": "Government-approved Caribbean programmes",
+      "dubai": "A ten-year residence, renewable",
+      "advisory": "Advice before inventory",
     },
     showSlide: "Show {name}",
     propertyType: "Property Type",
@@ -220,7 +487,7 @@ const en = {
       body: "Türkiye pairs one of the world’s great cities with a coastline that runs from the Aegean to the Mediterranean. İstanbul alone spans two continents, and the citizenship-by-investment programme makes a property purchase here a route to a second passport — a combination no other market offers at this scale.",
       stats: {
         threshold: "Citizenship Threshold",
-        months: "Months to Passport",
+        months: "Processing Time",
         visaFree: "Visa-Free Destinations",
       },
     },
@@ -230,9 +497,9 @@ const en = {
       heading: "Home to the Caribbean’s Most Iconic Destinations",
       body: "The Caribbean is home to a growing collection of the residences and resort developments we represent, spread across several island destinations — many of them tied to government-approved citizenship-by-investment routes.",
       stats: {
-        years: "Years",
-        jobs: "Jobs Created",
-        assisted: "Individuals Assisted in Second Citizenship",
+        years: "Years of Experience",
+        clients: "Happy Clients",
+        properties: "Verified Properties",
       },
     },
   },
@@ -249,6 +516,14 @@ const en = {
       All: "All",
       "Press Media": "Press Media",
       Blog: "Blog",
+    },
+    /** The Knowledge Centre's pillars; the index filters on these. */
+    topics: {
+      citizenship: "Citizenship",
+      residency: "Residency",
+      "real-estate": "Real Estate",
+      turkiye: "Türkiye",
+      news: "News",
     },
     sort: { Newest: "Newest", Oldest: "Oldest" },
     sortLabel: "Sort articles",
@@ -306,9 +581,9 @@ const en = {
         "In the Caribbean we work with government-approved developments in Grenada, Dominica and St. Kitts & Nevis — among them Six Senses La Sagesse, InterContinental Grenada – La Sagesse and Park Hyatt St. Kitts — where a single investment carries both a residence and a second passport. Offices in Türkiye, the UAE and Pakistan keep our clients close to the desk handling their file.",
       ],
       stats: {
-        developments: "Developments represented",
         experience: "Years of experience",
-        offices: "Offices across two continents",
+        clients: "Happy clients",
+        properties: "Verified properties",
       },
       imageAlt: "Waterfront residences in the Multi Mulk portfolio",
     },
@@ -446,9 +721,9 @@ const en = {
       },
       stats: {
         investment: "Minimum Property Investment",
-        timeline: "Months to Passport",
+        timeline: "Processing Time",
         visaFree: "Visa-Free Destinations",
-        holding: "Year Holding Period",
+        holding: "Holding Period",
       },
       benefits: {
         eyebrow: "Programme Benefits",
@@ -580,9 +855,9 @@ const en = {
       },
       stats: {
         investment: "Minimum Real Estate Investment",
-        timeline: "Months to Passport",
+        timeline: "Processing Time",
         visaFree: "Visa-Free Destinations",
-        holding: "Year Holding Period",
+        holding: "Holding Period",
       },
       benefits: {
         eyebrow: "Programme Benefits",
@@ -717,6 +992,8 @@ const en = {
       publishedLabel: "Published on:",
       sourceLabel: "Source:",
       relatedHeading: "Related Articles",
+      /** `{count}` is pre-formatted for the locale before substitution. */
+      readingTime: plural({ one: "{count} min read", other: "{count} min read" }),
     },
   },
 
@@ -745,6 +1022,8 @@ const en = {
   unit: {
     citizenshipEligible: "Citizenship Eligible",
     soldOut: "Sold Out",
+    /** Pre-fills the subject line when "Enquire Now" opens the form. */
+    enquirySubject: "Enquiry about {unit}, {place}",
     types: { Apartment: "Apartment", Townhouse: "Townhouse", Villa: "Villa" },
     studio: "Studio",
     bedrooms: plural({ one: "{count} Bedroom", other: "{count} Bedrooms" }),
@@ -870,6 +1149,31 @@ const en = {
       "Studio Apartments": "Studio Apartments",
     },
     /**
+     * Stat *values*, keyed by their English text. The labels above are keyed
+     * separately; these are the figures beside them, and they carry words —
+     * "apartments", "sq. ft." — so they need translating too. Left untranslated
+     * they also read badly right-to-left, where a bare Latin run inside an
+     * Arabic line reorders around the numeral.
+     */
+    statValues: {
+      "420 apartments": "420 apartments",
+      "11 townhouses with 3 & 5 bedrooms": "11 townhouses with 3 & 5 bedrooms",
+      "Studio, 1, 2, 3 bedroom units": "Studio, 1, 2, 3 bedroom units",
+      "512 sq. ft. - 6,600 sq. ft.": "512 sq. ft. - 6,600 sq. ft.",
+      "165 total apartments": "165 total apartments",
+      "78 studio units": "78 studio units",
+      "87 one-bedroom units": "87 one-bedroom units",
+      "Beyoğlu, İstanbul": "Beyoğlu, İstanbul",
+      "151 apartments": "151 apartments",
+      "Studio, 1 & 2 bedroom units": "Studio, 1 & 2 bedroom units",
+      "479 sq. ft. - 1,709 sq. ft.": "479 sq. ft. - 1,709 sq. ft.",
+      "Floor 1 - 15": "Floor 1 - 15",
+      "88 apartments": "88 apartments",
+      "Studio to 3 bedrooms": "Studio to 3 bedrooms",
+      "572 sq. ft. - 3,874 sq. ft.": "572 sq. ft. - 3,874 sq. ft.",
+      "Bodrum, Muğla": "Bodrum, Muğla",
+    },
+    /**
      * The long prose on a development page, keyed by slug — description,
      * overview body, amenity blurb and each highlight's paragraph. Empty in
      * English, which is the source these fall back to.
@@ -927,10 +1231,33 @@ const en = {
         caribbeanCbi: "Caribbean CBI enquiry",
         general: "General enquiry",
       },
+      /**
+       * The acknowledgement emailed back to the enquirer, in their own
+       * language. `sentBody` below is reused as its opening paragraph — it
+       * already says the one thing this email is for.
+       */
+      ack: {
+        subject: "We have received your enquiry",
+        greeting: "Dear {name},",
+        yourMessage: "Your message",
+        closing:
+          "If your enquiry is urgent, reply to this email or call the office nearest you.",
+      },
       sentHeading: "Thank You",
       sentBody:
         "Thank you for getting in touch. A member of the Multi Mulk team will reply shortly.",
       sentAgain: "Send another message",
+      submitting: "Sending…",
+      errors: {
+        required: "This field is required.",
+        email: "Enter a valid email address.",
+        phone: "Enter a valid phone number, including the country code.",
+        tooLong: "This is longer than we can accept.",
+        /** The enquiry dialog could not fetch what it needs to submit. */
+        load: "We could not load the form. The contact page carries the same one — or use the details alongside.",
+        rate: "You have sent several enquiries recently. Please try again later, or email info@multimulk.com.",
+        server: "We could not send your enquiry. Please try again, or email info@multimulk.com.",
+      },
     },
   },
 } as const;

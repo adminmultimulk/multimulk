@@ -18,40 +18,40 @@ const fr: Dictionary = {
         "Multi Mulk accompagne les citoyens du monde vers des résidences de prestige et des programmes de citoyenneté par investissement aux Émirats, en Türkiye et dans les Caraïbes.",
     },
     about: {
-      title: "À propos | Multi Mulk",
+      title: "À propos",
       description:
         "Multi Mulk est un cabinet international de conseil en immobilier et en citoyenneté, qui relie les citoyens du monde à des résidences d’exception en Türkiye et dans les Caraïbes.",
     },
     media: {
-      title: "Espace presse | Multi Mulk",
+      title: "Espace presse",
       description:
         "Retombées presse, annonces et guides signés Multi Mulk — citoyenneté turque par investissement, programmes d’İstanbul et du littoral, et portefeuille caribéen.",
     },
     search: {
-      title: "Rechercher un bien | Multi Mulk",
+      title: "Rechercher un bien",
       description:
         "Parcourez des résidences avec accès resort, vues dégagées et art de vivre balnéaire — filtrées selon vos critères.",
     },
     contact: {
-      title: "Nous contacter | Multi Mulk",
+      title: "Nous contacter",
       description:
         "Échangez avec l’équipe Multi Mulk sur la citoyenneté turque par investissement, l’immobilier en Türkiye et les programmes caribéens.",
     },
     /** Clé par slug de programme, comme dans `citizenship.ts`. */
     citizenship: {
       turkiye: {
-        title: "Citoyenneté turque par investissement | Multi Mulk",
+        title: "Citoyenneté turque par investissement",
         description:
           "La citoyenneté turque par l’achat d’un bien à partir de 400 000 USD — seuils, délais et résidences éligibles à İstanbul et sur la côte.",
       },
       caribbean: {
-        title: "Citoyenneté caribéenne par investissement | Multi Mulk",
+        title: "Citoyenneté caribéenne par investissement",
         description:
           "Une seconde citoyenneté à Grenade, en Dominique et à Saint-Christophe-et-Niévès par un investissement dans des projets approuvés par les États — seuils, délais et programmes immobiliers.",
       },
     },
-    propertyFallback: "Bien immobilier | Multi Mulk",
-    articleFallback: "Article | Multi Mulk",
+    propertyFallback: "Bien immobilier",
+    articleFallback: "Article",
   },
 
   common: {
@@ -68,17 +68,270 @@ const fr: Dictionary = {
     searchProperties: "Rechercher",
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
+    close: "Fermer",
     logoAlt: "Multi Mulk — Des solutions globales pour des citoyens du monde",
     chooseLanguage: "Choisir une langue",
     socialProfile: "Profil social de {name}",
   },
 
-  nav: {
+  review: {
+    line: "Dernière vérification le {date}",
+    by: "Vérifié par {name}",
+    sources: "Sources",
+    retrieved: "consulté le {date}",
+    stale: "Cette page doit être revue. Confirmez tout chiffre auprès de nous avant d’agir.",
+  },
+
+  figures: {
+    qualifiers: {
+      statutory: "Fixé par la loi.",
+      estimated:
+        "Estimation — sous réserve des délais de traitement administratif et de la situation de chaque demandeur. Sans garantie.",
+      indicative: "À titre indicatif. Confirmez le chiffre pour votre propre situation.",
+      market: "Estimation de marché, variable selon le bien et la date.",
+    },
+    units: {
+      months: "mois",
+      years: "ans",
+      days: "jours",
+      count: "destinations",
+      percent: "%",
+    },
+  },
+
+  /** Ask Multi Mulk, client outcomes, the calculators and the author pages. */
+  faq: {
+    eyebrow: "Demandez à Multi Mulk",
+    heading: "Les questions que l’on pose vraiment",
+    body: "Des réponses qui aboutissent. Lorsque la réponse dépend réellement de quelque chose, ce quelque chose est nommé plutôt que laissé comme prétexte à nous appeler.",
+    fullAnswer: "Lire la réponse complète",
+    topics: {
+      eligibility: "Éligibilité",
+      cost: "Coût",
+      timeline: "Délais",
+      family: "Famille",
+      property: "Immobilier",
+      tax: "Fiscalité",
+      process: "Procédure",
+      travel: "Voyage",
+    },
+  },
+
+  caseStudies: {
+    eyebrow: "Résultats clients",
+    heading: "À quoi ressemble le travail",
+    body: "Des dossiers anonymisés, avec le raisonnement et les complications laissés intacts. Une étude de cas sans complication est une brochure.",
+    objective: "Objectif",
+    family: "Famille",
+    invested: "Investi",
+    timeline: "Du début à la fin",
+    afterwards: "Ensuite",
+    reasoning: "Pourquoi ce choix, et ce qui a été écarté",
+    complication: "Ce qui a coincé",
+    consentPending: "Aucun résultat client n’est encore publié. Cela exige le consentement écrit du client, que Multi Mulk ne détient pour aucun à ce jour.",
+  },
+
+  tools: {
+    eyebrow: "Outils",
+    heading: "Faites les calculs vous-même",
+    body: "Chaque calculateur lit les mêmes fiches de programme que le reste du site : aucun ne peut donc citer un seuil que la page du programme contredit.",
+    calculator: {
+      heading: "Ce que cela coûte, tout compris",
+      body: "Le seuil est l’investissement, pas le coût. Ceci y ajoute la transaction, selon les hypothèses listées sous le total.",
+      programme: "Programme",
+      adults: "Adultes",
+      children: "Enfants de moins de 18 ans",
+      total: "Total estimé",
+      lines: {
+      investment: "Investissement éligible",
+      transferTax: "Droits de mutation",
+      legal: "Honoraires juridiques et de conseil",
+      documentation: "Évaluation, traduction et notaire",
+      government: "Frais gouvernementaux",
+      },
+      assumptions: "Hypothèses : droits de mutation de {tax}, {legal} d’honoraires, {docs} de documentation et {gov} par personne pour {people} demandeurs.",
+      caveat: "Une estimation pour planifier, non un devis. Les taux varient selon le bien, la juridiction et la date, et la TVA n’est pas prise en compte. Nous mettons le chiffre réel par écrit avant tout engagement.",
+    },
+  },
+
+  authors: {
+    eyebrow: "Notre équipe",
+    heading: "Qui vous conseille",
+    body: "Un conseil en immigration et en investissement ne vaut que ce que vaut celui qui le donne. Voici les personnes derrière ce qui est écrit ici.",
+    credentials: "Qualifications",
+    knowsAbout: "Domaines d’intervention",
+    noCredentials: "Qualifications en attente de confirmation.",
+    reviewedContent: "Contenus vérifiés",
+    roles: {
+      founder: "Fondateur et directeur général",
+      advisory: "Directeur du conseil",
+      team: "Équipe de conseil",
+    },
+  },
+
+  /** The Investor Protection framework: the three filters, the twenty checks
+   *  and the scoring model. Structure lives in `app/lib/due-diligence.ts`. */
+  legal: { pending: "Cette page attend son texte définitif de Multi Mulk. En attendant sa publication ici, écrivez à info@multimulk.com pour connaître les conditions en vigueur." },
+
+  protection: {
+    filtersHeading: "Trois filtres, dans cet ordre",
+    filters: {
+      eligible: { heading: "Éligible", body: "Le bien satisfait-il juridiquement aux règles du programme ? C’est oui ou non, et un non clôt la discussion." },
+      sensible: { heading: "Financièrement sensé", body: "Le prix est-il proche de ce que le bien vaut réellement ? Franchir un seuil ne dit rien de la valeur, et un bien acheté pour franchir un seuil est généralement mal acheté." },
+      exitReady: { heading: "Prêt à la sortie", body: "Peut-il être loué, et peut-il être vendu à la fin de la période de détention ? Un actif dont on ne peut sortir n’est pas un investissement, c’est un engagement." },
+    },
+    checksHeading: "Ce que nous vérifions avant que vous investissiez",
+    checksIntro: "Vingt questions, posées chaque fois dans le même ordre. Elles sont écrites comme des questions parce qu’elles en sont : chacune a une réponse que nous conservons, faute de quoi le bien ne va pas plus loin.",
+    checks: {
+      developerRecord: "Qui est le promoteur, et qu’a-t-il livré auparavant ?",
+      developerFinances: "Que montrent les comptes et les dépôts du promoteur ?",
+      titleDeed: "Le titre est-il libre, et est-il au nom du vendeur ?",
+      ownershipHistory: "Qui a possédé ce bien, et quand a-t-il changé de mains ?",
+      citizenshipEligibility: "Le bien satisfait-il aux règles d’éligibilité du programme ?",
+      gyoStatus: "Le vendeur est-il une foncière cotée (GYO), et cela change-t-il quelque chose ?",
+      valuation: "L’évaluation officielle justifie-t-elle le prix demandé ?",
+      sellerEligibility: "Le vendeur est-il habilité à vendre à un demandeur de citoyenneté ?",
+      buildingPermits: "Les permis de construire sont-ils en règle et à jour ?",
+      constructionStage: "Où en est le chantier, et par rapport à quel calendrier ?",
+      comparablePrices: "À quels prix des biens comparables se sont-ils réellement vendus ?",
+      pricePerSqm: "Comment le prix au mètre carré se situe-t-il dans le quartier ?",
+      rentalDemand: "Y a-t-il une demande locative réelle, ou seulement projetée ?",
+      rentalYield: "Quel rendement net cette demande permet-elle, charges déduites ?",
+      resaleLiquidity: "À quelle vitesse ce type de bien se revend-il sur ce marché ?",
+      exitStrategy: "Quelle est la sortie, et de quoi dépend-elle ?",
+      hiddenCosts: "Quels coûts ne figurent pas dans le prix affiché ?",
+      vatPosition: "Quel est le régime de TVA, et une exonération s’applique-t-elle ?",
+      titleDeedCosts: "Combien coûtera réellement le transfert du titre ?",
+      deliveryRisk: "Que se passe-t-il en cas de livraison tardive, ou d’absence de livraison ?",
+    },
+    scoreHeading: "Le score d’investissement Multi Mulk",
+    scoreIntro: "Chaque bien que nous recommandons est noté sur cent selon huit facteurs pondérés. Les pondérations sont publiées ici, car un score dont le calcul reste caché est un chiffre, pas une évaluation.",
+    scoreCaveat: "Un score est le jugement d’un évaluateur à une date donnée, ni une prévision ni une garantie. Chaque score porte le nom de son auteur et sa date. Demandez-nous le raisonnement derrière tout chiffre.",
+    factorLabel: "Critère",
+    weightLabel: "Pondération",
+    factors: {
+      citizenshipSafety: "Sécurité de l’éligibilité",
+      developerStrength: "Solidité du promoteur",
+      location: "Emplacement",
+      priceVsMarket: "Prix face au marché",
+      rentalPotential: "Potentiel locatif",
+      resaleLiquidity: "Liquidité à la revente",
+      capitalAppreciation: "Appréciation du capital",
+      deliveryRisk: "Risque de livraison",
+    },
+  },
+
+  pillars: {
+    citizenship: {
+      eyebrow: "Citoyenneté par investissement",
+      heading: "Une seconde citoyenneté, détenue comme un actif",
+      body: "Des programmes qui accordent la pleine citoyenneté en contrepartie d’un investissement éligible. Nous conseillons celui qui convient — et, aussi souvent, celui qui ne convient pas.",
+      hubIntro: "Chaque programme ci-dessous est présenté selon les mêmes champs, afin d’être lu en regard des autres plutôt qu’une brochure à la fois. Chaque chiffre porte sa source et la date de sa dernière vérification.",
+    },
+    goldenVisa: {
+      eyebrow: "Visa doré et résidence",
+      heading: "La résidence sans le déménagement",
+      body: "Des titres de séjour obtenus par investissement — une base, une position fiscale et, dans plusieurs cas, une voie vers la citoyenneté avec le temps.",
+      hubIntro: "La résidence diffère de la citoyenneté sur un point décisif : c’est une autorisation de séjour, renouvelable et révocable, et non une nationalité. Le tableau ci-dessous expose ce que chaque programme accorde réellement.",
+    },
+    realEstate: {
+      eyebrow: "Immobilier",
+      heading: "Un bien qui travaille comme un investissement",
+      body: "Des programmes à İstanbul, sur la côte turque, à Dubaï et dans les Caraïbes — évalués avant d’entrer dans notre portefeuille, non après.",
+    },
+    protection: {
+      eyebrow: "Protection de l’investisseur",
+      heading: "Tout bien éligible n’est pas un bon investissement",
+      body: "Un bien peut satisfaire au seuil d’un programme et rester un actif médiocre. Voici les vérifications que nous menons avant de présenter quoi que ce soit à un client.",
+    },
+  },
+
+  compare: {
+    eyebrow: "Comparer",
+    heading: "Les programmes, côte à côte",
+    intro: "Chaque chiffre de ces tableaux est lu dans la même fiche de programme : un seuil ne peut donc pas dire une chose ici et une autre sur la page du programme.",
+    factor: "Critère",
+    unknownLabel: "Non confirmé",
+    noneRequired: "Aucune",
+    noAgeLimit: "Sans limite d’âge",
+    grantedDirectly: "Accordée directement",
+    noRoute: "Aucune voie",
+    yes: "Oui",
+    no: "Non",
+    bestLabel: "Le plus favorable",
+    rows: {
+      minimumInvestment: "Investissement minimum",
+      holdingPeriod: "Durée de détention",
+      processingTime: "Délai de traitement",
+      visaFree: "Destinations sans visa",
+      schengen: "Accès à l’espace Schengen",
+      dualCitizenship: "Double nationalité autorisée",
+      residencyRequired: "Présence requise dans le pays",
+      physicalVisit: "Visite requise",
+      dependentChildren: "Enfants à charge jusqu’à",
+      parentsIncluded: "Parents pouvant être inclus",
+      citizenshipAfter: "Citoyenneté après",
+      worldwideTax: "Impose les revenus mondiaux",
+    },
+  },
+
+  programmes: {
+    routes: {
+      "real-estate": "Immobilier",
+      donation: "Don à un fonds public",
+      bonds: "Obligations d’État",
+      business: "Investissement en entreprise",
+      deposit: "Dépôt bancaire",
+      fund: "Fonds d’investissement",
+    },
+    offeredLabel: "Nous conseillons sur cette voie",
+    notOfferedLabel: "Reconnue, mais que nous ne traitons pas",
+    routesHeading: "Voies éligibles",
+    statusHeading: "Statut du programme",
+    status: {
+      open: "Ouvert",
+      suspended: "Suspendu",
+      closed: "Fermé",
+      announced: "Annoncé",
+    },
+    sinceLabel: "Ouvert depuis",
+    unreviewed: "Les chiffres de cette page n’ont pas achevé leur revue juridique et ne sont pas publiés. Confirmez chacun d’eux auprès de nous avant d’agir.",
+  },
+
+  routes: {
+    home: "Accueil",
     about: "À propos",
-    turkiye: "Türkiye",
-    caribbean: "Caraïbes",
-    cbi: "Citoyenneté par investissement",
-    media: "Espace presse",
+    contact: "Nous contacter",
+    search: "Biens immobiliers",
+    knowledge: "Centre de ressources",
+    article: "Article",
+    development: "Programme immobilier",
+    citizenshipHub: "Citoyenneté par investissement",
+    citizenshipProgramme: "Programme",
+    goldenVisaHub: "Visa doré et résidence",
+    goldenVisaProgramme: "Programme",
+    realEstateHub: "Immobilier",
+    country: "Pays",
+    compareIndex: "Comparer les programmes",
+    comparison: "Comparaison",
+    investorProtection: "Protection de l’investisseur",
+    faqIndex: "Demandez à Multi Mulk",
+    faq: "Question",
+    caseStudies: "Résultats clients",
+    caseStudy: "Étude de cas",
+    tools: "Outils",
+    authors: "Notre équipe",
+    author: "Profil",
+    legal: "Mentions légales",
+  },
+
+  nav: {
+    citizenship: "Citoyenneté",
+    goldenVisa: "Visa doré",
+    realEstate: "Immobilier",
+    protection: "Protection",
+    knowledge: "Ressources",
+    about: "À propos",
   },
 
   menus: {
@@ -88,19 +341,15 @@ const fr: Dictionary = {
       ourStory: "Notre histoire",
       ourTeam: "Notre équipe",
     },
-    turkiye: {
-      heading: "Türkiye",
-      body: "Des deux rives d’İstanbul aux côtes égéenne et méditerranéenne, la Türkiye réunit continents, culture et littoral — et ouvre une voie directe vers la citoyenneté.",
+    realEstate: {
+      heading: "Immobilier",
+      body: "Des programmes à İstanbul, sur la côte turque et dans les Caraïbes — chacun évalué face à son marché avant d’entrer au portefeuille.",
     },
-    caribbean: {
-      heading: "Caraïbes",
-      body: "Nos destinations caribéennes cultivent l’essence de la vie insulaire : des retraites pensées où la nature, l’architecture et le bien-être s’équilibrent parfaitement.",
-    },
-    cbi: {
+    citizenship: {
       label: "Citoyenneté par investissement",
       turkiyeRoutes: [
-        "Voie immobilière à 400 000 USD",
-        "Détention de 3 ans",
+        "Voie immobilière à partir de {investment}",
+        "Détention pendant {holding}",
         "Conjoint et enfants de moins de 18 ans inclus",
       ],
     },
@@ -121,12 +370,19 @@ const fr: Dictionary = {
   },
 
   hero: {
+    heading: "Citoyenneté, résidence et investissement mondial",
+    body: "Investissez à l’international. Obtenez une résidence. Bâtissez une stratégie de seconde résidence — conseillé par ceux qui vous diront quand un programme ne convient pas.",
+    pathsLabel: "Par où souhaitez-vous commencer ?",
+    paths: {
+      citizenship: "Obtenir la citoyenneté",
+      residency: "Obtenir la résidence",
+      property: "Investir dans l’immobilier",
+    },
     slides: {
-      "six-senses": "Un sanctuaire façonné par la mer et la forêt",
-      "marmara-vista": "S’évader au cœur de tout",
-      "levent-residences": "Une adresse emblématique à İstanbul",
-      "aegean-bay": "Se réveiller face à la mer Égée",
-      "la-sagesse": "Vivre en bord de mer, entre deux resorts d’exception",
+      "istanbul-dusk": "Où deux continents se rencontrent",
+      "island": "Des programmes caribéens agréés",
+      "dubai": "Une résidence de dix ans, renouvelable",
+      "advisory": "Le conseil avant le stock",
     },
     showSlide: "Afficher {name}",
     propertyType: "Type de bien",
@@ -210,7 +466,7 @@ const fr: Dictionary = {
       body: "La Türkiye associe l’une des grandes villes du monde à un littoral qui court de la mer Égée à la Méditerranée. İstanbul s’étend à elle seule sur deux continents, et le programme de citoyenneté par investissement fait d’une acquisition immobilière une voie vers un second passeport — une combinaison qu’aucun autre marché n’offre à cette échelle.",
       stats: {
         threshold: "Seuil de citoyenneté",
-        months: "Mois jusqu’au passeport",
+        months: "Délai de traitement",
         visaFree: "Destinations sans visa",
       },
     },
@@ -220,9 +476,9 @@ const fr: Dictionary = {
       heading: "Au cœur des destinations les plus emblématiques des Caraïbes",
       body: "Les Caraïbes accueillent un ensemble grandissant de résidences et de resorts que nous représentons, répartis sur plusieurs îles — dont beaucoup sont adossés à des programmes de citoyenneté par investissement agréés par les gouvernements.",
       stats: {
-        years: "Années",
-        jobs: "Emplois créés",
-        assisted: "Personnes accompagnées vers une seconde citoyenneté",
+        years: "ans d’expérience",
+        clients: "clients satisfaits",
+        properties: "biens vérifiés",
       },
     },
   },
@@ -239,10 +495,111 @@ const fr: Dictionary = {
       "Press Media": "Presse",
       Blog: "Blog",
     },
+    topics: {
+      citizenship: "Citoyenneté",
+      residency: "Résidence",
+      "real-estate": "Immobilier",
+      turkiye: "Türkiye",
+      news: "Actualités",
+    },
     sort: { Newest: "Plus récents", Oldest: "Plus anciens" },
     sortLabel: "Trier les articles",
     empty: "Rien de classé sous « {filter} » pour l’instant.",
-    copy: staged<ArticleCopy>({}),
+    copy: staged<ArticleCopy>({
+      "levent-residences-tops-out": {
+        title: "Levent Residences atteint sa hauteur définitive et devient la nouvelle adresse phare de Şişli",
+        body: [
+          "Levent Residences a atteint sa hauteur définitive sur la ligne d’horizon de Şişli, marquant l’achèvement du gros œuvre du programme le plus central de Multi Mulk à İstanbul. Le bouquet final a été observé sur place par l’équipe du projet, l’entreprise générale et les représentants de l’arrondissement, et fait entrer la tour en phase de second œuvre avant la livraison.",
+          "L’immeuble domine le quartier d’affaires de Levent avec un accès direct au métro, et ses étages supérieurs embrassent le Bosphore à l’est et la forêt de Belgrad au nord. Les intérieurs sont livrés en trois palettes, l’étage réservé aux résidents — piscine, spa, salle de projection et terrasse paysagère — occupant le socle.",
+          "Multi Mulk commercialise les résidences restantes par phases. Les demandes portant sur la tranche en cours sont traitées par le bureau de vente d’İstanbul.",
+        ],
+      },
+      "turkish-citizenship-guide-2026": {
+        title: "Guide de la citoyenneté turque par investissement en 2026",
+        body: [
+          "La voie turque de la citoyenneté par investissement reste l’une des plus directes au monde : l’achat d’un bien éligible, conservé trois ans, ouvre l’accès au passeport turc pour l’acquéreur, son conjoint et ses enfants à charge. Ce guide expose le fonctionnement concret du programme en 2026.",
+          "Le seuil immobilier s’établit à 400 000 USD, apprécié sur un rapport d’expertise officiel et non sur le prix du contrat — une distinction qui prend de court les acheteurs calant leur budget au seuil exact. L’expertise doit être établie par un évaluateur agréé, et le titre de propriété porte, dès l’enregistrement, la mention d’engagement de conservation de trois ans.",
+          "Les démarches se mènent en parallèle plutôt qu’en série : le transfert de titre, le permis de séjour et le dossier de citoyenneté peuvent avancer de front, ce qui maintient le délai habituel entre quatre et huit mois. La période de conservation court à compter de la date de la mention, non de celle de la demande.",
+          "Les programmes de Multi Mulk à İstanbul et sur la côte sont tous valorisés au-dessus du seuil et livrés avec les pièces qu’exige la demande. Notre équipe de conseil accompagne votre avocat jusqu’à l’entretien de remise du passeport.",
+        ],
+      },
+      "aegean-bay-residences-opens": {
+        title: "Aegean Bay Residences ouvre au-dessus d’une baie tranquille de Bodrum",
+        body: [
+          "Aegean Bay Residences a ouvert sur la péninsule de Bodrum, sur un versant exposé au sud dominant une baie qui reste calme hors des semaines d’été. Le programme descend la colline en terrasses basses, de sorte qu’aucune résidence ne donne sur la terrasse d’une autre, et chaque logement conserve une vue dégagée sur l’eau.",
+          "L’ensemble comprend un beach club, un appontement pour annexes, deux restaurants et un spa creusé dans la roche au bord de l’eau. Les aménagements paysagers reprennent le maquis existant — olivier, caroubier et lentisque — plutôt que des plantations rapportées, ce qui laisse le site se lire depuis la mer comme un coteau et non comme un complexe hôtelier.",
+        ],
+      },
+      "bodrum-or-antalya": {
+        title: "Bodrum ou Antalya ? Choisir sa portion de côte turque",
+        body: [
+          "Les deux noms reviennent dans presque chaque demande côtière que nous recevons, et ce sont réellement deux propositions différentes. En résumé : Bodrum est une saison, Antalya est une année.",
+          "La péninsule de Bodrum est compacte, tournée vers la voile et intensément mondaine de juin à septembre, avec un marché locatif concentré sur ces semaines et une culture de marina qui donne le ton à tout ce qui l’entoure. Les prix au mètre carré y dépassent ceux d’Antalya, et les meilleurs terrains — les baies exposées au nord, ombragées l’après-midi — sont de fait en nombre fini.",
+          "Antalya est le marché le plus vaste et le plus régulier. L’aéroport fonctionne toute l’année, la vieille ville abrite une population résidente et non saisonnière, et les montagnes qui ferment la ville gardent des hivers assez doux pour que le taux d’occupation tienne en mi-saison. Pour un acheteur qui met en balance rendement locatif et usage personnel, cet étalement compte davantage que le tarif estival affiché.",
+          "Si l’achat est avant tout une résidence de vacances que vous occuperez en août, Bodrum. Si c’est un actif que vous voulez voir travailler douze mois sur douze, Antalya.",
+        ],
+      },
+      "caribbean-routes-for-gulf-investors": {
+        title: "Multi Mulk ouvre les voies caribéennes de citoyenneté aux investisseurs du Golfe",
+        body: [
+          "Multi Mulk a ouvert son portefeuille caribéen aux investisseurs basés dans le Golfe, associant sa pratique de conseil en Türkiye à des projets approuvés à Grenade, à Saint-Christophe-et-Niévès et en Dominique. Cette décision répond à une demande constante de clients titulaires d’un titre de séjour turc, qui souhaitent y adjoindre un second document de voyage peu contraignant.",
+          "Les programmes sont des projets approuvés par les États au titre du dispositif de citoyenneté par investissement de chaque île, et comprennent les résidences Six Senses La Sagesse à Grenade et le Park Hyatt St. Kitts à Christophe Harbour. Le programme grenadien offre en outre l’accès au visa E-2 des États-Unis au titre du traité bilatéral.",
+          "Les demandes sont déposées par des agents locaux agréés ; le rôle de Multi Mulk porte sur la sélection du bien, le dossier de due diligence et la coordination entre les deux.",
+        ],
+      },
+      "buying-property-in-istanbul": {
+        title: "Cinq choses à savoir avant d’acheter un bien à İstanbul",
+        body: [
+          "İstanbul récompense les acheteurs qui font leurs devoirs et sanctionne ceux qui la traitent comme un marché unique. Cinq points reviennent dans presque chaque transaction que nous accompagnons.",
+          "D’abord, la ville n’est pas un marché mais des dizaines. Un prix au mètre carré à Şişli ne vous apprend rien sur Beykoz, et les rives européenne et asiatique suivent des cycles différents. Ensuite, c’est le rapport d’expertise officiel — et non le prix demandé — qui gouverne à la fois le seuil de citoyenneté et les droits de mutation : obtenez-le tôt.",
+          "Troisièmement, vérifiez l’iskan, le permis d’occupation. Un immeuble qui en est dépourvu ne peut être légalement occupé et peut se révéler difficile à revendre, aussi fini qu’il paraisse. Quatrièmement, budgétez les frais annexes au prix : droits de mutation, frais de notaire et de traduction, et l’assurance obligatoire contre les séismes.",
+          "Cinquièmement, et c’est le moins séduisant : lisez le règlement de copropriété. Les charges des tours dotées de vastes étages d’équipements varient fortement, et c’est le coût récurrent qui surprend le plus souvent les propriétaires étrangers la deuxième année.",
+        ],
+      },
+      "port-cabrits-marina": {
+        title: "Port Cabrits Marina impose un nouveau standard au yachting caribéen",
+        body: [
+          "Port Cabrits, sur la côte nord-ouest de la Dominique, a été décrit comme le projet de marina le plus important des Caraïbes orientales depuis dix ans. Les postes en eau profonde accueillent des navires jusqu’à 90 mètres, et le port se tient à l’abri du promontoire des Cabrits, ce qui le rend praticable malgré la houle d’hiver.",
+          "Au-dessus du front de mer, l’InterContinental Dominica Cabrits Resort & Spa fournit les infrastructures à terre — village de marina, avitaillement, dédouanement et logement des équipages — qui manquaient historiquement à la région hors d’Antigua et de Saint-Martin.",
+        ],
+      },
+      "christophe-harbour-rising": {
+        title: "Le Park Hyatt St. Kitts et l’essor de Christophe Harbour",
+        body: [
+          "Christophe Harbour occupe la péninsule sud-est de Saint-Christophe, une étendue de salines et de collines sèches pratiquement vide il y a dix ans, qui accueille aujourd’hui une marina pour superyachts, un beach club et le Park Hyatt St. Kitts.",
+          "L’hôtel se tient sur Banana Bay, Niévès en face du détroit, et ses résidences figurent parmi les biens éligibles au programme de citoyenneté de Saint-Christophe-et-Niévès — le plus ancien au monde, en vigueur depuis 1984.",
+        ],
+      },
+      "six-senses-la-sagesse-michelin-key": {
+        title: "Un paradis à découvrir : pourquoi Six Senses La Sagesse, à Grenade, est une escapade distinguée d’une Clé MICHELIN",
+        body: [
+          "Six Senses La Sagesse a reçu une Clé MICHELIN, la distinction du guide pour les hôtels offrant un séjour exceptionnel. C’est la première adresse de la marque dans les Caraïbes, déployée sur deux plages de la côte sud-est de Grenade.",
+          "Le complexe est bâti autour des ruines d’une ancienne maison de maître, avec 56 suites et 15 villas résidentielles disposées le long du rivage de la baie de La Sagesse et de Chemin Bay. Le programme de bien-être Six Senses se déploie depuis un spa et un earth lab installés en retrait sous les palmiers, et la cuisine s’approvisionne auprès des producteurs de l’île et des bateaux de pêche de la baie.",
+          "Les villas sont éligibles au programme grenadien de citoyenneté par investissement, qui ouvre l’accès au visa E-2 des États-Unis au titre du traité bilatéral.",
+        ],
+      },
+      "marmara-vista-presentation-istanbul": {
+        title: "Présentation du complexe résidentiel Marmara Vista à İstanbul",
+        body: [
+          "Multi Mulk a présenté Marmara Vista à des invités, partenaires et journalistes à İstanbul, dévoilant le plan-masse et la première tranche de résidences sur le rivage de la mer de Marmara.",
+          "La présentation a exposé les trois phases du programme, l’offre d’équipements et le calendrier de livraison, ainsi que la voie de citoyenneté par investissement ouverte aux acquéreurs étrangers. Les participants ont visité l’appartement témoin et découvert la palette de matériaux retenue pour la première phase.",
+        ],
+      },
+      "marmara-vista-launch": {
+        title: "Lancement prestigieux de Marmara Vista, İstanbul",
+        body: [
+          "Marmara Vista est lancé sur la mer de Marmara avec 240 résidences réparties en trois bâtiments bas, chacun orienté pour offrir une vue sur la mer depuis les pièces principales. C’est la plus importante mise sur le marché de Multi Mulk à İstanbul à ce jour.",
+          "Le programme est livré avec une plage privée, une allocation d’anneaux de port pour les résidents, un spa et une école inscrite au plan-masse. Toutes les résidences sont proposées au-dessus du seuil de la citoyenneté par investissement.",
+        ],
+      },
+      "istanbul-portfolio-expansion": {
+        title: "Multi Mulk étoffe son portefeuille à İstanbul",
+        body: [
+          "Multi Mulk a ajouté trois programmes à son portefeuille stambouliote, portant à huit le nombre de projets en cours dans la ville et étendant sa couverture du corridor du Bosphore au rivage de la mer de Marmara.",
+          "Cette expansion fait suite à une demande soutenue des acheteurs du Golfe et d’Asie centrale, pour qui İstanbul continue d’associer une voie vers la citoyenneté à un marché locatif domestique qui fonctionne — une combinaison que peu de programmes offrent.",
+        ],
+      },
+    }),
   },
 
   footer: {
@@ -287,9 +644,9 @@ const fr: Dictionary = {
         "Dans les Caraïbes, nous travaillons avec des programmes agréés par les gouvernements de Grenade, de la Dominique et de Saint-Christophe-et-Niévès — parmi lesquels Six Senses La Sagesse, InterContinental Grenada – La Sagesse et Park Hyatt St. Kitts — où un seul investissement ouvre à la fois une résidence et un second passeport. Nos bureaux en Türkiye, aux Émirats et au Pakistan gardent nos clients au plus près de l’équipe qui suit leur dossier.",
       ],
       stats: {
-        developments: "Programmes représentés",
-        experience: "Années d’expérience",
-        offices: "Bureaux sur deux continents",
+        experience: "ans d’expérience",
+        clients: "clients satisfaits",
+        properties: "biens vérifiés",
       },
       imageAlt: "Résidences en front de mer du portefeuille Multi Mulk",
     },
@@ -416,7 +773,7 @@ const fr: Dictionary = {
       },
       stats: {
         investment: "Investissement immobilier minimum",
-        timeline: "Mois jusqu’au passeport",
+        timeline: "Délai de traitement",
         visaFree: "Destinations sans visa",
         holding: "Ans de détention",
       },
@@ -550,7 +907,7 @@ const fr: Dictionary = {
       },
       stats: {
         investment: "Investissement immobilier minimum",
-        timeline: "Mois jusqu’au passeport",
+        timeline: "Délai de traitement",
         visaFree: "Destinations sans visa",
         holding: "Ans de détention",
       },
@@ -686,6 +1043,10 @@ const fr: Dictionary = {
       publishedLabel: "Publié le :",
       sourceLabel: "Source :",
       relatedHeading: "Articles liés",
+      readingTime: plural({
+        one: "{count} min de lecture",
+        other: "{count} min de lecture",
+      }),
     },
   },
 
@@ -712,6 +1073,7 @@ const fr: Dictionary = {
   unit: {
     citizenshipEligible: "Éligible à la citoyenneté",
     soldOut: "Vendu",
+    enquirySubject: "Demande concernant {unit}, {place}",
     types: {
       Apartment: "Appartement",
       Townhouse: "Maison de ville",
@@ -806,7 +1168,72 @@ const fr: Dictionary = {
         overviewHeading: "Se réveiller face à la mer Égée.",
       },
     },
-    copy: staged<ProjectCopy>({}),
+    copy: staged<ProjectCopy>({
+      "levent-residences": {
+        description:
+          "Dressées à Şişli, à quelques pas du quartier d’affaires de Levent, ces résidences allient une adresse centrale au calme d’intérieurs pensés dans le détail. Des volumes généreux, des baies toute hauteur et un étage d’équipements soigneusement composé en font un choix naturel pour les familles comme pour les investisseurs qui cherchent İstanbul dans sa version la mieux reliée — et une voie éligible à la citoyenneté turque.",
+        overviewBody:
+          "Conçues pour concilier commodité urbaine et sérénité, les Levent Residences déclinent une gamme de typologies — du studio efficace à la maison de ville familiale — chacune finie à un niveau qui préserve sa valeur.",
+        amenitiesBody:
+          "Un étage entier d’équipements accompagne le quotidien : hall d’arrivée avec conciergerie, spa et hammam, salon des résidents, salle de sport et terrasse paysagère pour la belle saison.",
+        highlights: {
+          "Central Connectivity":
+            "À quelques minutes des quartiers d’affaires de Levent et Maslak, avec le métro au pied de l’immeuble",
+          "Citizenship Eligible":
+            "Certaines résidences atteignent le seuil de 400 000 USD du programme turc de citoyenneté par investissement",
+          "City and Bosphorus Views":
+            "Les étages supérieurs sont orientés pour capter la ligne d’horizon et des échappées sur le Bosphore",
+        },
+      },
+      "bosphorus-heights": {
+        description:
+          "Une collection exclusive de 165 résidences à Beyoğlu, placées pour embrasser le Bosphore et la péninsule historique au-delà. À deux pas de Galata, d’İstiklal et des embarcadères, Bosphorus Heights offre une alliance rare entre cadre patrimonial et architecture contemporaine.",
+        overviewBody:
+          "Prenez de la hauteur sur la ville et découvrez İstanbul depuis un point de vue plus calme. Pied-à-terre ou résidence principale, c’est une invitation à vivre au point de rencontre de deux continents.",
+        amenitiesBody:
+          "Les résidents disposent d’un ensemble d’équipements pensé autant pour l’effort que pour le repos — piscine intérieure, salle de sport entièrement équipée et salon en toiture avec vue ininterrompue sur le détroit.",
+        highlights: {
+          "Bosphorus Outlook":
+            "Des résidences orientées pour cadrer le détroit et la péninsule historique",
+          "Heritage Quarter":
+            "À distance de marche de la tour de Galata, d’İstiklal Caddesi et des quais de Karaköy",
+          "Citizenship Eligible":
+            "Certaines résidences atteignent le seuil de 400 000 USD du programme turc de citoyenneté par investissement",
+        },
+      },
+      "marmara-vista": {
+        description:
+          "Implanté à Beylikdüzü sur la côte de Marmara, Marmara Vista propose 151 résidences en studio, une et deux chambres, largement ouvertes sur la mer. À courte distance de l’aéroport et du nouveau centre-ville, il convient aux familles comme aux investisseurs qui veulent de l’espace et de la lumière sans quitter İstanbul.",
+        overviewBody:
+          "Marmara Vista propose 151 résidences raffinées en studio, une et deux chambres sur la rive occidentale d’İstanbul, avec des vues panoramiques et paisibles sur la mer de Marmara.",
+        amenitiesBody:
+          "Un ensemble d’équipements bien pensé rythme le quotidien à Marmara Vista — du hall d’arrivée à la terrasse de la piscine, jusqu’à la promenade côtière à quelques pas.",
+        highlights: {
+          "Marmara Sea Views":
+            "Des résidences orientées pour capter des vues ininterrompues sur la Marmara",
+          "Family Neighbourhood":
+            "Parcs, écoles internationales et promenade de Beylikdüzü à portée immédiate",
+          "Airport Access":
+            "Un accès direct à l’aéroport d’İstanbul et au corridor E-5",
+        },
+      },
+      "aegean-bay-residences": {
+        description:
+          "Posé au-dessus d’une baie tranquille de la péninsule de Bodrum, Aegean Bay Residences est une adresse côtière raffinée où des intérieurs apaisés, la lumière naturelle et une vie sans effort se rejoignent. Pensé pour ceux qui tiennent à l’intimité et à la qualité, il installe un rythme simple : les matins au bord de l’eau, les soirs cadrés par l’horizon.",
+        overviewBody:
+          "Fusion rare de raffinement et de sérénité, Aegean Bay Residences redéfinit l’exclusivité côtière sur la péninsule de Bodrum. Par son charme intime et la beauté de son cadre, c’est un havre d’élégance contemporaine — aussi juste pour une retraite estivale que pour une adresse permanente de premier rang.",
+        amenitiesBody:
+          "Un ensemble d’équipements resserré soutient une façon de vivre calme et privée — hall d’arrivée, salle de sport, terrasse de la piscine et quelques marches jusqu’à la baie.",
+        highlights: {
+          "Unmatched Coastal Living":
+            "Un accès direct à la baie et la simplicité d’un véritable art de vivre en bord de resort, fondé sur le confort et l’intimité",
+          "Bodrum Peninsula":
+            "À quelques minutes de la marina de Yalıkavak et des villages portuaires de la péninsule",
+          "Citizenship Eligible":
+            "Certaines résidences atteignent le seuil de 400 000 USD du programme turc de citoyenneté par investissement",
+        },
+      },
+    }),
     highlights: {
       "Central Connectivity": "Au cœur des connexions",
       "Citizenship Eligible": "Éligible à la citoyenneté",
@@ -827,6 +1254,24 @@ const fr: Dictionary = {
       Apartments: "Appartements",
       Townhouses: "Maisons de ville",
       "Studio Apartments": "Studios",
+    },
+    statValues: {
+      "420 apartments": "420 appartements",
+      "11 townhouses with 3 & 5 bedrooms": "11 maisons de ville de 3 et 5 chambres",
+      "Studio, 1, 2, 3 bedroom units": "Studios, 1, 2 et 3 chambres",
+      "512 sq. ft. - 6,600 sq. ft.": "512 - 6 600 pi²",
+      "165 total apartments": "165 appartements au total",
+      "78 studio units": "78 studios",
+      "87 one-bedroom units": "87 logements d’une chambre",
+      "Beyoğlu, İstanbul": "Beyoğlu, İstanbul",
+      "151 apartments": "151 appartements",
+      "Studio, 1 & 2 bedroom units": "Studios, 1 et 2 chambres",
+      "479 sq. ft. - 1,709 sq. ft.": "479 - 1 709 pi²",
+      "Floor 1 - 15": "Étages 1 à 15",
+      "88 apartments": "88 appartements",
+      "Studio to 3 bedrooms": "Du studio au 3 chambres",
+      "572 sq. ft. - 3,874 sq. ft.": "572 - 3 874 pi²",
+      "Bodrum, Muğla": "Bodrum, Muğla",
     },
     amenityItems: {
       "Lobby & Concierge": "Lobby et conciergerie",
@@ -879,10 +1324,27 @@ const fr: Dictionary = {
         caribbeanCbi: "Programme caribéen",
         general: "Demande générale",
       },
+      ack: {
+        subject: "Nous avons bien reçu votre demande",
+        greeting: "Bonjour {name},",
+        yourMessage: "Votre message",
+        closing:
+          "Si votre demande est urgente, répondez à cet e-mail ou appelez le bureau le plus proche.",
+      },
       sentHeading: "Merci",
       sentBody:
         "Merci de nous avoir contactés. Un membre de l’équipe Multi Mulk vous répondra très prochainement.",
       sentAgain: "Envoyer un autre message",
+      submitting: "Envoi en cours…",
+      errors: {
+        required: "Ce champ est obligatoire.",
+        email: "Saisissez une adresse e-mail valide.",
+        phone: "Saisissez un numéro de téléphone valide, avec l’indicatif du pays.",
+        tooLong: "Ce texte dépasse la longueur acceptée.",
+        load: "Nous n’avons pas pu charger le formulaire. La page de contact propose le même — ou utilisez nos coordonnées ci-contre.",
+        rate: "Vous avez envoyé plusieurs demandes récemment. Réessayez plus tard ou écrivez à info@multimulk.com.",
+        server: "Nous n’avons pas pu envoyer votre demande. Réessayez ou écrivez à info@multimulk.com.",
+      },
     },
   },
 };

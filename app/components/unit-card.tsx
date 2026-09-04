@@ -4,7 +4,9 @@ import Image from "next/image";
 import type { Currency, Unit } from "@/app/lib/properties";
 import { projects } from "@/app/lib/projects";
 import { useI18n } from "@/app/lib/i18n/context";
+import { interpolate } from "@/app/lib/i18n/format";
 import { placeLabel, unitSpecs, unitTitle } from "@/app/lib/i18n/units";
+import { useEnquiry } from "./enquiry";
 import { Link } from "./link";
 import { Area, Bath, Bed, Building, MapPin, Stairs, ViewIcon } from "./icons";
 
@@ -18,9 +20,11 @@ export function UnitCard({
   currency: Currency;
 }) {
   const { t, locale, num } = useI18n();
+  const openEnquiry = useEnquiry();
   const price = unit.prices[currency];
   const project = projects.find((p) => p.name === unit.project);
   const title = unitTitle(locale, t, unit);
+  const place = placeLabel(t, unit.location);
   const specs = unitSpecs(locale, t, unit)
     .map((value, i) => ({ Icon: SPEC_ICONS[i], value }))
     .filter((spec) => spec.value);
@@ -85,8 +89,31 @@ export function UnitCard({
         ))}
       </dl>
 
+      {/* Still a link to /contact-us underneath: that is where a middle-click,
+          a crawler and a reader without JavaScript all need it to go. The
+          click is intercepted only once the dialog is there to intercept it
+          with, which keeps the reader on the grid they were browsing. */}
       <Link
         href="/contact-us"
+        onClick={
+          openEnquiry
+            ? (event) => {
+                if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+                event.preventDefault();
+                openEnquiry({
+                  eyebrow: `${title} · ${place}`,
+                  subject: interpolate(t.unit.enquirySubject, {
+                    unit: title,
+                    place,
+                  }),
+                  enquiryType:
+                    unit.country === "Caribbean"
+                      ? "caribbeanCbi"
+                      : "turkiyeProperty",
+                });
+              }
+            : undefined
+        }
         className="mt-auto inline-block self-start rounded-full bg-forest px-8 py-3 text-[13px] text-cream transition-colors hover:bg-forest-deep"
       >
         {t.common.enquireNow}

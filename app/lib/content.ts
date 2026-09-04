@@ -13,7 +13,7 @@
  * Multi Mulk's own before this goes anywhere public.
  */
 
-import { mediaArticles } from "./media";
+import { buildPath, routes, searchPath } from "./routes";
 
 export { type Article } from "./media";
 
@@ -21,22 +21,47 @@ export const company = {
   name: "Multi Mulk",
 };
 
-/** Keys into `dictionary.nav`; the language control is not one of these. */
-export type NavKey = "about" | "turkiye" | "caribbean" | "cbi" | "media";
+/**
+ * The top-level navigation, keyed into `dictionary.nav`.
+ *
+ * Organised by what Multi Mulk does rather than by where it operates. The
+ * previous arrangement led with Türkiye and the Caribbean, which described the
+ * portfolio accurately and the business badly: someone searching for a second
+ * citizenship does not begin by choosing a region, and a first-time visitor
+ * could read the whole menu without learning that citizenship advisory is the
+ * practice. Regions are still reachable — under Real Estate, and through the
+ * country hubs — but they are no longer the first question the site asks.
+ */
+export type NavKey =
+  | "citizenship"
+  | "goldenVisa"
+  | "realEstate"
+  | "protection"
+  | "knowledge"
+  | "about";
 
 export type NavLink = {
   key: NavKey;
   hasMenu: boolean;
-  /** Only meaningful for links without a menu; unset ones are not built yet. */
+  /** The page the label itself opens. A menu may still hang beneath it. */
   href?: string;
 };
 
 export const navLinks: NavLink[] = [
-  { key: "about", hasMenu: true },
-  { key: "turkiye", hasMenu: true },
-  { key: "caribbean", hasMenu: true },
-  { key: "cbi", hasMenu: true },
-  { key: "media", hasMenu: false, href: "/media-centre" },
+  {
+    key: "citizenship",
+    hasMenu: true,
+    href: routes.citizenshipHub.pattern,
+  },
+  { key: "goldenVisa", hasMenu: false, href: routes.goldenVisaHub.pattern },
+  { key: "realEstate", hasMenu: true, href: routes.realEstateHub.pattern },
+  {
+    key: "protection",
+    hasMenu: false,
+    href: routes.investorProtection.pattern,
+  },
+  { key: "knowledge", hasMenu: false, href: routes.knowledge.pattern },
+  { key: "about", hasMenu: true, href: routes.about.pattern },
 ];
 
 export type MenuCard = {
@@ -68,7 +93,12 @@ export type MegaMenu =
       kind: "programmes";
       cards: {
         key: "turkiye" | "caribbean";
-        image: string;
+        /**
+         * The flags of the countries the card covers, filling it as a strip.
+         * Türkiye is one; the Caribbean card stands for five programmes and
+         * carries all five, since the region has no flag of its own.
+         */
+        flags: string[];
         /** The programme page the card opens — /citizenship/[programme]. */
         href: string;
         /** Caribbean lists development names; Türkiye lists translated routes. */
@@ -81,40 +111,48 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
   about: {
     kind: "feature",
     cards: [
-      { key: "ourStory", href: "/about", image: "/images/about-our-story.webp" },
-      { key: "ourTeam", image: "/images/region-turkiye.avif" },
+      {
+        key: "ourStory",
+        href: routes.about.pattern,
+        image: "/images/cbi/cbi-advisory.jpg",
+      },
+      { key: "ourTeam", image: "/images/cbi/cbi-advisory.jpg" },
     ],
   },
 
-  turkiye: {
+  // Hangs from Real Estate. The Caribbean resorts that used to have a menu of
+  // their own had no pages behind any of their cards, so they are reached
+  // through the Caribbean programme hub and the search instead of a menu that
+  // could not be clicked.
+  realEstate: {
     kind: "portfolio",
-    viewAllHref: "/search-property?currency=USD&location=T%C3%BCrkiye",
+    viewAllHref: searchPath({ currency: "USD", location: "Türkiye" }),
     cards: [
       {
         eyebrow: [["Türkiye"], ["İstanbul", "Beyoğlu"]],
         title: "Bosphorus Heights",
-        href: "/properties/bosphorus-heights",
+        href: buildPath("development", { slug: "bosphorus-heights" }),
         detailKey: "bosphorus-heights",
         image: "/images/bosphorus-heights.webp",
       },
       {
         eyebrow: [["Türkiye"], ["İstanbul", "Beylikdüzü"]],
         title: "Marmara Vista",
-        href: "/properties/marmara-vista",
+        href: buildPath("development", { slug: "marmara-vista" }),
         detailKey: "marmara-vista",
         image: "/images/marmara-vista.webp",
       },
       {
         eyebrow: [["Türkiye"], ["İstanbul", "Şişli"]],
         title: "Levent Residences",
-        href: "/properties/levent-residences",
+        href: buildPath("development", { slug: "levent-residences" }),
         detailKey: "levent-residences",
         image: "/images/levent-residences.webp",
       },
       {
         eyebrow: [["Türkiye"], ["Muğla", "Bodrum"]],
         title: "Aegean Bay Residences",
-        href: "/properties/aegean-bay-residences",
+        href: buildPath("development", { slug: "aegean-bay-residences" }),
         detailKey: "aegean-bay-residences",
         image: "/images/aegean-bay.webp",
       },
@@ -133,61 +171,25 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
     ],
   },
 
-  caribbean: {
-    kind: "portfolio",
-    viewAllHref: "/search-property?currency=USD&location=Caribbean",
-    cards: [
-      {
-        eyebrow: [["Grenada"], ["La Sagesse Bay"]],
-        title: "The La Sagesse Collection Residences",
-        detailKey: "la-sagesse-collection",
-        image: "/images/cb-la-sagesse-residences.webp",
-      },
-      {
-        eyebrow: [["Grenada"], ["La Sagesse Bay"]],
-        title: "InterContinental Grenada - La Sagesse",
-        detailKey: "intercontinental-grenada",
-        image: "/images/caribbean-grenada.webp",
-      },
-      {
-        eyebrow: [["Grenada"], ["La Sagesse Bay"]],
-        title: "Six Senses La Sagesse",
-        detailKey: "six-senses-la-sagesse",
-        image: "/images/hero-six-senses.webp",
-      },
-      {
-        eyebrow: [["Dominica"], ["Cabrits National Park"]],
-        title: "InterContinental Dominica Cabrits Resort & Spa",
-        detailKey: "intercontinental-dominica",
-        image: "/images/cb-ic-dominica.webp",
-      },
-      {
-        eyebrow: [["St. Kitts & Nevis"], ["Christophe Harbour"]],
-        title: "Park Hyatt St. Kitts",
-        detailKey: "park-hyatt-st-kitts",
-        image: "/images/cb-park-hyatt.webp",
-      },
-      {
-        eyebrow: [["Dominica"], ["Portsmouth"]],
-        title: "Port Cabrits Marina",
-        detailKey: "port-cabrits-marina",
-        image: "/images/cb-port-cabrits.png",
-      },
-    ],
-  },
-
-  cbi: {
+  citizenship: {
     kind: "programmes",
     cards: [
       {
         key: "turkiye",
-        image: "/images/bosphorus-heights.webp",
-        href: "/citizenship/turkiye",
+        flags: ["/images/flags/tr-waving.jpg"],
+        href: buildPath("citizenshipProgramme", { programme: "turkiye" }),
       },
       {
         key: "caribbean",
-        image: "/images/hero-la-sagesse.webp",
-        href: "/citizenship/caribbean",
+        // In the order the programmes are listed in `programmes.ts`.
+        flags: [
+          "/images/flags/gd.svg",
+          "/images/flags/dm.svg",
+          "/images/flags/kn.svg",
+          "/images/flags/lc.svg",
+          "/images/flags/ag.svg",
+        ],
+        href: buildPath("citizenshipProgramme", { programme: "caribbean" }),
         projects: [
           "The La Sagesse Collection Residences",
           "InterContinental Grenada - La Sagesse",
@@ -201,40 +203,71 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
   },
 };
 
+/**
+ * The three things a reader can be on this site to do, in the order the
+ * business ranks them. Rendered under the homepage headline so the choice is
+ * the first thing offered rather than something to be found in the menu.
+ */
+export const heroPaths = [
+  { key: "citizenship" as const, href: routes.citizenshipHub.pattern },
+  { key: "residency" as const, href: routes.goldenVisaHub.pattern },
+  { key: "property" as const, href: routes.realEstateHub.pattern },
+];
+
 export type HeroSlide = {
   /** Key into `dictionary.hero.slides`. */
   key: string;
-  /** A development name, and the place it stands in, if the design shows one. */
+  /**
+   * A place name, and the country it sits in, for the pin in the corner.
+   * Empty on the slides that show a document or a person rather than a
+   * location — a passport photographed on a desk has no map reference, and a
+   * pin under it would be inventing one.
+   */
   name: string;
   place?: string;
   image: string;
+  /**
+   * Set on frames that are lit brightly enough that the standard wash is not
+   * enough to hold white type. The hero doubles its flat scrim for these.
+   */
+  bright?: boolean;
 };
 
 export const heroSlides: HeroSlide[] = [
-  { key: "six-senses", name: "Six Senses La Sagesse", image: "/images/hero-six-senses.webp" },
+  /*
+   * Dark, and deliberately so.
+   *
+   * The headline, the standfirst and the three paths are all set in white over
+   * these, so a bright photograph does not just look wrong — it makes the copy
+   * unreadable. Every frame here measures under 75 average luminance across
+   * the band the text occupies; the flat-lit stock that preceded them measured
+   * 126 to 178 and the buttons disappeared into it.
+   *
+   * The subjects are the places a second citizenship actually opens up, shot
+   * at dusk and at night, plus one frame of the work itself.
+   */
   {
-    key: "marmara-vista",
-    name: "Marmara Vista",
-    place: "İstanbul",
-    image: "/images/hero-beach-vista.webp",
+    key: "istanbul-dusk",
+    name: "İstanbul",
+    place: "Türkiye",
+    image: "/images/cbi/hero-istanbul-dusk.jpg",
+  },
+  // The one daylight frame. It measures 131 average luminance across the band
+  // the headline occupies — well above the 75 the others sit under — so it
+  // carries the heavier scrim rather than losing the white type into the sky.
+  {
+    key: "island",
+    name: "",
+    image: "/images/cbi/hero-island-lagoon.webp",
+    bright: true,
   },
   {
-    key: "levent-residences",
-    name: "Levent Residences",
-    place: "İstanbul",
-    image: "/images/hero-beach-residences.webp",
+    key: "dubai",
+    name: "Dubai",
+    place: "UAE",
+    image: "/images/cbi/hero-dubai-night.jpg",
   },
-  {
-    key: "aegean-bay",
-    name: "Aegean Bay Residences",
-    place: "Bodrum",
-    image: "/images/hero-beach-house.webp",
-  },
-  {
-    key: "la-sagesse",
-    name: "The La Sagesse Collection Residences",
-    image: "/images/hero-la-sagesse.webp",
-  },
+  { key: "advisory", name: "", image: "/images/cbi/cbi-documents.jpg" },
 ];
 
 export const regions = [
@@ -242,12 +275,12 @@ export const regions = [
     key: "turkiye" as const,
     /** The caption is a run of place names, joined with a middot. */
     places: ["İstanbul", "Bodrum", "Antalya"],
-    image: "/images/region-turkiye.avif",
+    image: "/images/cbi/cbi-istanbul-strait.jpg",
   },
   {
     key: "caribbean" as const,
     places: ["Caribbean"],
-    image: "/images/region-caribbean.avif",
+    image: "/images/cbi/cbi-caribbean-bay.webp",
   },
 ];
 
@@ -268,14 +301,19 @@ export const turkiyeProperties: Property[] = [
 ];
 
 /** Award badges. `key` selects the caption from `dictionary.awards.captions`. */
-export const awardItems = [
-  { key: "beachfront" as const, logo: "/logos/award-uae-realty.svg", height: 46 },
-  { key: "michelin" as const, logo: "/logos/award-michelin.webp", height: 43 },
-  { key: "eco" as const, logo: "/logos/award-conde-badge.webp", height: 43 },
-  { key: "travel" as const, logo: "/logos/award-conde-badge.webp", height: 43 },
-  { key: "newHotels" as const, logo: "/logos/award-conde-traveler.svg", height: 34 },
-  { key: "luxuryHotels" as const, logo: "/logos/award-people.svg", height: 34 },
-];
+/**
+ * Awards.
+ *
+ * Empty, and deliberately so. The six badges that were here — a Michelin Key,
+ * Condé Nast designations, "Best Beachfront Property of the Year" — were
+ * carried over with the design from the reference site and belong to that
+ * company's resorts. Multi Mulk's own site lists no awards, and displaying
+ * someone else's is not a placeholder problem but a false claim.
+ *
+ * The Awards section renders nothing while this is empty. Add entries when
+ * Multi Mulk has awards of its own to show.
+ */
+export const awardItems: { key: string; logo: string; height: number }[] = [];
 
 export type Resort = {
   /** Key into `dictionary.caribbeanSection.descriptions`. */
@@ -338,12 +376,14 @@ export const destinations = {
       ["Bodrum", "Muğla"],
       ["Antalya", "Konyaaltı"],
     ],
+    // Programme facts, so they come from the figures registry with their
+    // sources and qualifiers attached rather than as bare strings.
     stats: [
-      { key: "threshold" as const, value: "$400K" },
-      { key: "months" as const, value: "3–6" },
-      { key: "visaFree" as const, value: "110+" },
+      { key: "threshold" as const, figure: "tr.cbi.minimum-property" as const },
+      { key: "months" as const, figure: "tr.cbi.processing" as const },
+      { key: "visaFree" as const, figure: "tr.cbi.visa-free" as const },
     ],
-    map: "/images/region-turkiye.avif",
+    map: "/images/cbi/cbi-istanbul-strait.jpg",
   },
   caribbean: {
     /** Development names, so they are listed rather than looked up. */
@@ -355,10 +395,14 @@ export const destinations = {
       "Park Hyatt St. Kitts",
       "Port Cabrits Marina",
     ],
+    // Multi Mulk's own record, taken from multimulk.com. These replaced
+    // "15 Years / 5,500+ Jobs Created / 15,000 Individuals Assisted", which
+    // were carried over from the reference site this design came from and
+    // described a different company entirely.
     stats: [
-      { key: "years" as const, value: "15" },
-      { key: "jobs" as const, value: "5,500+" },
-      { key: "assisted" as const, value: "15,000" },
+      { key: "years" as const, value: "10+" },
+      { key: "clients" as const, value: "160+" },
+      { key: "properties" as const, value: "500+" },
     ],
     map: "/images/caribbean-grenada.webp",
   },
@@ -367,10 +411,18 @@ export const destinations = {
 export type DestinationKey = keyof typeof destinations;
 
 /**
- * The home page shows the four most recent pieces; the full index and its
- * filters live at /media-centre, backed by the same list.
+ * How many pieces the home page's "Latest Articles" strip shows.
+ *
+ * The full index and its filters live at /knowledge, backed by the same list —
+ * drawn from every collection, or the strip would headline "The Latest
+ * Articles" over press items several months older than what the Knowledge
+ * Centre is carrying.
+ *
+ * A count rather than the list itself: the strip now draws on the merged list,
+ * which includes whatever has been published from the dashboard and so cannot
+ * be resolved at module scope. The home page does the slicing.
  */
-export const articles = mediaArticles.slice(0, 4);
+export const LATEST_ARTICLES = 4;
 
 /**
  * Footer link columns. The two portfolio columns list development names, which
@@ -404,11 +456,11 @@ export const footerColumns = [
 
 /** The About column, keyed; `href` is unset for pages that do not exist yet. */
 export const footerAboutItems = [
-  { key: "ourStory" as const, href: "/about" },
+  { key: "ourStory" as const, href: routes.about.pattern },
   { key: "ourTeam" as const },
-  { key: "turkishCitizenship" as const, href: "/citizenship/turkiye" },
-  { key: "caribbeanCbi" as const, href: "/citizenship/caribbean" },
-  { key: "mediaCentre" as const, href: "/media-centre" },
+  { key: "turkishCitizenship" as const, href: buildPath("citizenshipProgramme", { programme: "turkiye" }) },
+  { key: "caribbeanCbi" as const, href: buildPath("citizenshipProgramme", { programme: "caribbean" }) },
+  { key: "mediaCentre" as const, href: routes.knowledge.pattern },
   { key: "construction" as const },
   { key: "terms" as const },
   { key: "privacy" as const },
@@ -416,13 +468,37 @@ export const footerAboutItems = [
 
 export const contact = {
   email: "info@multimulk.com",
+  /** Dubai first: it is the head office, and the order is read as a hierarchy. */
   phones: [
     { key: "UAE" as const, number: "+971 50 169 4283" },
     { key: "Türkiye" as const, number: "+90 543 337 7899" },
     { key: "Pakistan" as const, number: "+92 300 847 8644" },
   ],
-  /** The Beykent office as Google Maps resolves it, for the embed and the link out. */
-  mapQuery: "Burc Plaza, Gökevler Mah. 2312 Sk. No:18J, Beykent, Esenyurt/İstanbul",
+  offices: [
+    {
+      key: "UAE" as const,
+      headOffice: true,
+      address:
+        "Grosvenor Business Tower, Office 1909, Al Thanyah First, Barsha Heights, Dubai",
+      phone: "+971 50 169 4283",
+    },
+    {
+      key: "Türkiye" as const,
+      headOffice: false,
+      address:
+        "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J, Kat:5, Ofis No:48-49, Beykent / İstanbul",
+      phone: "+90 543 337 7899",
+    },
+    {
+      key: "Pakistan" as const,
+      headOffice: false,
+      address: "13 Sher Shah Block, Garden Town, Lahore, Pakistan",
+      phone: "+92 300 847 8644",
+    },
+  ],
+  /** The head office as Google Maps resolves it, for the embed and the link out. */
+  mapQuery:
+    "Grosvenor Business Tower, Barsha Heights, Dubai",
 };
 
 /** The office on Google Maps: the keyless embed for the frame, `href` to open it. */
@@ -448,10 +524,10 @@ export const socialLinks = [
 
 /** Footer names whose page exists are routed here; the rest render inert. */
 export const footerLinks: Record<string, string> = {
-  "Bosphorus Heights": "/properties/bosphorus-heights",
-  "Marmara Vista": "/properties/marmara-vista",
-  "Levent Residences": "/properties/levent-residences",
-  "Aegean Bay Residences": "/properties/aegean-bay-residences",
+  "Bosphorus Heights": buildPath("development", { slug: "bosphorus-heights" }),
+  "Marmara Vista": buildPath("development", { slug: "marmara-vista" }),
+  "Levent Residences": buildPath("development", { slug: "levent-residences" }),
+  "Aegean Bay Residences": buildPath("development", { slug: "aegean-bay-residences" }),
 };
 
 export const whatsapp = {

@@ -2,13 +2,19 @@
 
 import Image from "next/image";
 import { Link } from "./link";
-import { resolveArticle, type Article } from "@/app/lib/media";
+import { localise, type AnyArticle } from "@/app/lib/article-shape";
+import { buildPath } from "@/app/lib/routes";
 import { useI18n } from "@/app/lib/i18n/context";
 
 /**
- * The article card: thumbnail, meta line, headline. Shared by the Media Centre
- * grid and the rail beside an article page, which are the same card at two
- * widths — keep them here so the two cannot drift apart.
+ * The article card: thumbnail, meta line, headline. Shared by the Knowledge
+ * Centre grid and the rail beside an article page, which are the same card at
+ * two widths — keep them here so the two cannot drift apart.
+ *
+ * It takes `AnyArticle` because the index lists both collections and a reader
+ * should not be able to tell which side of the WordPress migration a piece
+ * came from. `localise` is a no-op on a migrated one, which has no staged
+ * translation to swap in.
  */
 export function ArticleCard({
   article,
@@ -17,18 +23,18 @@ export function ArticleCard({
   aspect = "302/202",
   headingLevel = 2,
 }: {
-  article: Article;
+  article: AnyArticle;
   sizes: string;
   aspect?: string;
   headingLevel?: 2 | 3;
 }) {
   const { t, date } = useI18n();
   const Heading = headingLevel === 3 ? "h3" : "h2";
-  const copy = resolveArticle(article, t.articles.copy[article.slug]);
+  const copy = localise(article, t.articles.copy[article.slug]);
 
   return (
     <Link
-      href={`/media-centre/${article.slug}`}
+      href={buildPath("article", { slug: article.slug })}
       className="group flex flex-col gap-[14.4px]"
     >
       <div
@@ -36,7 +42,9 @@ export function ArticleCard({
         style={{ aspectRatio: aspect }}
       >
         <Image
-          src={article.image}
+          // A migrated piece that arrived without a featured image still needs
+          // a card the same height as the ones beside it.
+          src={article.image ?? "/images/region-turkiye.avif"}
           alt=""
           fill
           sizes={sizes}
@@ -45,8 +53,12 @@ export function ArticleCard({
       </div>
 
       <p className="flex flex-wrap items-center gap-x-[7.2px] text-[11.5px] leading-[17.28px] tracking-[0.02em] text-ink">
-        <span>{t.articles.categories[article.category]}</span>
-        <span aria-hidden>|</span>
+        {article.topics[0] ? (
+          <>
+            <span>{t.articles.topics[article.topics[0]]}</span>
+            <span aria-hidden>|</span>
+          </>
+        ) : null}
         <span className="num">{date(article.date)}</span>
         {article.source ? (
           <>

@@ -5,8 +5,17 @@ import { awardItems } from "@/app/lib/content";
 import { getDictionary } from "@/app/lib/i18n";
 import { Diamond } from "./icons";
 
+/**
+ * Recognition Multi Mulk has received.
+ *
+ * Renders nothing while `awardItems` is empty, rather than an empty heading
+ * over a blank row. The badges that used to fill it belonged to the reference
+ * site this design came from.
+ */
 export async function Awards() {
   const t = await getDictionary();
+
+  if (awardItems.length === 0) return null;
 
   return (
     <section className="bg-white pb-[72px] lg:pb-24">
@@ -41,7 +50,7 @@ export async function Awards() {
                 />
               </div>
               <p className="mt-5 text-center text-[9px] font-bold uppercase leading-[14px] tracking-[0.05em] text-gold">
-                {t.awards.captions[item.key]}
+                {t.awards.captions[item.key as keyof typeof t.awards.captions]}
               </p>
             </li>
           ))}

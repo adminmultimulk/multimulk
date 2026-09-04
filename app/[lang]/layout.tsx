@@ -3,11 +3,23 @@ import { Manrope, Vazirmatn } from "next/font/google";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { EnquiryProvider } from "@/app/components/enquiry";
 import { WhatsAppButton } from "@/app/components/whatsapp-button";
 import { analyticsEnabled, gaId } from "@/app/lib/analytics";
-import { dirFor, isLocale, locales } from "@/app/lib/i18n/config";
+import {
+  dirFor,
+  hreflangFor,
+  intlLocale,
+  isLocale,
+  isPublished,
+  locales,
+} from "@/app/lib/i18n/config";
 import { I18nProvider } from "@/app/lib/i18n/context";
 import { getDictionary } from "@/app/lib/i18n";
+import { company } from "@/app/lib/content";
+import { JsonLd } from "@/app/components/json-ld";
+import { organization, webSite } from "@/app/lib/seo/jsonld";
+import { siteUrl } from "@/app/lib/site";
 import "../globals.css";
 
 /**
@@ -89,9 +101,27 @@ export async function generateMetadata({
   const t = await getDictionary(lang);
   // Defaults only. Each page sets its own title, description and — because a
   // layout cannot know which child is rendering — its own `hreflang` block.
+  //
+  // `metadataBase` is what turns every page's relative image path and every
+  // `alternates` entry into an absolute URL. Without it Next resolves them
+  // against a fallback origin, and relative `hreflang` is simply ignored.
   return {
-    title: t.meta.home.title,
+    metadataBase: siteUrl,
+    title: {
+      default: t.meta.home.title,
+      // Pages set the bare page name; the suffix is added once, here.
+      template: `%s | ${company.name}`,
+    },
     description: t.meta.home.description,
+    openGraph: {
+      siteName: company.name,
+      locale: intlLocale[lang],
+      type: "website",
+    },
+    twitter: { card: "summary_large_image" },
+    // A language still being translated is reachable but must not be indexed;
+    // `follow` keeps its outgoing links useful for discovery.
+    robots: isPublished(lang) ? undefined : { index: false, follow: true },
   };
 }
 
@@ -106,14 +136,24 @@ export default async function RootLayout({
 
   return (
     <html
-      lang={lang}
+      // The BCP 47 tag, not the URL segment: `/zh` announces itself as
+      // `zh-Hans`, which is what a screen reader and a crawler need.
+      lang={hreflangFor[lang]}
       dir={dirFor(lang)}
       className={`${theSeasons.variable} ${manrope.variable} ${vazirmatn.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* Stated once for the whole site; every page's own nodes point back
+            at these two by `@id` rather than repeating them. */}
+        <JsonLd graph={[organization(lang), webSite(lang)]} />
         <I18nProvider locale={lang} dict={dict}>
-          {children}
-          <WhatsAppButton />
+          {/* Site-wide so that any "Enquire Now" — on a residence card, in a
+              grid, anywhere — opens the form in place. Costs one small chunk;
+              the form itself only arrives on the first click. */}
+          <EnquiryProvider>
+            {children}
+            <WhatsAppButton />
+          </EnquiryProvider>
         </I18nProvider>
       </body>
       {analyticsEnabled && <GoogleAnalytics gaId={gaId} />}

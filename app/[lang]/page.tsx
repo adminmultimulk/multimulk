@@ -9,6 +9,8 @@ import { SiteNav } from "@/app/components/site-nav";
 import { TurkiyePortfolio } from "@/app/components/turkiye-portfolio";
 import { Welcome } from "@/app/components/welcome";
 import { alternatesFor, getDictionary } from "@/app/lib/i18n";
+import { mergedArticles } from "@/app/lib/cms/articles";
+import { LATEST_ARTICLES } from "@/app/lib/content";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,7 +18,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return { ...t.meta.home, alternates: await alternatesFor("/") };
 }
 
-export default function Home() {
+export default async function Home() {
+  // The four newest, whichever collection they came from. Sliced here rather
+  // than in `content.ts` because the dashboard's articles are only known at
+  // request time, and a static export of "the latest" would freeze on the day
+  // it was built.
+  const latest = (await mergedArticles()).slice(0, LATEST_ARTICLES);
+
   return (
     <>
       <div className="relative">
@@ -30,7 +38,7 @@ export default function Home() {
         <Awards />
         <CaribbeanRetreats />
         <Destinations />
-        <Articles />
+        <Articles articles={latest} />
       </main>
       <SiteFooter />
     </>

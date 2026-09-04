@@ -49,7 +49,7 @@ function RegionPanel({ region }: { region: AboutRegion }) {
   // Arabic and Urdu are cursive: pulling a word apart letter by letter breaks
   // the joins, so those two render the wordmark whole.
   const scatter = locale !== "ar" && locale !== "ur";
-  const word = region.word[locale] ?? region.word.en;
+  const word = region.word[locale];
 
   return (
     <section className="relative flex min-h-[520px] items-start overflow-hidden bg-forest-deep py-[88px] lg:h-[900px] lg:py-[104px]">

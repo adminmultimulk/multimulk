@@ -5,12 +5,13 @@ import { useState } from "react";
 import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
 import { Link } from "./link";
-import { articles } from "@/app/lib/content";
-import { articleCategories, resolveArticle } from "@/app/lib/media";
+import { articleCategories } from "@/app/lib/media";
+import { localise, type AnyArticle } from "@/app/lib/article-shape";
 import { useI18n } from "@/app/lib/i18n/context";
+import { buildPath } from "@/app/lib/routes";
 import { Diamond } from "./icons";
 
-export function Articles() {
+export function Articles({ articles }: { articles: AnyArticle[] }) {
   const { t, date } = useI18n();
   const [category, setCategory] = useState<string>("All");
 
@@ -18,7 +19,7 @@ export function Articles() {
     category === "All"
       ? articles
       : articles.filter((a) => a.category === category)
-  ).map((article) => resolveArticle(article, t.articles.copy[article.slug]));
+  ).map((article) => localise(article, t.articles.copy[article.slug]));
 
   return (
     <section className="bg-white py-[72px] lg:py-[100px]">
@@ -69,12 +70,12 @@ export function Articles() {
             {visible.map((article) => (
               <li key={article.slug}>
                 <Link
-                  href={`/media-centre/${article.slug}`}
+                  href={buildPath("article", { slug: article.slug })}
                   className="group block"
                 >
                   <div className="relative aspect-[255/211] w-full overflow-hidden">
                     <Image
-                      src={article.image}
+                      src={article.image ?? "/images/region-turkiye.avif"}
                       alt=""
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 255px"
@@ -82,7 +83,7 @@ export function Articles() {
                     />
                   </div>
                   <p className="mt-4 text-[10.5px] text-ink/65">
-                    {t.articles.categories[article.category]} &nbsp;|&nbsp;{" "}
+                    {t.articles.categories[article.category ?? "Blog"]} &nbsp;|&nbsp;{" "}
                     <span className="num">{date(article.date, "short")}</span>
                   </p>
                   <h3 className="mt-4 text-[13px] leading-[21px] text-ink">

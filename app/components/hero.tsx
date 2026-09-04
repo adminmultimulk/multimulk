@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { heroSlides } from "@/app/lib/content";
+import { heroPaths, heroSlides } from "@/app/lib/content";
 import { useI18n } from "@/app/lib/i18n/context";
 import { interpolate } from "@/app/lib/i18n/format";
 import {
@@ -21,6 +21,7 @@ import {
 } from "@/app/lib/properties";
 import { AnimatedTitle } from "./animated-title";
 import { MapPin } from "./icons";
+import { Link } from "./link";
 import { SelectMenu } from "./select-menu";
 
 const ROTATE_MS = 6500;
@@ -55,16 +56,81 @@ export function Hero() {
         />
       ))}
 
-      {/* Scrims keep the nav and search bar legible over any slide. */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[min(260px,34svh)] bg-gradient-to-b from-forest/55 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[min(340px,45svh)] bg-gradient-to-t from-forest/70 to-transparent" />
+      {/*
+        Scrims.
+        
+        Three, not two. The gradients cover the nav and the search bar, but the
+        band between them — where the headline, the standfirst and the three
+        paths sit — had nothing behind it, so legibility depended entirely on
+        the photograph being dark there. The hero cycles through four, and a
+        bright sky or a white paper flat-lay left white type sitting on white.
+        The even wash fixes that for every slide at once, and is light enough
+        that the photograph still reads as a photograph.
+      */}
+      <div
+        className={`pointer-events-none absolute inset-0 transition-colors duration-[1200ms] ease-out ${
+          slide.bright ? "bg-black/60" : "bg-black/35"
+        }`}
+      />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[min(260px,34svh)] bg-gradient-to-b from-black/55 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[min(340px,45svh)] bg-gradient-to-t from-black/70 to-transparent" />
 
       <div className="relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-6 sm:px-10 lg:px-[72px]">
-        <h1 className="mx-auto mt-[clamp(112px,17svh,150px)] max-w-[1160px] font-display text-[length:clamp(26px,5svh,34px)] leading-[1.18] text-white sm:text-[length:clamp(32px,6svh,46px)] lg:mt-[clamp(128px,18svh,190px)] lg:text-[length:min(64px,7svh)]">
-          <AnimatedTitle key={slide.key} align="center">
+        {/*
+          The H1 is fixed and says what the business is.
+
+          It used to be the rotating slide caption — "A Sanctuary Shaped by Sea
+          & Forests" and four others, changing every 6.5 seconds. Two problems
+          with that: a visitor could read the whole hero without learning that
+          this is a citizenship and residency advisory, and the only heading on
+          the page was written by client-side JavaScript into a different
+          string each render. The captions are still here, below, doing what
+          they are good at — naming the place in the photograph.
+        */}
+        <div className="mx-auto mt-[clamp(96px,15svh,140px)] max-w-[1160px] text-center lg:mt-[clamp(112px,16svh,172px)]">
+          <h1 className="font-display text-[length:clamp(26px,5svh,34px)] leading-[1.18] text-white sm:text-[length:clamp(32px,6svh,46px)] lg:text-[length:min(60px,6.6svh)]">
+            <AnimatedTitle variant="banner" align="center">
+              {t.hero.heading}
+            </AnimatedTitle>
+          </h1>
+          <p className="mx-auto mt-5 max-w-[620px] text-[14px] leading-[23px] text-white/80 sm:text-[15px] sm:leading-[25px]">
+            {t.hero.body}
+          </p>
+
+          {/* The three things a reader can be here to do, named in the order
+              the business ranks them. */}
+          <nav
+            aria-label={t.hero.pathsLabel}
+            className="mt-7 flex flex-wrap items-center justify-center gap-2.5"
+          >
+            {heroPaths.map((path) => (
+              <Link
+                key={path.key}
+                href={path.href}
+                /*
+                 * All three read as one row of equal choices.
+                 *
+                 * An outline in cream at 60% over white text would rely on the
+                 * photograph behind it being dark, and the hero cycles through
+                 * four of them, so each button carries its own translucent
+                 * ground and a blur — legible over a bright sky as well as a
+                 * night skyline.
+                 */
+                className="rounded-full border border-cream/70 bg-forest-deep/45 px-7 py-3 text-[12.5px] text-cream backdrop-blur-sm transition-colors hover:bg-cream hover:text-forest"
+              >
+                {t.hero.paths[path.key]}
+              </Link>
+            ))}
+          </nav>
+
+          {/* The rotating caption keeps its job: naming what is on screen. */}
+          <p
+            key={slide.key}
+            className="mt-8 text-[12px] uppercase tracking-[0.14em] text-white/85"
+          >
             {t.hero.slides[slide.key as keyof typeof t.hero.slides]}
-          </AnimatedTitle>
-        </h1>
+          </p>
+        </div>
 
         <div className="mt-auto pt-[clamp(2rem,7svh,4rem)]">
           <div className="flex items-center justify-center gap-3">
@@ -73,7 +139,11 @@ export function Hero() {
                 key={s.image}
                 type="button"
                 onClick={() => setActive(i)}
-                aria-label={interpolate(t.hero.showSlide, { name: s.name })}
+                /* The caption, not the pin: two slides have no place name,
+                    and "Show " is not a label. */
+                aria-label={interpolate(t.hero.showSlide, {
+                  name: t.hero.slides[s.key as keyof typeof t.hero.slides],
+                })}
                 aria-current={i === active}
                 className="py-2"
               >
@@ -86,15 +156,23 @@ export function Hero() {
             ))}
           </div>
 
-          <div className="mt-2 flex items-center justify-center gap-2 text-white lg:justify-end">
-            <MapPin className="w-3" />
-            {/* "Marmara Vista, İstanbul" — a Latin name beside a translated
-                place. `<bdi>` isolates the name so the comma stays with it
-                instead of being reordered by the bidi algorithm in Arabic. */}
-            <span className="text-[11px] uppercase tracking-[0.11em]">
-              <bdi>{slide.name}</bdi>
-              {slide.place ? <>, {placeLabel(t, slide.place)}</> : null}
-            </span>
+          {/* Only the slides that show somewhere get a pin. A passport on a
+              desk has no map reference, and captioning one with a place would
+              be inventing it. The row keeps its height either way so the
+              search bar below does not jump between slides. */}
+          <div className="mt-2 flex h-4 items-center justify-center gap-2 text-white lg:justify-end">
+            {slide.name ? (
+              <>
+                <MapPin className="w-3" />
+                {/* "Cabrits, Dominica" — a Latin name beside a translated
+                    place. `<bdi>` isolates the name so the comma stays with it
+                    instead of being reordered by the bidi algorithm in Arabic. */}
+                <span className="text-[11px] uppercase tracking-[0.11em]">
+                  <bdi>{slide.name}</bdi>
+                  {slide.place ? <>, {placeLabel(t, slide.place)}</> : null}
+                </span>
+              </>
+            ) : null}
           </div>
         </div>
 

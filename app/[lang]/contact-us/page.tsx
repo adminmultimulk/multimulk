@@ -8,6 +8,9 @@ import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
 import { contact, officeMap } from "@/app/lib/content";
 import { alternatesFor, getDictionary, getI18n } from "@/app/lib/i18n";
+import { mintFormToken } from "@/app/lib/leads/token";
+import { JsonLd } from "@/app/components/json-ld";
+import { breadcrumbs } from "@/app/lib/seo/jsonld";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getDictionary();
@@ -20,6 +23,9 @@ export default async function ContactPage() {
 
   return (
     <>
+      <JsonLd
+        graph={[breadcrumbs({ locale, id: "contact", labels: t.routes })]}
+      />
       <div className="relative">
         <SiteNav />
         <section className="relative flex h-[560px] items-center overflow-hidden bg-forest">
@@ -31,8 +37,8 @@ export default async function ContactPage() {
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-l from-forest-deep/80 via-forest-deep/40 to-forest-deep/60" />
-          <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-forest-deep/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/40 to-black/60" />
+          <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/70 to-transparent" />
 
           <Container className="relative">
             <h1 className="font-display text-[46px] leading-[1.1] text-white sm:text-[68px] lg:text-end">
@@ -129,7 +135,7 @@ export default async function ContactPage() {
                 </dl>
               </div>
 
-              <ContactForm />
+              <ContactForm token={mintFormToken()} />
             </div>
           </div>
         </Container>

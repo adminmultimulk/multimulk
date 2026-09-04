@@ -1,16 +1,13 @@
 /**
- * Media Centre: the featured hero rotation, the article index behind
- * /media-centre, the article pages at /media-centre/<slug>, and the
- * newsletter band that closes both.
+ * The Knowledge Centre's featured hero rotation, the newsletter band that
+ * closes it, and the pieces written for this site.
  *
  * The articles below are the English source. Headlines and bodies are staged
  * for translation: a language supplies whatever it has under
  * `dictionary.articles.copy[slug]` and anything missing falls back to the text
- * here — see `resolveArticle`.
- *
- * This is the single source of truth for articles — the home page's "Latest
- * Articles" strip takes the four most recent from here (see content.ts), and
- * every article link on the site resolves against a slug in this file.
+ * here — see `resolveArticle`. That is what separates them from the migrated
+ * pieces in `knowledge.ts`, which are English-only; the index at /knowledge
+ * lists both, merged by `allArticles` there.
  *
  * NOTE: placeholder content — headlines, outlets, dates, body copy and
  * photography are stand-ins pending Multi Mulk's real press archive. See the
@@ -22,13 +19,21 @@ import {
   pickAll,
   type ArticleCopy,
 } from "./i18n/format";
+import type { Topic } from "./topics";
 
 export type ArticleCategory = "Press Media" | "Blog";
 
 export type Article = {
-  /** Also the URL: /media-centre/<slug>. */
+  /** Also the URL: /knowledge/<slug>. */
   slug: string;
   category: ArticleCategory;
+  /**
+   * Pillars this sits under, which is what the Knowledge Centre index filters
+   * on, and what its related rail matches against. Category — press or our own
+   * writing — answers a different question, and is what the home page's
+   * "Latest Articles" strip still files on.
+   */
+  topics: Topic[];
   /** ISO day; render it through `formatArticleDate`, never directly. */
   date: string;
   /** Publication the piece ran in. Absent on Multi Mulk's own posts. */
@@ -67,6 +72,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "levent-residences-tops-out",
     category: "Press Media",
+    topics: ["turkiye", "real-estate"],
     date: "2026-06-18",
     source: "Daily Sabah",
     title: "Levent Residences Tops Out as Şişli’s Newest Landmark Address",
@@ -81,10 +87,11 @@ export const mediaArticles: Article[] = [
   {
     slug: "turkish-citizenship-guide-2026",
     category: "Blog",
+    topics: ["citizenship", "turkiye"],
     date: "2026-04-02",
     title: "A Guide to Turkish Citizenship by Investment in 2026",
     image: "/images/bosphorus-heights.webp",
-    hero: "/images/region-turkiye.avif",
+    hero: "/images/cbi/cbi-istanbul-strait.jpg",
     body: [
       "Türkiye’s citizenship-by-investment route remains one of the most direct in the world: a qualifying property purchase, held for three years, opens a path to a Turkish passport for the buyer, their spouse and dependent children. This guide sets out how the programme works in practice in 2026.",
       "The property threshold stands at USD 400,000, assessed against an official valuation report rather than the contract price — a distinction that catches out buyers who budget to the threshold exactly. The valuation must be prepared by a licensed appraiser, and the title deed is annotated with the three-year holding commitment at registration.",
@@ -95,6 +102,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "aegean-bay-residences-opens",
     category: "Press Media",
+    topics: ["turkiye", "real-estate"],
     date: "2026-02-11",
     source: "Hürriyet Daily News",
     title: "Aegean Bay Residences Opens Above a Quiet Bodrum Bay",
@@ -108,6 +116,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "bodrum-or-antalya",
     category: "Blog",
+    topics: ["turkiye", "real-estate"],
     date: "2025-11-20",
     title: "Bodrum or Antalya? Choosing Your Stretch of the Turkish Coast",
     image: "/images/antalya-coast.webp",
@@ -122,6 +131,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "caribbean-routes-for-gulf-investors",
     category: "Press Media",
+    topics: ["citizenship"],
     date: "2025-10-10",
     source: "Arabian Business",
     title: "Multi Mulk Brings Caribbean Citizenship Routes to Gulf Investors",
@@ -136,10 +146,11 @@ export const mediaArticles: Article[] = [
   {
     slug: "buying-property-in-istanbul",
     category: "Blog",
+    topics: ["turkiye", "real-estate"],
     date: "2025-06-26",
     title: "Five Things to Know Before Buying Property in İstanbul",
     image: "/images/anatolian-villas.webp",
-    hero: "/images/about-our-story.webp",
+    hero: "/images/cbi/cbi-advisory.jpg",
     body: [
       "İstanbul rewards buyers who do their homework and punishes those who treat it as a single market. Five points come up in nearly every transaction we handle.",
       "First, the city is not one market but dozens. A price per square metre in Şişli tells you nothing about Beykoz, and the European and Asian sides move on different cycles. Second, the official valuation report — not the asking price — governs both the citizenship threshold and the transfer tax, so obtain it early.",
@@ -150,6 +161,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "port-cabrits-marina",
     category: "Press Media",
+    topics: ["real-estate"],
     date: "2025-03-14",
     source: "Robb Report",
     title: "Port Cabrits Marina Sets a New Standard for Caribbean Yachting",
@@ -163,6 +175,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "christophe-harbour-rising",
     category: "Press Media",
+    topics: ["real-estate"],
     date: "2024-12-05",
     source: "Condé Nast Traveller",
     title: "Park Hyatt St. Kitts and the Rise of Christophe Harbour",
@@ -176,6 +189,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "six-senses-la-sagesse-michelin-key",
     category: "Press Media",
+    topics: ["real-estate"],
     date: "2024-10-30",
     title:
       "Discover Paradise: Why Six Senses La Sagesse, Grenada is a One-MICHELIN-Key Luxury Escape",
@@ -190,6 +204,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "marmara-vista-presentation-istanbul",
     category: "Press Media",
+    topics: ["news", "turkiye"],
     date: "2024-10-17",
     source: "Russian Emirates",
     title: "В Стамбуле состоялась презентация жилого комплекса Marmara Vista",
@@ -203,6 +218,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "marmara-vista-launch",
     category: "Press Media",
+    topics: ["news", "turkiye"],
     date: "2024-10-16",
     source: "Arabian Business",
     title: "Introducing the prestigious launch of Marmara Vista, İstanbul",
@@ -216,6 +232,7 @@ export const mediaArticles: Article[] = [
   {
     slug: "istanbul-portfolio-expansion",
     category: "Press Media",
+    topics: ["news", "turkiye"],
     date: "2024-10-16",
     source: "Gulf News",
     title: "Multi Mulk expands its İstanbul portfolio",
@@ -244,19 +261,6 @@ export function resolveArticle(article: Article, copy: ArticleCopy | undefined):
 
 export function getArticle(slug: string) {
   return mediaArticles.find((article) => article.slug === slug);
-}
-
-/**
- * The rail beside an article. Same-category pieces come first — a press item
- * sits next to press, a guide next to guides — and the newest of whatever is
- * left fills the remainder, so the rail is never short.
- */
-export function relatedArticles(slug: string, count = 2) {
-  const others = mediaArticles.filter((article) => article.slug !== slug);
-  const current = getArticle(slug);
-  const sameCategory = others.filter((a) => a.category === current?.category);
-  return [...sameCategory, ...others.filter((a) => !sameCategory.includes(a))]
-    .slice(0, count);
 }
 
 export type MediaHeroSlide = {

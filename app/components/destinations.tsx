@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
+import { Figure } from "./figure";
 import { destinations, type DestinationKey } from "@/app/lib/content";
 import { useI18n } from "@/app/lib/i18n/context";
 import { interpolate } from "@/app/lib/i18n/format";
@@ -66,22 +67,32 @@ export function Destinations() {
               ))}
             </ul>
 
-            <dl className="mt-[30px] flex items-start">
+            <dl className="mt-[30px] grid items-start sm:grid-cols-3">
               {data.stats.map((stat, i) => (
                 <div
                   key={stat.key}
-                  className={`flex flex-col items-center px-4 text-center sm:px-5 ${
-                    i === 0 ? "ps-0" : "border-s border-ink/20"
+                  className={`flex min-w-0 flex-col items-center px-2 text-center ${
+                    i === 0
+                      ? "sm:ps-0"
+                      : "mt-6 border-t border-ink/20 pt-6 sm:mt-0 sm:border-s sm:border-t-0 sm:pt-0"
                   }`}
                 >
-                  <dt className="num whitespace-nowrap font-display text-[30px] leading-[50px] text-ink sm:text-[40px]">
-                    {stat.value}
-                  </dt>
-                  <dd className="max-w-[150px] text-[11.5px] leading-[17px] text-ink">
-                    {
-                      (copy.stats as Record<string, string>)[stat.key]
-                    }
-                  </dd>
+                  {"figure" in stat ? (
+                    <Figure
+                      id={stat.figure}
+                      label={(copy.stats as Record<string, string>)[stat.key]}
+                      size="sm"
+                    />
+                  ) : (
+                    <>
+                      <dt className="num whitespace-nowrap font-display text-[22px] leading-none text-ink">
+                        {stat.value}
+                      </dt>
+                      <dd className="mt-3 max-w-[150px] text-[11.5px] leading-[17px] text-ink">
+                        {(copy.stats as Record<string, string>)[stat.key]}
+                      </dd>
+                    </>
+                  )}
                 </div>
               ))}
             </dl>

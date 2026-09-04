@@ -2,23 +2,19 @@
 
 import Image from "next/image";
 import { Link } from "./link";
-import type { MegaMenu, MenuCard, NavKey } from "@/app/lib/content";
+import type { MegaMenu, MenuCard } from "@/app/lib/content";
 import { useI18n } from "@/app/lib/i18n/context";
 import { lookup } from "@/app/lib/i18n/format";
 import { placeLine } from "@/app/lib/i18n/units";
+import { getFigure } from "@/app/lib/figures";
+import { figureValue } from "@/app/lib/format-figure";
 import type { Dictionary } from "@/app/lib/i18n";
 
 /** Children enter one after another rather than all at once. */
 const stagger = (i: number) => ({ animationDelay: `${60 + i * 55}ms` });
 
-export function MegaMenuPanel({
-  menu,
-  navKey,
-}: {
-  menu: MegaMenu;
-  navKey: NavKey;
-}) {
-  const { t } = useI18n();
+export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
+  const { t, locale, fill } = useI18n();
 
   switch (menu.kind) {
     case "feature": {
@@ -47,7 +43,10 @@ export function MegaMenuPanel({
     }
 
     case "portfolio": {
-      const copy = navKey === "turkiye" ? t.menus.turkiye : t.menus.caribbean;
+      // Only Real Estate carries a portfolio menu now; the Caribbean resorts
+      // had no pages behind their cards and are reached through the programme
+      // hub instead.
+      const copy = t.menus.realEstate;
       return (
         <div className="grid grid-cols-[220px_1fr] gap-7">
           <Intro heading={copy.heading} body={copy.body}>
@@ -75,10 +74,23 @@ export function MegaMenuPanel({
       return (
         <div className={`grid gap-3 ${wide ? "grid-cols-2" : "grid-cols-3"}`}>
           {menu.cards.map((card, i) => {
-            // Türkiye lists the programme's terms, which are translated;
-            // the Caribbean lists development names, which are not.
+            // Türkiye lists the programme's terms, which are translated and
+            // whose figures come from the registry rather than the copy; the
+            // Caribbean lists development names, which are not translated.
             const lines =
-              card.projects ?? t.menus.cbi.turkiyeRoutes;
+              card.projects ??
+              t.menus.citizenship.turkiyeRoutes.map((line) =>
+                fill(line, {
+                  investment: figureValue(
+                    locale,
+                    getFigure("tr.cbi.minimum-property"),
+                  ),
+                  holding: `${figureValue(
+                    locale,
+                    getFigure("tr.cbi.holding-period"),
+                  )} ${t.figures.units.years}`,
+                }),
+              );
             return (
               <Link
                 key={card.key}
@@ -88,9 +100,9 @@ export function MegaMenuPanel({
                   wide ? "aspect-[660/300]" : "aspect-[430/300]"
                 }`}
               >
-                <CardImage src={card.image} sizes={wide ? "660px" : "430px"} />
+                <FlagStrip flags={card.flags} />
                 <div className="absolute inset-x-0 bottom-0 bg-forest-deep/90 px-5 py-4">
-                  <p className="text-[10px] text-cream/70">{t.menus.cbi.label}</p>
+                  <p className="text-[10px] text-cream/70">{t.menus.citizenship.label}</p>
                   <div className="mt-1 flex items-end justify-between gap-4">
                     <span className="font-display text-[26px] leading-tight text-cream">
                       {lookup(t.places, card.key === "turkiye" ? "Türkiye" : "Caribbean")}
@@ -179,6 +191,34 @@ function PortfolioCard({
         ) : null}
       </div>
     </Link>
+  );
+}
+
+/**
+ * The flags of a programme's countries, side by side and filling the card.
+ *
+ * Each flag is cropped to its column rather than letterboxed, so the strip
+ * reads as one continuous field the way the photograph it replaced did. Every
+ * one of these five carries its device in the centre, which is what survives
+ * the crop.
+ */
+function FlagStrip({ flags }: { flags: string[] }) {
+  return (
+    <div className="absolute inset-0 flex bg-forest-deep transition-transform duration-700 ease-out group-hover:scale-105">
+      {flags.map((flag) => (
+        <div key={flag} className="relative flex-1">
+          <Image
+            src={flag}
+            alt=""
+            fill
+            // The optimizer refuses SVG unless it is told to trust it.
+            unoptimized={flag.endsWith(".svg")}
+            sizes={`${Math.ceil(660 / flags.length)}px`}
+            className="object-cover"
+          />
+        </div>
+      ))}
+    </div>
   );
 }
 

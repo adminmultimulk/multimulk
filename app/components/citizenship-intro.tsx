@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
+import { Figure, LastReviewed } from "./figure";
 import { Link } from "./link";
-import type { Programme } from "@/app/lib/citizenship";
+import { programmeReview, type Programme } from "@/app/lib/citizenship";
 import { getDictionary } from "@/app/lib/i18n";
 
 /**
@@ -74,15 +75,20 @@ export async function CitizenshipIntro({
               key={stat.key}
               className="border-b border-cream/12 px-7 py-8 last:border-b-0 sm:border-b-0 sm:border-e sm:last:border-e-0 lg:px-9 lg:py-10"
             >
-              <dt className="num font-display text-[34px] leading-none sm:text-[42px]">
-                {stat.value}
-              </dt>
-              <dd className="mt-3 text-[10.5px] uppercase leading-[16px] tracking-[0.1em] text-cream/70">
-                {copy.stats[stat.key]}
-              </dd>
+              <Figure
+                id={stat.figure}
+                label={copy.stats[stat.key]}
+                tone="dark"
+                size="lg"
+              />
             </div>
           ))}
         </dl>
+
+        {/* The figures above are legislation, so the page says when they were
+            last checked and against what. `dateModified` in this page's
+            structured data comes from the same date. */}
+        <LastReviewed review={programmeReview(programme)} className="mt-5" />
       </Container>
     </section>
   );

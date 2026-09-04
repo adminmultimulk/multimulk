@@ -4,12 +4,11 @@ import { useMemo, useState } from "react";
 import {
   bedroomOptions,
   currencies,
-  locations,
   priceCeilings,
   propertyTypes,
-  units,
   CBI_THRESHOLD_USD,
   type Currency,
+  type Unit,
 } from "@/app/lib/properties";
 import { useI18n } from "@/app/lib/i18n/context";
 import { interpolate } from "@/app/lib/i18n/format";
@@ -52,7 +51,23 @@ function matchesLocation(
   return unitLocation === selected || unitCountry === selected;
 }
 
-export function PropertySearch({ initial }: { initial: InitialFilters }) {
+/**
+ * The inventory and the place filter arrive as props rather than as imports.
+ *
+ * `properties.ts` is still the source of the units that ship with the site,
+ * but a lister can publish more from the dashboard and can put one in a city
+ * the static list has never heard of — so both are resolved on the server, by
+ * `app/lib/cms/properties.ts`, and handed down already merged.
+ */
+export function PropertySearch({
+  initial,
+  units,
+  locations,
+}: {
+  initial: InitialFilters;
+  units: Unit[];
+  locations: string[];
+}) {
   const { t, locale, num, plural } = useI18n();
   const [query, setQuery] = useState(initial.query);
   const [types, setTypes] = useState<string[]>(initial.types);
@@ -79,7 +94,7 @@ export function PropertySearch({ initial }: { initial: InitialFilters }) {
       if (cbiOnly && !unit.cbiEligible) return false;
       return true;
     });
-  }, [query, types, bedrooms, location, maxPrice, currency, cbiOnly, locale, t]);
+  }, [units, query, types, bedrooms, location, maxPrice, currency, cbiOnly, locale, t]);
 
   const toggle = (
     value: string,

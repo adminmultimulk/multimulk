@@ -1,0 +1,197 @@
+// Dashboard data: the people who sign in, and the two kinds of content they
+// create. Everything the public site rendered before this file still lives in
+// `app/lib/*.ts`; these collections are merged on top of it at read time, so
+// the site keeps working with an empty database.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+/// What a signed-in person is allowed to do.
+///
+/// SUPERADMIN is the only role that can reach /admin/users, and the only one
+/// that can create or disable an account. There is exactly one of it, seeded
+/// from SUPERADMIN_PASSWORD under the fixed username `superadmin` — see
+/// `app/lib/auth/superadmin.ts`.
+enum Role {
+  SUPERADMIN
+  EDITOR
+  LISTER
+}
+
+/// Draft until someone publishes it. Only PUBLISHED rows reach the public site.
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model User {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  /// The sign-in handle. Lowercased on write so `Sara` and `sara` are one account.
+  username     String    @unique
+  name         String
+  email        String?
+  /// bcrypt. Never selected into anything that crosses to the client.
+  passwordHash String
+  role         Role
+  /// Disabling beats deleting: an article keeps its author, and the sign-in
+  /// is refused all the same.
+  active       Boolean   @default(true)
+  /// Set when a superadmin creates the account, cleared once the person picks
+  /// their own password.
+  mustChangePassword Boolean @default(false)
+  lastLoginAt  DateTime?
+  createdById  String?   @db.ObjectId
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  articles   Article[]
+  properties Property[]
+
+  // Auth.js adapter tables. Unused while Credentials is the only provider,
+  // and present so adding an OAuth provider later is a config change.
+  accounts Account[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+model Article {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  /// Also the URL: /<lang>/knowledge/<slug>. Unique across the database, and
+  /// checked against the static articles too — see `reservedSlugs`.
+  slug      String        @unique
+  title     String
+  /// The standfirst. Shown on cards and used as the meta description.
+  excerpt   String
+  /// One entry per paragraph. A leading `## ` marks a heading, matching the
+  /// convention `ArticleBody` already renders for the migrated pieces.
+  body      String[]
+  /// Keys from `app/lib/topics.ts`. Validated on write.
+  topics    String[]
+  /// "Press Media" for coverage elsewhere, "Blog" for our own writing.
+  category  String        @default("Blog")
+  /// The publication a press piece ran in. Absent on our own writing.
+  source    String?
+  /// Card thumbnail, ~3:2.
+  image     String?
+  /// Wide banner for the article page, ~8:3. Falls back to `image`.
+  hero      String?
+  /// Where "Read More" points. The button is omitted without it.
+  readMore  String?
+  /// Overrides the `<title>`. A headline is written for the page and a title
+  /// tag is written for a result listing; they are usually not one sentence.
+  seoTitle       String?
+  /// Overrides the meta description. The standfirst is used when it is absent.
+  seoDescription String?
+  /// Points search engines at the original, for a piece that also ran
+  /// elsewhere. Absent on our own writing, which is its own canonical.
+  canonicalUrl   String?
+  /// Keeps the piece out of search results while leaving the URL readable —
+  /// for a page that exists to be linked from a campaign, not found.
+  noindex        Boolean @default(false)
+  status    ContentStatus @default(DRAFT)
+  /// When the piece is filed, which is what the index sorts on. Set at first
+  /// publish and editable afterwards, because a backdated import needs its
+  /// real date — and because a future date is how a piece is scheduled: it is
+  /// PUBLISHED in the dashboard and withheld from the site until the moment
+  /// arrives. See `cmsArticles`.
+  publishedAt DateTime?
+  authorId  String        @db.ObjectId
+  author    User          @relation(fields: [authorId], references: [id])
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([status, publishedAt])
+  @@map("articles")
+}
+
+model Property {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  slug         String        @unique
+  /// A development name plus its layout — "Marmara Vista 2 Bedroom".
+  title        String
+  /// The development this unit sits in.
+  project      String
+  /// Place names, resolved through `dictionary.places` on the public site.
+  location     String
+  country      String
+  /// One column per currency rather than an embedded document, so the search
+  /// page can filter on a price ceiling without loading every unit.
+  priceUSD     Int
+  priceEUR     Int
+  priceTRY     Int
+  /// "Apartment" | "Townhouse" | "Villa", matching `propertyTypes`.
+  type         String
+  bathrooms    String
+  bedroom      String
+  size         String
+  level        String
+  view         String
+  soldOut      Boolean       @default(false)
+  /// Derived from the Türkiye CBI threshold on write, and overridable — a
+  /// Caribbean unit qualifies under a different programme entirely.
+  cbiEligible  Boolean       @default(false)
+  /// Card and hero image.
+  image        String
+  /// Additional photography for the listing, in order.
+  gallery      String[]
+  status       ContentStatus @default(DRAFT)
+  publishedAt  DateTime?
+  listerId     String        @db.ObjectId
+  lister       User          @relation(fields: [listerId], references: [id])
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([status, country])
+  @@map("properties")
+}
+
+// --- Auth.js adapter models --------------------------------------------------
+// Shapes fixed by @auth/prisma-adapter; do not rename their fields.
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}

@@ -15,15 +15,24 @@ import {
   type Dictionary,
 } from "@/app/lib/i18n";
 import { locales } from "@/app/lib/i18n/config";
+import {
+  getLegacyDevelopment,
+  legacyDevelopments,
+} from "@/app/lib/legacy-developments";
+import { LegacyDevelopmentPage } from "@/app/components/legacy-development";
+import { JsonLd } from "@/app/components/json-ld";
+import { apartmentComplex, breadcrumbs } from "@/app/lib/seo/jsonld";
 import { lookup, pick, selectPlural } from "@/app/lib/i18n/format";
 import { placeLine } from "@/app/lib/i18n/units";
 import { getProject, projects, type Project } from "@/app/lib/projects";
-import { units } from "@/app/lib/properties";
+import { mergedUnits } from "@/app/lib/cms/properties";
 
 export function generateStaticParams() {
-  return locales.flatMap((lang) =>
-    projects.map((project) => ({ lang, slug: project.slug })),
-  );
+  const slugs = [
+    ...projects.map((project) => project.slug),
+    ...legacyDevelopments.map((development) => development.slug),
+  ];
+  return locales.flatMap((lang) => slugs.map((slug) => ({ lang, slug })));
 }
 
 /**
@@ -55,12 +64,23 @@ export async function generateMetadata({
   const { slug } = await params;
   const t = await getDictionary();
   const project = getProject(slug);
-  if (!project) return { title: t.meta.propertyFallback };
+  const alternates = await alternatesFor(`/properties/${slug}`);
+
+  if (!project) {
+    // One of the ninety-four developments carried over from the legacy site.
+    const legacy = getLegacyDevelopment(slug);
+    if (!legacy) return { title: t.meta.propertyFallback };
+    return {
+      title: legacy.name,
+      description: legacy.description,
+      alternates,
+    };
+  }
 
   return {
-    title: `${project.name} | Multi Mulk`,
+    title: `${project.name}`,
     description: localise(t, project).tagline,
-    alternates: await alternatesFor(`/properties/${slug}`),
+    alternates,
   };
 }
 
@@ -69,17 +89,46 @@ export default async function PropertyPage({
 }: PageProps<"/[lang]/properties/[slug]">) {
   const { slug } = await params;
   const project = getProject(slug);
-  if (!project) notFound();
+
+  if (!project) {
+    // The legacy developments have a name, a description and a body, and no
+    // unit inventory behind them — so they get a page shaped to what is
+    // actually known rather than this one's galleries and floorplans.
+    const legacy = getLegacyDevelopment(slug);
+    if (!legacy) notFound();
+    return <LegacyDevelopmentPage development={legacy} />;
+  }
 
   const locale = await getLocale();
   const t = await getDictionary(locale);
   const copy = localise(t, project);
 
-  const residences = units.filter((unit) => unit.project === project.name);
+  const residences = (await mergedUnits()).filter(
+    (unit) => unit.project === project.name,
+  );
   const gallery = [...new Set(residences.map((unit) => unit.image))].slice(0, 3);
 
   return (
     <>
+      <JsonLd
+        graph={[
+          // Only the description is swapped for this language; `copy` also
+          // carries a differently-shaped `highlights`, which this node does
+          // not use and must not inherit.
+          apartmentComplex(
+            locale,
+            { ...project, description: copy.description },
+            residences.length,
+          ),
+          breadcrumbs({
+            locale,
+            id: "development",
+            values: { slug },
+            labels: t.routes,
+            leafLabel: project.name,
+          }),
+        ]}
+      />
       <div className="relative">
         <SiteNav />
         <section className="relative flex min-h-[620px] items-end overflow-hidden bg-forest lg:min-h-[760px]">
@@ -91,8 +140,8 @@ export default async function PropertyPage({
             priority
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/90 via-forest-deep/50 to-transparent rtl:bg-gradient-to-l" />
-          <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-forest-deep/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent rtl:bg-gradient-to-l" />
+          <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/70 to-transparent" />
 
           <Container className="relative pb-16">
             <div className="flex items-center gap-2 text-cream/85">
@@ -174,7 +223,7 @@ export default async function PropertyPage({
                         {lookup(t.property.stats, stat.label)}
                       </dt>
                       <dd className="mt-2 font-display text-[19px] leading-[26px] text-ink">
-                        {stat.value}
+                        {lookup(t.property.statValues, stat.value)}
                       </dd>
                     </div>
                   ))}

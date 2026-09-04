@@ -239,7 +239,7 @@ export function SiteNav() {
                 key={rendered}
                 className="mx-auto w-full max-w-[1440px] px-12 py-9"
               >
-                <MegaMenuPanel menu={renderedMenu} navKey={rendered} />
+                <MegaMenuPanel menu={renderedMenu} />
               </div>
             </div>
           </div>

@@ -5,6 +5,7 @@ import { Link } from "./link";
 import { useEffect, useState } from "react";
 import { getArticle, mediaHero, resolveArticle } from "@/app/lib/media";
 import { useI18n } from "@/app/lib/i18n/context";
+import { buildPath } from "@/app/lib/routes";
 import { interpolate } from "@/app/lib/i18n/format";
 import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
@@ -56,7 +57,7 @@ export function MediaHero() {
 
       {/* Nav scrim above, reading scrim below — the design runs transparent to
           70% black across the lower half. */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[min(260px,34svh)] bg-gradient-to-b from-forest-deep/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[min(260px,34svh)] bg-gradient-to-b from-black/60 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-black/80 via-black/35 to-transparent" />
 
       <Container className="relative pb-16 pt-40 lg:pb-[72px] lg:pt-48">
@@ -70,7 +71,7 @@ export function MediaHero() {
 
         <div className="mt-9 flex flex-wrap items-end justify-between gap-8">
           <Link
-            href={`/media-centre/${slide.slug}`}
+            href={buildPath("article", { slug: slide.slug })}
             className="inline-block rounded-full border border-cream/80 px-[28.8px] py-3 text-[13.8px] text-cream transition-colors hover:bg-cream hover:text-ink"
           >
             {t.common.readMore}

@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import {
+  isOffered,
   locales,
   localeNames,
   stripLocale,
@@ -62,7 +63,11 @@ export function LanguageSwitcher({
     router.push(rest === "/" ? `/${next}` : `/${next}${rest}`);
   };
 
-  const shown = compact ? locales.filter((code) => code !== locale) : locales;
+  // Everything except a `preview` locale, which is reachable by URL only, for
+  // whoever is translating it. The reader's current locale is always listed,
+  // so someone testing one does not lose the control that got them there.
+  const offered = locales.filter((code) => isOffered(code) || code === locale);
+  const shown = compact ? offered.filter((code) => code !== locale) : offered;
 
   return (
     <ul

@@ -49,8 +49,8 @@ export function CitizenshipHero({ programme }: { programme: Programme }) {
         />
       ))}
 
-      <div className="absolute inset-0 bg-gradient-to-r from-forest-deep/90 via-forest-deep/50 to-transparent rtl:bg-gradient-to-l" />
-      <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-forest-deep/70 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent rtl:bg-gradient-to-l" />
+      <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/70 to-transparent" />
 
       <Container className="relative pb-16 lg:pb-20">
         <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gold-light">

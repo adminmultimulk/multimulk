@@ -3,6 +3,7 @@ import { ContactForm } from "./contact-form";
 import { Mail, MapPin, Phone } from "./icons";
 import type { Programme } from "@/app/lib/citizenship";
 import { contact } from "@/app/lib/content";
+import { mintFormToken } from "@/app/lib/leads/token";
 import { getDictionary } from "@/app/lib/i18n";
 
 /**
@@ -91,6 +92,8 @@ export async function CitizenshipEnquire({
 
             {/* The form defaults its enquiry type to the programme being read. */}
             <ContactForm
+              token={mintFormToken()}
+              programme={programme.key}
               defaultEnquiry={
                 programme.key === "turkiye"
                   ? "turkishCitizenship"
