@@ -43,6 +43,11 @@ const en = {
       description:
         "Speak to the Multi Mulk team about Turkish citizenship by investment, Türkiye property, and Caribbean CBI programmes.",
     },
+    team: {
+      title: "Our Team",
+      description:
+        "The people behind Multi Mulk — leadership, and the three offices in Dubai, İstanbul and Lahore that handle Turkish citizenship, Caribbean CBI and property files end to end.",
+    },
     /** Keyed by programme slug, matching `citizenship.ts`. */
     citizenship: {
       turkiye: {
@@ -183,7 +188,20 @@ const en = {
   /** The four pillars, their hubs and the pages built on programme data. */
   /** The Investor Protection framework: the three filters, the twenty checks
    *  and the scoring model. Structure lives in `app/lib/due-diligence.ts`. */
-  legal: { pending: "This page is awaiting its final text from Multi Mulk. Until it is published here, write to info@multimulk.com for the current terms." },
+  legal: {
+    pending: "This page is awaiting its final text from Multi Mulk. Until it is published here, write to info@multimulk.com for the current terms.",
+    /** The image credits page. Author names and licence names are not
+     *  translated: they identify a person and a licence, and a translated
+     *  licence name cites a licence that does not exist. */
+    credits: {
+      intro: "Almost every photograph on this site is stock or public domain, and asks for nothing in return. Two are Creative Commons, and their licences ask to be credited here.",
+      authorLabel: "Photographer",
+      sourceLabel: "Source",
+      licenceLabel: "Licence",
+      shareAlike: "This licence is share-alike. The version used on this site is cropped, which makes it a derivative work, so it is published under the same licence — you may reuse it on the same terms.",
+      rest: "Everything else is Pexels stock, public domain, or photography supplied by the developments themselves. A full record of where each file came from is kept with the files.",
+    },
+  },
 
   protection: {
     filtersHeading: "Three filters, in order",
@@ -319,6 +337,7 @@ const en = {
   routes: {
     home: "Home",
     about: "About Us",
+    team: "Our Team",
     contact: "Contact Us",
     search: "Properties",
     knowledge: "Knowledge Centre",
@@ -479,7 +498,8 @@ const en = {
   },
 
   destinations: {
-    mapAlt: "Multi Mulk destinations in {region}",
+    passportAlt:
+      "The passport issued under the {region} citizenship-by-investment programme",
     turkiye: {
       label: "Türkiye",
       eyebrow: "İstanbul, Türkiye",
@@ -553,6 +573,7 @@ const en = {
       construction: "Construction Updates",
       terms: "Terms & Conditions",
       privacy: "Privacy Policy",
+      imageCredits: "Image Credits",
     },
     contactTitle: "Contact Us",
     address:
@@ -1200,6 +1221,58 @@ const en = {
   },
 
   /** /contact-us */
+  /** /our-team. Names stay as written; roles are shared with the About page. */
+  team: {
+    hero: {
+      heading: "The People Who Handle the File",
+      body: "Multi Mulk is a small advisory by design. The person who answers your first question is the person who sees the application through, and there is no desk between the two.",
+    },
+    leadership: {
+      eyebrow: "Executive Leadership",
+      heading: "Leadership With Global Perspective",
+      body: "Strategic leadership across Multi Mulk\u2019s advisory work, its offices and its long-term growth.",
+    },
+    people_section: {
+      eyebrow: "Our People",
+      heading: "Expertise Across Every Function",
+      body: "Operations, sales, client advisory and digital media, working together across Dubai, \u0130stanbul and Lahore so a file is handled by one firm rather than three offices.",
+    },
+    portraitAlt: "{name}, {title} at Multi Mulk",
+    /** The line above each name. Several people share one, so these are keyed
+     *  by department rather than by person. */
+    departments: {
+      executiveLeadership: "Executive Leadership",
+      growthDubai: "Growth & Dubai Operations",
+      turkeyOperations: "T\u00fcrkiye Operations",
+      operations: "Operations",
+      istanbulSales: "\u0130stanbul Sales",
+      sales: "Sales",
+      clientAdvisory: "Client Advisory",
+      digitalMedia: "Digital Media",
+      mediaProduction: "Media Production",
+    },
+    /** Role lines under each name, keyed by slug. Two lines where the person
+     *  holds two titles; the names themselves are never translated. */
+    people: {
+      "sajid-ali-haydar": ["Chief Executive Officer (CEO)"],
+      "nader-djebbi": ["CGO", "Office Manager (Dubai)"],
+      "nargis-sadiq": ["Office Manager (T\u00fcrkiye)"],
+      "seyhan-ozman": ["Office Admin"],
+      "fatih-abbas": ["Sales Coordinator", "\u0130stanbul Office"],
+      "errfan-balouch": ["Sales Coordinator"],
+      "nilofar-sadiq": ["Sales Consultant"],
+      "danish-anwar": ["Sales Consultant"],
+      "rizwan-saeed": ["Sales Consultant"],
+      "sadaf-sarwar": ["Social Media Manager"],
+      "abdul-hadi": ["Videographer"],
+      "zeeshan-haider": ["Video Editor"],
+    },
+    cta: {
+      heading: "Talk to the People Who Will Do the Work",
+      body: "Tell us what you are trying to achieve. You will get a view on whether it is achievable, what it will cost beyond the headline figure, and how long it should take — before anyone asks you to commit to anything.",
+    },
+  },
+
   contact: {
     heading: "Contact Us",
     leadHeading: "A new level of luxury living awaits make it yours today.",

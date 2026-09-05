@@ -197,7 +197,9 @@ export const programmes: Record<ProgrammeKey, Programme> = {
         "/images/cbi/cbi-documents.jpg",
       ],
       intro: "/images/cbi/cbi-istanbul-strait.jpg",
-      benefits: "/images/cbi/cbi-passport-turkiye.jpg",
+      // Behind the principles-style cards, so a place rather than the
+      // passport close-up that only worked under an 88% wash.
+      benefits: "/images/cbi/hero-istanbul.jpg",
       signature: "/images/cbi/cbi-documents.jpg",
       cta: "/images/cbi/hero-istanbul-dusk.jpg",
       about: [
@@ -281,7 +283,8 @@ export const programmes: Record<ProgrammeKey, Programme> = {
         "/images/cbi/cbi-documents.jpg",
       ],
       intro: "/images/cbi/cbi-caribbean-aerial.jpg",
-      benefits: "/images/cbi/cbi-passport-caribbean.jpg",
+      // Same slot as Türkiye: a place behind the cards, not the passport.
+      benefits: "/images/cbi/hero-caribbean.jpg",
       signature: "/images/cbi/hero-caribbean.jpg",
       cta: "/images/cbi/hero-island-dusk.jpg",
       about: [

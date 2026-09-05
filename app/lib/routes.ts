@@ -67,6 +67,7 @@ export type RouteId =
   | "tools"
   | "authors"
   | "author"
+  | "team"
   | "legal";
 
 export type ChangeFrequency =
@@ -145,6 +146,14 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     parent: "home",
     labelKey: "about",
     sitemap: { include: true, priority: 0.6, changeFrequency: "yearly" },
+    schema: ["AboutPage"],
+  },
+  team: {
+    id: "team",
+    pattern: "/our-team",
+    parent: "about",
+    labelKey: "team",
+    sitemap: { include: true, priority: 0.5, changeFrequency: "yearly" },
     schema: ["AboutPage"],
   },
   contact: {
@@ -392,7 +401,9 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     parent: "home",
     labelKey: "legal",
     enumerate: () =>
-      ["privacy-policy", "terms"].map((slug) => ({ values: { slug } })),
+      ["privacy-policy", "terms", "image-credits"].map((slug) => ({
+        values: { slug },
+      })),
     // Reachable and linked, but there is nothing to rank for here.
     sitemap: { include: false, priority: 0.1, changeFrequency: "yearly" },
     schema: [],

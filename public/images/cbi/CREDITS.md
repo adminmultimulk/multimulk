@@ -38,6 +38,8 @@ below exist to prevent recurring.
 | cbi-caribbean-bay.webp | supplied | 176 (label band) | A Caribbean bay from a flowering hillside — the region tile, which carries a 65% top gradient for its white label |
 | cbi-istanbul-strait.jpg | 28601284 | 178 | İstanbul cityscape and the Bosphorus |
 | hero-st-lucia-soufriere.jpg | Commons — see below | 89 | Soufrière and the Pitons at golden hour, St. Lucia |
+| about-hero-earth-night.jpg | Unsplash — NASA | ~20 | Earth at night from orbit — the About hero. Global citizenship, not a resort and not a frame already used on a programme page |
+| hero-passports.jpg | 29402986 | bright (left wash) | Passports on a map — the citizenship hub hero. The frame is the document, not one programme; the page already darkens the left for type |
 
 ## The one image here that is not Pexels
 
@@ -73,8 +75,8 @@ frame here showing a place we actually work in rather than a stand-in.
 
 The two benefits sections sit on the passport each programme actually issues.
 These are not from Pexels — no free-licence photograph of a Caribbean passport
-exists — so they come from [Wikimedia Commons](https://commons.wikimedia.org),
-both under a public domain dedication with no attribution required. Credited
+exists — so both come from [Wikimedia Commons](https://commons.wikimedia.org),
+and both are public domain dedications with no attribution required, credited
 here on the same principle as everything else.
 
 | File | Commons source | Band | Subject |
@@ -82,12 +84,40 @@ here on the same principle as everything else.
 | cbi-passport-caribbean.jpg | [Saint Lucian Passport.jpg](https://commons.wikimedia.org/wiki/File:Saint_Lucian_Passport.jpg) (CC0) | 53 | A Caribbean Community cover, cropped to the embossed coat of arms |
 | cbi-passport-turkiye.jpg | [Turkish passport detail.jpg](https://commons.wikimedia.org/wiki/File:Turkish_passport_detail.jpg) (public domain) | 134 | The crescent and star on a Turkish passport page, in macro |
 
-The band figures are recorded for consistency, not as a constraint: these sit
-under an 88% wash rather than a hero's 35%, so only about a tenth of the image
-reaches the page and no type is at risk. What matters instead is that the
-country is the right one. The slot previously held a Pexels shot of European
-passports (ID 29402986), which put a Portuguese cover behind copy about
-Caribbean citizenship.
+Both run *washed* — they are grounds, sensed rather than read — which is why
+the band figures matter and the source resolution does not have to carry
+lettering.
+
+## The destinations panel
+
+The homepage destinations panel used to run a passport crop unwashed, in the
+same family as the grounds above. It now runs client-supplied collage artwork
+instead — a passport held over a landmark, cut out on transparency:
+
+| File | Region | Source | Size |
+|---|---|---|---|
+| cbi-passport-turkiye-collage.webp | Türkiye | Supplied by the client (`cover1-1-1-1.png`) | 986x1335 |
+| cbi-passport-caribbean-collage.webp | Caribbean | Supplied by the client (`banner_img.png`) | 1126x1126 |
+
+Two things follow from these being cutouts rather than photographs. The panel
+runs them `object-contain` on the section's mist ground, not `object-cover` —
+a cover crop would cut the passport out of the composition — and its mobile
+frame is square rather than 700/560, because the Türkiye piece is portrait and
+a landscape frame letterboxed it heavily. They are WebP with alpha (`cwebp -q
+88 -alpha_q 100 -m 6`); anything replacing them needs a transparent background
+or the mist ground will show a white rectangle behind the art.
+
+The Caribbean piece is an Antigua and Barbuda cover. Antigua is a CARICOM
+member, so "CARIBBEAN COMMUNITY" above the arms carries the region — which is
+what a panel covering several islands needs, and the same reason the earlier
+crops in this folder were framed above the country name rather than on it.
+
+The band figures are recorded for consistency, not as a constraint: the two
+washed files sit under an 88% wash rather than a hero's 35%, so only about a
+tenth of the image reaches the page and no type is at risk. What matters
+instead is that the country is the right one. The slot previously held a Pexels
+shot of European passports (ID 29402986), which put a Portuguese cover behind
+copy about Caribbean citizenship.
 
 Source resolution is the constraint on this pair, because a full-bleed band
 magnifies a passport cover several times over and a soft one reads as a
@@ -97,11 +127,18 @@ cover and upscaled to 1500px wide, which holds at 2x. It is framed on the
 emblem rather than the lettering, so it reads as a Caribbean Community ground
 for a page covering five islands rather than as one country's document.
 
-If a sharper or more specific frame is ever wanted, the alternative is
-[a St Kitts & Nevis cover](https://commons.wikimedia.org/wiki/File:A8fef01cb.jpg)
-photographed at 1658x1724 — the flagship programme, name legible. It is
-CC BY-SA 4.0, so using it means attributing it and releasing the cropped
-version under the same licence. That is the only reason it was not chosen.
+## The share-alike file
+
+There is no longer one. `cbi-passport-stkitts.jpg` held the destinations panel
+under CC BY-SA 4.0 — attribution *and* share-alike, the crop being a derivative
+work — until the panel moved to the client collages above. The file has been
+deleted along with its row on `/legal/image-credits`; re-derive from
+[A8fef01cb.jpg](https://commons.wikimedia.org/wiki/File:A8fef01cb.jpg) by
+**Abhaybrar7** if it is ever wanted back, and restore the row with it.
+
+`/legal/image-credits` still carries one obligation — the Saint Lucia hero,
+CC BY 2.0 — so the page stays. Adding a share-alike file adds a row and the
+share-alike flag in `app/lib/credits.ts` with it.
 
 ## Replacing one
 

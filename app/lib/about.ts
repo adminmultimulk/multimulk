@@ -13,7 +13,7 @@ import type { Locale } from "./i18n/config";
 import { buildPath, routes, searchPath } from "./routes";
 
 export const aboutHero = {
-  image: "/images/caribbean-backdrop.webp",
+  image: "/images/cbi/about-hero-earth-night.jpg",
 };
 
 export const aboutIntro = {

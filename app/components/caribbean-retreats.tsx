@@ -16,15 +16,16 @@ import { useI18n } from "@/app/lib/i18n/context";
 import { Diamond } from "./icons";
 
 /**
- * Slots the resort photography drops into, placed out at the section's margins
- * so it frames the centred text rather than sitting in a row with it.
+ * The photography sits in three slots pinned to the viewport rather than to any
+ * one row: the list scrolls past them and each resort hands its pictures to the
+ * slots as it takes over, so the images stay out at the margins framing whatever
+ * name is currently centred. Insets are logical, so the arrangement mirrors in
+ * Arabic and Urdu.
  */
 const SLOT = {
-  // Logical insets, so the whole arrangement mirrors in Arabic and Urdu and
-  // the photography still frames the text from its outer edges.
-  leading: "start-0 top-1/2 w-[128px] -translate-y-1/2 aspect-[3/4]",
-  trailingTop: "end-0 -top-[70px] w-[150px] aspect-[4/3]",
-  trailingBottom: "end-[5%] -bottom-[80px] w-[130px] aspect-[3/4]",
+  leading: "start-[5%] top-[34%] w-[150px] aspect-[2/3]",
+  trailingTop: "end-[3%] top-[8%] w-[122px] aspect-[2/3]",
+  trailingBottom: "end-[3%] top-[73%] w-[150px] aspect-square",
 };
 
 /** Balance whatever imagery a resort has: a lone photo alternates sides. */
@@ -117,23 +118,39 @@ export function CaribbeanRetreats() {
   return (
     <section className="relative bg-forest">
       <OpeningStage ref={runway} />
-      <div className="relative overflow-hidden pb-[72px] lg:pb-20">
+      {/*
+       * `overflow-clip` rather than `overflow-hidden`: both trim the backdrop,
+       * but only clip leaves the pinned image slots below free to stick to the
+       * viewport instead of to a scroll container that never scrolls.
+       */}
+      <div className="relative overflow-clip pb-[72px] lg:pb-20">
         <Image
           src="/images/caribbean-backdrop.webp"
           alt=""
           fill
           sizes="100vw"
-          className="object-cover opacity-[0.16]"
+          className="object-cover opacity-[0.07]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-forest/95 via-forest/70 to-forest/95" />
+
+        <div className="pointer-events-none absolute inset-0 hidden lg:block">
+          <div className="sticky top-0 h-svh">
+            {/* Keyed on the resort so handing the slots over replays the wipe. */}
+            <FloatingImages
+              key={caribbeanResorts[active].key}
+              resort={caribbeanResorts[active]}
+              index={active}
+            />
+          </div>
+        </div>
 
         <Container className="relative">
           {/*
            * Every row reserves its pair of rules (hidden until active) so the
-           * list never jumps; the gap absorbs the 20px that reservation costs,
-           * keeping the resting pitch between names where it was.
+           * list never jumps, and carries generous padding of its own so the
+           * names sit far apart whether or not one of them is open.
            */}
-          <ul className="flex flex-col items-center gap-[10px] pt-[72px] lg:pt-20">
+          <ul className="flex flex-col items-center pt-[72px] lg:pt-20">
             {caribbeanResorts.map((resort, i) => (
               <ResortRow
                 key={resort.key}
@@ -141,7 +158,6 @@ export function CaribbeanRetreats() {
                   rows.current[i] = el;
                 }}
                 resort={resort}
-                index={i}
                 isActive={i === active}
                 onActivate={() => setActive(i)}
               />
@@ -239,13 +255,11 @@ function useClipPath(
 function ResortRow({
   ref,
   resort,
-  index,
   isActive,
   onActivate,
 }: {
   ref: (el: HTMLLIElement | null) => void;
   resort: Resort;
-  index: number;
   isActive: boolean;
   onActivate: () => void;
 }) {
@@ -253,16 +267,18 @@ function ResortRow({
 
   return (
     <li ref={ref} className="relative w-full">
-      {isActive ? (
-        // Keyed on the resort so switching rows replays the wipe.
-        <FloatingImages key={resort.key} resort={resort} index={index} />
-      ) : null}
-
       <Rule show={isActive} />
 
+      {/*
+       * The resting padding carries most of the pitch between names, so the
+       * list reads as an airy column rather than a tight menu; opening a row
+       * trades that padding for the logo and description it reveals.
+       */}
       <div
         className={`flex flex-col items-center text-center transition-[padding] duration-500 ease-out ${
-          isActive ? "py-[18px]" : "py-0"
+          isActive
+            ? "py-[16px] lg:py-[30px]"
+            : "py-[36px] lg:py-[76px]"
         }`}
       >
         {/*
@@ -281,10 +297,10 @@ function ResortRow({
               <Image
                 src={resort.logo}
                 alt=""
-                width={84}
-                height={40}
+                width={110}
+                height={52}
                 unoptimized
-                className="mx-auto mb-[18px] h-10 w-auto"
+                className="mx-auto mb-[18px] h-[52px] w-auto"
               />
             ) : null}
           </div>
@@ -296,10 +312,8 @@ function ResortRow({
           onFocus={onActivate}
           onClick={onActivate}
           aria-expanded={isActive}
-          className={`font-display leading-[33px] transition-all duration-500 ease-out ${
-            isActive
-              ? "text-[21px] text-cream sm:text-[27px]"
-              : "text-[19px] text-cream/25 hover:text-cream/60 sm:text-[24px]"
+          className={`font-display leading-[1.2] text-[clamp(1.375rem,3.2vw,3rem)] transition-colors duration-500 ease-out ${
+            isActive ? "text-cream" : "text-cream/25 hover:text-cream/60"
           }`}
         >
           {resort.name}
@@ -313,7 +327,7 @@ function ResortRow({
           }`}
         >
           <div className="overflow-hidden">
-            <p className="mx-auto mt-[18px] max-w-[520px] text-[12px] leading-5 text-cream/80">
+            <p className="mx-auto mt-[18px] max-w-[720px] text-[13px] leading-[22px] text-cream/80 lg:text-[14px]">
               {
                 t.caribbeanSection.descriptions[
                   resort.key as keyof typeof t.caribbeanSection.descriptions
@@ -335,7 +349,7 @@ function FloatingImages({ resort, index }: { resort: Resort; index: number }) {
   const slots = slotsFor(images.length, index);
 
   return (
-    <div className="pointer-events-none absolute inset-0 hidden lg:block">
+    <>
       {images.map((src, i) => (
         <div key={src} className={`absolute overflow-hidden ${slots[i]}`}>
           <div
@@ -347,6 +361,9 @@ function FloatingImages({ resort, index }: { resort: Resort; index: number }) {
               alt=""
               fill
               sizes="150px"
+              // The slots are already in view when a resort takes over, so the
+              // fetch should start with the mount rather than a lazy tick later.
+              loading="eager"
               className="object-cover"
             />
           </div>
@@ -357,19 +374,24 @@ function FloatingImages({ resort, index }: { resort: Resort; index: number }) {
           />
         </div>
       ))}
-    </div>
+    </>
   );
 }
 
+/**
+ * The hairline pair that brackets the open resort. It grows out from the
+ * centre as the row opens, so the rules read as part of the reveal rather than
+ * as a border switching on.
+ */
 function Rule({ show }: { show: boolean }) {
   return (
     <div
-      className={`relative mx-auto h-[10px] w-full max-w-[940px] transition-opacity duration-500 ease-out ${
-        show ? "opacity-100" : "opacity-0"
+      className={`relative mx-auto h-[10px] w-full max-w-[1020px] transition-[opacity,transform] duration-700 ease-out ${
+        show ? "scale-x-100 opacity-100" : "scale-x-[0.45] opacity-0"
       }`}
       aria-hidden
     >
-      <span className="absolute inset-x-0 top-[4.5px] h-px bg-cream/30" />
+      <span className="absolute inset-x-0 top-[4.5px] h-px bg-gradient-to-r from-transparent via-cream/35 to-transparent" />
       <Diamond className="absolute left-1/2 top-0 w-[10px] -translate-x-1/2 text-cream/50" />
     </div>
   );

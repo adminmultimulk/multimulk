@@ -99,13 +99,21 @@ export function Destinations() {
           </div>
 
           <div className="relative">
-            <div className="relative aspect-[700/560] w-full overflow-hidden lg:aspect-[700/710]">
+            {/* Cutout artwork on transparency, not a photograph, so the frame
+                contains it on the section's ground rather than cropping to
+                fill — a cover crop would cut the passport out of the collage.
+                Square on mobile because the artwork is portrait-ish and a
+                landscape frame would letterbox it heavily. */}
+            <div className="relative aspect-square w-full lg:aspect-[700/710]">
               <Image
-                src={data.map}
-                alt={interpolate(t.destinations.mapAlt, { region: copy.label })}
+                src={data.passport.src}
+                alt={interpolate(t.destinations.passportAlt, {
+                  region: copy.label,
+                })}
                 fill
                 sizes="(max-width: 1024px) 100vw, 700px"
-                className="object-cover"
+                style={{ objectPosition: data.passport.position }}
+                className="object-contain"
               />
             </div>
           </div>

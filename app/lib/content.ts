@@ -114,9 +114,13 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
       {
         key: "ourStory",
         href: routes.about.pattern,
+        image: "/images/about-our-story.webp",
+      },
+      {
+        key: "ourTeam",
+        href: routes.team.pattern,
         image: "/images/cbi/cbi-advisory.jpg",
       },
-      { key: "ourTeam", image: "/images/cbi/cbi-advisory.jpg" },
     ],
   },
 
@@ -383,7 +387,17 @@ export const destinations = {
       { key: "months" as const, figure: "tr.cbi.processing" as const },
       { key: "visaFree" as const, figure: "tr.cbi.visa-free" as const },
     ],
-    map: "/images/cbi/cbi-istanbul-strait.jpg",
+    /**
+     * Client-supplied artwork rather than a photograph: the Türkiye passport
+     * held over the Galata Tower and a residence, which is the programme in
+     * one frame — the property purchase and the document it buys. It is a
+     * cutout on transparency, so the panel runs it `object-contain` on the
+     * section's mist ground rather than cropping it.
+     */
+    passport: {
+      src: "/images/cbi/cbi-passport-turkiye-collage.webp",
+      position: "center",
+    },
   },
   caribbean: {
     /** Development names, so they are listed rather than looked up. */
@@ -404,7 +418,16 @@ export const destinations = {
       { key: "clients" as const, value: "160+" },
       { key: "properties" as const, value: "500+" },
     ],
-    map: "/images/caribbean-grenada.webp",
+    /**
+     * The Türkiye panel's counterpart, in the same client-supplied style: an
+     * Antigua and Barbuda cover — a CARICOM member, so "CARIBBEAN COMMUNITY"
+     * above the arms carries the region a panel covering several islands
+     * needs. Also a cutout on transparency; see the note above.
+     */
+    passport: {
+      src: "/images/cbi/cbi-passport-caribbean-collage.webp",
+      position: "center",
+    },
   },
 };
 
@@ -457,13 +480,16 @@ export const footerColumns = [
 /** The About column, keyed; `href` is unset for pages that do not exist yet. */
 export const footerAboutItems = [
   { key: "ourStory" as const, href: routes.about.pattern },
-  { key: "ourTeam" as const },
+  { key: "ourTeam" as const, href: routes.team.pattern },
   { key: "turkishCitizenship" as const, href: buildPath("citizenshipProgramme", { programme: "turkiye" }) },
   { key: "caribbeanCbi" as const, href: buildPath("citizenshipProgramme", { programme: "caribbean" }) },
   { key: "mediaCentre" as const, href: routes.knowledge.pattern },
   { key: "construction" as const },
   { key: "terms" as const },
   { key: "privacy" as const },
+  // The one item here that is not waiting for copy: two Creative Commons
+  // images on the site are only licensed while this link is reachable.
+  { key: "imageCredits" as const, href: buildPath("legal", { slug: "image-credits" }) },
 ];
 
 export const contact = {

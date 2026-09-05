@@ -14,6 +14,7 @@
     "check:review": "node scripts/check-review.mjs",
     "check": "npm run typecheck && npm run lint && npm run check:i18n && npm run check:figures && npm run check:tables && npm run check:review && npm run check:redirects",
     "check:redirects": "node scripts/check-redirects.mjs --check",
+    "check:bitrix": "node --env-file=.env.local scripts/check-bitrix.mjs",
     "check:tables": "node scripts/check-tables.mjs",
     "db:generate": "prisma generate",
     "db:push": "node --env-file=.env.local node_modules/prisma/build/index.js db push",

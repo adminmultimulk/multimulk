@@ -9,6 +9,7 @@
  */
 
 import "server-only";
+import { bitrixConfigured, createBitrixLead } from "./bitrix24";
 import { emailConfigured, emailLead } from "./email";
 import type { Lead } from "./schema";
 
@@ -16,8 +17,12 @@ import type { Lead } from "./schema";
  * An HTTPS endpoint that accepts a JSON lead — a CRM intake, a Zapier or Make
  * catch hook, or an internal service. Awaited, and a non-2xx is a failure.
  *
- * Optional, because email through Resend is a destination in its own right;
- * see `./email.ts`. Either one on its own is enough.
+ * Optional, because Bitrix24 and email through Resend are destinations in
+ * their own right; see `./bitrix24.ts` and `./email.ts`. Any one on its own is
+ * enough. A Zapier or Make catch hook belongs here rather than in a module of
+ * its own — it wants exactly this, the lead as JSON on a URL — so pointing a
+ * Zap at `LEAD_WEBHOOK_URL` needs no code and is the way to reach anything
+ * Bitrix24 is not.
  */
 const webhook = process.env.LEAD_WEBHOOK_URL;
 
@@ -39,14 +44,18 @@ export class LeadDeliveryError extends Error {
  * variable must never become a silent data loss on the live site, but it also
  * must not stop anyone working on the form locally.
  *
- * Where both a webhook and email are configured, they are attempted together
+ * Where more than one destination is configured they are attempted together
  * and one success is enough. A lead sitting in the team's inbox *is* readable
  * back, so a CRM having a bad afternoon should not tell the reader their
  * enquiry failed and send them round again — but it is logged as the error it
- * is, because the two destinations are now out of step.
+ * is, because the destinations are now out of step and somebody has to
+ * reconcile them by hand.
  */
 export async function deliverLead(lead: Lead): Promise<void> {
   const destinations: { name: string; send: () => Promise<void> }[] = [];
+  if (bitrixConfigured) {
+    destinations.push({ name: "bitrix24", send: () => createBitrixLead(lead) });
+  }
   if (emailConfigured) {
     destinations.push({ name: "resend", send: () => emailLead(lead) });
   }
@@ -58,7 +67,7 @@ export async function deliverLead(lead: Lead): Promise<void> {
   if (destinations.length === 0) {
     if (process.env.NODE_ENV === "production") {
       throw new LeadDeliveryError(
-        "No lead destination configured — refusing to accept a lead with nowhere to put it. Set RESEND_API_KEY, LEAD_EMAIL_FROM and LEAD_EMAIL_TO, or LEAD_WEBHOOK_URL.",
+        "No lead destination configured — refusing to accept a lead with nowhere to put it. Set BITRIX24_WEBHOOK_URL, or RESEND_API_KEY with LEAD_EMAIL_FROM and LEAD_EMAIL_TO, or LEAD_WEBHOOK_URL.",
       );
     }
     console.info("[lead] no destination configured; logging instead:", lead);

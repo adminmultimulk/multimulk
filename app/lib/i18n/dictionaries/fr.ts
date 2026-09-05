@@ -37,6 +37,11 @@ const fr: Dictionary = {
       description:
         "Échangez avec l’équipe Multi Mulk sur la citoyenneté turque par investissement, l’immobilier en Türkiye et les programmes caribéens.",
     },
+    team: {
+      title: "Notre équipe",
+      description:
+        "Les personnes derrière Multi Mulk — la direction, et les trois bureaux de Dubaï, İstanbul et Lahore qui suivent de bout en bout les dossiers de citoyenneté turque, de programmes caribéens et d’immobilier.",
+    },
     /** Clé par slug de programme, comme dans `citizenship.ts`. */
     citizenship: {
       turkiye: {
@@ -171,7 +176,17 @@ const fr: Dictionary = {
 
   /** The Investor Protection framework: the three filters, the twenty checks
    *  and the scoring model. Structure lives in `app/lib/due-diligence.ts`. */
-  legal: { pending: "Cette page attend son texte définitif de Multi Mulk. En attendant sa publication ici, écrivez à info@multimulk.com pour connaître les conditions en vigueur." },
+  legal: {
+    pending: "Cette page attend son texte définitif de Multi Mulk. En attendant sa publication ici, écrivez à info@multimulk.com pour connaître les conditions en vigueur.",
+    credits: {
+      intro: "Presque toutes les photographies de ce site sont des banques d’images ou relèvent du domaine public, et n’exigent rien en retour. Deux sont sous licence Creative Commons, et cette licence demande à être créditée ici.",
+      authorLabel: "Photographe",
+      sourceLabel: "Source",
+      licenceLabel: "Licence",
+      shareAlike: "Cette licence impose le partage à l’identique. La version utilisée ici est recadrée, ce qui en fait une œuvre dérivée : elle est donc publiée sous la même licence, et vous pouvez la réutiliser aux mêmes conditions.",
+      rest: "Tout le reste provient de la banque d’images Pexels, du domaine public, ou de photographies fournies par les promoteurs eux-mêmes. Le relevé complet de la provenance de chaque fichier est conservé avec les fichiers.",
+    },
+  },
 
   protection: {
     filtersHeading: "Trois filtres, dans cet ordre",
@@ -301,6 +316,7 @@ const fr: Dictionary = {
   routes: {
     home: "Accueil",
     about: "À propos",
+    team: "Notre équipe",
     contact: "Nous contacter",
     search: "Biens immobiliers",
     knowledge: "Centre de ressources",
@@ -458,7 +474,8 @@ const fr: Dictionary = {
   },
 
   destinations: {
-    mapAlt: "Destinations Multi Mulk : {region}",
+    passportAlt:
+      "Le passeport délivré par le programme de citoyenneté par investissement — {region}",
     turkiye: {
       label: "Türkiye",
       eyebrow: "İstanbul, Türkiye",
@@ -617,6 +634,7 @@ const fr: Dictionary = {
       construction: "Avancement des chantiers",
       terms: "Conditions générales",
       privacy: "Politique de confidentialité",
+      imageCredits: "Crédits photographiques",
     },
     contactTitle: "Nous contacter",
     address:
@@ -1289,6 +1307,53 @@ const fr: Dictionary = {
       "Rooftop Lounge": "Salon en rooftop",
       "Promenade Access": "Accès à la promenade",
       "Bay Access": "Accès à la baie",
+    },
+  },
+
+  team: {
+    hero: {
+      heading: "Celles et ceux qui suivent le dossier",
+      body: "Multi Mulk est un cabinet volontairement restreint. La personne qui répond à votre première question est celle qui mène la demande jusqu’au bout, sans aucun intermédiaire entre les deux.",
+    },
+    leadership: {
+      eyebrow: "Direction générale",
+      heading: "Une direction à perspective internationale",
+      body: "La direction stratégique du conseil de Multi Mulk, de ses bureaux et de sa croissance à long terme.",
+    },
+    people_section: {
+      eyebrow: "Nos équipes",
+      heading: "Une expertise dans chaque fonction",
+      body: "Opérations, ventes, conseil client et médias numériques travaillent ensemble entre Dubaï, İstanbul et Lahore, pour qu’un dossier soit suivi par un cabinet plutôt que par trois bureaux.",
+    },
+    portraitAlt: "{name}, {title} chez Multi Mulk",
+    departments: {
+      executiveLeadership: "Direction générale",
+      growthDubai: "Développement et opérations à Dubaï",
+      turkeyOperations: "Opérations Türkiye",
+      operations: "Opérations",
+      istanbulSales: "Ventes İstanbul",
+      sales: "Ventes",
+      clientAdvisory: "Conseil client",
+      digitalMedia: "Médias numériques",
+      mediaProduction: "Production audiovisuelle",
+    },
+    people: {
+      "sajid-ali-haydar": ["Directeur général (CEO)"],
+      "nader-djebbi": ["Directeur du développement", "Responsable du bureau (Dubaï)"],
+      "nargis-sadiq": ["Responsable du bureau (Türkiye)"],
+      "seyhan-ozman": ["Assistante de bureau"],
+      "fatih-abbas": ["Coordinateur des ventes", "Bureau d’İstanbul"],
+      "errfan-balouch": ["Coordinateur des ventes"],
+      "nilofar-sadiq": ["Conseillère commerciale"],
+      "danish-anwar": ["Conseiller commercial"],
+      "rizwan-saeed": ["Conseiller commercial"],
+      "sadaf-sarwar": ["Responsable des réseaux sociaux"],
+      "abdul-hadi": ["Vidéaste"],
+      "zeeshan-haider": ["Monteur vidéo"],
+    },
+    cta: {
+      heading: "Parlez à celles et ceux qui feront le travail",
+      body: "Dites-nous ce que vous cherchez à obtenir. Vous saurez si c’est réalisable, ce que cela coûtera au-delà du montant affiché et combien de temps cela devrait prendre — avant qu’on ne vous demande de vous engager à quoi que ce soit.",
     },
   },
 

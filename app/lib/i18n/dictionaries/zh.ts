@@ -534,7 +534,7 @@ const zh = {
   },
 
   destinations: {
-    mapAlt: "Multi Mulk 在{region}的项目分布",
+    passportAlt: "{region}投资入籍项目所签发的护照",
     turkiye: {
       label: "土耳其",
       eyebrow: "土耳其，伊斯坦布尔",

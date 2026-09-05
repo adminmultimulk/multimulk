@@ -532,7 +532,8 @@ const tr = {
   },
 
   destinations: {
-    mapAlt: "{region} bölgesindeki Multi Mulk destinasyonları",
+    passportAlt:
+      "{region} yatırım yoluyla vatandaşlık programı kapsamında verilen pasaport",
     turkiye: {
       label: "Türkiye",
       eyebrow: "İstanbul, Türkiye",
