@@ -53,7 +53,9 @@ async function call(method, payload = {}) {
   });
   const body = await response.json().catch(() => null);
   if (body && typeof body === "object" && "error" in body) {
-    throw new Error(body.error_description || String(body.error));
+    const failure = new Error(body.error_description || String(body.error));
+    failure.code = String(body.error ?? "");
+    throw failure;
   }
   if (!response.ok) {
     throw new Error(`${response.status} ${response.statusText}`);
@@ -109,11 +111,29 @@ if (assignee) {
         ".\n",
     );
   } catch (error) {
-    // Not fatal on its own: Bitrix falls back to the webhook's own user, so
-    // the form keeps working and the leads land on the wrong desk.
-    console.error(`  warning: ${error.message}`);
-    console.error("  leads would fall back to the webhook's own user.\n");
-    process.exitCode = 1;
+    // Reading the directory needs the `user` scope, which a webhook created
+    // for `crm` alone does not have. That is not a problem with the setting:
+    // ASSIGNED_BY_ID is passed straight to `crm.lead.add`, which only needs
+    // `crm`, so assignment still works — the id simply cannot be confirmed
+    // from here. Saying otherwise would send somebody to fix what is not
+    // broken, and widening the token's scope to check one number is a worse
+    // trade than looking the id up in the portal once.
+    const unverifiable =
+      error.code === "insufficient_scope" ||
+      /higher privileges|access denied/i.test(error.message);
+
+    if (unverifiable) {
+      console.log("  cannot confirm the name: the webhook has no `user` scope.");
+      console.log("  assignment still works — check the id against the number in");
+      console.log("  the person's profile URL, /company/personal/user/<id>/.\n");
+    } else {
+      // A real one: the id names nobody, so Bitrix ignores it and quietly
+      // falls back to the webhook's own user. Nothing errors and the leads
+      // pile up on the wrong desk — the failure this script exists to catch.
+      console.error(`  warning: ${error.message}`);
+      console.error("  leads would fall back to the webhook's own user.\n");
+      process.exitCode = 1;
+    }
   }
 }
 

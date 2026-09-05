@@ -7,6 +7,7 @@ import { Regions } from "@/app/components/regions";
 import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
 import { TurkiyePortfolio } from "@/app/components/turkiye-portfolio";
+import { VideoFeature } from "@/app/components/video-feature";
 import { Welcome } from "@/app/components/welcome";
 import { alternatesFor, getDictionary } from "@/app/lib/i18n";
 import { mergedArticles } from "@/app/lib/cms/articles";
@@ -33,6 +34,7 @@ export default async function Home() {
       </div>
       <main className="flex-1">
         <Welcome />
+        <VideoFeature />
         <Regions />
         <TurkiyePortfolio />
         <Awards />

@@ -414,6 +414,12 @@ const fr: Dictionary = {
     body: "Multi Mulk accompagne les familles et les investisseurs internationaux qui souhaitent s’enraciner dans les lieux les plus désirables au monde. La citoyenneté turque par investissement est au cœur de notre métier — des adresses emblématiques d’İstanbul à la côte égéenne — aux côtés de programmes caribéens sélectionnés. Nous accompagnons chaque étape : choix du bien, acquisition et dossier de citoyenneté, depuis nos bureaux en Türkiye, aux Émirats et au Pakistan.",
   },
 
+  video: {
+    eyebrow: "Salon IPS Dubaï 2026",
+    heading: "Les 14 meilleurs projets d’investissement à İstanbul",
+    play: "Lire la vidéo",
+  },
+
   regions: {
     turkiye: { label: "Türkiye" },
     caribbean: { label: "Caraïbes" },

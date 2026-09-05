@@ -14,6 +14,7 @@ import { formatDate, selectPlural } from "@/app/lib/i18n/format";
 import { readingMinutes } from "@/app/lib/rich-text";
 import { locales } from "@/app/lib/i18n/config";
 import { localise, type AnyArticle } from "@/app/lib/article-shape";
+import { ogImage } from "@/app/lib/content";
 import { allArticles } from "@/app/lib/knowledge";
 import { findMergedArticle, relatedMerged } from "@/app/lib/cms/articles";
 import { article as articleSchema, breadcrumbs } from "@/app/lib/seo/jsonld";
@@ -78,7 +79,10 @@ export async function generateMetadata({
       type: "article",
       publishedTime: article.date,
       modifiedTime: article.modified,
-      images: article.hero ?? article.image ? [article.hero ?? article.image!] : [],
+      // An article without a photograph falls back to the brand card rather
+      // than to nothing: an empty array here is not "no preference", it is an
+      // explicit override of the site default, and it unfurls as a bare link.
+      images: [article.hero ?? article.image ?? ogImage],
     },
   };
 }

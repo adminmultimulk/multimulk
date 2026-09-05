@@ -16,7 +16,7 @@ import {
 } from "@/app/lib/i18n/config";
 import { I18nProvider } from "@/app/lib/i18n/context";
 import { getDictionary } from "@/app/lib/i18n";
-import { company } from "@/app/lib/content";
+import { company, ogImage } from "@/app/lib/content";
 import { JsonLd } from "@/app/components/json-ld";
 import { organization, webSite } from "@/app/lib/seo/jsonld";
 import { siteUrl } from "@/app/lib/site";
@@ -117,7 +117,15 @@ export async function generateMetadata({
       siteName: company.name,
       locale: intlLocale[lang],
       type: "website",
+      // The default card for the whole site. A page that sets its own
+      // `openGraph` replaces this block wholesale rather than merging into it
+      // — Next shallow-merges metadata — so any page overriding it has to
+      // carry its own `images`, and the ones that do are article and
+      // residence pages with a photograph better than the brand card.
+      images: [ogImage],
     },
+    // X reads `og:image` when no `twitter:image` is given, so the card above
+    // serves both; this only promotes it from a thumbnail to the wide format.
     twitter: { card: "summary_large_image" },
     // A language still being translated is reachable but must not be indexed;
     // `follow` keeps its outgoing links useful for discovery.

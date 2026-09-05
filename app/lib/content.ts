@@ -22,6 +22,30 @@ export const company = {
 };
 
 /**
+ * The card a link to this site unfurls into — in WhatsApp, iMessage, Slack,
+ * LinkedIn, X. Every page falls back to it; the ones with a photograph worth
+ * showing, an article or a residence, override it with their own hero.
+ *
+ * A branded card rather than a rendered one. The obvious alternative is
+ * `next/og`, drawing each page's title onto the image at request time, and it
+ * is the wrong tool *here* specifically: the site publishes in seven
+ * languages, and Satori needs a font file covering every glyph it draws. Only
+ * TheSeasons is bundled locally and it is Latin-only, so Arabic, Urdu, Chinese
+ * and Russian titles would render as boxes — a worse card than no title at all,
+ * and broken in exactly the markets the Gulf and Türkiye pages are written for.
+ *
+ * Dimensions are stated because Facebook and LinkedIn lay the card out before
+ * the image finishes downloading; without them the first person to share a
+ * page often sees a small square thumbnail instead of the wide banner.
+ */
+export const ogImage = {
+  url: "/og-default.png",
+  width: 1200,
+  height: 630,
+  alt: "Multi Mulk — Global Solutions for Global Citizens",
+};
+
+/**
  * The top-level navigation, keyed into `dictionary.nav`.
  *
  * Organised by what Multi Mulk does rather than by where it operates. The

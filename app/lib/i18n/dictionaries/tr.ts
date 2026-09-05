@@ -316,6 +316,12 @@ const tr = {
     body: "Multi Mulk, uluslararası düşünen ailelerin ve yatırımcıların dünyanın en cazip yerlerinde kök salmasına yardımcı olur. Yaptığımız işin merkezinde yatırım yoluyla Türk vatandaşlığı vardır — İstanbul'un simge adreslerinden Ege kıyılarına — ve yanı sıra seçili Karayip programları. Gayrimenkul seçiminden satın almaya ve vatandaşlık başvurusuna kadar her adımda yanınızdayız; Türkiye, BAE ve Pakistan'daki ofislerimizle.",
   },
 
+  video: {
+    eyebrow: "IPS Dubai Fuarı 2026",
+    heading: "İstanbul'un En İyi 14 Yatırım Projesi",
+    play: "Videoyu oynat",
+  },
+
   regions: {
     turkiye: {
       label: "Türkiye",

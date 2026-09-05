@@ -437,6 +437,12 @@ const en = {
     body: "Multi Mulk helps internationally minded families and investors put down roots in the world’s most desirable places. Turkish citizenship by investment is at the centre of what we do — from landmark İstanbul addresses to the Aegean coast — alongside select Caribbean programmes. We guide every step: property selection, purchase, and the citizenship application itself, with offices across Türkiye, the UAE and Pakistan.",
   },
 
+  video: {
+    eyebrow: "IPS Dubai Expo 2026",
+    heading: "Top 14 İstanbul Investment Projects",
+    play: "Play video",
+  },
+
   regions: {
     turkiye: { label: "Türkiye" },
     caribbean: { label: "Caribbean" },
