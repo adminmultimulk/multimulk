@@ -1,0 +1,25 @@
+# Hourly reminder send. Not in vercel.json because Hobby caps Vercel Cron at
+# once a day, which is too coarse for a 20-hour reminder lead.
+# Needs a CRON_SECRET Actions secret matching the one set on Vercel.
+name: Event reminders
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: event-reminders
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://multimulk.com' }}
+        run: |
+          curl "$SITE_URL/api/cron/event-reminders" \
+            --silent --show-error --fail-with-body --location \
+            --retry 3 --retry-delay 10 \
+            --header "Authorization: Bearer $CRON_SECRET"

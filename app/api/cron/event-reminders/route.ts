@@ -9,12 +9,15 @@ import { sendDueEmailReminders } from "@/app/lib/events/send";
  * person receiving it, and an hourly cron is one that can be reasoned about
  * when something goes wrong at eleven at night during a trade show.
  *
+ * The caller is .github/workflows/event-reminders.yml rather than Vercel Cron,
+ * which on a Hobby account will not schedule anything more often than daily.
+ *
  * The endpoint is idempotent by construction — `dueForEmail` only returns
  * visitors with nothing sent, and the send itself carries an idempotency key —
  * so a retry, a double-fire or a curl by hand cannot email anybody twice.
  */
 
-/** Vercel Cron sends this; without it the endpoint is a public send button. */
+/** The scheduler sends this; without it the endpoint is a public send button. */
 const secret = process.env.CRON_SECRET;
 
 export const dynamic = "force-dynamic";
