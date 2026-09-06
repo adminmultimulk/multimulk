@@ -73,7 +73,7 @@ export function Articles({ articles }: { articles: AnyArticle[] }) {
                   href={buildPath("article", { slug: article.slug })}
                   className="group block"
                 >
-                  <div className="relative aspect-[255/211] w-full overflow-hidden">
+                  <div className="relative aspect-[16/9] w-full overflow-hidden">
                     <Image
                       src={article.image ?? "/images/region-turkiye.avif"}
                       alt=""

@@ -382,8 +382,11 @@ const ur: Dictionary = {
       imageCredits: "تصاویر کے کریڈٹس",
     },
     contactTitle: "ہم سے رابطہ",
-    address:
-      "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J، پانچویں منزل، دفتر 48-49، بے کینٹ / استنبول",
+    addresses: {
+      UAE: "گروسوینر بزنس ٹاور، دفتر 1909، الثنیہ فرسٹ، برشا ہائٹس، دبئی",
+      "Türkiye": "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J، پانچویں منزل، دفتر 48-49، بے کینٹ / استنبول",
+      Pakistan: "13 شیر شاہ بلاک، گارڈن ٹاؤن، لاہور، پاکستان",
+    },
     copyright: "© 2026 Multi Mulk۔ جملہ حقوق محفوظ ہیں۔",
     offices: { UAE: "متحدہ عرب امارات", Türkiye: "ترکیہ", Pakistan: "پاکستان" },
   },

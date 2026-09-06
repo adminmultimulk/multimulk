@@ -19,8 +19,14 @@ import { useI18n } from "@/app/lib/i18n/context";
 export function ArticleCard({
   article,
   sizes,
-  /** Design uses 302/202 in the grid and 324/202 in the rail. */
-  aspect = "302/202",
+  /**
+   * 16/9, because that is what the featured images are: all but a dozen of
+   * the migrated pieces carry a banner with the headline set into the
+   * artwork, and the 3:2 frame the design started from cropped the first and
+   * last word of it off. The dozen 3:2 photographs lose a little top and
+   * bottom instead, which costs nothing.
+   */
+  aspect = "16/9",
   headingLevel = 2,
 }: {
   article: AnyArticle;

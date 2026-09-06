@@ -35,24 +35,47 @@ const socialIcons = {
 export async function SiteFooter() {
   const t = await getDictionary();
   const itemStyle =
-    "text-[11.5px] leading-[17px] text-cream/90 transition-colors hover:text-white";
+    "text-[13.5px] leading-[21px] text-cream/90 transition-colors hover:text-white lg:text-[11.5px] lg:leading-[17px]";
+  const headingStyle =
+    "text-[13px] font-medium uppercase tracking-[0.08em] text-cream lg:text-[12px]";
+  // Rendered under the social rows on a wide screen and at the very bottom on
+  // a phone, where the link columns run between the two.
+  const copyright = (
+    <p className="text-[12px] text-cream/80 lg:text-[10.5px]">
+      {t.footer.copyright}
+    </p>
+  );
 
   return (
     // The footer is uncovered by the page rather than scrolled to; see
     // FooterReveal. Everything inside it is unchanged by that.
     <FooterReveal>
-      <footer className="relative min-h-[720px] overflow-hidden bg-forest lg:min-h-[900px]">
-        <Image
-          src="/images/footer-aerial.png"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-x-0 bottom-0 h-[600px] bg-gradient-to-t from-forest-deep/95 via-forest-deep/75 to-transparent" />
+      <footer className="relative overflow-hidden bg-forest-deep lg:min-h-[1120px]">
+        {/* On a phone the aerial is a band above the footer rather than a
+            ground beneath it. Stacked into one column the links run far past
+            the 600px scrim, and everything below it was being read off a
+            sunlit photograph. From lg there is height enough for the scrim to
+            cover the copy, so the photograph fills the footer as designed. */}
+        <div className="relative aspect-[4/5] w-full sm:aspect-[3/2] lg:absolute lg:inset-0 lg:aspect-auto lg:h-full">
+          <Image
+            src="/images/footer-aerial.png"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          {/* The band settles into the ground below it rather than ending on a
+              seam. */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[170px] bg-gradient-to-t from-forest-deep to-transparent lg:hidden" />
+        </div>
 
-        <div className="relative flex min-h-[720px] flex-col justify-end lg:min-h-[900px]">
-          <div className="mx-auto w-full max-w-[1440px] px-6 pb-12 sm:px-10 lg:px-[60px] lg:pb-[60px]">
+        {/* The desktop scrim. Sized to the copy, not to a round number:
+            the contact column runs 423px tall and starts 477px down, so
+            a 600px gradient left the column headings on bare sand. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-[820px] bg-gradient-to-t from-forest-deep/95 via-forest-deep/85 to-transparent lg:block" />
+
+        <div className="relative flex flex-col justify-end lg:min-h-[1120px]">
+          <div className="mx-auto w-full max-w-[1440px] px-6 pb-12 pt-8 sm:px-10 lg:px-[60px] lg:pb-[60px] lg:pt-0">
             <div className="grid gap-12 lg:grid-cols-[320px_1fr]">
               <div>
                 <Link href="/" aria-label="Multi Mulk">
@@ -68,7 +91,9 @@ export async function SiteFooter() {
                 <div className="mt-6 flex flex-col gap-2.5">
                   {entities.map((entity) => (
                     <div key={entity} className="flex items-center gap-2.5">
-                      <span className="text-[11.5px] text-cream/90">{entity}</span>
+                      <span className="text-[13.5px] text-cream/90 lg:text-[11.5px]">
+                        {entity}
+                      </span>
                       <div className="flex items-center gap-[7px]">
                         {socialLinks.map((social) => {
                           const Icon = socialIcons[social.key];
@@ -92,17 +117,15 @@ export async function SiteFooter() {
                   ))}
                 </div>
 
-                <p className="mt-6 text-[10.5px] text-cream/80">
-                  {t.footer.copyright}
-                </p>
+                <div className="mt-6 hidden lg:block">{copyright}</div>
               </div>
 
               <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
                 {/* Portfolio columns list development names, which read the same
                     in every language. */}
                 {footerColumns.map((column) => (
-                  <div key={column.key}>
-                    <h2 className="text-[12px] font-medium uppercase tracking-[0.08em] text-cream">
+                  <div key={column.key} className="hidden lg:block">
+                    <h2 className={headingStyle}>
                       {t.footer.columns[column.key]}
                     </h2>
                     <ul className="mt-[18px] flex flex-col gap-[11px]">
@@ -127,7 +150,7 @@ export async function SiteFooter() {
                 ))}
 
                 <div>
-                  <h2 className="text-[12px] font-medium uppercase tracking-[0.08em] text-cream">
+                  <h2 className={headingStyle}>
                     {t.footer.columns.about}
                   </h2>
                   <ul className="mt-[18px] flex flex-col gap-[11px]">
@@ -148,44 +171,48 @@ export async function SiteFooter() {
                 </div>
 
                 <div>
-                  <h2 className="text-[12px] font-medium uppercase tracking-[0.08em] text-cream">
+                  <h2 className={headingStyle}>
                     {t.footer.contactTitle}
                   </h2>
-                  <ul className="mt-[18px] flex flex-col gap-[11px] text-[11.5px] leading-[17px] text-cream/90">
-                    <li className="flex gap-2">
-                      <MapPin className="mt-0.5 w-3 shrink-0" />
-                      <span>{t.footer.address}</span>
-                    </li>
+                  {/* One block per office rather than the head office alone:
+                      a reader in Lahore or Dubai should not have to guess
+                      whether the firm is anywhere near them. Address and phone
+                      sit together under the country, in `contact.offices`
+                      order — head office first. */}
+                  <ul className="mt-[18px] flex flex-col gap-[18px] text-[13.5px] leading-[21px] text-cream/90 lg:gap-[14px] lg:text-[11.5px] lg:leading-[17px]">
+                    {contact.offices.map((office) => (
+                      <li key={office.key} className="flex flex-col gap-[5px]">
+                        <span className="text-[11px] font-medium uppercase tracking-[0.1em] text-cream/60 lg:text-[10px]">
+                          {t.footer.offices[office.key]}
+                        </span>
+                        <span className="flex gap-2">
+                          <MapPin className="mt-0.5 w-3 shrink-0" />
+                          <span>{t.footer.addresses[office.key]}</span>
+                        </span>
+                        <a
+                          href={`tel:${office.phone.replace(/\s/g, "")}`}
+                          className="flex gap-2 transition-colors hover:text-white"
+                        >
+                          <Phone className="mt-0.5 w-3.5 shrink-0" />
+                          <span className="num">{office.phone}</span>
+                        </a>
+                      </li>
+                    ))}
                     <li className="flex gap-2">
                       <Mail className="mt-0.5 w-3.5 shrink-0" />
                       <a
                         href={`mailto:${contact.email}`}
-                        className="transition-colors hover:text-white num"
+                        className="num transition-colors hover:text-white"
                       >
                         {contact.email}
                       </a>
-                    </li>
-                    <li className="flex gap-2">
-                      <Phone className="mt-0.5 w-3.5 shrink-0" />
-                      <span className="flex flex-col gap-1">
-                        {contact.phones.map((phone) => (
-                          <a
-                            key={phone.number}
-                            href={`tel:${phone.number.replace(/\s/g, "")}`}
-                            className="transition-colors hover:text-white"
-                          >
-                            <span className="text-cream/60">
-                              {t.footer.offices[phone.key]}
-                            </span>{" "}
-                            <span className="num">{phone.number}</span>
-                          </a>
-                        ))}
-                      </span>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
+
+            <div className="mt-12 lg:hidden">{copyright}</div>
           </div>
         </div>
       </footer>

@@ -385,8 +385,11 @@ const ar: Dictionary = {
       imageCredits: "حقوق الصور",
     },
     contactTitle: "تواصل معنا",
-    address:
-      "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J، الطابق 5، مكتب 48-49، بيكنت / إسطنبول",
+    addresses: {
+      UAE: "برج غروسفنور التجاري، مكتب 1909، الثنية الأولى، برشا هايتس، دبي",
+      "Türkiye": "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J، الطابق 5، مكتب 48-49، بيكنت / إسطنبول",
+      Pakistan: "13 شيرشاه بلوك، جاردن تاون، لاهور، باكستان",
+    },
     copyright: "© 2026 Multi Mulk. جميع الحقوق محفوظة.",
     offices: { UAE: "الإمارات", Türkiye: "تركيا", Pakistan: "باكستان" },
   },

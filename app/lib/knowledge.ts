@@ -541,12 +541,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
     date: "2026-08-13",
     modified: "2026-08-13",
     topics: ["turkiye"],
-    excerpt: "Primary Keyword: How citizenship by investment works Secondary Keywords: CBI program step by step, citizenship by real estate, second passport process, CBI due diligence Target URL: https://multimulk.com/blog/how-citizenship-by-investment-programs-work-a-step-by-step-guide/ How Citizenship by Investment Programs Work \u2013 A Step-by-Step Guide Direct Answer / Quick Summary Citizenship by Investment (CBI) programs allow qualified individuals to legally obtain second citizenship [\u2026]",
+    excerpt: "Citizenship by Investment (CBI) programs let qualified individuals obtain a second citizenship and passport through an approved economic contribution to a host country. Selecting a programme, choosing an investment pathway, passing due diligence, submitting through a licensed agency, naturalisation \u2014 usually in 3 to 12 months, with no residency required. [\u2026]",
     image: "/images/legacy/The-Turkish-Citizenship.webp",
     body: [
-      "Primary Keyword: How citizenship by investment works",
-      "Secondary Keywords: CBI program step by step, citizenship by real estate, second passport process, CBI due diligence",
-      "Target URL: https://multimulk.com/blog/how-citizenship-by-investment-programs-work-a-step-by-step-guide/",
       "## Direct Answer / Quick Summary",
       "Citizenship by Investment (CBI) programs allow qualified individuals to legally obtain second citizenship and a passport by making an approved economic contribution to a host country. The process typically involves selecting a program, choosing an investment pathway (such as real estate or a government fund), passing mandatory background due diligence, submitting an official application through a licensed agency, and receiving naturalization\u2014usually within 3 to 12 months without requiring physical residency.",
       "## What Is a Citizenship by Investment (CBI) Program?",

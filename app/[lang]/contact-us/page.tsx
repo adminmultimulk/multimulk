@@ -105,13 +105,22 @@ export default async function ContactPage() {
                     <dt className="text-[10.5px] uppercase tracking-[0.12em] text-gold">
                       {t.contact.addressLabel}
                     </dt>
-                    <dd className="mt-2 flex items-start gap-2.5">
-                      <MapPin className="mt-0.5 w-3.5 shrink-0 text-ink/50" />
-                      <span className="max-w-[300px] text-[13.5px] leading-[21px] text-ink">
-                        {t.footer.address}
-                      </span>
-                    </dd>
-                    {/* The same address, shown rather than described. */}
+                    {contact.offices.map((office) => (
+                      <dd
+                        key={office.key}
+                        className="mt-2 flex items-start gap-2.5"
+                      >
+                        <MapPin className="mt-0.5 w-3.5 shrink-0 text-ink/50" />
+                        <span className="max-w-[300px] text-[13.5px] leading-[21px] text-ink">
+                          <span className="text-ink/50">
+                            {t.footer.offices[office.key]}
+                          </span>{" "}
+                          {t.footer.addresses[office.key]}
+                        </span>
+                      </dd>
+                    ))}
+                    {/* The head office — the first of the three above — shown
+                        rather than described. */}
                     <dd className="mt-5">
                       <div className="aspect-[16/10] w-full max-w-[440px] overflow-hidden border border-ink/10 bg-white">
                         <iframe

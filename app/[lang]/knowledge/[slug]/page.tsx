@@ -129,7 +129,11 @@ export default async function ArticlePage({
       <div className="relative">
         <SiteNav />
         {banner ? (
-          <div className="relative min-h-[380px] w-full overflow-hidden bg-forest lg:aspect-[8/3] lg:min-h-0">
+          // 16/9 on a phone: a full-bleed banner at a fixed 380px height was
+          // cropping a third off each side of a headline set into the artwork.
+          // The 8/3 letterbox on desktop only trims sky and foreground, which
+          // the banners are built to lose.
+          <div className="relative aspect-[16/9] w-full overflow-hidden bg-forest lg:aspect-[8/3]">
             <Image
               src={banner}
               alt=""
@@ -215,7 +219,6 @@ export default async function ArticlePage({
                       <li key={item.slug}>
                         <ArticleCard
                           article={item}
-                          aspect="324/202"
                           headingLevel={3}
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 324px"
                         />

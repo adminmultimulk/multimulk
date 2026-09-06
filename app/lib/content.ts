@@ -524,27 +524,15 @@ export const contact = {
     { key: "Türkiye" as const, number: "+90 543 337 7899" },
     { key: "Pakistan" as const, number: "+92 300 847 8644" },
   ],
+  /**
+   * The offices, head office first. The street address of each is copy, not
+   * data — Arabic, Russian and Urdu render it in their own script — so it
+   * lives in `t.footer.addresses` under the same key rather than here.
+   */
   offices: [
-    {
-      key: "UAE" as const,
-      headOffice: true,
-      address:
-        "Grosvenor Business Tower, Office 1909, Al Thanyah First, Barsha Heights, Dubai",
-      phone: "+971 50 169 4283",
-    },
-    {
-      key: "Türkiye" as const,
-      headOffice: false,
-      address:
-        "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J, Kat:5, Ofis No:48-49, Beykent / İstanbul",
-      phone: "+90 543 337 7899",
-    },
-    {
-      key: "Pakistan" as const,
-      headOffice: false,
-      address: "13 Sher Shah Block, Garden Town, Lahore, Pakistan",
-      phone: "+92 300 847 8644",
-    },
+    { key: "UAE" as const, headOffice: true, phone: "+971 50 169 4283" },
+    { key: "Türkiye" as const, headOffice: false, phone: "+90 543 337 7899" },
+    { key: "Pakistan" as const, headOffice: false, phone: "+92 300 847 8644" },
   ],
   /** The head office as Google Maps resolves it, for the embed and the link out. */
   mapQuery:
