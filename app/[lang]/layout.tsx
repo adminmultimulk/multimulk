@@ -3,6 +3,7 @@ import { Manrope, Vazirmatn } from "next/font/google";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
 import { EnquiryProvider } from "@/app/components/enquiry";
 import { WhatsAppButton } from "@/app/components/whatsapp-button";
 import { analyticsEnabled, gaId } from "@/app/lib/analytics";
@@ -163,6 +164,12 @@ export default async function RootLayout({
             <WhatsAppButton />
           </EnquiryProvider>
         </I18nProvider>
+        {/* Vercel Web Analytics. Unlike the GA tag it is not gated on
+            NODE_ENV: the component reads the deployment it is served from and
+            only reports from Vercel, so a local `next dev` run collects
+            nothing. Page views are picked up from the App Router itself, so
+            there is nothing to wire per route. */}
+        <Analytics />
       </body>
       {analyticsEnabled && <GoogleAnalytics gaId={gaId} />}
     </html>
