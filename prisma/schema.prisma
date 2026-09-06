@@ -195,3 +195,123 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
+
+// --- Event visitors (app/lib/events) ----------------------------------------
+// The people who booked a slot at a trade show, and every reminder sent to
+// them. Imported from the sales team's spreadsheet rather than typed in, so
+// the import has to be safely repeatable — hence `dedupeKey`.
+
+/// Which half of the day someone asked for.
+///
+/// The spreadsheet says "Morning", "Afternoon", "1800 hrs", "3PM" and "7 or 8
+/// Sep" in the same column, so the raw text is kept alongside this and the
+/// slot is what the reminder schedule is computed from. UNSPECIFIED is not a
+/// failure — it means nobody has pinned the visitor down yet, and it is the
+/// filter the team works through on the morning of the show.
+enum VisitSlot {
+  MORNING
+  AFTERNOON
+  EVENING
+  UNSPECIFIED
+}
+
+/// Where a booking stands. The first two mirror the spreadsheet's Remarks
+/// column ("Confirmed" / "Response awaited"); the rest are filled in at the
+/// stand as people arrive, which is what makes the report worth reading after
+/// the show as well as during it.
+enum VisitorStatus {
+  AWAITING
+  CONFIRMED
+  CANCELLED
+  ATTENDED
+  NO_SHOW
+}
+
+enum ReminderChannel {
+  EMAIL
+  WHATSAPP
+}
+
+enum ReminderStatus {
+  SENT
+  FAILED
+}
+
+model EventVisitor {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Which show. One key per event so next year's list does not have to live
+  /// in a second collection.
+  event  String @default("ips-2026")
+  /// The spreadsheet tab: "Visitors" or "Clients". Kept because the two are
+  /// reported on separately — a client already has a relationship, a visitor
+  /// is a lead.
+  list   String @default("Visitors")
+  /// The row number in the sheet it came from, for reconciling by eye.
+  serial Int?
+
+  name  String
+  email String?
+  /// E.164 without the plus, which is what `wa.me` wants and what the sheet
+  /// holds once Excel's scientific notation is undone.
+  phone String?
+
+  /// Midnight UTC on the day of the visit, or absent when the sheet says
+  /// something like "7 or 8 Sep".
+  visitDate    DateTime?
+  /// Exactly what the sheet said, so a person can always see the original.
+  visitDateRaw String    @default("")
+  slot         VisitSlot @default(UNSPECIFIED)
+  preferredTimeRaw String @default("")
+
+  /// When the reminder is due — derived from the visit date and slot on
+  /// import, and editable afterwards for the one visitor who wants it later.
+  /// Absent means the schedule could not be worked out; that visitor is
+  /// reported as needing a decision rather than quietly never contacted.
+  remindAt DateTime?
+
+  status VisitorStatus @default(AWAITING)
+  notes  String?
+
+  /// Denormalised from the reminder log so the list can be sorted and
+  /// filtered on "not yet contacted" without a join per row.
+  emailSentAt    DateTime?
+  whatsappSentAt DateTime?
+
+  /// `event:email` — or the phone, or the name — so re-importing the same
+  /// spreadsheet updates rows instead of doubling them.
+  dedupeKey String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reminders EventReminder[]
+
+  @@index([event, remindAt])
+  @@index([event, visitDate, slot])
+  @@map("event_visitors")
+}
+
+/// One send attempt, kept whether it worked or not.
+///
+/// A failure is the row worth having: "we emailed everybody" is only true if
+/// nothing in here says otherwise, and the report leads with the failures for
+/// that reason.
+model EventReminder {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  visitorId String          @db.ObjectId
+  visitor   EventVisitor    @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  channel   ReminderChannel
+  status    ReminderStatus
+  subject   String?
+  /// The provider's message id on success, the error on failure.
+  detail    String?
+  /// Who pressed the button. Absent when the scheduled run sent it.
+  sentById  String?         @db.ObjectId
+  sentByName String?
+  automatic Boolean         @default(false)
+  createdAt DateTime        @default(now())
+
+  @@index([visitorId, createdAt])
+  @@index([createdAt])
+  @@map("event_reminders")
+}

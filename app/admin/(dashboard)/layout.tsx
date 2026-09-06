@@ -52,8 +52,14 @@ export default async function DashboardLayout({
       label: "Properties",
       hint: "Listings and availability",
     });
-  if (canManageUsers(user.role))
+  if (canManageUsers(user.role)) {
+    items.push({
+      href: "/admin/events",
+      label: "Event visitors",
+      hint: "IPS 2026 list and reminders",
+    });
     items.push({ href: "/admin/users", label: "People", hint: "Accounts and access" });
+  }
   items.push({ href: "/admin/account", label: "Account", hint: "Your password" });
 
   return (

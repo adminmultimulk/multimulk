@@ -7,6 +7,7 @@ import {
   canManageUsers,
 } from "@/app/lib/auth/roles";
 import { prisma } from "@/app/lib/db";
+import { EVENT } from "@/app/lib/events/config";
 import { allArticles } from "@/app/lib/knowledge";
 import { units } from "@/app/lib/properties";
 
@@ -38,6 +39,9 @@ export default async function OverviewPage() {
   const articles = canEditArticles(user.role);
   const properties = canEditProperties(user.role);
 
+  const superadmin = canManageUsers(user.role);
+  const now = new Date();
+
   const [
     articlesLive,
     articlesDraft,
@@ -45,12 +49,14 @@ export default async function OverviewPage() {
     propertiesDraft,
     people,
     recent,
+    visitors,
+    remindersDue,
   ] = await Promise.all([
     articles ? prisma.article.count({ where: { status: "PUBLISHED" } }) : 0,
     articles ? prisma.article.count({ where: { status: "DRAFT" } }) : 0,
     properties ? prisma.property.count({ where: { status: "PUBLISHED" } }) : 0,
     properties ? prisma.property.count({ where: { status: "DRAFT" } }) : 0,
-    canManageUsers(user.role) ? prisma.user.count({ where: { active: true } }) : 0,
+    superadmin ? prisma.user.count({ where: { active: true } }) : 0,
     articles
       ? prisma.article.findMany({
           orderBy: { updatedAt: "desc" },
@@ -58,6 +64,18 @@ export default async function OverviewPage() {
           select: { id: true, title: true, status: true, updatedAt: true },
         })
       : [],
+    superadmin ? prisma.eventVisitor.count({ where: { event: EVENT.key } }) : 0,
+    superadmin
+      ? prisma.eventVisitor.count({
+          where: {
+            event: EVENT.key,
+            emailSentAt: null,
+            email: { not: null },
+            remindAt: { not: null, lte: now },
+            status: { notIn: ["CANCELLED", "NO_SHOW"] },
+          },
+        })
+      : 0,
   ]);
 
   return (
@@ -88,10 +106,43 @@ export default async function OverviewPage() {
             <Stat label="Listings in draft" value={propertiesDraft} />
           </>
         ) : null}
-        {canManageUsers(user.role) ? (
+        {superadmin ? (
           <Stat label="Accounts enabled" value={people} />
         ) : null}
       </div>
+
+      {superadmin && visitors > 0 ? (
+        <div className="mb-8 rounded-lg border border-ink/10 bg-white px-5 py-4">
+          <p className="text-[11px] tracking-[0.06em] text-ink/50 uppercase">
+            {EVENT.shortName}
+          </p>
+          <p className="mt-1 text-[13px] leading-[20px] text-ink">
+            {visitors} visitor{visitors === 1 ? "" : "s"} booked in.{" "}
+            {remindersDue === 0 ? (
+              <span className="text-ink/60">Every reminder that is due has gone out.</span>
+            ) : (
+              <strong>
+                {remindersDue} reminder{remindersDue === 1 ? " is" : "s are"} due now.
+              </strong>
+            )}
+          </p>
+          <p className="mt-2 text-[13px]">
+            <Link
+              href="/admin/events"
+              className="text-forest underline underline-offset-2"
+            >
+              Visitor list
+            </Link>{" "}
+            ·{" "}
+            <Link
+              href="/admin/events/report"
+              className="text-forest underline underline-offset-2"
+            >
+              Report
+            </Link>
+          </p>
+        </div>
+      ) : null}
 
       {articles ? (
         <>

@@ -7,10 +7,9 @@
  * about. See `./sink.ts`. The enquirer's own copy is the opposite — strictly
  * secondary — and lives in `./ack.ts`.
  *
- * Resend's REST API rather than the `resend` package, for the same reason
- * `sink.ts` and `notify.ts` post their own JSON: one `fetch` against a
- * documented endpoint carries less than a dependency would, and the whole
- * surface used here is a POST with a handful of fields.
+ * The wire itself lives in `../email/resend`, shared with the visit reminders
+ * in `../events`. What stays here is what an enquiry specifically is: the
+ * fields, their order, and the failure type `deliverLead` reports by channel.
  *
  * The team's email is written in English regardless of the language the
  * enquiry arrived in. It is read by the sales team, not by the enquirer — but
@@ -20,15 +19,15 @@
 
 import "server-only";
 import { createHash } from "node:crypto";
+import {
+  ResendError,
+  resendConfigured,
+  sendResendEmail,
+} from "../email/resend";
 import en from "../i18n/dictionaries/en";
 import { localeNames } from "../i18n/config";
 import { absoluteUrl } from "../site";
 import type { Lead } from "./schema";
-
-const ENDPOINT = "https://api.resend.com/emails";
-
-/** Set by the Resend integration on Vercel; keep the name it injects. */
-const apiKey = process.env.RESEND_API_KEY;
 
 /** Where enquiries land. Comma-separated for more than one inbox. */
 export const teamInbox = (process.env.LEAD_EMAIL_TO ?? "")
@@ -37,16 +36,11 @@ export const teamInbox = (process.env.LEAD_EMAIL_TO ?? "")
   .filter(Boolean);
 
 /**
- * The sender, on a domain verified in Resend — `Multi Mulk
- * <enquiries@multimulk.com>`. Resend rejects anything else, so this cannot
- * default to the enquirer's own address; theirs goes in `reply_to`.
+ * All three are needed before this channel counts as available: the API key
+ * and the verified sender (both checked by `resendConfigured`), and somewhere
+ * for the enquiry to land.
  */
-const sender = process.env.LEAD_EMAIL_FROM;
-
-/** All three are needed before this channel counts as available. */
-export const emailConfigured = Boolean(
-  apiKey && sender && teamInbox.length > 0,
-);
+export const emailConfigured = Boolean(resendConfigured && teamInbox.length > 0);
 
 export class LeadEmailError extends Error {
   constructor(message: string, options?: { cause?: unknown }) {
@@ -56,10 +50,11 @@ export class LeadEmailError extends Error {
 }
 
 /**
- * One POST to Resend. Resolves only once it has accepted the message, and
- * throws with the API's own message otherwise — a 403 for an unverified
- * sending domain is the mistake worth reading, and it is the one the response
- * body explains.
+ * The enquiry channel's send.
+ *
+ * Delegates the wire to `../email/resend` and keeps `LeadEmailError` as the
+ * type this module throws, because `deliverLead` reports failures by channel
+ * and a bare transport error would not say which one gave up.
  */
 export async function sendEmail(message: {
   to: string[];
@@ -76,35 +71,12 @@ export async function sendEmail(message: {
     );
   }
 
-  let response: Response;
   try {
-    response = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${apiKey}`,
-        "Idempotency-Key": message.idempotencyKey,
-      },
-      body: JSON.stringify({
-        from: sender,
-        to: message.to,
-        reply_to: message.replyTo,
-        subject: message.subject,
-        text: message.text,
-        html: message.html,
-      }),
-      // A lead is small; if Resend cannot answer promptly the reader is better
-      // off being told than left waiting.
-      signal: AbortSignal.timeout(8000),
-    });
+    await sendResendEmail(message);
   } catch (cause) {
-    throw new LeadEmailError("Resend did not respond.", { cause });
-  }
-
-  if (!response.ok) {
-    const detail = await response.text().catch(() => "");
     throw new LeadEmailError(
-      `Resend returned ${response.status} ${response.statusText}. ${detail}`.trim(),
+      cause instanceof ResendError ? cause.message : "Resend did not accept the enquiry.",
+      { cause },
     );
   }
 }
