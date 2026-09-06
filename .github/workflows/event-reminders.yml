@@ -17,7 +17,11 @@ jobs:
     steps:
       - env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
-          SITE_URL: ${{ vars.SITE_URL || 'https://multimulk.com' }}
+          # `www`, not the apex. The apex 308-redirects here, and curl drops
+          # the Authorization header across a redirect to a different host —
+          # so the apex spelling reached the endpoint unauthenticated and got
+          # a 401 on every scheduled run.
+          SITE_URL: ${{ vars.SITE_URL || 'https://www.multimulk.com' }}
         run: |
           curl "$SITE_URL/api/cron/event-reminders" \
             --silent --show-error --fail-with-body --location \
