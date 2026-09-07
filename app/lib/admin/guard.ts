@@ -81,6 +81,22 @@ export async function requirePropertyAccess(): Promise<AdminUser> {
   return user;
 }
 
+/**
+ * Anyone who edits something that carries a picture.
+ *
+ * Uploading is not a section of the dashboard of its own — it is a step in
+ * writing an article or listing a unit — so the gate is the union of the two
+ * rather than either one. An editor needs a banner as much as a lister needs
+ * a card image, and holding the media library to `requirePropertyAccess`
+ * would have left every writer typing paths by hand.
+ */
+export async function requireMediaAccess(): Promise<AdminUser> {
+  const user = await requireUser();
+  if (!canEditArticles(user.role) && !canEditProperties(user.role))
+    redirect("/admin");
+  return user;
+}
+
 export async function requireSuperadmin(): Promise<AdminUser> {
   const user = await requireUser();
   if (!canManageUsers(user.role)) redirect("/admin");

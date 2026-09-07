@@ -9,11 +9,12 @@
  * application has to carry.
  */
 
-import { requirePropertyAccess } from "./guard";
+import { requireMediaAccess } from "./guard";
 import {
   cloudinaryConfigured,
   signUpload,
   type ResourceType,
+  type UploadKind,
   type UploadTicket,
 } from "@/app/lib/cloudinary";
 
@@ -23,10 +24,12 @@ export type UploadTicketResult =
 
 export async function requestUploadTicket(
   resourceType: ResourceType,
+  kind: UploadKind = "property",
 ): Promise<UploadTicketResult> {
-  // Same gate as saving a listing: signing an upload is a write, and an
-  // unauthenticated one would be an open door into the media library.
-  await requirePropertyAccess();
+  // Same gate as saving the thing the file is going onto: signing an upload is
+  // a write, and an unauthenticated one would be an open door into the media
+  // library.
+  await requireMediaAccess();
 
   if (!cloudinaryConfigured) {
     return {
@@ -38,5 +41,5 @@ export async function requestUploadTicket(
 
   // A signature is minted per file rather than per form: the browser may sit
   // on a half-filled listing for an hour, and Cloudinary rejects a stale one.
-  return { ok: true, ticket: signUpload(resourceType) };
+  return { ok: true, ticket: signUpload(resourceType, kind) };
 }

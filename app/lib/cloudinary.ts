@@ -27,9 +27,15 @@ export const cloudinaryConfigured = Boolean(cloudName && apiKey && apiSecret);
 
 /**
  * Cloudinary sorts everything under one prefix, so the account stays legible
- * next to whatever else it is used for.
+ * next to whatever else it is used for — and a prefix per kind, so the
+ * photography of a hundred units is not shuffled in with article artwork.
  */
-const FOLDER = process.env.CLOUDINARY_FOLDER || "multimulk/properties";
+export type UploadKind = "property" | "article";
+
+const folders: Record<UploadKind, string> = {
+  property: process.env.CLOUDINARY_FOLDER || "multimulk/properties",
+  article: process.env.CLOUDINARY_ARTICLE_FOLDER || "multimulk/articles",
+};
 
 /**
  * `image` handles the photography and gives us Cloudinary's transformations.
@@ -73,15 +79,19 @@ export class CloudinaryError extends Error {
  * for as long as it exists, and this one is only good for an hour and only
  * into this folder.
  */
-export function signUpload(resourceType: ResourceType): UploadTicket {
+export function signUpload(
+  resourceType: ResourceType,
+  kind: UploadKind = "property",
+): UploadTicket {
   if (!cloudinaryConfigured) {
     throw new CloudinaryError(
       "Cloudinary is not configured — set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET.",
     );
   }
 
+  const folder = folders[kind];
   const timestamp = Math.floor(Date.now() / 1000);
-  const params = { folder: FOLDER, timestamp: String(timestamp) };
+  const params = { folder, timestamp: String(timestamp) };
   const payload = Object.entries(params)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([key, value]) => `${key}=${value}`)
@@ -92,6 +102,6 @@ export function signUpload(resourceType: ResourceType): UploadTicket {
     apiKey: apiKey!,
     timestamp,
     signature: createHash("sha1").update(payload + apiSecret).digest("hex"),
-    folder: FOLDER,
+    folder,
   };
 }

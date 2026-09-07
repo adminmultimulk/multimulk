@@ -17,19 +17,19 @@
 
 import { useRef, useState } from "react";
 import { requestUploadTicket } from "@/app/lib/admin/upload-actions";
-import type { ResourceType } from "@/app/lib/cloudinary";
+import type { ResourceType, UploadKind } from "@/app/lib/cloudinary";
 import { Field, Input, Textarea } from "./ui";
 
 /** What Cloudinary answers with; only the URL is of any use here. */
 type CloudinaryResponse = { secure_url?: string; error?: { message?: string } };
 
-function useUploader(resourceType: ResourceType) {
+function useUploader(resourceType: ResourceType, kind: UploadKind) {
   const [progress, setProgress] = useState<number | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
 
   const upload = async (file: File): Promise<string | null> => {
     setFailure(null);
-    const ticket = await requestUploadTicket(resourceType);
+    const ticket = await requestUploadTicket(resourceType, kind);
     if (!ticket.ok) {
       setFailure(ticket.error);
       return null;
@@ -146,10 +146,12 @@ export function UploadField({
   error,
   accept,
   resourceType,
+  kind = "property",
   defaultValue,
   placeholder,
   required,
   preview = true,
+  previewRatio,
 }: {
   name: string;
   label: string;
@@ -157,14 +159,22 @@ export function UploadField({
   error?: string;
   accept: string;
   resourceType: ResourceType;
+  /** Which folder the file lands in. */
+  kind?: UploadKind;
   defaultValue: string;
   placeholder?: string;
   required?: boolean;
   /** Off for a brochure, where there is nothing to look at. */
   preview?: boolean;
+  /**
+   * An aspect ratio — "3/2", "8/3" — for the thumbnail, where the shape of the
+   * crop is part of what the editor is choosing. Without it the preview is a
+   * fixed box, which is enough for a listing photograph.
+   */
+  previewRatio?: string;
 }) {
   const [value, setValue] = useState(defaultValue);
-  const { upload, progress, failure } = useUploader(resourceType);
+  const { upload, progress, failure } = useUploader(resourceType, kind);
 
   return (
     <Field label={label} name={name} error={error} hint={hint} required={required}>
@@ -177,6 +187,9 @@ export function UploadField({
             error={error}
             placeholder={placeholder}
             required={required}
+            // An input carries an intrinsic minimum width; without this the
+            // pair overflows the article form's 300px sidebar.
+            className="min-w-0"
             onChange={(event) => setValue(event.target.value)}
           />
           <PickButton
@@ -193,13 +206,25 @@ export function UploadField({
 
         {preview && value ? (
           // A plain <img>: this is the dashboard, the source is arbitrary, and
-          // `next/image` would need every host allow-listed to show a preview.
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={value}
-            alt=""
-            className="h-24 w-40 rounded-md border border-ink/10 object-cover"
-          />
+          // `next/image` would need every host allow-listed to show a preview
+          // — and answers a mistyped path with a 400 in the console rather
+          // than the broken-image icon that tells the editor what is wrong.
+          previewRatio ? (
+            <span
+              className="block overflow-hidden rounded-[4px] border border-ink/10 bg-ink/5"
+              style={{ aspectRatio: previewRatio }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={value} alt="" className="size-full object-cover" />
+            </span>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={value}
+              alt=""
+              className="h-24 w-40 rounded-md border border-ink/10 object-cover"
+            />
+          )
         ) : null}
 
         {!preview && value ? (
@@ -225,6 +250,7 @@ export function UploadList({
   error,
   accept,
   resourceType,
+  kind = "property",
   defaultValue,
   rows = 4,
 }: {
@@ -234,11 +260,12 @@ export function UploadList({
   error?: string;
   accept: string;
   resourceType: ResourceType;
+  kind?: UploadKind;
   defaultValue: string[];
   rows?: number;
 }) {
   const [value, setValue] = useState(defaultValue.join("\n"));
-  const { upload, progress, failure } = useUploader(resourceType);
+  const { upload, progress, failure } = useUploader(resourceType, kind);
   const items = value.split("\n").map((line) => line.trim()).filter(Boolean);
 
   return (

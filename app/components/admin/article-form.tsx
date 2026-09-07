@@ -14,6 +14,7 @@ import { fromBlocks } from "@/app/lib/rich-text";
 import { topics as allTopics } from "@/app/lib/topics";
 import { Alert, Button, Field, Input, Select, Textarea } from "./ui";
 import { RichEditor } from "./rich-editor";
+import { UploadField } from "./upload-field";
 
 export type ArticleDraft = {
   id?: string;
@@ -82,8 +83,6 @@ export function ArticleForm({
   const [excerpt, setExcerpt] = useState(article.excerpt);
   const [seoTitle, setSeoTitle] = useState(article.seoTitle);
   const [seoDescription, setSeoDescription] = useState(article.seoDescription);
-  const [image, setImage] = useState(article.image);
-  const [hero, setHero] = useState(article.hero);
   const [date, setDate] = useState(article.date);
   const [category, setCategory] = useState(article.category);
 
@@ -343,40 +342,35 @@ export function ArticleForm({
           </fieldset>
         </Card>
 
-        <Card title="Images">
-          <Field
-            label="Card"
+        <Card
+          title="Images"
+          hint="Upload a file and it goes to Cloudinary; the box underneath holds the URL either way, so a path under /public still works."
+        >
+          <UploadField
             name="image"
+            label="Card"
             error={errors.image}
-            hint="Roughly 3:2. A path under /public."
-          >
-            <Input
-              id="image"
-              name="image"
-              value={image}
-              error={errors.image}
-              onChange={(event) => setImage(event.target.value)}
-              placeholder="/images/…"
-            />
-            <Thumb src={image} ratio="3/2" />
-          </Field>
+            accept="image/*"
+            resourceType="image"
+            kind="article"
+            defaultValue={article.image}
+            placeholder="/images/…"
+            previewRatio="3/2"
+            hint="Roughly 3:2. Shown on the Knowledge Centre index, and everywhere the piece is linked."
+          />
 
-          <Field
-            label="Banner"
+          <UploadField
             name="hero"
+            label="Banner"
             error={errors.hero}
+            accept="image/*"
+            resourceType="image"
+            kind="article"
+            defaultValue={article.hero}
+            placeholder="/images/…"
+            previewRatio="8/3"
             hint="Roughly 8:3, for the top of the article. Falls back to the card image."
-          >
-            <Input
-              id="hero"
-              name="hero"
-              value={hero}
-              error={errors.hero}
-              onChange={(event) => setHero(event.target.value)}
-              placeholder="/images/…"
-            />
-            <Thumb src={hero} ratio="8/3" />
-          </Field>
+          />
         </Card>
 
         <Card title="Filing">
@@ -608,24 +602,6 @@ function Schedule({
         </p>
       ) : null}
     </Field>
-  );
-}
-
-/** Shows whether the path in the field actually resolves to a photograph. */
-function Thumb({ src, ratio }: { src: string; ratio: string }) {
-  if (!src.startsWith("/")) return null;
-  return (
-    <span
-      className="block overflow-hidden rounded-[4px] border border-ink/10 bg-ink/5"
-      style={{ aspectRatio: ratio }}
-    >
-      {/* Deliberately not `next/image`: this is an unvalidated path being
-          typed, and the optimiser answers a bad one with a 400 in the console
-          rather than the broken-image icon that tells the editor what is
-          wrong. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" className="size-full object-cover" />
-    </span>
   );
 }
 
