@@ -6,6 +6,7 @@ import { EnquireButton } from "./enquire-button";
 import { JsonLd } from "./json-ld";
 import { Link } from "./link";
 import { ListingImage } from "./listing-image";
+import { PropertyGallery } from "./property-gallery";
 import { SiteFooter } from "./site-footer";
 import { SiteNav } from "./site-nav";
 import { UnitCard } from "./unit-card";
@@ -22,7 +23,7 @@ import { getDictionary, getLocale } from "@/app/lib/i18n";
 import { formatNumber, interpolate, lookup } from "@/app/lib/i18n/format";
 import { placeLabel, unitSpecs, unitTitle } from "@/app/lib/i18n/units";
 import { mergedUnits, type Listing } from "@/app/lib/cms/properties";
-import { getProjectByName } from "@/app/lib/projects";
+import { developmentSlug } from "@/app/lib/cms/developments";
 import { breadcrumbs, residence, routeUrl } from "@/app/lib/seo/jsonld";
 
 /**
@@ -54,10 +55,9 @@ export async function ListingPage({ listing }: { listing: Listing }) {
     .map((value, index) => ({ Icon: SPEC_ICONS[index], value }))
     .filter((spec) => spec.value);
 
-  // The development this unit sits in, where the site knows it as one — a
-  // listing names its scheme in free text, and only the four in `projects.ts`
-  // have a page to send anyone to.
-  const project = getProjectByName(listing.project);
+  // The development this unit sits in. Every published listing belongs to one,
+  // assembled from the listings that name it — so the link always resolves.
+  const developmentHref = `/properties/${developmentSlug(listing.project)}`;
 
   // Everything else released in the same scheme. Drawn from the merged
   // inventory, so a listing sits alongside the units that ship with the site.
@@ -157,9 +157,9 @@ export async function ListingPage({ listing }: { listing: Listing }) {
                   className="inline-flex items-center gap-2 rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
                 />
               ) : null}
-              {project ? (
+              {listing.project ? (
                 <Link
-                  href={`/properties/${project.slug}`}
+                  href={developmentHref}
                   className="rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
                 >
                   {copy.viewDevelopment}
@@ -240,23 +240,8 @@ export async function ListingPage({ listing }: { listing: Listing }) {
               <h2 className="font-display text-[26px] leading-[1.28] text-ink sm:text-[32px]">
                 {copy.gallery}
               </h2>
-              <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {listing.gallery.map((src, index) => (
-                  <div
-                    key={src}
-                    className={`relative overflow-hidden ${
-                      index === 0
-                        ? "aspect-[16/10] sm:col-span-2 lg:col-span-2 lg:row-span-2"
-                        : "aspect-[4/3]"
-                    }`}
-                  >
-                    <ListingImage
-                      src={src}
-                      alt=""
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
-                    />
-                  </div>
-                ))}
+              <div className="mt-8">
+                <PropertyGallery images={listing.gallery} label={title} />
               </div>
             </Container>
           </section>
@@ -268,22 +253,12 @@ export async function ListingPage({ listing }: { listing: Listing }) {
               <h2 className="font-display text-[26px] leading-[1.28] text-ink sm:text-[32px]">
                 {copy.floorPlans}
               </h2>
-              {/* On white, uncropped: a plan cut to fill a box is a plan with
-                  a room missing. */}
-              <div className="mt-8 grid gap-6 sm:grid-cols-2">
-                {listing.floorPlans.map((src) => (
-                  <div
-                    key={src}
-                    className="relative aspect-[4/3] overflow-hidden border border-ink/10 bg-white"
-                  >
-                    <ListingImage
-                      src={src}
-                      alt={copy.floorPlans}
-                      sizes="(max-width: 640px) 100vw, 500px"
-                      className="object-contain p-4"
-                    />
-                  </div>
-                ))}
+              <div className="mt-8">
+                <PropertyGallery
+                  images={listing.floorPlans}
+                  label={copy.floorPlans}
+                  variant="plans"
+                />
               </div>
             </Container>
           </section>

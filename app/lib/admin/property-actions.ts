@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/app/lib/db";
 import { PROPERTIES_TAG } from "@/app/lib/cms/tags";
+import { getDevelopment } from "@/app/lib/cms/developments";
 import { CBI_THRESHOLD_USD, propertyTypes } from "@/app/lib/properties";
 import { requirePropertyAccess, type ActionState } from "./guard";
 import {
@@ -25,11 +26,13 @@ import {
 /** The search page, the home hero's filters, and the merged reader behind both. */
 function publishedPropertiesChanged() {
   updateTag(PROPERTIES_TAG);
-  revalidatePath("/[lang]/search-property", "page");
-  revalidatePath("/[lang]", "page");
-  // Every published listing has a page of its own now, and a development's
-  // page lists the units in it — both are rendered from the same reader.
-  revalidatePath("/[lang]/properties/[slug]", "page");
+  /*
+   * The whole tree, not a handful of pages. The navigation bar carries the
+   * developments assembled from published listings, and the bar is on every
+   * page — so publishing a unit changes the Real Estate menu everywhere, not
+   * just on the pages that list units.
+   */
+  revalidatePath("/[lang]", "layout");
 }
 
 export async function saveProperty(
@@ -95,6 +98,10 @@ export async function saveProperty(
   if (slugError) fieldErrors.slug = slugError;
   else if (reservedPropertySlugs.has(slug))
     fieldErrors.slug = "The site already lists a unit at this slug.";
+  // A development answers at its name slugged, and wins the collision, so a
+  // listing that took the slug would have a page nobody could reach.
+  else if (await getDevelopment(slug))
+    fieldErrors.slug = "A development already answers at this slug.";
 
   if (priceUSD === null) fieldErrors.priceUSD = "Whole numbers only, no symbols.";
   if (priceEUR === null) fieldErrors.priceEUR = "Whole numbers only, no symbols.";

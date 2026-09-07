@@ -23,18 +23,23 @@ import {
 } from "@/app/lib/legacy-developments";
 import { LegacyDevelopmentPage } from "@/app/components/legacy-development";
 import { ListingPage } from "@/app/components/listing-page";
+import { PropertyGallery } from "@/app/components/property-gallery";
 import { JsonLd } from "@/app/components/json-ld";
 import { apartmentComplex, breadcrumbs } from "@/app/lib/seo/jsonld";
 import { lookup, pick, selectPlural } from "@/app/lib/i18n/format";
 import { placeLine, unitTitle } from "@/app/lib/i18n/units";
-import { getProject, projects, type Project } from "@/app/lib/projects";
-import { getListing, mergedUnits } from "@/app/lib/cms/properties";
+import type { Project } from "@/app/lib/projects";
+import { developments, getDevelopment } from "@/app/lib/cms/developments";
+import { getListing } from "@/app/lib/cms/properties";
 
+/*
+ * The ninety-four developments carried over from the legacy site, and those
+ * alone. A development or a listing published in the dashboard is not
+ * enumerated here — it would mean a database read at build time for a set that
+ * changes between builds — and renders on demand instead.
+ */
 export function generateStaticParams() {
-  const slugs = [
-    ...projects.map((project) => project.slug),
-    ...legacyDevelopments.map((development) => development.slug),
-  ];
+  const slugs = legacyDevelopments.map((development) => development.slug);
   return locales.flatMap((lang) => slugs.map((slug) => ({ lang, slug })));
 }
 
@@ -66,7 +71,7 @@ export async function generateMetadata({
 }: PageProps<"/[lang]/properties/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const t = await getDictionary();
-  const project = getProject(slug);
+  const project = await getDevelopment(slug);
   const alternates = await alternatesFor(`/properties/${slug}`);
 
   if (!project) {
@@ -98,9 +103,12 @@ export async function generateMetadata({
     };
   }
 
+  const copy = localise(t, project);
   return {
     title: `${project.name}`,
-    description: localise(t, project).tagline,
+    // A development assembled from listings has no tagline of its own; its
+    // description is the prose its lister wrote.
+    description: copy.tagline || copy.description,
     alternates,
   };
 }
@@ -109,7 +117,7 @@ export default async function PropertyPage({
   params,
 }: PageProps<"/[lang]/properties/[slug]">) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getDevelopment(slug);
 
   if (!project) {
     // The legacy developments have a name, a description and a body, and no
@@ -130,10 +138,17 @@ export default async function PropertyPage({
   const t = await getDictionary(locale);
   const copy = localise(t, project);
 
-  const residences = (await mergedUnits()).filter(
-    (unit) => unit.project === project.name,
+  const residences = project.units;
+  // The card image of each residence, then whatever else was uploaded with
+  // them. Three are shown beside the overview; the rest are behind them in the
+  // lightbox, which is where the photography of a development actually lives
+  // now that every unit in it carries its own.
+  const gallery = [
+    ...new Set(residences.flatMap((unit) => [unit.image, ...unit.gallery])),
+  ];
+  const others = (await developments()).filter(
+    (other) => other.slug !== project.slug,
   );
-  const gallery = [...new Set(residences.map((unit) => unit.image))].slice(0, 3);
 
   return (
     <>
@@ -187,9 +202,11 @@ export default async function PropertyPage({
             <h1 className="mt-5 max-w-[760px] font-display text-[38px] leading-[1.14] text-white sm:text-[52px]">
               <AnimatedTitle>{project.name}</AnimatedTitle>
             </h1>
-            <p className="mt-4 max-w-[620px] font-display text-[20px] leading-[1.35] text-gold-light sm:text-[24px]">
-              <AnimatedTitle delay={0.25}>{copy.tagline}</AnimatedTitle>
-            </p>
+            {copy.tagline ? (
+              <p className="mt-4 max-w-[620px] font-display text-[20px] leading-[1.35] text-gold-light sm:text-[24px]">
+                <AnimatedTitle delay={0.25}>{copy.tagline}</AnimatedTitle>
+              </p>
+            ) : null}
             <p className="mt-6 max-w-[620px] text-[13px] leading-[22px] text-cream/85">
               {copy.description}
             </p>
@@ -247,14 +264,25 @@ export default async function PropertyPage({
           <Container>
             <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
               <div>
-                <h2 className="max-w-[460px] font-display text-[30px] leading-[1.28] text-ink sm:text-[38px]">
-                  {copy.overviewHeading}
-                </h2>
-                <p className="mt-6 max-w-[500px] text-[13.5px] leading-[23px] text-ink">
-                  {copy.overviewBody}
-                </p>
+                {/* Neither half exists for a development assembled from
+                    listings: the dashboard has no field for an overview, and
+                    the stats below say what is known instead. */}
+                {copy.overviewHeading ? (
+                  <h2 className="max-w-[460px] font-display text-[30px] leading-[1.28] text-ink sm:text-[38px]">
+                    {copy.overviewHeading}
+                  </h2>
+                ) : null}
+                {copy.overviewBody ? (
+                  <p className="mt-6 max-w-[500px] text-[13.5px] leading-[23px] text-ink">
+                    {copy.overviewBody}
+                  </p>
+                ) : null}
 
-                <dl className="mt-10 grid grid-cols-2 gap-x-8 gap-y-7">
+                <dl
+                  className={`grid grid-cols-2 gap-x-8 gap-y-7 ${
+                    copy.overviewHeading || copy.overviewBody ? "mt-10" : ""
+                  }`}
+                >
                   {project.stats.map((stat) => (
                     <div key={stat.label}>
                       <dt className="text-[10.5px] uppercase tracking-[0.12em] text-gold">
@@ -269,31 +297,11 @@ export default async function PropertyPage({
               </div>
 
               {gallery.length ? (
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="relative col-span-2 aspect-[16/9] overflow-hidden">
-                    <Image
-                      src={gallery[0]}
-                      alt=""
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 600px"
-                      className="object-cover"
-                    />
-                  </div>
-                  {gallery.slice(1, 3).map((src) => (
-                    <div
-                      key={src}
-                      className="relative aspect-[4/3] overflow-hidden"
-                    >
-                      <Image
-                        src={src}
-                        alt=""
-                        fill
-                        sizes="(max-width: 1024px) 50vw, 300px"
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
+                <PropertyGallery
+                  images={gallery}
+                  label={project.name}
+                  variant="collage"
+                />
               ) : null}
             </div>
           </Container>
@@ -334,6 +342,7 @@ export default async function PropertyPage({
         </section>
 
         {/* Amenities */}
+        {project.amenities.items.length ? (
         <section className="bg-white py-16 lg:py-24">
           <Container>
             <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
@@ -341,9 +350,11 @@ export default async function PropertyPage({
                 <h2 className="font-display text-[30px] leading-[1.28] text-ink sm:text-[38px]">
                   {t.property.amenities}
                 </h2>
-                <p className="mt-6 max-w-[500px] text-[13.5px] leading-[23px] text-ink">
-                  {copy.amenitiesBody}
-                </p>
+                {copy.amenitiesBody ? (
+                  <p className="mt-6 max-w-[500px] text-[13.5px] leading-[23px] text-ink">
+                    {copy.amenitiesBody}
+                  </p>
+                ) : null}
               </div>
               <ul className="grid grid-cols-2 gap-x-8 gap-y-4 self-center">
                 {project.amenities.items.map((item) => (
@@ -362,16 +373,18 @@ export default async function PropertyPage({
             </div>
           </Container>
         </section>
+        ) : null}
 
         {/* Other developments */}
+        {others.length ? (
         <section className="bg-forest py-16 lg:py-20">
           <Container>
             <h2 className="font-display text-[26px] text-cream sm:text-[32px]">
               {t.property.otherDevelopments}
             </h2>
             <ul className="mt-9 grid gap-3 sm:grid-cols-3">
-              {projects
-                .filter((p) => p.slug !== project.slug)
+              {others
+                .slice(0, 3)
                 .map((other) => (
                   <li key={other.slug}>
                     <Link
@@ -395,6 +408,7 @@ export default async function PropertyPage({
             </ul>
           </Container>
         </section>
+        ) : null}
       </main>
 
       <SiteFooter />

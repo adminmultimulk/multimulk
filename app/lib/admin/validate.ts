@@ -1,6 +1,5 @@
 import { allArticles } from "@/app/lib/knowledge";
 import { legacyDevelopments } from "@/app/lib/legacy-developments";
-import { projects } from "@/app/lib/projects";
 import { units } from "@/app/lib/properties";
 import { isTopic } from "@/app/lib/topics";
 
@@ -17,17 +16,18 @@ export { checkSlug, slugify } from "./slug";
 export const reservedArticleSlugs = new Set(allArticles.map((a) => a.slug));
 /*
  * A published listing answers at /properties/<slug>, which is the namespace
- * the four developments and the ninety-four legacy developments already
- * occupy. Those win a collision — the page resolves them first — so a listing
- * that took one of their slugs would simply never be reachable. Caught here,
- * where somebody can pick another one.
+ * the ninety-four legacy developments already occupy. Those win a collision —
+ * the page resolves them first — so a listing that took one of their slugs
+ * would simply never be reachable. Caught here, where somebody can pick
+ * another one.
+ *
+ * The developments assembled from listings occupy it too, and cannot be listed
+ * statically; `saveProperty` checks the slug against them as it writes.
  */
 export const reservedPropertySlugs = new Set([
   ...units.map((u) => u.slug),
-  ...projects.map((p) => p.slug),
   ...legacyDevelopments.map((d) => d.slug),
 ]);
-
 
 /** Splits a textarea into one entry per non-empty line, trimmed. */
 export function lines(value: string): string[] {

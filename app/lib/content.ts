@@ -99,6 +99,13 @@ export type MenuCard = {
   title: string;
   /** Key into `dictionary.menus.detail` for the line under the title. */
   detailKey?: string;
+  /**
+   * How many residences are published in it. Used for the line under the title
+   * where there is no `detailKey` to look up — a development entered in the
+   * dashboard has no dictionary entry, and the count is the one thing about it
+   * that can be stated in every language without anybody translating it.
+   */
+  units?: number;
   image: string;
   href?: string;
 };
@@ -155,48 +162,11 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
   realEstate: {
     kind: "portfolio",
     viewAllHref: searchPath({ currency: "USD", location: "Türkiye" }),
-    cards: [
-      {
-        eyebrow: [["Türkiye"], ["İstanbul", "Beyoğlu"]],
-        title: "Bosphorus Heights",
-        href: buildPath("development", { slug: "bosphorus-heights" }),
-        detailKey: "bosphorus-heights",
-        image: "/images/bosphorus-heights.webp",
-      },
-      {
-        eyebrow: [["Türkiye"], ["İstanbul", "Beylikdüzü"]],
-        title: "Marmara Vista",
-        href: buildPath("development", { slug: "marmara-vista" }),
-        detailKey: "marmara-vista",
-        image: "/images/marmara-vista.webp",
-      },
-      {
-        eyebrow: [["Türkiye"], ["İstanbul", "Şişli"]],
-        title: "Levent Residences",
-        href: buildPath("development", { slug: "levent-residences" }),
-        detailKey: "levent-residences",
-        image: "/images/levent-residences.webp",
-      },
-      {
-        eyebrow: [["Türkiye"], ["Muğla", "Bodrum"]],
-        title: "Aegean Bay Residences",
-        href: buildPath("development", { slug: "aegean-bay-residences" }),
-        detailKey: "aegean-bay-residences",
-        image: "/images/aegean-bay.webp",
-      },
-      {
-        eyebrow: [["Türkiye"], ["Antalya", "Konyaaltı"]],
-        title: "Antalya Coast",
-        detailKey: "antalya-coast",
-        image: "/images/antalya-coast.webp",
-      },
-      {
-        eyebrow: [["Türkiye"], ["İstanbul", "Sarıyer"]],
-        title: "Anatolian Villas",
-        detailKey: "anatolian-villas",
-        image: "/images/anatolian-villas.webp",
-      },
-    ],
+    // Empty here, and filled in by `SiteNav` from the developments published
+    // in the dashboard. The six cards that used to be written out were the
+    // reason entering a listing changed nothing in the menu: the menu did not
+    // read the inventory, it repeated a list somebody had typed beside it.
+    cards: [],
   },
 
   citizenship: {
@@ -319,14 +289,14 @@ export type Property = {
   image: string;
 };
 
-export const turkiyeProperties: Property[] = [
-  { key: "bosphorus-heights", name: "Bosphorus Heights", image: "/images/bosphorus-heights.webp" },
-  { key: "marmara-vista", name: "Marmara Vista", image: "/images/marmara-vista.webp" },
-  { key: "levent-residences", name: "Levent Residences", image: "/images/levent-residences.webp" },
-  { key: "aegean-bay-residences", name: "Aegean Bay Residences", image: "/images/aegean-bay.webp" },
-  { key: "antalya-coast", name: "Antalya Coast", image: "/images/antalya-coast.webp" },
-  { key: "anatolian-villas", name: "Anatolian Villas", image: "/images/anatolian-villas.webp" },
-];
+/**
+ * The developments paged through in the home page's Türkiye section.
+ *
+ * Empty: `TurkiyePortfolio` is handed the published developments instead, so
+ * the section shows what is for sale rather than a list maintained by hand.
+ * An entry here would still render, ahead of them.
+ */
+export const turkiyeProperties: Property[] = [];
 
 /** Award badges. `key` selects the caption from `dictionary.awards.captions`. */
 /**
@@ -472,33 +442,18 @@ export type DestinationKey = keyof typeof destinations;
 export const LATEST_ARTICLES = 4;
 
 /**
- * Footer link columns. The two portfolio columns list development names, which
- * read the same in every language; the About column is keyed into
- * `dictionary.footer.aboutItems`.
+ * Footer link columns, one per region.
+ *
+ * The names are no longer written here. Both columns listed developments by
+ * hand — six Türkiye schemes and six Caribbean resorts — and a footer that
+ * names developments the site does not sell is worse than a short footer;
+ * `SiteFooter` fills each column from the developments published in that
+ * region and drops a column with nothing in it. Anything left in `names` is
+ * still rendered, ahead of them, and routed through `footerLinks`.
  */
 export const footerColumns = [
-  {
-    key: "turkiye" as const,
-    names: [
-      "Bosphorus Heights",
-      "Marmara Vista",
-      "Levent Residences",
-      "Aegean Bay Residences",
-      "Antalya Coast",
-      "Anatolian Villas",
-    ],
-  },
-  {
-    key: "caribbean" as const,
-    names: [
-      "The La Sagesse Collection Residences",
-      "InterContinental Grenada - La Sagesse",
-      "Six Senses La Sagesse",
-      "InterContinental Dominica Cabrits Resort & Spa",
-      "Park Hyatt St. Kitts",
-      "Port Cabrits Marina",
-    ],
-  },
+  { key: "turkiye" as const, names: [] as string[] },
+  { key: "caribbean" as const, names: [] as string[] },
 ];
 
 /** The About column, keyed; `href` is unset for pages that do not exist yet. */
@@ -509,8 +464,8 @@ export const footerAboutItems = [
   { key: "caribbeanCbi" as const, href: buildPath("citizenshipProgramme", { programme: "caribbean" }) },
   { key: "mediaCentre" as const, href: routes.knowledge.pattern },
   // No standing construction-updates page yet; the footer points readers at
-  // the development whose build progress the updates are about.
-  { key: "construction" as const, href: buildPath("development", { slug: "bosphorus-heights" }) },
+  // the portfolio, where each development's own page carries its progress.
+  { key: "construction" as const, href: routes.realEstateHub.pattern },
   { key: "terms" as const },
   { key: "privacy" as const },
   // The one item here that is not waiting for copy: two Creative Commons
@@ -562,13 +517,12 @@ export const socialLinks = [
   { key: "tiktok" as const, name: "TikTok", href: "https://www.tiktok.com/@multimulkglobal" },
 ];
 
-/** Footer names whose page exists are routed here; the rest render inert. */
-export const footerLinks: Record<string, string> = {
-  "Bosphorus Heights": buildPath("development", { slug: "bosphorus-heights" }),
-  "Marmara Vista": buildPath("development", { slug: "marmara-vista" }),
-  "Levent Residences": buildPath("development", { slug: "levent-residences" }),
-  "Aegean Bay Residences": buildPath("development", { slug: "aegean-bay-residences" }),
-};
+/**
+ * Hand-written footer names whose page exists are routed here; the rest render
+ * inert. Empty, now that the columns are filled from what is published — a
+ * development assembled from listings brings its own href.
+ */
+export const footerLinks: Record<string, string> = {};
 
 export const whatsapp = {
   /** The UAE line doubles as the WhatsApp business number. */

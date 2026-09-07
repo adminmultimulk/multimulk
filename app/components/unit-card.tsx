@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { Currency, Unit } from "@/app/lib/properties";
-import { getProjectByName } from "@/app/lib/projects";
+import { slugify } from "@/app/lib/admin/slug";
 import { useI18n } from "@/app/lib/i18n/context";
 import { interpolate } from "@/app/lib/i18n/format";
 import { placeLabel, unitSpecs, unitTitle } from "@/app/lib/i18n/units";
@@ -23,21 +23,16 @@ export function UnitCard({
   const { t, locale, num } = useI18n();
   const openEnquiry = useEnquiry();
   const price = unit.prices[currency];
-  const project = getProjectByName(unit.project);
   const title = unitTitle(locale, t, unit);
-  // A listing from the dashboard has a page of its own; a unit that ships with
-  // the site is shown on its development's page instead.
+  // A listing from the dashboard has a page of its own; anything else is shown
+  // on its development's page, which answers at the development's name slugged
+  // the same way the dashboard slugs a listing.
   const href = unit.hasPage
     ? `/properties/${unit.slug}`
-    : project
-      ? `/properties/${project.slug}`
-      : null;
-  // Likewise the brochure: the listing's own, or the development's.
+    : `/properties/${slugify(unit.project)}`;
   const brochure = unit.brochure
     ? { slug: unit.slug, name: unit.project, file: unit.brochure }
-    : project?.brochure
-      ? { slug: project.slug, name: project.name, file: project.brochure }
-      : null;
+    : null;
   const place = placeLabel(t, unit.location);
   const specs = unitSpecs(locale, t, unit)
     .map((value, i) => ({ Icon: SPEC_ICONS[i], value }))

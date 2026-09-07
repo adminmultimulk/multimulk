@@ -10,7 +10,7 @@
  */
 
 import type { Locale } from "./i18n/config";
-import { buildPath, routes, searchPath } from "./routes";
+import { routes, searchPath } from "./routes";
 
 export const aboutHero = {
   image: "/images/cbi/about-hero-earth-night.jpg",
@@ -91,26 +91,13 @@ export const aboutPrinciples = {
 };
 
 export const aboutDevelopments = {
-  cards: [
-    {
-      key: "bosphorus-heights" as const,
-      name: "Bosphorus Heights",
-      image: "/images/bosphorus-heights.webp",
-      href: buildPath("development", { slug: "bosphorus-heights" }),
-    },
-    {
-      key: "aegean-bay-residences" as const,
-      name: "Aegean Bay Residences",
-      image: "/images/aegean-bay.webp",
-      href: buildPath("development", { slug: "aegean-bay-residences" }),
-    },
-    {
-      key: "la-sagesse-collection" as const,
-      name: "The La Sagesse Collection Residences",
-      image: "/images/cb-la-sagesse-residences.webp",
-      href: searchPath({ currency: "USD", location: "Caribbean" }),
-    },
-  ],
+  /*
+   * No cards here any more. The three developments this section named were
+   * written beside the portfolio rather than read from it, so the page went
+   * stale the moment the portfolio changed; `AboutDevelopments` reads the
+   * published developments instead. The two buttons below stay, because they
+   * point at searches rather than at particular schemes.
+   */
   actions: [
     {
       key: "turkiye" as const,
@@ -141,15 +128,14 @@ export const aboutLeadership = {
 };
 
 export const aboutMap = {
-  /** A development name, and the place it stands in, as place-name tokens. */
-  places: [
-    { name: "Bosphorus Heights", region: ["İstanbul", "Beyoğlu"] },
-    { name: "Levent Residences", region: ["İstanbul", "Şişli"] },
-    { name: "Marmara Vista", region: ["İstanbul", "Beylikdüzü"] },
-    { name: "Aegean Bay Residences", region: ["Muğla", "Bodrum"] },
-    { name: "Antalya Coast", region: ["Antalya", "Konyaaltı"] },
-    { name: "The La Sagesse Collection", region: ["Grenada", "La Sagesse Bay"] },
-  ],
+  /**
+   * A development name and the place it stands in, as place-name tokens.
+   *
+   * Empty: `AboutMap` lists the developments that are actually published,
+   * which is the only version of this list that can be true a month from now.
+   * Anything written here is still shown, ahead of them.
+   */
+  places: [] as { name: string; region: string[] }[],
   image: "/images/cbi/cbi-caribbean-aerial.jpg",
 };
 

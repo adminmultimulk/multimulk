@@ -3,6 +3,8 @@ import { publishedLocales } from "./lib/i18n/config";
 import { hreflangCluster } from "./lib/i18n";
 import { buildPath, routes, allRoutePaths } from "./lib/routes";
 import { cmsArticles } from "./lib/cms/articles";
+import { developments } from "./lib/cms/developments";
+import { cmsUnits } from "./lib/cms/properties";
 import { absoluteUrl } from "./lib/site";
 
 /**
@@ -54,6 +56,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: article.modified,
         changeFrequency: routes.article.sitemap.changeFrequency,
         priority: routes.article.sitemap.priority,
+        alternates: { languages },
+      });
+    }
+  }
+
+  /*
+   * The developments assembled from published listings, and the listings
+   * themselves. Both answer under /properties/, and neither can come from the
+   * route registry for the same reason the articles cannot: that registry is
+   * synchronous and read where a database call is impossible.
+   */
+  const pages = [
+    ...(await developments()).map((development) => development.slug),
+    ...(await cmsUnits())
+      .filter((listing) => !listing.noindex)
+      .map((listing) => listing.slug),
+  ];
+
+  for (const slug of pages) {
+    const path = buildPath("development", { slug });
+    const languages = hreflangCluster(path);
+
+    for (const locale of publishedLocales) {
+      entries.push({
+        url: absoluteUrl(`/${locale}${path}`),
+        lastModified: buildDate,
+        changeFrequency: routes.development.sitemap.changeFrequency,
+        priority: routes.development.sitemap.priority,
         alternates: { languages },
       });
     }

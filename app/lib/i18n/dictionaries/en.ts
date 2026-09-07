@@ -1127,6 +1127,10 @@ const en = {
       one: "Explore the {count} residence currently released at {project}.",
       other: "Explore the {count} residences currently released at {project}.",
     }),
+    residencesCount: plural({
+      one: "{count} residence",
+      other: "{count} residences",
+    }),
     residencesEmpty:
       "Residences at {project} are released in phases — enquire for current availability.",
     browseAll: "Browse all residences",
@@ -1397,6 +1401,14 @@ const en = {
     specs: "At a Glance",
     about: "About This Residence",
     gallery: "Gallery",
+    galleryViewAll: plural({
+      one: "View the photo",
+      other: "View all {count} photos",
+    }),
+    galleryMore: "+{count} more",
+    galleryCounter: "{index} of {count}",
+    galleryPrevious: "Previous",
+    galleryNext: "Next",
     floorPlans: "Floor Plans",
     terms: "Terms",
     paymentPlan: "Payment plan",

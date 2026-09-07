@@ -1,11 +1,10 @@
 /**
  * What a "Download Brochure" click actually resolves to.
  *
- * A brochure hangs off two different things. A development in `projects.ts`
- * has one for the whole scheme, and every unit in it sends that. A listing
- * created in the dashboard carries its own, because the dashboard has no
- * developments to hang it on. Both are addressed by slug from the same button,
- * so the lookup belongs in one place rather than in the Server Action.
+ * A brochure hangs off two different things. A development has one for the
+ * whole scheme — taken from the listing in it that carries one — and a single
+ * listing has its own. Both are addressed by slug from the same button, so the
+ * lookup belongs in one place rather than in the Server Action.
  *
  * Resolved here and never taken from the form: the slug arrives over the wire,
  * and a request must not be able to name a file the site does not publish.
@@ -13,7 +12,7 @@
 
 import "server-only";
 import { getListing } from "./cms/properties";
-import { getProject } from "./projects";
+import { getDevelopment } from "./cms/developments";
 import { absoluteUrl } from "./site";
 
 export type BrochureSource = {
@@ -31,9 +30,9 @@ export async function resolveBrochure(
 ): Promise<BrochureSource | null> {
   if (!slug) return null;
 
-  // The static developments win a slug collision, as everywhere else the two
-  // sources meet.
-  const project = getProject(slug);
+  // A development wins a slug collision, as everywhere else the two resolve
+  // against each other.
+  const project = await getDevelopment(slug);
   if (project?.brochure) {
     return {
       name: project.name,

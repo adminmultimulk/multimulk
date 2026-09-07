@@ -4,11 +4,12 @@ import Image from "next/image";
 import { Link } from "./link";
 import type { MegaMenu, MenuCard } from "@/app/lib/content";
 import { useI18n } from "@/app/lib/i18n/context";
-import { lookup } from "@/app/lib/i18n/format";
+import { lookup, selectPlural } from "@/app/lib/i18n/format";
 import { placeLine } from "@/app/lib/i18n/units";
 import { getFigure } from "@/app/lib/figures";
 import { figureValue } from "@/app/lib/format-figure";
 import type { Dictionary } from "@/app/lib/i18n";
+import type { Locale } from "@/app/lib/i18n/config";
 
 /** Children enter one after another rather than all at once. */
 const stagger = (i: number) => ({ animationDelay: `${60 + i * 55}ms` });
@@ -60,7 +61,13 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
           </Intro>
           <div className="grid grid-cols-6 gap-2">
             {menu.cards.map((card, i) => (
-              <PortfolioCard key={card.title} card={card} index={i} t={t} />
+              <PortfolioCard
+                key={card.title}
+                card={card}
+                index={i}
+                t={t}
+                locale={locale}
+              />
             ))}
           </div>
         </div>
@@ -155,14 +162,26 @@ function PortfolioCard({
   card,
   index,
   t,
+  locale,
 }: {
   card: MenuCard;
   index: number;
   t: Dictionary;
+  locale: Locale;
 }) {
-  const detail = card.detailKey
-    ? lookup(t.menus.detail, card.detailKey)
-    : undefined;
+  /*
+   * The written line where the dictionary has one, and the unit count
+   * otherwise. `lookup` is not used here on purpose: it falls back to the key
+   * itself, and a card for a development entered last week would print its
+   * slug under the name.
+   */
+  const detail =
+    (card.detailKey
+      ? (t.menus.detail as Record<string, string | undefined>)[card.detailKey]
+      : undefined) ??
+    (card.units
+      ? selectPlural(locale, t.property.residencesCount, card.units)
+      : undefined);
 
   return (
     <Link

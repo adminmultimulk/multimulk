@@ -1172,6 +1172,10 @@ const fr: Dictionary = {
       other:
         "Découvrez les {count} résidences actuellement commercialisées à {project}.",
     }),
+    residencesCount: plural({
+      one: "{count} résidence",
+      other: "{count} résidences",
+    }),
     residencesEmpty:
       "Les résidences de {project} sont commercialisées par phases — consultez-nous pour les disponibilités actuelles.",
     browseAll: "Parcourir toutes les résidences",
@@ -1464,6 +1468,14 @@ const fr: Dictionary = {
     specs: "En bref",
     about: "À propos de cette résidence",
     gallery: "Galerie",
+    galleryViewAll: plural({
+      one: "Voir la photo",
+      other: "Voir les {count} photos",
+    }),
+    galleryMore: "+{count} de plus",
+    galleryCounter: "{index} sur {count}",
+    galleryPrevious: "Précédent",
+    galleryNext: "Suivant",
     floorPlans: "Plans",
     terms: "Conditions",
     paymentPlan: "Échéancier de paiement",

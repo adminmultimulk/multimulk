@@ -5,13 +5,17 @@ import { Link } from "./link";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Container, SectionIntro } from "./container";
-import { turkiyeProperties } from "@/app/lib/content";
+import { turkiyeProperties, type Property } from "@/app/lib/content";
 import { useI18n } from "@/app/lib/i18n/context";
-import { projects } from "@/app/lib/projects";
 
-const projectHref = Object.fromEntries(
-  projects.map((project) => [project.name, `/properties/${project.slug}`]),
-);
+/**
+ * One entry in the section: a development, with the line shown beneath it.
+ *
+ * `key` still selects a description from `dictionary.turkiyeSection`, which is
+ * what the six hand-written entries used. A development published from the
+ * dashboard has no such key, so it carries its own `body` and its own link.
+ */
+export type PortfolioItem = Property & { href: string; body?: string };
 
 function scrollDriven() {
   return (
@@ -25,11 +29,20 @@ function indexFromProgress(value: number, count: number) {
   return Math.min(count - 1, Math.max(0, Math.floor(value * count)));
 }
 
-export function TurkiyePortfolio() {
+export function TurkiyePortfolio({ items }: { items: PortfolioItem[] }) {
   const { t } = useI18n();
   const [active, setActive] = useState(0);
   const runway = useRef<HTMLDivElement>(null);
-  const count = turkiyeProperties.length;
+  // Anything still written into `content.ts` leads, then the published
+  // developments the home page hands down.
+  const properties: PortfolioItem[] = [
+    ...turkiyeProperties.map((property) => ({
+      ...property,
+      href: "/search-property?currency=USD",
+    })),
+    ...items,
+  ];
+  const count = properties.length;
   const activeRef = useRef(active);
   const locked = useRef(false);
   const unlockTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -83,6 +96,10 @@ export function TurkiyePortfolio() {
     unlockTimer.current = setTimeout(unlock, 1400);
   };
 
+  // Nothing published in Türkiye yet: the section is dropped rather than
+  // pinning the scroll on an empty runway.
+  if (!count) return null;
+
   return (
     <section className="bg-white">
       <div
@@ -103,7 +120,7 @@ export function TurkiyePortfolio() {
           <Container className="mt-14 lg:mt-10">
             <div className="grid gap-10 lg:grid-cols-2 lg:gap-[72px]">
               <div className="relative aspect-[612/590] w-full overflow-hidden lg:max-h-[56svh]">
-                {turkiyeProperties.map((property, i) => (
+                {properties.map((property, i) => (
                   <Image
                     key={property.image}
                     src={property.image}
@@ -123,7 +140,7 @@ export function TurkiyePortfolio() {
                 </p>
 
                 <ul className="mt-8 flex flex-col gap-[30px]">
-                  {turkiyeProperties.map((property, i) => {
+                  {properties.map((property, i) => {
                     const isActive = i === active;
                     return (
                       <li key={property.name}>
@@ -154,17 +171,12 @@ export function TurkiyePortfolio() {
                           >
                             <div className="mt-4 max-w-[520px]">
                               <p className="text-[13.5px] leading-[22px] text-ink">
-                                {
-                                  t.turkiyeSection.descriptions[
-                                    property.key as keyof typeof t.turkiyeSection.descriptions
-                                  ]
-                                }
+                                {t.turkiyeSection.descriptions[
+                                  property.key as keyof typeof t.turkiyeSection.descriptions
+                                ] ?? property.body}
                               </p>
                               <Link
-                                href={
-                                  projectHref[property.name] ??
-                                  "/search-property?currency=USD"
-                                }
+                                href={property.href}
                                 className="mt-[18px] inline-block border-b border-ink pb-1 text-[12.5px] font-medium text-ink"
                               >
                                 {t.common.learnMore}

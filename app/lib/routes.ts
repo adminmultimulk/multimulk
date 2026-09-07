@@ -25,7 +25,6 @@ import { knowledgeArticles } from "./knowledge";
 import { legacyDevelopments } from "./legacy-developments";
 import { mediaArticles } from "./media";
 import { isPublishable, programmes } from "./programmes";
-import { projects } from "./projects";
 
 /**
  * The citizenship programmes that have a page.
@@ -208,12 +207,15 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     pattern: "/properties/:slug",
     parent: "search",
     labelKey: "development",
-    enumerate: () => [
-      ...projects.map((project) => ({ values: { slug: project.slug } })),
-      ...legacyDevelopments.map((development) => ({
+    // The legacy developments alone. The developments the site sells today are
+    // assembled from published listings, which this registry cannot read: it is
+    // synchronous, and `next.config.ts` and the proxy both import it where a
+    // database call is impossible. `app/sitemap.ts` appends them afterwards,
+    // the same way it appends the dashboard's articles.
+    enumerate: () =>
+      legacyDevelopments.map((development) => ({
         values: { slug: development.slug },
       })),
-    ],
     sitemap: { include: true, priority: 0.8, changeFrequency: "monthly" },
     schema: ["ApartmentComplex"],
   },

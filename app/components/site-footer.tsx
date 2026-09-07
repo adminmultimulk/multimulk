@@ -8,6 +8,8 @@ import {
   footerLinks,
   socialLinks,
 } from "@/app/lib/content";
+import { developments } from "@/app/lib/cms/developments";
+import { buildPath } from "@/app/lib/routes";
 import { getDictionary } from "@/app/lib/i18n";
 import { interpolate } from "@/app/lib/i18n/format";
 import { Link } from "./link";
@@ -34,6 +36,32 @@ const socialIcons = {
 
 export async function SiteFooter() {
   const t = await getDictionary();
+
+  /*
+   * The portfolio columns, filled from what is actually published. A
+   * development belongs to the column its country names; a column with nothing
+   * in it is not rendered, which is the whole reason these are built here
+   * rather than written out in `content.ts`.
+   */
+  const schemes = await developments();
+  const columns = footerColumns
+    .map((column) => ({
+      key: column.key,
+      items: [
+        ...column.names.map((name) => ({ name, href: footerLinks[name] })),
+        ...schemes
+          .filter((scheme) =>
+            column.key === "caribbean"
+              ? scheme.country.includes("Caribbean")
+              : !scheme.country.includes("Caribbean"),
+          )
+          .map((scheme) => ({
+            name: scheme.name,
+            href: buildPath("development", { slug: scheme.slug }),
+          })),
+      ],
+    }))
+    .filter((column) => column.items.length);
   const itemStyle =
     "text-[13.5px] leading-[21px] text-cream/90 transition-colors hover:text-white lg:text-[11.5px] lg:leading-[17px]";
   const headingStyle =
@@ -123,28 +151,25 @@ export async function SiteFooter() {
               <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
                 {/* Portfolio columns list development names, which read the same
                     in every language. */}
-                {footerColumns.map((column) => (
+                {columns.map((column) => (
                   <div key={column.key} className="hidden lg:block">
                     <h2 className={headingStyle}>
                       {t.footer.columns[column.key]}
                     </h2>
                     <ul className="mt-[18px] flex flex-col gap-[11px]">
-                      {column.names.map((name) => {
-                        const href = footerLinks[name];
-                        return (
-                          <li key={name}>
-                            {href ? (
-                              <Link href={href} className={itemStyle}>
-                                {name}
-                              </Link>
-                            ) : (
-                              <a href="#" className={itemStyle}>
-                                {name}
-                              </a>
-                            )}
-                          </li>
-                        );
-                      })}
+                      {column.items.map((item) => (
+                        <li key={item.name}>
+                          {item.href ? (
+                            <Link href={item.href} className={itemStyle}>
+                              {item.name}
+                            </Link>
+                          ) : (
+                            <a href="#" className={itemStyle}>
+                              {item.name}
+                            </a>
+                          )}
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 ))}

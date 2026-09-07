@@ -902,6 +902,10 @@ const ur: Dictionary = {
       one: "{project} میں فی الحال دستیاب {count} رہائش گاہ دیکھیے۔",
       other: "{project} میں فی الحال دستیاب {count} رہائش گاہیں دیکھیے۔",
     }),
+    residencesCount: plural({
+      one: "{count} رہائش گاہ",
+      other: "{count} رہائش گاہیں",
+    }),
     residencesEmpty:
       "{project} کی رہائش گاہیں مرحلہ وار جاری کی جاتی ہیں — موجودہ دستیابی کے لیے ہم سے رابطہ کریں۔",
     browseAll: "تمام رہائش گاہیں دیکھیں",
@@ -1459,6 +1463,14 @@ const ur: Dictionary = {
     specs: "ایک نظر میں",
     about: "اس رہائش گاہ کے بارے میں",
     gallery: "تصویری گیلری",
+    galleryViewAll: plural({
+      one: "تصویر دیکھیں",
+      other: "تمام {count} تصاویر دیکھیں",
+    }),
+    galleryMore: "مزید {count}",
+    galleryCounter: "{count} میں سے {index}",
+    galleryPrevious: "پچھلا",
+    galleryNext: "اگلا",
     floorPlans: "نقشے",
     terms: "شرائط",
     paymentPlan: "ادائیگی کا منصوبہ",
