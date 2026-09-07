@@ -790,6 +790,45 @@ const zh = {
       link: "了解更多关于我们",
     },
   },
+  /** “下载宣传册”——按钮、其后的表单，以及宣传册所在的邮件。 */
+  brochure: {
+    cta: "下载宣传册",
+    heading: "{project} 宣传册",
+    body: "户型图、精装标准、技术参数与付款条件，尽在同一份文件中。留下您的联系方式，宣传册稍后即达您的邮箱。",
+    consent:
+      "索取宣传册即表示您同意我们就该项目与您联系。有关我们如何处理您的数据，请参阅隐私政策。",
+    submit: "把宣传册发给我",
+    submitting: "发送中…",
+    sentHeading: "已发送",
+    sentBody:
+      "我们已将 {project} 宣传册发送至您的邮箱。若几分钟内仍未收到，请查看垃圾邮件文件夹。",
+    email: {
+      subject: "您的 {project} 宣传册",
+      greeting: "尊敬的 {name}：",
+      body: "感谢您对 {project} 的关注。您的宣传册已准备好——户型图、精装标准、技术参数与付款条件。",
+      button: "下载宣传册",
+      closing:
+        "Multi Mulk 团队成员将尽快与您联系。如需安排看房或咨询付款条件，直接回复本邮件即可。",
+    },
+  },
+  /** /properties/<slug> 上单套住宅的页面。 */
+  listing: {
+    specs: "概览",
+    about: "关于这套住宅",
+    gallery: "图库",
+    floorPlans: "户型图",
+    terms: "交易条件",
+    paymentPlan: "付款计划",
+    handover: "交付时间",
+    serviceCharge: "物业费",
+    titleDeed: "产权状况",
+    watchTour: "观看视频导览",
+    location: "位置",
+    mapTitle: "{title} 地图",
+    moreAt: "{project} 的更多房源",
+    ctaHeading: "关于这套住宅，欢迎向我们咨询。",
+    viewDevelopment: "查看该项目",
+  },
 } satisfies PartialDictionary;
 
 export default zh;

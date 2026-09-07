@@ -1421,6 +1421,45 @@ const fr: Dictionary = {
       },
     },
   },
+  /** « Télécharger la brochure » — le bouton, le formulaire et l’e-mail. */
+  brochure: {
+    cta: "Télécharger la brochure",
+    heading: "La brochure {project}",
+    body: "Plans, finitions, spécifications et conditions de paiement en un seul document. Dites-nous où l’envoyer et il arrivera dans votre boîte de réception en un instant.",
+    consent:
+      "En demandant la brochure, vous acceptez que nous vous contactions au sujet de cette résidence. Consultez notre Politique de confidentialité pour savoir comment nous traitons vos données.",
+    submit: "Envoyez-moi la brochure",
+    submitting: "Envoi en cours…",
+    sentHeading: "En route",
+    sentBody:
+      "Nous avons envoyé la brochure {project} à votre adresse e-mail. Si elle n’arrive pas d’ici quelques minutes, vérifiez vos courriers indésirables.",
+    email: {
+      subject: "Votre brochure {project}",
+      greeting: "Bonjour {name},",
+      body: "Merci de l’intérêt que vous portez à {project}. Votre brochure est prête — plans, finitions, spécifications et conditions de paiement.",
+      button: "Télécharger la brochure",
+      closing:
+        "Un membre de l’équipe Multi Mulk vous recontactera sous peu. Pour organiser une visite ou poser une question sur les conditions de paiement, il vous suffit de répondre à cet e-mail.",
+    },
+  },
+  /** La page d’une résidence, sur /properties/<slug>. */
+  listing: {
+    specs: "En bref",
+    about: "À propos de cette résidence",
+    gallery: "Galerie",
+    floorPlans: "Plans",
+    terms: "Conditions",
+    paymentPlan: "Échéancier de paiement",
+    handover: "Livraison",
+    serviceCharge: "Charges annuelles",
+    titleDeed: "Titre de propriété",
+    watchTour: "Voir la visite",
+    location: "Emplacement",
+    mapTitle: "Carte de {title}",
+    moreAt: "Plus à {project}",
+    ctaHeading: "Posez-nous toutes vos questions sur cette résidence.",
+    viewDevelopment: "Voir le programme",
+  },
 };
 
 export default fr;

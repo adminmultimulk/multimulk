@@ -2,6 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { AnimatedTitle } from "@/app/components/animated-title";
+import { BrochureButton } from "@/app/components/brochure-button";
 import { Container, SectionIntro } from "@/app/components/container";
 import { MapPin } from "@/app/components/icons";
 import { Link } from "@/app/components/link";
@@ -20,12 +21,13 @@ import {
   legacyDevelopments,
 } from "@/app/lib/legacy-developments";
 import { LegacyDevelopmentPage } from "@/app/components/legacy-development";
+import { ListingPage } from "@/app/components/listing-page";
 import { JsonLd } from "@/app/components/json-ld";
 import { apartmentComplex, breadcrumbs } from "@/app/lib/seo/jsonld";
 import { lookup, pick, selectPlural } from "@/app/lib/i18n/format";
-import { placeLine } from "@/app/lib/i18n/units";
+import { placeLine, unitTitle } from "@/app/lib/i18n/units";
 import { getProject, projects, type Project } from "@/app/lib/projects";
-import { mergedUnits } from "@/app/lib/cms/properties";
+import { getListing, mergedUnits } from "@/app/lib/cms/properties";
 
 export function generateStaticParams() {
   const slugs = [
@@ -69,11 +71,29 @@ export async function generateMetadata({
   if (!project) {
     // One of the ninety-four developments carried over from the legacy site.
     const legacy = getLegacyDevelopment(slug);
-    if (!legacy) return { title: t.meta.propertyFallback };
+    if (legacy) {
+      return {
+        title: legacy.name,
+        description: legacy.description,
+        alternates,
+      };
+    }
+
+    // Or a unit a lister published, which has a page of its own.
+    const listing = await getListing(slug);
+    if (!listing) return { title: t.meta.propertyFallback };
+
+    const locale = await getLocale();
     return {
-      title: legacy.name,
-      description: legacy.description,
+      title: listing.seoTitle || unitTitle(locale, t, listing),
+      description:
+        listing.seoDescription ||
+        listing.description ||
+        `${listing.title} — ${listing.location}, ${listing.country}.`,
       alternates,
+      // A listing kept out of search results still has a readable URL, for a
+      // campaign that links straight at it.
+      ...(listing.noindex ? { robots: { index: false, follow: true } } : {}),
     };
   }
 
@@ -95,8 +115,14 @@ export default async function PropertyPage({
     // unit inventory behind them — so they get a page shaped to what is
     // actually known rather than this one's galleries and floorplans.
     const legacy = getLegacyDevelopment(slug);
-    if (!legacy) notFound();
-    return <LegacyDevelopmentPage development={legacy} />;
+    if (legacy) return <LegacyDevelopmentPage development={legacy} />;
+
+    // A unit published from the dashboard. Last, so that a slug which somehow
+    // matches a development still resolves to the development — the same
+    // precedence the search page merges with.
+    const listing = await getListing(slug);
+    if (!listing) notFound();
+    return <ListingPage listing={listing} />;
   }
 
   const locale = await getLocale();
@@ -173,6 +199,17 @@ export default async function PropertyPage({
               >
                 {t.property.viewResidences}
               </a>
+              {/* Only where the development has a brochure to send; see
+                  `Project.brochure`. */}
+              {project.brochure ? (
+                <BrochureButton
+                  slug={project.slug}
+                  project={project.name}
+                  brochure={project.brochure}
+                  eyebrow={project.name}
+                  className="inline-flex items-center gap-2 rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
+                />
+              ) : null}
               <a
                 href="#"
                 className="rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"

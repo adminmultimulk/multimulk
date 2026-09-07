@@ -18,6 +18,14 @@ const usd = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 0,
 });
 
+function Tag({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full bg-ink/5 px-2 py-0.5 text-ink/60">
+      {children}
+    </span>
+  );
+}
+
 export default async function PropertiesPage() {
   const user = await requirePropertyAccess();
 
@@ -68,6 +76,19 @@ export default async function PropertiesPage() {
                     <span className="block text-[11px] text-ink/45">
                       {property.project} · {property.lister.name}
                     </span>
+                    {/* What the listing carries beyond the search card, so the
+                        gap between a bare listing and a finished page is
+                        visible from the table rather than only from the form. */}
+                    <span className="mt-1 flex flex-wrap gap-1.5 text-[10.5px] text-ink/45">
+                      {property.brochure ? <Tag>Brochure</Tag> : null}
+                      {property.description ? <Tag>Description</Tag> : null}
+                      {property.gallery.length ? (
+                        <Tag>{property.gallery.length} photos</Tag>
+                      ) : null}
+                      {property.floorPlans.length ? <Tag>Floor plans</Tag> : null}
+                      {property.amenities.length ? <Tag>Amenities</Tag> : null}
+                      {property.noindex ? <Tag>No-index</Tag> : null}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-ink/70">
                     {property.location}
@@ -93,6 +114,16 @@ export default async function PropertiesPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end gap-2">
+                      {property.status === "PUBLISHED" ? (
+                        <a
+                          href={`/en/properties/${property.slug}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="rounded-md border border-ink/15 px-2.5 py-1.5 text-[12px] text-ink/70 transition-colors hover:border-ink/35 hover:text-ink"
+                        >
+                          View page
+                        </a>
+                      ) : null}
                       <ActionButton
                         action={toggleSoldOut.bind(
                           null,

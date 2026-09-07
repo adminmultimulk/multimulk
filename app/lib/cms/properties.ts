@@ -12,8 +12,36 @@ import { PROPERTIES_TAG } from "./tags";
  * is layered on top, and a static slug wins a collision.
  */
 
+/**
+ * A listing as its own page needs it.
+ *
+ * `Unit` is the card: the fields every residence on the search page has. A
+ * listing created in the dashboard can carry a great deal more — prose,
+ * amenities, floor plans, what the payment plan is — and all of it is
+ * optional, because a lister putting a unit up at short notice should not have
+ * to write a brochure to do it. Every section of the page is omitted rather
+ * than empty when its field is absent.
+ */
+export type Listing = Unit & {
+  description: string | null;
+  highlights: { title: string; text: string }[];
+  amenities: string[];
+  floorPlans: string[];
+  paymentPlan: string | null;
+  handover: string | null;
+  serviceCharge: string | null;
+  titleDeed: string | null;
+  videoUrl: string | null;
+  mapLat: number | null;
+  mapLng: number | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  noindex: boolean;
+  gallery: string[];
+};
+
 const load = unstable_cache(
-  async (): Promise<Unit[]> => {
+  async (): Promise<Listing[]> => {
     const rows = await prisma.property.findMany({
       where: { status: "PUBLISHED" },
       orderBy: { publishedAt: "desc" },
@@ -35,13 +63,35 @@ const load = unstable_cache(
       soldOut: row.soldOut,
       cbiEligible: row.cbiEligible,
       image: row.image,
+      brochure: row.brochure ?? undefined,
+      // Every published listing answers at its own URL; see
+      // `app/[lang]/properties/[slug]/page.tsx`.
+      hasPage: true,
+      gallery: row.gallery,
+      description: row.description,
+      highlights: row.highlights.map((highlight) => ({
+        title: highlight.title,
+        text: highlight.text,
+      })),
+      amenities: row.amenities,
+      floorPlans: row.floorPlans,
+      paymentPlan: row.paymentPlan,
+      handover: row.handover,
+      serviceCharge: row.serviceCharge,
+      titleDeed: row.titleDeed,
+      videoUrl: row.videoUrl,
+      mapLat: row.mapLat,
+      mapLng: row.mapLng,
+      seoTitle: row.seoTitle,
+      seoDescription: row.seoDescription,
+      noindex: row.noindex,
     }));
   },
   ["cms-properties"],
   { tags: [PROPERTIES_TAG], revalidate: 300 },
 );
 
-export async function cmsUnits(): Promise<Unit[]> {
+export async function cmsUnits(): Promise<Listing[]> {
   try {
     return await load();
   } catch (error) {
@@ -54,6 +104,20 @@ export async function mergedUnits(): Promise<Unit[]> {
   const fromDb = await cmsUnits();
   const taken = new Set(units.map((u) => u.slug));
   return [...units, ...fromDb.filter((u) => !taken.has(u.slug))];
+}
+
+/**
+ * One published listing, for the page it answers at.
+ *
+ * Read out of the same cached list rather than queried on its own: the list is
+ * already in memory for the search page, it is invalidated by the same tag
+ * when a lister publishes, and a listing is not a large object. A slug that
+ * belongs to a development or to the static inventory is not one of these, and
+ * the caller falls through to whatever else answers at that URL.
+ */
+export async function getListing(slug: string): Promise<Listing | null> {
+  const listings = await cmsUnits();
+  return listings.find((listing) => listing.slug === slug) ?? null;
 }
 
 /**

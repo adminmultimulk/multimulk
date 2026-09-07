@@ -18,7 +18,7 @@ export default async function NewPropertyPage() {
     <>
       <PageHeading
         title="Add a listing"
-        description="Save it as a draft while the details are still being confirmed. Nothing reaches the search page until you publish."
+        description="Publishing puts the unit on the search page and gives it a page of its own at /properties/<slug>. Save it as a draft while the details are still being confirmed — nothing is public until you publish."
       />
       <PropertyForm property={emptyProperty} locations={places} />
     </>

@@ -37,6 +37,18 @@ export type Unit = {
   soldOut: boolean;
   cbiEligible: boolean;
   image: string;
+  /**
+   * The brochure emailed by "Download Brochure", where the unit carries its
+   * own. The inventory in this file takes its development's instead — see
+   * `Project.brochure` — so only listings created in the dashboard set this.
+   */
+  brochure?: string;
+  /**
+   * True for a unit with a page of its own at `/properties/<slug>`. The units
+   * here are shown on their development's page and have none, so a card links
+   * to the development; a listing from the dashboard links to itself.
+   */
+  hasPage?: boolean;
 };
 
 export const currencies: Currency[] = ["USD", "EUR", "TRY"];

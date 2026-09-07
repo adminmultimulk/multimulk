@@ -1,4 +1,6 @@
 import { allArticles } from "@/app/lib/knowledge";
+import { legacyDevelopments } from "@/app/lib/legacy-developments";
+import { projects } from "@/app/lib/projects";
 import { units } from "@/app/lib/properties";
 import { isTopic } from "@/app/lib/topics";
 
@@ -13,7 +15,18 @@ export { checkSlug, slugify } from "./slug";
  * source happened to sort first.
  */
 export const reservedArticleSlugs = new Set(allArticles.map((a) => a.slug));
-export const reservedPropertySlugs = new Set(units.map((u) => u.slug));
+/*
+ * A published listing answers at /properties/<slug>, which is the namespace
+ * the four developments and the ninety-four legacy developments already
+ * occupy. Those win a collision — the page resolves them first — so a listing
+ * that took one of their slugs would simply never be reachable. Caught here,
+ * where somebody can pick another one.
+ */
+export const reservedPropertySlugs = new Set([
+  ...units.map((u) => u.slug),
+  ...projects.map((p) => p.slug),
+  ...legacyDevelopments.map((d) => d.slug),
+]);
 
 
 /** Splits a textarea into one entry per non-empty line, trimmed. */
@@ -22,6 +35,66 @@ export function lines(value: string): string[] {
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
+}
+
+/**
+ * A file that is not an image — the brochure.
+ *
+ * Same rule as `checkImage`, and separate from it so the message names the
+ * thing the person is actually looking at. A PDF may sit under `/public` with
+ * the rest of the repository's files, or on Cloudinary, or anywhere else that
+ * resolves; what it may not be is a bare filename somebody dragged in from
+ * their desktop.
+ */
+export function checkFile(value: string, label: string): string | null {
+  if (!value) return null;
+  if (value.startsWith("/")) return null;
+  if (/^https?:\/\//.test(value)) return null;
+  return `${label} must start with "/" or be a full https:// URL.`;
+}
+
+/**
+ * A map coordinate.
+ *
+ * Three answers, not two: `null` for "left blank", which is legitimate and
+ * means no map, and `false` for "typed, and wrong" — which has to be told
+ * apart from the blank so the form can say so rather than silently dropping
+ * the pin.
+ */
+export function coordinate(value: string, limit: number): number | null | false {
+  if (!value) return null;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed) || Math.abs(parsed) > limit) return false;
+  return parsed;
+}
+
+/** The separator between a highlight's heading and its sentence. */
+const HIGHLIGHT_SPLIT = "|";
+
+/**
+ * The highlight cards, written one per line as `Title | Text`.
+ *
+ * A textarea rather than three pairs of inputs: a listing may have two
+ * highlights or five, and a fixed set of boxes decides that in advance.
+ */
+export function highlightPairs(value: string): { title: string; text: string }[] {
+  return lines(value)
+    .map((line) => {
+      const at = line.indexOf(HIGHLIGHT_SPLIT);
+      if (at === -1) return null;
+      const title = line.slice(0, at).trim();
+      const text = line.slice(at + 1).trim();
+      return title && text ? { title, text } : null;
+    })
+    .filter((pair): pair is { title: string; text: string } => pair !== null);
+}
+
+/** Says which line is missing its half, rather than dropping it in silence. */
+export function checkHighlights(value: string): string | null {
+  const written = lines(value);
+  const parsed = highlightPairs(value);
+  if (written.length === parsed.length) return null;
+  return 'Each highlight is one line, written as "Title | The sentence under it".';
 }
 
 /** Splits a comma-separated field, e.g. the topics input. */

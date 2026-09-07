@@ -269,6 +269,63 @@ export function apartmentComplex(
 }
 
 /**
+ * One listed residence.
+ *
+ * `Apartment` rather than `ApartmentComplex`: this is a unit, and the offer
+ * attached to it is a price somebody can act on. The development it sits in,
+ * where the site knows it as one, has its own node on its own page — they are
+ * two things, and conflating them would tell a search engine there is a
+ * building for sale at a one-bedroom price.
+ */
+export function residence(
+  locale: Locale,
+  listing: {
+    slug: string;
+    project: string;
+    location: string;
+    country: string;
+    prices: { USD: number };
+    image: string;
+    description: string | null;
+    amenities: readonly string[];
+    soldOut: boolean;
+  },
+  /** Already localised — the layout half of the name is translated. */
+  name: string,
+  url: string,
+): Thing {
+  return {
+    "@type": "Apartment",
+    "@id": `${url}#residence`,
+    name,
+    url,
+    ...(listing.description ? { description: listing.description } : {}),
+    image: absoluteUrl(listing.image),
+    containedInPlace: { "@type": "Place", name: listing.project },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: listing.location,
+      addressCountry: listing.country,
+    },
+    amenityFeature: listing.amenities.map((item) => ({
+      "@type": "LocationFeatureSpecification" as const,
+      name: item,
+      value: true,
+    })),
+    offers: {
+      "@type": "Offer",
+      price: listing.prices.USD,
+      priceCurrency: "USD",
+      availability: listing.soldOut
+        ? "https://schema.org/SoldOut"
+        : "https://schema.org/InStock",
+      url,
+    },
+    inLanguage: hreflangFor[locale],
+  } as Thing;
+}
+
+/**
  * An index page. Children are referenced by `@id` rather than inlined — the
  * full node lives on the page it describes, and repeating it here would be two
  * definitions of one thing.

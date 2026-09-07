@@ -16,8 +16,10 @@
 import { headers } from "next/headers";
 import { after } from "next/server";
 
+import { resolveBrochure } from "../brochures";
 import { validateLead, type LeadErrors, type Lead } from "./schema";
 import { acknowledgeLead } from "./ack";
+import { sendBrochure } from "./brochure";
 import { deliverLead } from "./sink";
 import { notifyTeam } from "./notify";
 import { withinRateLimit } from "./rate-limit";
@@ -102,6 +104,86 @@ export async function submitLead(
     results.forEach((result, index) => {
       if (result.status === "rejected") {
         console.error(`[lead] ${names[index]} failed`, result.reason);
+      }
+    });
+  });
+
+  return { status: "sent" };
+}
+
+/** The same states as an enquiry: the brochure itself arrives by email. */
+export type BrochureState =
+  | { status: "idle" }
+  | { status: "invalid"; errors: LeadErrors }
+  | { status: "failed"; reason: "rate" | "server" }
+  | { status: "sent" };
+
+/**
+ * A brochure request: three fields on screen, a lead in the inbox, and the
+ * brochure in the reader's email.
+ *
+ * The enquiry the sales team reads is composed here rather than typed — there
+ * is no subject or message field on a brochure form — so what arrives beside
+ * the ordinary enquiries names the development and says how it was raised.
+ */
+export async function requestBrochure(
+  _previous: BrochureState,
+  form: FormData,
+): Promise<BrochureState> {
+  // The slug arrives over the wire, so the file is resolved from the site's
+  // own data rather than taken from the form: a request cannot name a path
+  // the site does not publish, and anything with no brochure — which is
+  // anything with no button either — cannot be requested at all.
+  const brochure = await resolveBrochure(String(form.get("project") ?? ""));
+  if (!brochure) return { status: "failed", reason: "server" };
+
+  // As in `submitLead`: a bot is thanked rather than told what gave it away,
+  // and what is withheld is the lead and the email.
+  if (String(form.get("company") ?? "")) return { status: "sent" };
+
+  const verdict = verifyFormToken(form.get("t"));
+  if (verdict === "too-fast" || verdict === "bad") return { status: "sent" };
+  if (verdict === "stale") return { status: "failed", reason: "server" };
+
+  // Keyed apart from the enquiry form's window: someone who asks for two
+  // brochures and then enquires is doing exactly what the site invites.
+  if (!withinRateLimit(`brochure:${await clientKey()}`)) {
+    return { status: "failed", reason: "rate" };
+  }
+
+  const result = validateLead({
+    ...Object.fromEntries(form.entries()),
+    enquiryType: brochure.country.includes("Caribbean")
+      ? "caribbeanCbi"
+      : "turkiyeProperty",
+    subject: `Brochure request: ${brochure.name}`,
+    message: `Requested the ${brochure.name} brochure — ${brochure.place}, ${brochure.country}.`,
+  });
+  if (!result.ok) return { status: "invalid", errors: result.errors };
+
+  const lead: Lead = {
+    ...result.lead,
+    submittedAt: new Date().toISOString(),
+  };
+
+  // Awaited for the reason it is in `submitLead`: the reader is about to be
+  // told this worked, and the lead is the half that has to be durable.
+  try {
+    await deliverLead(lead);
+  } catch (error) {
+    console.error("[brochure] delivery failed", error);
+    return { status: "failed", reason: "server" };
+  }
+
+  after(async () => {
+    const names = ["notification", "brochure"];
+    const results = await Promise.allSettled([
+      notifyTeam(lead),
+      sendBrochure(lead, { project: brochure.name, url: brochure.url }),
+    ]);
+    results.forEach((result, index) => {
+      if (result.status === "rejected") {
+        console.error(`[brochure] ${names[index]} failed`, result.reason);
       }
     });
   });

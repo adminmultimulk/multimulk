@@ -5,6 +5,17 @@ import { legacyRedirects } from "./app/lib/legacy-redirects";
 const LEGACY_LOCALE = "en";
 
 const nextConfig: NextConfig = {
+  images: {
+    /*
+     * Photography uploaded through the dashboard lives on Cloudinary; the
+     * imagery that ships with the site is under `public/`. Nothing else is
+     * allow-listed on purpose — `next/image` refuses a host it has not been
+     * told about, and a listing pointing anywhere else is rendered as a plain
+     * tag instead. See `app/components/listing-image.tsx`.
+     */
+    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+  },
+
   async redirects() {
     return [
       ...legacyRedirects.map(({ from, to }) => ({

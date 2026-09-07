@@ -111,6 +111,13 @@ model Article {
   @@map("articles")
 }
 
+/// One of the short cards on a listing's page. Embedded rather than a table:
+/// a highlight has no life of its own away from the listing it is on.
+type PropertyHighlight {
+  title String
+  text  String
+}
+
 model Property {
   id           String        @id @default(auto()) @map("_id") @db.ObjectId
   slug         String        @unique
@@ -141,6 +148,51 @@ model Property {
   image        String
   /// Additional photography for the listing, in order.
   gallery      String[]
+
+  // --- The listing's own page ------------------------------------------------
+  // Everything below is optional: a lister can put a unit on the search page
+  // with the fields above alone, and each of these adds a section to
+  // /properties/<slug> rather than being required to have one at all.
+
+  /// The prose under the hero. Absent, the page leads with the specs.
+  description   String?
+  /// Three or so short cards — what somebody should know before scrolling.
+  highlights    PropertyHighlight[]
+  /// Amenity names. Translated through `dictionary.property.amenityItems`
+  /// where the name is one the site already knows, and shown as written
+  /// otherwise.
+  amenities     String[]
+  /// The brochure emailed by "Download Brochure". A Cloudinary URL, or a path
+  /// under /public. Absent, the button is not shown.
+  brochure      String?
+  /// Floor plans, in the order they should be read.
+  floorPlans    String[]
+
+  // --- Commercials -----------------------------------------------------------
+
+  /// "30% on signing, 70% over 24 months", as the developer words it.
+  paymentPlan   String?
+  /// When the unit is handed over — "Q4 2027", or "Ready to move in".
+  handover      String?
+  /// Annual service charge, as written.
+  serviceCharge String?
+  /// Title deed status — "Ready title deed", "Under construction (kat irtifakı)".
+  titleDeed     String?
+
+  // --- The page's own metadata ----------------------------------------------
+
+  /// A tour, on YouTube or Vimeo. Rendered as a link, never an autoplaying embed.
+  videoUrl      String?
+  /// Where the map pin goes. Both or neither; the map is omitted without them.
+  mapLat        Float?
+  mapLng        Float?
+  /// Overrides the <title>. A headline and a title tag are rarely one sentence.
+  seoTitle       String?
+  /// Overrides the meta description. The description is used when absent.
+  seoDescription String?
+  /// Keeps the listing out of search results while leaving the URL readable.
+  noindex        Boolean @default(false)
+
   status       ContentStatus @default(DRAFT)
   publishedAt  DateTime?
   listerId     String        @db.ObjectId

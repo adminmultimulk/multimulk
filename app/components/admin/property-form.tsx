@@ -10,6 +10,7 @@ import {
   propertyTypes,
 } from "@/app/lib/properties";
 import { Alert, Button, Field, Input, Select, Textarea } from "./ui";
+import { UploadField, UploadList } from "./upload-field";
 
 export type PropertyDraft = {
   id?: string;
@@ -31,6 +32,22 @@ export type PropertyDraft = {
   cbiEligible: boolean;
   image: string;
   gallery: string[];
+  description: string;
+  /** One per line, written as "Title | The sentence under it". */
+  highlights: string;
+  amenities: string[];
+  brochure: string;
+  floorPlans: string[];
+  paymentPlan: string;
+  handover: string;
+  serviceCharge: string;
+  titleDeed: string;
+  videoUrl: string;
+  mapLat: string;
+  mapLng: string;
+  seoTitle: string;
+  seoDescription: string;
+  noindex: boolean;
   status: "DRAFT" | "PUBLISHED";
 };
 
@@ -53,8 +70,32 @@ export const emptyProperty: PropertyDraft = {
   cbiEligible: false,
   image: "",
   gallery: [],
+  description: "",
+  highlights: "",
+  amenities: [],
+  brochure: "",
+  floorPlans: [],
+  paymentPlan: "",
+  handover: "",
+  serviceCharge: "",
+  titleDeed: "",
+  videoUrl: "",
+  mapLat: "",
+  mapLng: "",
+  seoTitle: "",
+  seoDescription: "",
+  noindex: false,
   status: "DRAFT",
 };
+
+function SectionTitle({ title, note }: { title: string; note: string }) {
+  return (
+    <div>
+      <h2 className="text-[13px] font-medium text-ink">{title}</h2>
+      <p className="mt-1 text-[12px] leading-[18px] text-ink/55">{note}</p>
+    </div>
+  );
+}
 
 export function PropertyForm({
   property,
@@ -320,38 +361,60 @@ export function PropertyForm({
       </section>
 
       <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">
-        <Field
-          label="Card image"
-          name="image"
-          error={errors.image}
-          hint="A path under /public, e.g. /images/units/marmara-vista.webp."
-          required
-        >
-          <Input
-            id="image"
-            name="image"
-            defaultValue={property.image}
-            error={errors.image}
-            placeholder="/images/units/…"
-            required
-          />
-        </Field>
+        <SectionTitle
+          title="Photography"
+          note="Upload a file and it goes to Cloudinary; the box underneath holds the URL either way, so a path under /public still works."
+        />
 
-        <Field
-          label="Further photography"
+        <UploadField
+          name="image"
+          label="Card image"
+          error={errors.image}
+          accept="image/*"
+          resourceType="image"
+          defaultValue={property.image}
+          placeholder="/images/units/…"
+          hint="Shown on the search page and as the hero of the listing's own page. Roughly 3:2."
+          required
+        />
+
+        <UploadList
           name="gallery"
+          label="Gallery"
           error={errors.gallery}
-          hint="One path per line, in the order they should appear."
-        >
-          <Textarea
-            id="gallery"
-            name="gallery"
-            defaultValue={property.gallery.join("\n")}
-            error={errors.gallery}
-            rows={4}
-            className="font-mono text-[13px]"
-          />
-        </Field>
+          accept="image/*"
+          resourceType="image"
+          defaultValue={property.gallery}
+          hint="Shown on the listing's page, in this order. The first is given the wide slot."
+        />
+
+        <UploadList
+          name="floorPlans"
+          label="Floor plans"
+          error={errors.floorPlans}
+          accept="image/*"
+          resourceType="image"
+          defaultValue={property.floorPlans}
+          hint="Shown uncropped on white, so a plan is never cut off."
+          rows={3}
+        />
+
+        <UploadField
+          name="brochure"
+          label="Brochure (PDF)"
+          error={errors.brochure}
+          accept="application/pdf"
+          resourceType="raw"
+          defaultValue={property.brochure}
+          placeholder="/brochures/….pdf"
+          preview={false}
+          hint={
+            <>
+              Emailed to anyone who asks for it. Without one, the “Download
+              Brochure” button is not shown on this unit at all.
+            </>
+          }
+        />
 
         <label className="flex items-center gap-2.5 text-[13px] text-ink/80">
           <input
@@ -361,6 +424,195 @@ export function PropertyForm({
             className="size-4 accent-[#12402a]"
           />
           Sold out — keeps the listing on the site, marked unavailable
+        </label>
+      </section>
+
+      <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">
+        <SectionTitle
+          title="The listing's page"
+          note="Everything here is optional. Each section is left off the page rather than shown empty, so a listing with nothing but specs still reads as finished."
+        />
+
+        <Field
+          label="Description"
+          name="description"
+          error={errors.description}
+          hint="One paragraph per blank line."
+        >
+          <Textarea
+            id="description"
+            name="description"
+            defaultValue={property.description}
+            error={errors.description}
+            rows={6}
+          />
+        </Field>
+
+        <Field
+          label="Highlights"
+          name="highlights"
+          error={errors.highlights}
+          hint='One per line, written as "Title | The sentence under it". Three is the usual number.'
+        >
+          <Textarea
+            id="highlights"
+            name="highlights"
+            defaultValue={property.highlights}
+            error={errors.highlights}
+            rows={4}
+            placeholder="Sea Views | Every room on this floor faces the Marmara."
+          />
+        </Field>
+
+        <Field
+          label="Amenities"
+          name="amenities"
+          error={errors.amenities}
+          hint="One per line. Names the site already knows — Indoor Pool, Concierge — are translated automatically; anything else is shown as written."
+        >
+          <Textarea
+            id="amenities"
+            name="amenities"
+            defaultValue={property.amenities.join("\n")}
+            error={errors.amenities}
+            rows={4}
+          />
+        </Field>
+      </section>
+
+      <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">
+        <SectionTitle
+          title="Terms"
+          note="What a buyer asks before they enquire. Shown as written, in the language they are written in — so write them in English."
+        />
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Payment plan" name="paymentPlan" error={errors.paymentPlan}>
+            <Input
+              id="paymentPlan"
+              name="paymentPlan"
+              defaultValue={property.paymentPlan}
+              error={errors.paymentPlan}
+              placeholder="30% on signing, 70% over 24 months"
+            />
+          </Field>
+          <Field label="Handover" name="handover" error={errors.handover}>
+            <Input
+              id="handover"
+              name="handover"
+              defaultValue={property.handover}
+              error={errors.handover}
+              placeholder="Q4 2027, or Ready to move in"
+            />
+          </Field>
+          <Field label="Service charge" name="serviceCharge" error={errors.serviceCharge}>
+            <Input
+              id="serviceCharge"
+              name="serviceCharge"
+              defaultValue={property.serviceCharge}
+              error={errors.serviceCharge}
+              placeholder="USD 1,800 a year"
+            />
+          </Field>
+          <Field label="Title deed" name="titleDeed" error={errors.titleDeed}>
+            <Input
+              id="titleDeed"
+              name="titleDeed"
+              defaultValue={property.titleDeed}
+              error={errors.titleDeed}
+              placeholder="Ready title deed (tapu)"
+            />
+          </Field>
+        </div>
+
+        <Field
+          label="Video tour"
+          name="videoUrl"
+          error={errors.videoUrl}
+          hint="Shown as a link. Nothing is embedded, so the player sets no cookies on a reader who never presses play."
+        >
+          <Input
+            id="videoUrl"
+            name="videoUrl"
+            type="url"
+            defaultValue={property.videoUrl}
+            error={errors.videoUrl}
+            placeholder="https://www.youtube.com/watch?v=…"
+          />
+        </Field>
+      </section>
+
+      <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">
+        <SectionTitle
+          title="Map"
+          note="Both or neither. In Google Maps, right-click the spot and the first item on the menu is the pair, in this order."
+        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Latitude" name="mapLat" error={errors.mapLat}>
+            <Input
+              id="mapLat"
+              name="mapLat"
+              defaultValue={property.mapLat}
+              error={errors.mapLat}
+              placeholder="40.9823"
+            />
+          </Field>
+          <Field label="Longitude" name="mapLng" error={errors.mapLng}>
+            <Input
+              id="mapLng"
+              name="mapLng"
+              defaultValue={property.mapLng}
+              error={errors.mapLng}
+              placeholder="28.6412"
+            />
+          </Field>
+        </div>
+      </section>
+
+      <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">
+        <SectionTitle
+          title="Search engines"
+          note="Left empty, the page uses the listing's own title and description."
+        />
+
+        <Field label="SEO title" name="seoTitle" error={errors.seoTitle}>
+          <Input
+            id="seoTitle"
+            name="seoTitle"
+            defaultValue={property.seoTitle}
+            error={errors.seoTitle}
+          />
+        </Field>
+
+        <Field
+          label="Meta description"
+          name="seoDescription"
+          error={errors.seoDescription}
+          hint="Around 155 characters is what a result listing shows."
+        >
+          <Textarea
+            id="seoDescription"
+            name="seoDescription"
+            defaultValue={property.seoDescription}
+            error={errors.seoDescription}
+            rows={3}
+          />
+        </Field>
+
+        <label className="flex items-start gap-2.5 text-[13px] text-ink/80">
+          <input
+            type="checkbox"
+            name="noindex"
+            defaultChecked={property.noindex}
+            className="mt-0.5 size-4 accent-[#12402a]"
+          />
+          <span>
+            Keep out of search results
+            <span className="mt-0.5 block text-[12px] text-ink/55">
+              The page still works and can still be linked from a campaign — it
+              simply is not indexed.
+            </span>
+          </span>
         </label>
       </section>
 

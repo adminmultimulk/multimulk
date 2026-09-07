@@ -8,8 +8,12 @@ import { PROPERTIES_TAG } from "@/app/lib/cms/tags";
 import { CBI_THRESHOLD_USD, propertyTypes } from "@/app/lib/properties";
 import { requirePropertyAccess, type ActionState } from "./guard";
 import {
+  checkFile,
+  checkHighlights,
   checkImage,
   checkSlug,
+  coordinate,
+  highlightPairs,
   checkbox,
   field,
   lines,
@@ -23,6 +27,9 @@ function publishedPropertiesChanged() {
   updateTag(PROPERTIES_TAG);
   revalidatePath("/[lang]/search-property", "page");
   revalidatePath("/[lang]", "page");
+  // Every published listing has a page of its own now, and a development's
+  // page lists the units in it — both are rendered from the same reader.
+  revalidatePath("/[lang]/properties/[slug]", "page");
 }
 
 export async function saveProperty(
@@ -47,6 +54,25 @@ export async function saveProperty(
   const gallery = lines(field(form, "gallery"));
   const soldOut = checkbox(form, "soldOut");
   const publish = field(form, "intent") === "publish";
+
+  // Everything below builds the listing's own page. All of it is optional: a
+  // unit can go on the search page with the fields above alone, and each
+  // section is omitted rather than empty when its field is blank.
+  const description = field(form, "description");
+  const highlights = highlightPairs(field(form, "highlights"));
+  const amenities = lines(field(form, "amenities"));
+  const brochure = field(form, "brochure");
+  const floorPlans = lines(field(form, "floorPlans"));
+  const paymentPlan = field(form, "paymentPlan");
+  const handover = field(form, "handover");
+  const serviceCharge = field(form, "serviceCharge");
+  const titleDeed = field(form, "titleDeed");
+  const videoUrl = field(form, "videoUrl");
+  const mapLat = coordinate(field(form, "mapLat"), 90);
+  const mapLng = coordinate(field(form, "mapLng"), 180);
+  const seoTitle = field(form, "seoTitle");
+  const seoDescription = field(form, "seoDescription");
+  const noindex = checkbox(form, "noindex");
 
   const priceUSD = money(field(form, "priceUSD"));
   const priceEUR = money(field(form, "priceEUR"));
@@ -84,6 +110,28 @@ export async function saveProperty(
       break;
     }
   }
+  for (const item of floorPlans) {
+    const error = checkImage(item, "Every floor plan");
+    if (error) {
+      fieldErrors.floorPlans = error;
+      break;
+    }
+  }
+
+  const brochureError = checkFile(brochure, "The brochure");
+  if (brochureError) fieldErrors.brochure = brochureError;
+
+  if (videoUrl && !/^https:\/\//.test(videoUrl))
+    fieldErrors.videoUrl = "A full https:// link to the tour, or leave it empty.";
+
+  // Both or neither: half a coordinate puts the pin in the sea.
+  if (mapLat === false) fieldErrors.mapLat = "A latitude between -90 and 90.";
+  if (mapLng === false) fieldErrors.mapLng = "A longitude between -180 and 180.";
+  if ((mapLat === null) !== (mapLng === null))
+    fieldErrors.mapLat = "A map needs both a latitude and a longitude.";
+
+  const highlightError = checkHighlights(field(form, "highlights"));
+  if (highlightError) fieldErrors.highlights = highlightError;
 
   if (Object.keys(fieldErrors).length)
     return { fieldErrors, error: "Nothing was saved — see the fields marked below." };
@@ -122,6 +170,21 @@ export async function saveProperty(
     cbiEligible,
     image,
     gallery,
+    description: description || null,
+    highlights,
+    amenities,
+    brochure: brochure || null,
+    floorPlans,
+    paymentPlan: paymentPlan || null,
+    handover: handover || null,
+    serviceCharge: serviceCharge || null,
+    titleDeed: titleDeed || null,
+    videoUrl: videoUrl || null,
+    mapLat: mapLat === false ? null : mapLat,
+    mapLng: mapLng === false ? null : mapLng,
+    seoTitle: seoTitle || null,
+    seoDescription: seoDescription || null,
+    noindex,
     status: publish ? ("PUBLISHED" as const) : ("DRAFT" as const),
     publishedAt: publish ? (existing?.publishedAt ?? new Date()) : (existing?.publishedAt ?? null),
   };

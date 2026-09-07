@@ -40,10 +40,17 @@ export function Figure({
       : "";
 
   const muted = tone === "dark" ? "text-cream/60" : "text-ink/55";
+  /*
+   * `lg` is set against the width its column actually has rather than the
+   * width of the viewport: the value never wraps, and the longest one on the
+   * site — "US$400,000", which French and Arabic set longer still — needs
+   * about 6.2em. The stat row it sits in goes one-up, two-up and four-up, so
+   * the size steps back down where the column count steps up.
+   */
   const valueSize = {
     sm: "text-[22px] leading-none",
     md: "text-[30px] leading-none sm:text-[40px]",
-    lg: "text-[34px] leading-none sm:text-[42px]",
+    lg: "text-[32px] leading-none lg:text-[42px] xl:text-[33px] 2xl:text-[38px]",
   }[size];
 
   return (

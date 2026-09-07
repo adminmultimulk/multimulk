@@ -790,6 +790,45 @@ const tr = {
       link: "Hakkımızda Daha Fazlası",
     },
   },
+  /** "Broşürü İndirin" — düğme, arkasındaki form ve broşürün geldiği e-posta. */
+  brochure: {
+    cta: "Broşürü İndirin",
+    heading: "{project} Broşürü",
+    body: "Kat planları, malzemeler, teknik özellikler ve ödeme koşulları tek bir belgede. Nereye göndereceğimizi yazın, birkaç dakika içinde e-posta kutunuzda olsun.",
+    consent:
+      "Broşürü talep ederek bu proje hakkında sizinle iletişime geçmemizi kabul etmiş olursunuz. Verilerinizi nasıl işlediğimizi Gizlilik Politikamızda bulabilirsiniz.",
+    submit: "Broşürü Bana Gönderin",
+    submitting: "Gönderiliyor…",
+    sentHeading: "Yola Çıktı",
+    sentBody:
+      "{project} broşürünü e-posta adresinize gönderdik. Birkaç dakika içinde ulaşmazsa spam klasörünüzü kontrol edin.",
+    email: {
+      subject: "{project} broşürünüz",
+      greeting: "Sayın {name},",
+      body: "{project} projesine gösterdiğiniz ilgi için teşekkür ederiz. Broşürünüz hazır — kat planları, malzemeler, teknik özellikler ve ödeme koşulları.",
+      button: "Broşürü indirin",
+      closing:
+        "Multi Mulk ekibinden bir yetkili kısa süre içinde sizinle iletişime geçecek. Randevu almak veya ödeme koşullarını sormak için bu e-postayı yanıtlamanız yeterli.",
+    },
+  },
+  /** /properties/<slug> adresindeki tek bir rezidansın sayfası. */
+  listing: {
+    specs: "Bir Bakışta",
+    about: "Bu Rezidans Hakkında",
+    gallery: "Galeri",
+    floorPlans: "Kat Planları",
+    terms: "Koşullar",
+    paymentPlan: "Ödeme planı",
+    handover: "Teslim",
+    serviceCharge: "Aidat",
+    titleDeed: "Tapu durumu",
+    watchTour: "Turu İzleyin",
+    location: "Konum",
+    mapTitle: "{title} haritası",
+    moreAt: "{project} projesinde daha fazlası",
+    ctaHeading: "Bu rezidansla ilgili her şeyi bize sorun.",
+    viewDevelopment: "Projeyi Görüntüleyin",
+  },
 } satisfies PartialDictionary;
 
 export default tr;

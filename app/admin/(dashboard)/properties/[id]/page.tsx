@@ -54,6 +54,23 @@ export default async function EditPropertyPage({
           cbiEligible: property.cbiEligible,
           image: property.image,
           gallery: property.gallery,
+          description: property.description ?? "",
+          highlights: property.highlights
+            .map((highlight) => `${highlight.title} | ${highlight.text}`)
+            .join("\n"),
+          amenities: property.amenities,
+          brochure: property.brochure ?? "",
+          floorPlans: property.floorPlans,
+          paymentPlan: property.paymentPlan ?? "",
+          handover: property.handover ?? "",
+          serviceCharge: property.serviceCharge ?? "",
+          titleDeed: property.titleDeed ?? "",
+          videoUrl: property.videoUrl ?? "",
+          mapLat: property.mapLat === null ? "" : String(property.mapLat),
+          mapLng: property.mapLng === null ? "" : String(property.mapLng),
+          seoTitle: property.seoTitle ?? "",
+          seoDescription: property.seoDescription ?? "",
+          noindex: property.noindex,
           status: property.status,
         }}
         locations={places}

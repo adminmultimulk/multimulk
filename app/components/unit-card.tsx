@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import type { Currency, Unit } from "@/app/lib/properties";
-import { projects } from "@/app/lib/projects";
+import { getProjectByName } from "@/app/lib/projects";
 import { useI18n } from "@/app/lib/i18n/context";
 import { interpolate } from "@/app/lib/i18n/format";
 import { placeLabel, unitSpecs, unitTitle } from "@/app/lib/i18n/units";
+import { BrochureButton } from "./brochure-button";
 import { useEnquiry } from "./enquiry";
 import { Link } from "./link";
 import { Area, Bath, Bed, Building, MapPin, Stairs, ViewIcon } from "./icons";
@@ -22,8 +23,21 @@ export function UnitCard({
   const { t, locale, num } = useI18n();
   const openEnquiry = useEnquiry();
   const price = unit.prices[currency];
-  const project = projects.find((p) => p.name === unit.project);
+  const project = getProjectByName(unit.project);
   const title = unitTitle(locale, t, unit);
+  // A listing from the dashboard has a page of its own; a unit that ships with
+  // the site is shown on its development's page instead.
+  const href = unit.hasPage
+    ? `/properties/${unit.slug}`
+    : project
+      ? `/properties/${project.slug}`
+      : null;
+  // Likewise the brochure: the listing's own, or the development's.
+  const brochure = unit.brochure
+    ? { slug: unit.slug, name: unit.project, file: unit.brochure }
+    : project?.brochure
+      ? { slug: project.slug, name: project.name, file: project.brochure }
+      : null;
   const place = placeLabel(t, unit.location);
   const specs = unitSpecs(locale, t, unit)
     .map((value, i) => ({ Icon: SPEC_ICONS[i], value }))
@@ -61,9 +75,9 @@ export function UnitCard({
 
       <div className="mt-3 flex items-start justify-between gap-6">
         <h3 className="max-w-[290px] font-display text-[22px] leading-[30px] text-ink">
-          {project ? (
+          {href ? (
             <Link
-              href={`/properties/${project.slug}`}
+              href={href}
               className="transition-colors hover:text-gold"
             >
               <bdi>{title}</bdi>
@@ -93,31 +107,44 @@ export function UnitCard({
           a crawler and a reader without JavaScript all need it to go. The
           click is intercepted only once the dialog is there to intercept it
           with, which keeps the reader on the grid they were browsing. */}
-      <Link
-        href="/contact-us"
-        onClick={
-          openEnquiry
-            ? (event) => {
-                if (event.metaKey || event.ctrlKey || event.shiftKey) return;
-                event.preventDefault();
-                openEnquiry({
-                  eyebrow: `${title} · ${place}`,
-                  subject: interpolate(t.unit.enquirySubject, {
-                    unit: title,
-                    place,
-                  }),
-                  enquiryType:
-                    unit.country === "Caribbean"
-                      ? "caribbeanCbi"
-                      : "turkiyeProperty",
-                });
-              }
-            : undefined
-        }
-        className="mt-auto inline-block self-start rounded-full bg-forest px-8 py-3 text-[13px] text-cream transition-colors hover:bg-forest-deep"
-      >
-        {t.common.enquireNow}
-      </Link>
+      <div className="mt-auto flex flex-wrap items-center gap-3">
+        <Link
+          href="/contact-us"
+          onClick={
+            openEnquiry
+              ? (event) => {
+                  if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+                  event.preventDefault();
+                  openEnquiry({
+                    eyebrow: `${title} · ${place}`,
+                    subject: interpolate(t.unit.enquirySubject, {
+                      unit: title,
+                      place,
+                    }),
+                    enquiryType:
+                      unit.country === "Caribbean"
+                        ? "caribbeanCbi"
+                        : "turkiyeProperty",
+                  });
+                }
+              : undefined
+          }
+          className="inline-block rounded-full bg-forest px-7 py-3 text-[13px] text-cream transition-colors hover:bg-forest-deep"
+        >
+          {t.common.enquireNow}
+        </Link>
+
+        {/* Only where there is a brochure to send. */}
+        {brochure ? (
+          <BrochureButton
+            slug={brochure.slug}
+            project={brochure.name}
+            brochure={brochure.file}
+            eyebrow={`${title} · ${place}`}
+            className="inline-flex items-center gap-2 rounded-full border border-forest/30 px-6 py-3 text-[13px] text-forest transition-colors hover:border-forest hover:bg-forest hover:text-cream"
+          />
+        ) : null}
+      </div>
     </article>
   );
 }

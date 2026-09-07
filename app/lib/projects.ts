@@ -23,6 +23,15 @@ export type Project = {
   location: string;
   country: string;
   image: string;
+  /**
+   * The development's brochure, served from `public/`. Requested by email
+   * rather than downloaded outright: the reader leaves their details, the
+   * brochure arrives in their inbox, and sales gets the lead.
+   *
+   * Optional, and the button is simply absent without it — a "Download
+   * Brochure" that emails a 404 is worse than no button at all.
+   */
+  brochure?: string;
   highlights: { title: string; text: string }[];
   overview: { heading: string; body: string };
   stats: { label: string; value: string }[];
@@ -39,6 +48,7 @@ export const projects: Project[] = [
     location: "Şişli",
     country: "İstanbul, Türkiye",
     image: "/images/levent-residences.webp",
+    brochure: "/brochures/levent-residences.pdf",
     highlights: [
       {
         title: "Central Connectivity",
@@ -85,6 +95,7 @@ export const projects: Project[] = [
     location: "Beyoğlu",
     country: "İstanbul, Türkiye",
     image: "/images/bosphorus-heights.webp",
+    brochure: "/brochures/bosphorus-heights.pdf",
     highlights: [
       {
         title: "Bosphorus Outlook",
@@ -123,6 +134,7 @@ export const projects: Project[] = [
     location: "Beylikdüzü",
     country: "İstanbul, Türkiye",
     image: "/images/marmara-vista.webp",
+    brochure: "/brochures/marmara-vista.pdf",
     highlights: [
       {
         title: "Marmara Sea Views",
@@ -161,6 +173,7 @@ export const projects: Project[] = [
     location: "Bodrum",
     country: "Muğla, Türkiye",
     image: "/images/aegean-bay.webp",
+    brochure: "/brochures/aegean-bay-residences.pdf",
     highlights: [
       {
         title: "Unmatched Coastal Living",
@@ -194,4 +207,13 @@ export const projects: Project[] = [
 
 export function getProject(slug: string) {
   return projects.find((p) => p.slug === slug);
+}
+
+/**
+ * The development a unit belongs to. `Unit.project` carries the name rather
+ * than the slug, and the name is the half that is never translated, so it is
+ * what both sides match on.
+ */
+export function getProjectByName(name: string) {
+  return projects.find((p) => p.name === name);
 }

@@ -1343,6 +1343,56 @@ const en = {
       },
     },
   },
+
+  /**
+   * "Download Brochure": the button, the dialog behind it, and the email the
+   * brochure arrives in. The field labels and the error messages are the
+   * contact form's — it is the same three fields and the same failures — so
+   * only what is particular to a brochure is written here.
+   */
+  brochure: {
+    cta: "Download Brochure",
+    heading: "The {project} Brochure",
+    body: "Floorplans, finishes, specifications and payment terms in one document. Tell us where to send it and it will be in your inbox in a moment.",
+    consent:
+      "By requesting the brochure you consent to us contacting you about this development. See our Privacy Policy for details on how we handle your data.",
+    submit: "Send Me the Brochure",
+    submitting: "Sending…",
+    sentHeading: "On Its Way",
+    sentBody:
+      "We have emailed the {project} brochure to you. If it has not arrived within a few minutes, check your spam folder.",
+    /** The email itself; see `app/lib/leads/brochure.ts`. */
+    email: {
+      subject: "Your {project} brochure",
+      greeting: "Dear {name},",
+      body: "Thank you for your interest in {project}. Your brochure is ready — floorplans, finishes, specifications and payment terms.",
+      button: "Download the brochure",
+      closing:
+        "A member of the Multi Mulk team will follow up shortly. To arrange a viewing or ask about payment terms, simply reply to this email.",
+    },
+  },
+  /**
+   * A single listed residence's own page, at /properties/<slug>. The
+   * developments that ship with the site use `property` above; this is the
+   * page a lister's unit gets, and every section it names is optional.
+   */
+  listing: {
+    specs: "At a Glance",
+    about: "About This Residence",
+    gallery: "Gallery",
+    floorPlans: "Floor Plans",
+    terms: "Terms",
+    paymentPlan: "Payment plan",
+    handover: "Handover",
+    serviceCharge: "Service charge",
+    titleDeed: "Title deed",
+    watchTour: "Watch the Tour",
+    location: "Location",
+    mapTitle: "Map of {title}",
+    moreAt: "More at {project}",
+    ctaHeading: "Ask us anything about this residence.",
+    viewDevelopment: "View the Development",
+  },
 } as const;
 
 export default en;

@@ -236,8 +236,23 @@ function ProgrammeCard({
           suspended ? "grayscale" : ""
         }`}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-forest-deep via-forest-deep/35 to-transparent" />
-      <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/35 to-transparent" />
+      {/*
+       * On a grid card the text block runs almost the full height, so the
+       * scrim has to carry cream type over a photograph that is pale from
+       * top to bottom — Grenada, Saint Lucia and Antigua all are — and not
+       * merely over the dark foot of one. The featured card is twice the
+       * height for the same block of text, so it keeps the lighter wash.
+       */}
+      <div
+        className={`absolute inset-0 bg-gradient-to-t from-forest-deep to-transparent ${
+          featured ? "via-forest-deep/35" : "via-forest-deep/80 via-55%"
+        }`}
+      />
+      <div
+        className={`absolute inset-x-0 top-0 bg-gradient-to-b to-transparent ${
+          featured ? "h-1/3 from-black/35" : "h-3/5 from-black/70"
+        }`}
+      />
 
       <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
         <div className="flex items-center gap-2.5">

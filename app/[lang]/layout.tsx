@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
+import { BrochureProvider } from "@/app/components/brochure";
 import { EnquiryProvider } from "@/app/components/enquiry";
 import { WhatsAppButton } from "@/app/components/whatsapp-button";
 import { analyticsEnabled, gaId } from "@/app/lib/analytics";
@@ -160,8 +161,12 @@ export default async function RootLayout({
               grid, anywhere — opens the form in place. Costs one small chunk;
               the form itself only arrives on the first click. */}
           <EnquiryProvider>
-            {children}
-            <WhatsAppButton />
+            {/* Same arrangement for "Download Brochure": the form comes to
+                the reader, and its chunk only on the first click. */}
+            <BrochureProvider>
+              {children}
+              <WhatsAppButton />
+            </BrochureProvider>
           </EnquiryProvider>
         </I18nProvider>
         {/* Vercel Web Analytics. Unlike the GA tag it is not gated on

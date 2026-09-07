@@ -135,6 +135,25 @@ export function Mail({ className }: IconProps) {
   );
 }
 
+export function Download({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.4}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M12 3.5v11" />
+      <path d="m7.5 10.5 4.5 4.5 4.5-4.5" />
+      <path d="M4.5 17v2.5h15V17" />
+    </svg>
+  );
+}
+
 export function Phone({ className }: IconProps) {
   return (
     <svg

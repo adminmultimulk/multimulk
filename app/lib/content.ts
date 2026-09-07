@@ -508,7 +508,9 @@ export const footerAboutItems = [
   { key: "turkishCitizenship" as const, href: buildPath("citizenshipProgramme", { programme: "turkiye" }) },
   { key: "caribbeanCbi" as const, href: buildPath("citizenshipProgramme", { programme: "caribbean" }) },
   { key: "mediaCentre" as const, href: routes.knowledge.pattern },
-  { key: "construction" as const },
+  // No standing construction-updates page yet; the footer points readers at
+  // the development whose build progress the updates are about.
+  { key: "construction" as const, href: buildPath("development", { slug: "bosphorus-heights" }) },
   { key: "terms" as const },
   { key: "privacy" as const },
   // The one item here that is not waiting for copy: two Creative Commons
@@ -557,7 +559,7 @@ export const socialLinks = [
   { key: "facebook" as const, name: "Facebook", href: "https://www.facebook.com/share/1BdLzoe5ki/" },
   { key: "youtube" as const, name: "YouTube", href: "https://youtube.com/@multimulk" },
   { key: "x" as const, name: "X", href: "https://x.com/multimulk" },
-  { key: "tiktok" as const, name: "TikTok", href: "https://www.tiktok.com/@multimulkrealty" },
+  { key: "tiktok" as const, name: "TikTok", href: "https://www.tiktok.com/@multimulkglobal" },
 ];
 
 /** Footer names whose page exists are routed here; the rest render inert. */

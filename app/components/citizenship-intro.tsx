@@ -69,21 +69,29 @@ export async function CitizenshipIntro({
           />
         </div>
 
-        <dl className="grid grid-cols-2 bg-forest text-cream sm:grid-cols-4">
-          {programme.stats.map((stat) => (
-            <div
-              key={stat.key}
-              className="border-b border-cream/12 px-7 py-8 last:border-b-0 sm:border-b-0 sm:border-e sm:last:border-e-0 lg:px-9 lg:py-10"
-            >
-              <Figure
-                id={stat.figure}
-                label={copy.stats[stat.key]}
-                tone="dark"
-                size="lg"
-              />
-            </div>
-          ))}
-        </dl>
+        {/* One-up, then two-up, then four-up only once a quarter of the grid is
+            wide enough for the threshold figure to sit on one line. The rules
+            between the cells are the `gap-px` showing the panel behind them,
+            so they land correctly at every one of those column counts — the
+            panel is forest under a cream wash, which is the rule colour the
+            cells used to carry as a border. */}
+        <div className="bg-forest">
+          <dl className="grid grid-cols-1 gap-px bg-cream/12 text-cream sm:grid-cols-2 xl:grid-cols-4">
+            {programme.stats.map((stat) => (
+              <div
+                key={stat.key}
+                className="bg-forest px-7 py-8 lg:px-9 lg:py-10 xl:px-7"
+              >
+                <Figure
+                  id={stat.figure}
+                  label={copy.stats[stat.key]}
+                  tone="dark"
+                  size="lg"
+                />
+              </div>
+            ))}
+          </dl>
+        </div>
 
         {/* The figures above are legislation, so the page says when they were
             last checked and against what. `dateModified` in this page's

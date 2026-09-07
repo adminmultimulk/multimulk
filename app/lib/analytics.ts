@@ -40,6 +40,8 @@ export type AnalyticsEvent =
   | "generate_lead"
   | "form_start"
   | "form_error"
+  /** A brochure requested by email, which is a lead of its own kind. */
+  | "brochure_request"
   | "whatsapp_click"
   | "phone_click"
   | "email_click"
