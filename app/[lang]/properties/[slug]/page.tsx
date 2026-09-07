@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { AmenityIcon } from "@/app/components/amenity-icon";
 import { AnimatedTitle } from "@/app/components/animated-title";
 import { BrochureButton } from "@/app/components/brochure-button";
 import { Container, SectionIntro } from "@/app/components/container";
@@ -348,9 +349,13 @@ export default async function PropertyPage({
                 {project.amenities.items.map((item) => (
                   <li
                     key={item}
-                    className="border-b border-ink/10 pb-3 text-[13.5px] text-ink"
+                    className="flex items-center gap-3 border-b border-ink/10 pb-3 text-[13.5px] text-ink"
                   >
-                    {lookup(t.property.amenityItems, item)}
+                    <AmenityIcon
+                      name={item}
+                      className="w-[18px] shrink-0 text-gold"
+                    />
+                    <span>{lookup(t.property.amenityItems, item)}</span>
                   </li>
                 ))}
               </ul>

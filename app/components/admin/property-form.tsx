@@ -2,13 +2,20 @@
 
 import { useActionState, useState } from "react";
 import Link from "next/link";
+import clsx from "clsx";
 import { saveProperty } from "@/app/lib/admin/property-actions";
 import { slugify } from "@/app/lib/admin/slug";
+import {
+  amenityGroups,
+  amenityNames,
+  splitAmenities,
+} from "@/app/lib/amenities";
 import {
   CBI_THRESHOLD_USD,
   bedroomOptions,
   propertyTypes,
 } from "@/app/lib/properties";
+import { AmenityIcon } from "../amenity-icon";
 import { Alert, Button, Field, Input, Select, Textarea } from "./ui";
 import { UploadField, UploadList } from "./upload-field";
 
@@ -94,6 +101,123 @@ function SectionTitle({ title, note }: { title: string; note: string }) {
       <h2 className="text-[13px] font-medium text-ink">{title}</h2>
       <p className="mt-1 text-[12px] leading-[18px] text-ink/55">{note}</p>
     </div>
+  );
+}
+
+/**
+ * Amenities, picked rather than typed.
+ *
+ * This was a free-text box, and free text is how a listing ended up with
+ * "indoor pool" where the rest of the site says "Indoor Pool" — a name the
+ * dictionaries cannot translate and the icon map cannot illustrate. The
+ * vocabulary in `app/lib/amenities.ts` is offered as checkboxes so the common
+ * cases are spelled once, in the one place that spells them.
+ *
+ * The box underneath stays, because no vocabulary is finished: an amenity
+ * typed there is saved as written and shown as written. Both halves are joined
+ * back into the single newline-separated `amenities` field the Server Action
+ * already parses, so nothing behind this component had to change.
+ */
+function AmenityPicker({
+  value,
+  error,
+}: {
+  value: string[];
+  error?: string;
+}) {
+  const initial = splitAmenities(value);
+  const [selected, setSelected] = useState<string[]>(initial.selected);
+  const [custom, setCustom] = useState(initial.custom.join("\n"));
+
+  function toggle(name: string) {
+    setSelected((current) =>
+      current.includes(name)
+        ? current.filter((item) => item !== name)
+        : [...current, name],
+    );
+  }
+
+  // Vocabulary order rather than click order, so the page reads the same way
+  // whichever order a lister ticked the boxes in.
+  const amenities = [
+    ...amenityNames.filter((name) => selected.includes(name)),
+    ...custom
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean),
+  ];
+
+  return (
+    <fieldset className="grid gap-3">
+      <legend className="text-[13px] font-medium text-ink">Amenities</legend>
+      <input type="hidden" name="amenities" value={amenities.join("\n")} />
+
+      {amenityGroups.map((group) => (
+        <div key={group.label} className="grid gap-2">
+          <p className="text-[11px] uppercase tracking-[0.08em] text-ink/45">
+            {group.label}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {group.items.map((name) => {
+              const on = selected.includes(name);
+              return (
+                <label
+                  key={name}
+                  className={clsx(
+                    "flex cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-[13px] transition-colors",
+                    "focus-within:ring-2 focus-within:ring-forest/15",
+                    on
+                      ? "border-forest bg-forest/5 text-ink"
+                      : "border-ink/15 bg-white text-ink/70 hover:border-ink/30",
+                  )}
+                >
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={on}
+                    onChange={() => toggle(name)}
+                  />
+                  <AmenityIcon
+                    name={name}
+                    className={clsx("w-4 shrink-0", on ? "text-forest" : "text-ink/40")}
+                  />
+                  {name}
+                </label>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      <div className="grid gap-1.5">
+        <label
+          htmlFor="amenities-other"
+          className="text-[13px] font-medium text-ink"
+        >
+          Anything else
+        </label>
+        <Textarea
+          id="amenities-other"
+          value={custom}
+          onChange={(event) => setCustom(event.target.value)}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? "amenities-error" : undefined}
+          rows={3}
+          placeholder="Helipad"
+        />
+        {error ? (
+          <p id="amenities-error" className="text-[12px] text-red-700">
+            {error}
+          </p>
+        ) : (
+          <p className="text-[12px] leading-[18px] text-ink/55">
+            One per line. The ticked names above are translated into every
+            language and carry an icon; anything typed here is shown as written,
+            in English.
+          </p>
+        )}
+      </div>
+    </fieldset>
   );
 }
 
@@ -464,20 +588,7 @@ export function PropertyForm({
           />
         </Field>
 
-        <Field
-          label="Amenities"
-          name="amenities"
-          error={errors.amenities}
-          hint="One per line. Names the site already knows — Indoor Pool, Concierge — are translated automatically; anything else is shown as written."
-        >
-          <Textarea
-            id="amenities"
-            name="amenities"
-            defaultValue={property.amenities.join("\n")}
-            error={errors.amenities}
-            rows={4}
-          />
-        </Field>
+        <AmenityPicker value={property.amenities} error={errors.amenities} />
       </section>
 
       <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">

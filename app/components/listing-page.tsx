@@ -1,4 +1,5 @@
 import { Container, SectionIntro } from "./container";
+import { AmenityIcon } from "./amenity-icon";
 import { AnimatedTitle } from "./animated-title";
 import { BrochureButton } from "./brochure-button";
 import { EnquireButton } from "./enquire-button";
@@ -299,9 +300,15 @@ export async function ListingPage({ listing }: { listing: Listing }) {
                   {listing.amenities.map((item) => (
                     <li
                       key={item}
-                      className="border-b border-ink/10 pb-3 text-[13.5px] text-ink"
+                      className="flex items-center gap-3 border-b border-ink/10 pb-3 text-[13.5px] text-ink"
                     >
-                      {lookup(t.property.amenityItems, item)}
+                      {/* Keyed by the English name, so the glyph survives
+                          translation. */}
+                      <AmenityIcon
+                        name={item}
+                        className="w-[18px] shrink-0 text-gold"
+                      />
+                      <span>{lookup(t.property.amenityItems, item)}</span>
                     </li>
                   ))}
                 </ul>

@@ -33,10 +33,14 @@ const FOLDER = process.env.CLOUDINARY_FOLDER || "multimulk/properties";
 
 /**
  * `image` handles the photography and gives us Cloudinary's transformations.
- * A brochure goes up as `raw`: a PDF uploaded as an image is subject to the
- * account's "allow delivery of PDF files" setting, which is off by default and
- * turns every brochure link into a 401 that is very hard to diagnose from
- * here. `raw` delivers the bytes as they were uploaded.
+ * A brochure goes up as `raw`, which delivers the bytes as they were uploaded
+ * rather than putting a PDF through the image pipeline.
+ *
+ * `raw` does *not* exempt a brochure from the account's restricted media
+ * types: with PDF restricted — the default on a new product environment — a
+ * `raw/upload/….pdf` is served as `401 … x-cld-error: deny or ACL failure`
+ * while a `.txt` beside it is served as 200. Nothing here can work around
+ * that; it is unchecked once, per environment, under Settings → Security.
  */
 export type ResourceType = "image" | "raw";
 

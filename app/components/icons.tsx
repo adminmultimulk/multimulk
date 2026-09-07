@@ -337,3 +337,418 @@ export function WhatsApp({ className }: IconProps) {
     </svg>
   );
 }
+
+/* ---- Amenity icons ----
+   One glyph per kind of amenity rather than per name: an indoor pool, an
+   outdoor pool and a pool terrace are all a pool to a reader scanning a list.
+   `AmenityIcon` in `amenity-icon.tsx` is what maps names onto these. */
+
+export function Bell({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M3 14.5h14a6.5 6.5 0 0 0-6.5-6.5h-1A6.5 6.5 0 0 0 3 14.5Z" />
+      <path d="M1.5 17h17M10 8V5.5M8.5 4.5h3" />
+    </svg>
+  );
+}
+
+export function Shield({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M10 2.5 3.5 5v5c0 3.4 2.6 6.5 6.5 7.5 3.9-1 6.5-4.1 6.5-7.5V5L10 2.5Z" />
+      <path d="m7.4 9.9 1.9 1.9 3.5-3.6" />
+    </svg>
+  );
+}
+
+export function Sofa({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M4 9V6.5A1.5 1.5 0 0 1 5.5 5h9A1.5 1.5 0 0 1 16 6.5V9" />
+      <path d="M2.5 14.5v-3.9A1.6 1.6 0 0 1 4.1 9c.9 0 1.6.7 1.6 1.6v1.4h8.6v-1.4c0-.9.7-1.6 1.6-1.6a1.6 1.6 0 0 1 1.6 1.6v3.9Z" />
+      <path d="M4.5 14.5V16M15.5 14.5V16" />
+    </svg>
+  );
+}
+
+export function Rooftop({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M2 17.5h16" />
+      <path d="M4.5 17.5V9l5.5-3.5L15.5 9v8.5" />
+      <path d="M8 17.5v-4h4v4M7 3.5v2M13 3.5v2" />
+    </svg>
+  );
+}
+
+export function Cinema({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <rect x="2.5" y="4" width="15" height="9.5" rx="1" />
+      <path d="m8.5 6.8 4 1.95-4 1.95V6.8Z" />
+      <path d="M6.5 17h7" />
+    </svg>
+  );
+}
+
+export function Desk({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <rect x="4.5" y="4.5" width="11" height="7.5" rx="1" />
+      <path d="M2.5 14.5h15M6 17.5l1.2-3M14 17.5l-1.2-3" />
+    </svg>
+  );
+}
+
+export function Elevator({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <rect x="3.5" y="2.5" width="13" height="15" rx="1" />
+      <path d="M10 2.5v15" />
+      <path d="m6 9 1.3-1.6L8.6 9M14 11l-1.3 1.6L11.4 11" />
+    </svg>
+  );
+}
+
+export function Dining({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M6 2.5v6a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-6M4 10.5v7" />
+      <path d="M13.5 2.5c2 0 3.5 2 3.5 4.5S15.5 11 14.5 11v6.5" />
+    </svg>
+  );
+}
+
+export function Spa({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M16.6 3.6C9.2 3.6 4 8 4 13.8c0 1 .1 1.9.4 2.6 7.2.8 12.2-4.4 12.2-12.8Z" />
+      <path d="M4.4 16.4C6.6 12 9.9 8.7 13.9 6.8" />
+    </svg>
+  );
+}
+
+export function Sauna({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M10 17.5c2.5 0 4.5-1.9 4.5-4.2 0-3.3-4.5-5.3-3.4-9.3-2.6 1-4.4 3.6-4.4 6.2 0 1.2.4 2 .4 2.7 0 .9-.7 1.4-1.3 1.1.1 2 1.9 3.5 4.2 3.5Z" />
+    </svg>
+  );
+}
+
+export function Dumbbell({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M4 7.5v5M2 8.5v3M16 7.5v5M18 8.5v3" />
+      <rect x="4" y="6.5" width="2.5" height="7" rx="0.8" />
+      <rect x="13.5" y="6.5" width="2.5" height="7" rx="0.8" />
+      <path d="M6.5 10h7" />
+    </svg>
+  );
+}
+
+export function Pool({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M7 12.5V5a2 2 0 0 1 2-2M13 12.5V5a2 2 0 0 1 2-2" />
+      <path d="M7 6.5h6M7 9.5h6" />
+      <path d="M2 15c1.3 0 1.3 1.2 2.7 1.2S6 15 7.3 15s1.3 1.2 2.7 1.2 1.3-1.2 2.7-1.2 1.3 1.2 2.6 1.2S16.7 15 18 15" />
+    </svg>
+  );
+}
+
+export function Tree({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M10 2.8 5.8 9h8.4L10 2.8Z" />
+      <path d="M10 7 4.2 14.2h11.6L10 7Z" />
+      <path d="M10 14.2v3.3M6.5 17.5h7" />
+    </svg>
+  );
+}
+
+export function Play({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <circle cx="10" cy="10" r="7" />
+      <path d="M10 3c2.1 2 3.2 4.3 3.2 7s-1.1 5-3.2 7M10 3C7.9 5 6.8 7.3 6.8 10s1.1 5 3.2 7" />
+      <path d="M3 10h14" />
+    </svg>
+  );
+}
+
+export function Track({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <rect x="1.5" y="5" width="17" height="10" rx="5" />
+      <rect x="5" y="8" width="10" height="4" rx="2" />
+    </svg>
+  );
+}
+
+export function Racket({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <ellipse cx="11.5" cy="7.5" rx="5" ry="5.5" transform="rotate(20 11.5 7.5)" />
+      <path d="M8.2 11.8 4 17.5M7.9 5.6l6.5 4.6M12.4 3.2l-3.7 8.6" />
+    </svg>
+  );
+}
+
+export function Grill({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M3 8.5h14a7 7 0 0 1-3.5 5.6L15 17.5M5 17.5l1.5-3.4A7 7 0 0 1 3 8.5Z" />
+      <path d="M8 5.5c0-1 1-1.3 1-2.3.8.6 1.2 1.3 1.2 2.3M11.5 5.5c0-.7.6-1 .6-1.7.6.4.9.9.9 1.7" />
+    </svg>
+  );
+}
+
+export function Car({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M3 13.5v-3l1.6-4A1.5 1.5 0 0 1 6 5.5h8a1.5 1.5 0 0 1 1.4 1l1.6 4v3" />
+      <path d="M3 10.5h14" />
+      <path d="M4 13.5v1.8M16 13.5v1.8M5.5 12h1.5M13 12h1.5" />
+    </svg>
+  );
+}
+
+export function Plug({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M6.5 3v4M13.5 3v4" />
+      <path d="M4.5 7h11v2.5a5.5 5.5 0 0 1-5.5 5.5A5.5 5.5 0 0 1 4.5 9.5V7Z" />
+      <path d="M10 15v2.5" />
+    </svg>
+  );
+}
+
+export function SmartHome({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M3 8.8 10 3.5l7 5.3v7.2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8.8Z" />
+      <path d="M7.9 12.4a3 3 0 0 1 4.2 0M9.4 14.3h1.2" />
+    </svg>
+  );
+}
+
+export function Paw({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <ellipse cx="6.2" cy="7.2" rx="1.7" ry="2.2" />
+      <ellipse cx="13.8" cy="7.2" rx="1.7" ry="2.2" />
+      <ellipse cx="3.6" cy="11.8" rx="1.5" ry="1.8" />
+      <ellipse cx="16.4" cy="11.8" rx="1.5" ry="1.8" />
+      <path d="M10 10.2c2.2 0 4 1.9 4 4a2.6 2.6 0 0 1-3.7 2.4 1 1 0 0 0-.6 0A2.6 2.6 0 0 1 6 14.2c0-2.1 1.8-4 4-4Z" />
+    </svg>
+  );
+}
+
+export function Wave({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M1.5 7.5c1.4 0 1.4 1.3 2.8 1.3S5.7 7.5 7.1 7.5s1.4 1.3 2.9 1.3 1.4-1.3 2.8-1.3 1.4 1.3 2.8 1.3S17 7.5 18.5 7.5" />
+      <path d="M1.5 11.5c1.4 0 1.4 1.3 2.8 1.3s1.4-1.3 2.8-1.3 1.4 1.3 2.9 1.3 1.4-1.3 2.8-1.3 1.4 1.3 2.8 1.3S17 11.5 18.5 11.5" />
+      <path d="M1.5 15.5c1.4 0 1.4 1.3 2.8 1.3s1.4-1.3 2.8-1.3 1.4 1.3 2.9 1.3 1.4-1.3 2.8-1.3 1.4 1.3 2.8 1.3 1.4-1.3 2.9-1.3" />
+    </svg>
+  );
+}
