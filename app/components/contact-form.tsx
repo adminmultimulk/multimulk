@@ -81,7 +81,12 @@ export function ContactForm({
   }
 
   return (
-    <form action={action} onInput={onFirstInput} className="grid gap-5 sm:grid-cols-2" noValidate>
+    <form
+      action={action}
+      onInput={onFirstInput}
+      className="grid w-full content-start gap-x-4 gap-y-3 self-start sm:grid-cols-2"
+      noValidate
+    >
       {/* Context the action cannot work out for itself. */}
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="path" value={path} />
@@ -124,7 +129,7 @@ export function ContactForm({
       />
 
       <div className="sm:col-span-2">
-        <span className="mb-2 block text-[12.5px] text-ink/70">
+        <span className="mb-1.5 block text-[12.5px] text-ink/70">
           {form.enquiryAbout} <span className="text-gold">*</span>
         </span>
         <SelectMenu
@@ -150,7 +155,7 @@ export function ContactForm({
       />
 
       <label className="sm:col-span-2">
-        <span className="mb-2 block text-[12.5px] text-ink/70">
+        <span className="mb-1.5 block text-[12.5px] text-ink/70">
           {form.message} <span className="text-gold">*</span>
         </span>
         <textarea
@@ -221,7 +226,7 @@ function Field({
 }) {
   return (
     <label className={className}>
-      <span className="mb-2 block text-[12.5px] text-ink/70">
+      <span className="mb-1.5 block text-[12.5px] text-ink/70">
         {label} {required ? <span className="text-gold">*</span> : null}
       </span>
       <input
