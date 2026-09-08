@@ -58,6 +58,19 @@ export const CBI_THRESHOLD_USD = 400000;
 
 export const propertyTypes = ["Apartment", "Townhouse", "Villa"];
 
+/**
+ * The tax rates a Turkish purchase can carry, as whole percentages.
+ *
+ * Fixed lists rather than free text: these are statutory rates, a lister
+ * typing "%1" or "1 percent" into a box would put three spellings of the same
+ * number on three listings, and a number is the only thing a buyer comparing
+ * two units can actually compare. Written once here so the form's options, the
+ * Server Action's validation and the page agree on what exists.
+ */
+export const vatRates = [0, 1, 10, 20];
+
+export const titleDeedTaxRates = [0, 2, 4];
+
 export const bedroomOptions = ["Studio", "1", "2", "3", "5"];
 
 export const locations = [

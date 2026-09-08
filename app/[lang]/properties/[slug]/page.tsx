@@ -31,6 +31,7 @@ import { placeLine, unitTitle } from "@/app/lib/i18n/units";
 import type { Project } from "@/app/lib/projects";
 import { developments, getDevelopment } from "@/app/lib/cms/developments";
 import { getListing } from "@/app/lib/cms/properties";
+import { plainText, toBlocks } from "@/app/lib/rich-text";
 
 /*
  * The ninety-four developments carried over from the legacy site, and those
@@ -94,7 +95,11 @@ export async function generateMetadata({
       title: listing.seoTitle || unitTitle(locale, t, listing),
       description:
         listing.seoDescription ||
-        listing.description ||
+        // The prose without its markup: a result snippet should read as a
+        // sentence, not as the grammar it was written in.
+        (listing.description
+          ? plainText(toBlocks(listing.description)).join(" ")
+          : "") ||
         `${listing.title} — ${listing.location}, ${listing.country}.`,
       alternates,
       // A listing kept out of search results still has a readable URL, for a

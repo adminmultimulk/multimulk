@@ -28,11 +28,22 @@ export function RichEditor({
   name,
   defaultValue,
   error,
+  variant = "article",
+  placeholder = "Write the piece.\n\nA blank line starts a new paragraph. Use the toolbar, or type ## for a heading and - for a bullet.",
 }: {
   name: string;
   defaultValue: string;
   error?: string;
+  /**
+   * "article" is the full body editor. "prose" is the same grammar and the
+   * same preview in a shorter box, without the tools that only make sense in
+   * an article — a figure needs a path under `/public`, and a listing's
+   * description is not where a comparison table belongs.
+   */
+  variant?: "article" | "prose";
+  placeholder?: string;
 }) {
+  const full = variant === "article";
   const [value, setValue] = useState(defaultValue);
   const [tab, setTab] = useState<"write" | "preview">("write");
   const area = useRef<HTMLTextAreaElement>(null);
@@ -215,35 +226,39 @@ export function RichEditor({
           <Icon d="M4 15V9a4 4 0 0 1 4-4M11 15V9a4 4 0 0 1 4-4" />
         </Tool>
 
-        <Divider />
+        {full ? (
+          <>
+            <Divider />
 
-        <Tool
-          label="Image"
-          // Caret lands after `/images/`, which is where the filename goes.
-          onClick={() => insertBlock("![Describe the photograph](/images/)", 35)}
-        >
-          <Icon d="M3 4h14v12H3zM3 13l4-4 4 4 3-3 3 3" />
-        </Tool>
-        <Tool
-          label="Table"
-          onClick={() =>
-            insertBlock(
-              "| Programme | Minimum | Timeline |\n| --- | --- | --- |\n|  |  |  |",
-              2,
-            )
-          }
-        >
-          <Icon d="M3 4h14v12H3zM3 8h14M3 12h14M8.5 4v12M13 4v12" />
-        </Tool>
-        <Tool
-          label="Key point"
-          onClick={() => insertBlock(":::key\n\n:::", 7)}
-        >
-          <Icon d="M10 3v10M6 9l4 4 4-4M4 17h12" />
-        </Tool>
-        <Tool label="Section break" onClick={() => insertBlock("---")}>
-          <Icon d="M3 10h14" />
-        </Tool>
+            <Tool
+              label="Image"
+              // Caret lands after `/images/`, which is where the filename goes.
+              onClick={() => insertBlock("![Describe the photograph](/images/)", 35)}
+            >
+              <Icon d="M3 4h14v12H3zM3 13l4-4 4 4 3-3 3 3" />
+            </Tool>
+            <Tool
+              label="Table"
+              onClick={() =>
+                insertBlock(
+                  "| Programme | Minimum | Timeline |\n| --- | --- | --- |\n|  |  |  |",
+                  2,
+                )
+              }
+            >
+              <Icon d="M3 4h14v12H3zM3 8h14M3 12h14M8.5 4v12M13 4v12" />
+            </Tool>
+            <Tool
+              label="Key point"
+              onClick={() => insertBlock(":::key\n\n:::", 7)}
+            >
+              <Icon d="M10 3v10M6 9l4 4 4-4M4 17h12" />
+            </Tool>
+            <Tool label="Section break" onClick={() => insertBlock("---")}>
+              <Icon d="M3 10h14" />
+            </Tool>
+          </>
+        ) : null}
 
         <div className="ms-auto flex rounded-[5px] bg-ink/6 p-0.5">
           {(["write", "preview"] as const).map((key) => (
@@ -275,8 +290,10 @@ export function RichEditor({
           spellCheck
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? `${name}-error` : undefined}
-          className="block min-h-[520px] w-full resize-y bg-white px-4 py-4 text-[14.5px] leading-[25px] text-ink outline-none placeholder:text-ink/30"
-          placeholder={"Write the piece.\n\nA blank line starts a new paragraph. Use the toolbar, or type ## for a heading and - for a bullet."}
+          className={`block w-full resize-y bg-white px-4 py-4 text-[14.5px] leading-[25px] text-ink outline-none placeholder:text-ink/30 ${
+            full ? "min-h-[520px]" : "min-h-[180px]"
+          }`}
+          placeholder={placeholder}
         />
       </div>
 
@@ -298,12 +315,16 @@ export function RichEditor({
         <span className="tabular-nums">
           {words.toLocaleString("en")} {words === 1 ? "word" : "words"}
         </span>
-        <span className="tabular-nums">
-          {readingMinutes(blocks)} min read
-        </span>
-        <span className="tabular-nums">
-          {blocks.length} {blocks.length === 1 ? "block" : "blocks"}
-        </span>
+        {full ? (
+          <>
+            <span className="tabular-nums">
+              {readingMinutes(blocks)} min read
+            </span>
+            <span className="tabular-nums">
+              {blocks.length} {blocks.length === 1 ? "block" : "blocks"}
+            </span>
+          </>
+        ) : null}
         <span className="ms-auto hidden sm:block">
           ⌘B bold · ⌘I italic · ⌘K link
         </span>

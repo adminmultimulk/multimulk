@@ -4,6 +4,7 @@ import { units } from "@/app/lib/properties";
 import { isTopic } from "@/app/lib/topics";
 
 export { checkSlug, slugify } from "./slug";
+export { money } from "./money";
 
 /**
  * Slugs the static content in `app/lib` already answers on.
@@ -66,6 +67,31 @@ export function coordinate(value: string, limit: number): number | null | false 
   const parsed = Number(value);
   if (!Number.isFinite(parsed) || Math.abs(parsed) > limit) return false;
   return parsed;
+}
+
+/**
+ * One of a fixed set of answers, or nothing.
+ *
+ * Same three answers as `coordinate`: `null` for "not stated", the value for a
+ * recognised one, and `false` for something that is neither — which only a
+ * hand-made request can produce, and is rejected rather than quietly dropped.
+ */
+export function choice<T extends string>(
+  value: string,
+  allowed: readonly T[],
+): T | null | false {
+  if (!value) return null;
+  return (allowed as readonly string[]).includes(value) ? (value as T) : false;
+}
+
+/** A whole percentage from a fixed list — VAT, title deed tax. */
+export function rate(
+  value: string,
+  allowed: readonly number[],
+): number | null | false {
+  if (!value) return null;
+  const parsed = Number(value);
+  return allowed.includes(parsed) ? parsed : false;
 }
 
 /** The separator between a highlight's heading and its sentence. */
@@ -173,12 +199,4 @@ export function field(form: FormData, name: string): string {
 
 export function checkbox(form: FormData, name: string): boolean {
   return form.get(name) === "on" || form.get(name) === "true";
-}
-
-/** A money field: digits only, and never negative. */
-export function money(value: string): number | null {
-  const cleaned = value.replace(/[,\s]/g, "");
-  if (!/^\d+$/.test(cleaned)) return null;
-  const n = Number(cleaned);
-  return Number.isSafeInteger(n) ? n : null;
 }

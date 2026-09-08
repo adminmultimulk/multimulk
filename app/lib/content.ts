@@ -13,7 +13,7 @@
  * Multi Mulk's own before this goes anywhere public.
  */
 
-import { buildPath, routes, searchPath } from "./routes";
+import { buildPath, routes, searchPath, type RouteId } from "./routes";
 
 export { type Article } from "./media";
 
@@ -456,13 +456,60 @@ export const footerColumns = [
   { key: "caribbean" as const, names: [] as string[] },
 ];
 
-/** The About column, keyed; `href` is unset for pages that do not exist yet. */
+/**
+ * The two standing link columns, between the portfolio and About Us.
+ *
+ * They exist because the portfolio columns above are filled from what is
+ * published, so on a site with no developments entered yet the footer rendered
+ * two columns in a four-column grid and half the desktop footer was bare sand.
+ * These are not inventory: every entry is a page that exists in `routes`,
+ * so the columns are the same height whether or not anything is for sale.
+ *
+ * Labelled from `dictionary.routes`, which already names every page in all
+ * seven languages. A second set of footer-only strings would be the same page
+ * names translated twice, drifting apart the first time one was renamed.
+ */
+export type FooterRouteItem = { route: RouteId; href: string };
+
+/**
+ * The four pillars, in the order the nav ranks them.
+ *
+ * `search` is deliberately not here even though it is the page these lead
+ * into: `routes.search` and `routes.realEstateHub` are "Properties" and "Real
+ * Estate" in English but the same word in Arabic and Russian, and near enough
+ * in Turkish and Urdu, so listing both put two identical lines in one column
+ * for four of the seven languages. The hub carries the reader to the search.
+ */
+export const footerServiceItems: FooterRouteItem[] = [
+  { route: "citizenshipHub", href: routes.citizenshipHub.pattern },
+  { route: "goldenVisaHub", href: routes.goldenVisaHub.pattern },
+  { route: "realEstateHub", href: routes.realEstateHub.pattern },
+  { route: "investorProtection", href: routes.investorProtection.pattern },
+];
+
+/** What a reader deciding between programmes goes looking for. */
+export const footerResourceItems: FooterRouteItem[] = [
+  { route: "knowledge", href: routes.knowledge.pattern },
+  { route: "compareIndex", href: routes.compareIndex.pattern },
+  { route: "faqIndex", href: routes.faqIndex.pattern },
+  { route: "caseStudies", href: routes.caseStudies.pattern },
+  { route: "tools", href: routes.tools.pattern },
+  { route: "contact", href: routes.contact.pattern },
+];
+
+/**
+ * The About column, keyed; `href` is unset for pages that do not exist yet.
+ *
+ * `mediaCentre` is gone from here: it linked to `/knowledge` under a second
+ * name, and the Resources column now lists that page as the Knowledge Centre,
+ * which is what the nav and the breadcrumbs call it. Its dictionary entries
+ * are left in place — the page may yet earn a press room of its own.
+ */
 export const footerAboutItems = [
   { key: "ourStory" as const, href: routes.about.pattern },
   { key: "ourTeam" as const, href: routes.team.pattern },
   { key: "turkishCitizenship" as const, href: buildPath("citizenshipProgramme", { programme: "turkiye" }) },
   { key: "caribbeanCbi" as const, href: buildPath("citizenshipProgramme", { programme: "caribbean" }) },
-  { key: "mediaCentre" as const, href: routes.knowledge.pattern },
   // No standing construction-updates page yet; the footer points readers at
   // the portfolio, where each development's own page carries its progress.
   { key: "construction" as const, href: routes.realEstateHub.pattern },

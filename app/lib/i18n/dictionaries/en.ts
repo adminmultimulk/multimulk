@@ -566,6 +566,8 @@ const en = {
     columns: {
       turkiye: "Türkiye",
       caribbean: "Caribbean",
+      services: "Services",
+      resources: "Resources",
       about: "About Us",
     },
     /** The About column's items; the two portfolio columns list development
@@ -1415,6 +1417,9 @@ const en = {
     handover: "Handover",
     serviceCharge: "Service charge",
     titleDeed: "Title deed",
+    gyo: "REIT (GYO)",
+    vat: "VAT",
+    titleDeedTax: "Title deed tax",
     watchTour: "Watch the Tour",
     location: "Location",
     mapTitle: "Map of {title}",

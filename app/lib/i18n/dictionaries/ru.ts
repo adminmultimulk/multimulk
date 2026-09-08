@@ -632,6 +632,8 @@ const ru: Dictionary = {
     columns: {
       turkiye: "Türkiye",
       caribbean: "Карибы",
+      services: "Услуги",
+      resources: "Материалы",
       about: "О компании",
     },
     aboutItems: {
@@ -1497,6 +1499,9 @@ const ru: Dictionary = {
     handover: "Срок сдачи",
     serviceCharge: "Плата за обслуживание",
     titleDeed: "Право собственности",
+    gyo: "REIT (GYO)",
+    vat: "НДС",
+    titleDeedTax: "Налог на оформление тапу",
     watchTour: "Смотреть тур",
     location: "Расположение",
     mapTitle: "Карта: {title}",

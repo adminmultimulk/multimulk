@@ -371,6 +371,8 @@ const ar: Dictionary = {
     columns: {
       turkiye: "تركيا",
       caribbean: "الكاريبي",
+      services: "الخدمات",
+      resources: "مصادر ومقارنات",
       about: "من نحن",
     },
     aboutItems: {
@@ -1513,6 +1515,9 @@ const ar: Dictionary = {
     handover: "التسليم",
     serviceCharge: "رسوم الخدمة",
     titleDeed: "سند الملكية",
+    gyo: "صندوق استثمار عقاري (GYO)",
+    vat: "ضريبة القيمة المضافة",
+    titleDeedTax: "رسم نقل سند الملكية",
     watchTour: "شاهد الجولة",
     location: "الموقع",
     mapTitle: "خريطة {title}",

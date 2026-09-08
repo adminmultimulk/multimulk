@@ -5,20 +5,27 @@ import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/app/lib/db";
 import { PROPERTIES_TAG } from "@/app/lib/cms/tags";
-import { getDevelopment } from "@/app/lib/cms/developments";
-import { CBI_THRESHOLD_USD, propertyTypes } from "@/app/lib/properties";
+import { developmentSlug, getDevelopment } from "@/app/lib/cms/developments";
+import {
+  CBI_THRESHOLD_USD,
+  propertyTypes,
+  titleDeedTaxRates,
+  vatRates,
+} from "@/app/lib/properties";
 import { requirePropertyAccess, type ActionState } from "./guard";
 import {
   checkFile,
   checkHighlights,
   checkImage,
   checkSlug,
+  choice,
   coordinate,
   highlightPairs,
   checkbox,
   field,
   lines,
   money,
+  rate,
   reservedPropertySlugs,
   slugify,
 } from "./validate";
@@ -70,6 +77,9 @@ export async function saveProperty(
   const handover = field(form, "handover");
   const serviceCharge = field(form, "serviceCharge");
   const titleDeed = field(form, "titleDeed");
+  const gyo = choice(field(form, "gyo"), ["yes", "no"]);
+  const vatRate = rate(field(form, "vatRate"), vatRates);
+  const titleDeedTaxRate = rate(field(form, "titleDeedTaxRate"), titleDeedTaxRates);
   const videoUrl = field(form, "videoUrl");
   const mapLat = coordinate(field(form, "mapLat"), 90);
   const mapLng = coordinate(field(form, "mapLng"), 180);
@@ -98,10 +108,20 @@ export async function saveProperty(
   if (slugError) fieldErrors.slug = slugError;
   else if (reservedPropertySlugs.has(slug))
     fieldErrors.slug = "The site already lists a unit at this slug.";
-  // A development answers at its name slugged, and wins the collision, so a
-  // listing that took the slug would have a page nobody could reach.
-  else if (await getDevelopment(slug))
-    fieldErrors.slug = "A development already answers at this slug.";
+  /*
+   * A development answers at its name slugged, and wins the collision, so a
+   * listing that took the slug would have a page nobody could reach.
+   *
+   * Except where the development in question is this listing's own. A scheme
+   * is assembled from the listings that name it, so the first unit published
+   * in "Pearl House 4" *creates* the development at `pearl-house-4` — and if
+   * the unit was itself slugged `pearl-house-4`, every later save of it
+   * collided with a development it had brought into existence, and the listing
+   * could never be edited again. That is not a clash: the development's page
+   * is assembled from this unit and carries it, so nothing is unreachable.
+   */
+  else if (developmentSlug(project) !== slug && (await getDevelopment(slug)))
+    fieldErrors.slug = `A development already answers at /properties/${slug}. Give the unit a slug of its own — "${slug}-2-bedroom", say.`;
 
   if (priceUSD === null) fieldErrors.priceUSD = "Whole numbers only, no symbols.";
   if (priceEUR === null) fieldErrors.priceEUR = "Whole numbers only, no symbols.";
@@ -127,6 +147,14 @@ export async function saveProperty(
 
   const brochureError = checkFile(brochure, "The brochure");
   if (brochureError) fieldErrors.brochure = brochureError;
+
+  // Three closed lists, and a browser that submits something else is not a
+  // browser filling in this form.
+  if (gyo === false) fieldErrors.gyo = "Answer yes or no, or leave it unstated.";
+  if (vatRate === false)
+    fieldErrors.vatRate = `One of: ${vatRates.join("%, ")}%.`;
+  if (titleDeedTaxRate === false)
+    fieldErrors.titleDeedTaxRate = `One of: ${titleDeedTaxRates.join("%, ")}%.`;
 
   if (videoUrl && !/^https:\/\//.test(videoUrl))
     fieldErrors.videoUrl = "A full https:// link to the tour, or leave it empty.";
@@ -186,6 +214,11 @@ export async function saveProperty(
     handover: handover || null,
     serviceCharge: serviceCharge || null,
     titleDeed: titleDeed || null,
+    // `null` is "not stated", which the page leaves out entirely — a different
+    // answer from "no" and from "0%", both of which it shows.
+    gyo: gyo === false || gyo === null ? null : gyo === "yes",
+    vatRate: vatRate === false ? null : vatRate,
+    titleDeedTaxRate: titleDeedTaxRate === false ? null : titleDeedTaxRate,
     videoUrl: videoUrl || null,
     mapLat: mapLat === false ? null : mapLat,
     mapLng: mapLng === false ? null : mapLng,

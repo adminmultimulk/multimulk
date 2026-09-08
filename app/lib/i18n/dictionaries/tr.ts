@@ -163,6 +163,8 @@ const tr = {
     columns: {
       turkiye: "Türkiye",
       caribbean: "Karayipler",
+      services: "Hizmetler",
+      resources: "Kaynaklar",
       about: "Hakkımızda",
     },
     aboutItems: {
@@ -822,6 +824,9 @@ const tr = {
     handover: "Teslim",
     serviceCharge: "Aidat",
     titleDeed: "Tapu durumu",
+    gyo: "GYO",
+    vat: "KDV",
+    titleDeedTax: "Tapu harcı",
     watchTour: "Turu İzleyin",
     location: "Konum",
     mapTitle: "{title} haritası",

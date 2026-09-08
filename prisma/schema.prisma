@@ -178,6 +178,14 @@ model Property {
   serviceCharge String?
   /// Title deed status — "Ready title deed", "Under construction (kat irtifakı)".
   titleDeed     String?
+  /// Whether the unit is held through a Turkish REIT (gayrimenkul yatırım
+  /// ortaklığı). Nullable rather than a default: "not stated" and "no" are
+  /// different answers to a buyer, and only one of them belongs on the page.
+  gyo              Boolean?
+  /// VAT charged on the purchase, as a whole percentage — 0, 1, 10 or 20.
+  vatRate          Int?
+  /// Title deed transfer tax, as a whole percentage — 0, 2 or 4.
+  titleDeedTaxRate Int?
 
   // --- The page's own metadata ----------------------------------------------
 

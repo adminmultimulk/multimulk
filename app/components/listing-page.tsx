@@ -1,5 +1,7 @@
+import type { ReactNode } from "react";
 import { Container, SectionIntro } from "./container";
 import { AmenityIcon } from "./amenity-icon";
+import { ArticleBody, RichLine } from "./article-body";
 import { AnimatedTitle } from "./animated-title";
 import { BrochureButton } from "./brochure-button";
 import { EnquireButton } from "./enquire-button";
@@ -25,6 +27,7 @@ import { placeLabel, unitSpecs, unitTitle } from "@/app/lib/i18n/units";
 import { mergedUnits, type Listing } from "@/app/lib/cms/properties";
 import { developmentSlug } from "@/app/lib/cms/developments";
 import { breadcrumbs, residence, routeUrl } from "@/app/lib/seo/jsonld";
+import { plainText, toBlocks } from "@/app/lib/rich-text";
 
 /**
  * The page a listing gets when a lister publishes it.
@@ -74,20 +77,63 @@ export async function ListingPage({ listing }: { listing: Listing }) {
         : ("turkiyeProperty" as const),
   };
 
-  const terms = [
+  /*
+   * Terms, in two halves.
+   *
+   * The written ones are a sentence the developer worded, and carry the same
+   * inline emphasis the description does — a lister who bolds the deposit in
+   * one box expects it bolded in the other. The answered ones are picked from
+   * a list, so they are rendered rather than repeated: a rate is a number this
+   * page can put in the reader's own numerals, and a yes is a word it can
+   * translate. Left unstated, a row is absent — which is not the same as a no
+   * or a zero, both of which are shown.
+   */
+  const percent = (rate: number) => `${formatNumber(locale, rate)}%`;
+
+  const terms: { label: string; value: ReactNode }[] = [
     { label: copy.paymentPlan, value: listing.paymentPlan },
     { label: copy.handover, value: listing.handover },
     { label: copy.serviceCharge, value: listing.serviceCharge },
     { label: copy.titleDeed, value: listing.titleDeed },
-  ].filter((term): term is { label: string; value: string } =>
-    Boolean(term.value),
-  );
+  ]
+    .filter((term): term is { label: string; value: string } =>
+      Boolean(term.value),
+    )
+    .map((term) => ({
+      label: term.label,
+      value: <RichLine text={term.value} />,
+    }));
+
+  if (listing.gyo !== null)
+    terms.push({
+      label: copy.gyo,
+      value: listing.gyo ? t.compare.yes : t.compare.no,
+    });
+  if (listing.vatRate !== null)
+    terms.push({ label: copy.vat, value: percent(listing.vatRate) });
+  if (listing.titleDeedTaxRate !== null)
+    terms.push({
+      label: copy.titleDeedTax,
+      value: percent(listing.titleDeedTaxRate),
+    });
 
   return (
     <>
       <JsonLd
         graph={[
-          residence(locale, listing, title, url),
+          // Structured data takes the prose without its markup — a search
+          // result should not read "**Sea views**".
+          residence(
+            locale,
+            {
+              ...listing,
+              description: listing.description
+                ? plainText(toBlocks(listing.description)).join(" ")
+                : null,
+            },
+            title,
+            url,
+          ),
           breadcrumbs({
             locale,
             id: "development",
@@ -198,19 +244,12 @@ export async function ListingPage({ listing }: { listing: Listing }) {
                     <h2 className="max-w-[460px] font-display text-[30px] leading-[1.28] text-ink sm:text-[38px]">
                       {copy.about}
                     </h2>
-                    {/* One paragraph per blank line, as the lister typed it. */}
-                    {listing.description
-                      .split(/\n{2,}/)
-                      .map((paragraph) => paragraph.trim())
-                      .filter(Boolean)
-                      .map((paragraph) => (
-                        <p
-                          key={paragraph}
-                          className="mt-6 max-w-[500px] text-[13.5px] leading-[23px] text-ink"
-                        >
-                          {paragraph}
-                        </p>
-                      ))}
+                    {/* Written in the same grammar an article is written in,
+                        and rendered through the same components — so bold, a
+                        list or a link means here what it means there. */}
+                    <div className="mt-6 max-w-[500px]">
+                      <ArticleBody body={toBlocks(listing.description)} />
+                    </div>
                   </div>
                 ) : null}
 
@@ -223,7 +262,7 @@ export async function ListingPage({ listing }: { listing: Listing }) {
                         </h3>
                         <span className="mt-3 block h-px w-7 bg-gold" />
                         <p className="mt-3 text-[13px] leading-[21px] text-ink/80">
-                          {highlight.text}
+                          <RichLine text={highlight.text} />
                         </p>
                       </li>
                     ))}

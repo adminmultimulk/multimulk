@@ -65,6 +65,12 @@ export default async function EditPropertyPage({
           handover: property.handover ?? "",
           serviceCharge: property.serviceCharge ?? "",
           titleDeed: property.titleDeed ?? "",
+          gyo: property.gyo === null ? "" : property.gyo ? "yes" : "no",
+          vatRate: property.vatRate === null ? "" : String(property.vatRate),
+          titleDeedTaxRate:
+            property.titleDeedTaxRate === null
+              ? ""
+              : String(property.titleDeedTaxRate),
           videoUrl: property.videoUrl ?? "",
           mapLat: property.mapLat === null ? "" : String(property.mapLat),
           mapLng: property.mapLng === null ? "" : String(property.mapLng),

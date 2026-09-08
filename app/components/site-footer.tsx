@@ -6,6 +6,8 @@ import {
   footerAboutItems,
   footerColumns,
   footerLinks,
+  footerResourceItems,
+  footerServiceItems,
   socialLinks,
 } from "@/app/lib/content";
 import { developments } from "@/app/lib/cms/developments";
@@ -62,6 +64,27 @@ export async function SiteFooter() {
       ],
     }))
     .filter((column) => column.items.length);
+
+  /*
+   * The two standing columns. Unlike the portfolio ones they are always here,
+   * which is the point: with nothing published the footer was two columns wide
+   * in a four-column grid, and the right half of the desktop footer was empty.
+   */
+  const routeColumns = [
+    { key: "services" as const, items: footerServiceItems },
+    { key: "resources" as const, items: footerResourceItems },
+  ];
+
+  /*
+   * Four columns is the design, and four is exactly what renders while no
+   * development is published. Publishing one or two adds a portfolio column
+   * apiece, and six columns in a row of four leaves a widowed pair; at that
+   * point three-by-two is the tidier grid, and the columns stay wide enough
+   * for "Citizenship by Investment" to sit on two lines rather than four.
+   */
+  const columnCount = columns.length + routeColumns.length + 2;
+  const gridColumns = columnCount > 4 ? "lg:grid-cols-3" : "lg:grid-cols-4";
+
   const itemStyle =
     "text-[13.5px] leading-[21px] text-cream/90 transition-colors hover:text-white lg:text-[11.5px] lg:leading-[17px]";
   const headingStyle =
@@ -148,7 +171,7 @@ export async function SiteFooter() {
                 <div className="mt-6 hidden lg:block">{copyright}</div>
               </div>
 
-              <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+              <div className={`grid gap-10 sm:grid-cols-2 ${gridColumns}`}>
                 {/* Portfolio columns list development names, which read the same
                     in every language. */}
                 {columns.map((column) => (
@@ -168,6 +191,23 @@ export async function SiteFooter() {
                               {item.name}
                             </a>
                           )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+
+                {routeColumns.map((column) => (
+                  <div key={column.key}>
+                    <h2 className={headingStyle}>
+                      {t.footer.columns[column.key]}
+                    </h2>
+                    <ul className="mt-[18px] flex flex-col gap-[11px]">
+                      {column.items.map((item) => (
+                        <li key={item.route}>
+                          <Link href={item.href} className={itemStyle}>
+                            {t.routes[item.route]}
+                          </Link>
                         </li>
                       ))}
                     </ul>

@@ -1,9 +1,18 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import {
+  memo,
+  useActionState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import { saveProperty } from "@/app/lib/admin/property-actions";
+import { money } from "@/app/lib/admin/money";
 import { slugify } from "@/app/lib/admin/slug";
 import {
   amenityGroups,
@@ -14,8 +23,13 @@ import {
   CBI_THRESHOLD_USD,
   bedroomOptions,
   propertyTypes,
+  titleDeedTaxRates,
+  vatRates,
 } from "@/app/lib/properties";
 import { AmenityIcon } from "../amenity-icon";
+import { useFormDraft } from "./form-draft";
+import { PropertyPreview } from "./property-preview";
+import { RichEditor } from "./rich-editor";
 import { Alert, Button, Field, Input, Select, Textarea } from "./ui";
 import { UploadField, UploadList } from "./upload-field";
 
@@ -49,6 +63,11 @@ export type PropertyDraft = {
   handover: string;
   serviceCharge: string;
   titleDeed: string;
+  /** "", "yes" or "no" — empty is "not stated", which is not the same as no. */
+  gyo: string;
+  /** A whole percentage as written in the select, or "" for not stated. */
+  vatRate: string;
+  titleDeedTaxRate: string;
   videoUrl: string;
   mapLat: string;
   mapLng: string;
@@ -86,6 +105,9 @@ export const emptyProperty: PropertyDraft = {
   handover: "",
   serviceCharge: "",
   titleDeed: "",
+  gyo: "",
+  vatRate: "",
+  titleDeedTaxRate: "",
   videoUrl: "",
   mapLat: "",
   mapLng: "",
@@ -95,6 +117,64 @@ export const emptyProperty: PropertyDraft = {
   status: "DRAFT",
 };
 
+/**
+ * The form as it stands, in the shape the server rendered it in.
+ *
+ * Read out of the live `FormData` rather than tracked in state, so a field
+ * added to this form is kept in a draft without anything here being told about
+ * it twice. `id` and `status` are taken from the listing rather than the form:
+ * they say which row is being edited, not what somebody typed.
+ */
+function readDraft(form: FormData, base: PropertyDraft): PropertyDraft {
+  const text = (name: string) => String(form.get(name) ?? "");
+  const list = (name: string) =>
+    text(name)
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+  return {
+    id: base.id,
+    status: base.status,
+    slug: text("slug"),
+    title: text("title"),
+    project: text("project"),
+    location: text("location"),
+    country: text("country"),
+    priceUSD: text("priceUSD"),
+    priceEUR: text("priceEUR"),
+    priceTRY: text("priceTRY"),
+    type: text("type"),
+    bathrooms: text("bathrooms"),
+    bedroom: text("bedroom"),
+    size: text("size"),
+    level: text("level"),
+    view: text("view"),
+    soldOut: form.get("soldOut") !== null,
+    cbiEligible: form.get("cbiEligible") !== null,
+    image: text("image"),
+    gallery: list("gallery"),
+    description: text("description"),
+    highlights: text("highlights"),
+    amenities: list("amenities"),
+    brochure: text("brochure"),
+    floorPlans: list("floorPlans"),
+    paymentPlan: text("paymentPlan"),
+    handover: text("handover"),
+    serviceCharge: text("serviceCharge"),
+    titleDeed: text("titleDeed"),
+    gyo: text("gyo"),
+    vatRate: text("vatRate"),
+    titleDeedTaxRate: text("titleDeedTaxRate"),
+    videoUrl: text("videoUrl"),
+    mapLat: text("mapLat"),
+    mapLng: text("mapLng"),
+    seoTitle: text("seoTitle"),
+    seoDescription: text("seoDescription"),
+    noindex: form.get("noindex") !== null,
+  };
+}
+
 function SectionTitle({ title, note }: { title: string; note: string }) {
   return (
     <div>
@@ -102,6 +182,16 @@ function SectionTitle({ title, note }: { title: string; note: string }) {
       <p className="mt-1 text-[12px] leading-[18px] text-ink/55">{note}</p>
     </div>
   );
+}
+
+/** "3 minutes ago", for the line that says what was brought back. */
+function ago(at: number): string {
+  const minutes = Math.round((Date.now() - at) / 60000);
+  if (minutes < 1) return "a moment ago";
+  if (minutes === 1) return "a minute ago";
+  if (minutes < 60) return `${minutes} minutes ago`;
+  const hours = Math.round(minutes / 60);
+  return hours === 1 ? "an hour ago" : `${hours} hours ago`;
 }
 
 /**
@@ -221,6 +311,56 @@ function AmenityPicker({
   );
 }
 
+/** The hint under every box that takes emphasis, written once. */
+const FORMATTING_HINT = "**bold**, *italic*, [a link](https://…).";
+
+/**
+ * What each field is called, for the summary a rejected save opens with.
+ *
+ * The Server Action answers with field names; a lister looking for what went
+ * wrong is looking for the words above the boxes. Keyed by the `name` the form
+ * submits, which is also the `id` on the control, so each entry in the summary
+ * is a link straight to the box it is about.
+ */
+const FIELD_LABELS: Record<string, string> = {
+  title: "Listing title",
+  project: "Development",
+  slug: "URL slug",
+  location: "City or district",
+  country: "Country or region",
+  priceUSD: "Price (USD)",
+  priceEUR: "Price (EUR)",
+  priceTRY: "Price (TRY)",
+  type: "Type",
+  bedroom: "Bedrooms",
+  bathrooms: "Bathrooms",
+  size: "Size",
+  level: "Level",
+  view: "View",
+  image: "Card image",
+  gallery: "Gallery",
+  floorPlans: "Floor plans",
+  brochure: "Brochure (PDF)",
+  description: "Description",
+  highlights: "Highlights",
+  amenities: "Amenities",
+  paymentPlan: "Payment plan",
+  handover: "Handover",
+  serviceCharge: "Service charge",
+  titleDeed: "Title deed",
+  gyo: "REIT (GYO)",
+  vatRate: "VAT",
+  titleDeedTaxRate: "Title deed tax",
+  videoUrl: "Video tour",
+  mapLat: "Latitude",
+  mapLng: "Longitude",
+  seoTitle: "SEO title",
+  seoDescription: "Meta description",
+};
+
+/** The box a field name belongs to, where the two differ. */
+const FIELD_IDS: Record<string, string> = { amenities: "amenities-other" };
+
 export function PropertyForm({
   property,
   locations,
@@ -229,22 +369,184 @@ export function PropertyForm({
   locations: string[];
 }) {
   const [state, action, pending] = useActionState(saveProperty, {});
-  const errors = state.fieldErrors ?? {};
+  // Stable across the re-renders the preview causes, so the fields beside it
+  // are not re-rendered for every keystroke that only the preview cares about.
+  const errors = useMemo(() => state.fieldErrors ?? {}, [state]);
 
+  const {
+    formRef,
+    values,
+    live,
+    version,
+    restoredAt,
+    touch,
+    onSubmit,
+    rejected,
+    discard,
+  } = useFormDraft({
+    key: `multimulk:property:${property.id ?? "new"}`,
+    initial: property,
+    fromForm: useCallback(
+      (form: FormData) => readDraft(form, property),
+      [property],
+    ),
+  });
+
+  const failed = Object.keys(errors);
+  const alert = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!state.error && !state.fieldErrors) return;
+
+    // Puts back everything React's post-action form reset just wiped, and
+    // takes the draft again.
+    rejected();
+
+    /*
+     * And it is announced where the person is looking, not where the markup
+     * happens to put it. Publish is at the bottom of a form two screens long;
+     * without this, a rejected save looks exactly like a button that does
+     * nothing, and the reason for it sits unread above the fold.
+     */
+    alert.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    alert.current?.focus({ preventScroll: true });
+  }, [state, rejected]);
+
+  return (
+    /*
+     * Two columns where there is room for two. The preview is a companion to
+     * the form and not a step after it, so it sits alongside and sticks to the
+     * top of the screen while the form is scrolled; below `xl` it falls under
+     * the form, where it is still the answer to "what did I just make?".
+     */
+    <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start">
+      <form
+        ref={formRef}
+        action={action}
+        onChange={touch}
+        onInput={touch}
+        onSubmit={onSubmit}
+        className="grid max-w-[860px] gap-6"
+      >
+        {property.id ? <input type="hidden" name="id" value={property.id} /> : null}
+
+        {state.error ? (
+          <Alert ref={alert}>
+            {state.error}
+            {failed.length ? (
+              <ul className="mt-1.5 grid gap-1">
+                {failed.map((name) => (
+                  <li key={name}>
+                    <a
+                      href={`#${FIELD_IDS[name] ?? name}`}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        const box = document.getElementById(
+                          FIELD_IDS[name] ?? name,
+                        );
+                        box?.scrollIntoView({ block: "center" });
+                        box?.focus();
+                      }}
+                      className="font-medium underline underline-offset-2"
+                    >
+                      {FIELD_LABELS[name] ?? name}
+                    </a>{" "}
+                    — {errors[name]}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </Alert>
+        ) : null}
+
+        {restoredAt !== null ? (
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-[13px] text-amber-900">
+            <span>
+              Unsaved changes from {ago(restoredAt)} were brought back —
+              nothing here is saved until you publish or save a draft.
+            </span>
+            <button
+              type="button"
+              onClick={discard}
+              className="underline underline-offset-2 hover:no-underline"
+            >
+              Discard them
+            </button>
+          </p>
+        ) : null}
+
+        {/* Remounted when a draft is restored, so every box below picks up its
+            restored value the same way it picks up the server's. */}
+        <PropertyFields
+          key={version}
+          property={values}
+          locations={locations}
+          errors={errors}
+          onUpload={touch}
+        />
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Button type="submit" name="intent" value="publish" disabled={pending}>
+            {property.status === "PUBLISHED" ? "Save and keep live" : "Publish"}
+          </Button>
+          <Button
+            type="submit"
+            name="intent"
+            value="draft"
+            variant="secondary"
+            disabled={pending}
+          >
+            {property.status === "PUBLISHED"
+              ? "Save and take offline"
+              : "Save as draft"}
+          </Button>
+          <Link
+            href="/admin/properties"
+            className="text-[13px] text-ink/60 underline underline-offset-2 hover:text-ink"
+          >
+            Cancel
+          </Link>
+        </div>
+      </form>
+
+      {/* Outside the form on purpose: nothing in here is a field, and a
+          preview that could be submitted with the listing is a bug waiting. */}
+      <aside className="max-w-[520px] xl:sticky xl:top-9 xl:max-h-[calc(100svh-4.5rem)] xl:overflow-y-auto">
+        <PropertyPreview property={live} />
+      </aside>
+    </div>
+  );
+}
+
+/**
+ * Memoised: the preview re-renders as fast as somebody types, and the fields
+ * beside it hold carets, upload progress and a rich-text editor that have no
+ * reason to be rebuilt for it.
+ */
+const PropertyFields = memo(function PropertyFields({
+  property,
+  locations,
+  errors,
+  onUpload,
+}: {
+  property: PropertyDraft;
+  locations: string[];
+  errors: Record<string, string>;
+  /** A photograph arriving is a change to the listing like any other. */
+  onUpload: () => void;
+}) {
   const [slug, setSlug] = useState(property.slug);
   const [slugTouched, setSlugTouched] = useState(Boolean(property.slug));
   const [usd, setUsd] = useState(property.priceUSD);
 
   // Shown, not enforced — the server derives the same thing from the price it
-  // is actually given, so a stale number on screen cannot mislabel a unit.
-  const overThreshold = Number(usd.replace(/[,\s]/g, "")) >= CBI_THRESHOLD_USD;
+  // is actually given, so a stale number on screen cannot mislabel a unit. Read
+  // with the action's own parser, so "450.000" counts here exactly as it counts
+  // there.
+  const overThreshold = (money(usd) ?? 0) >= CBI_THRESHOLD_USD;
 
   return (
-    <form action={action} className="grid max-w-[860px] gap-6">
-      {property.id ? <input type="hidden" name="id" value={property.id} /> : null}
-
-      {state.error ? <Alert>{state.error}</Alert> : null}
-
+    <>
       <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Listing title" name="title" error={errors.title} required>
@@ -381,7 +683,8 @@ export function PropertyForm({
         </div>
         <p className="text-[12px] leading-[18px] text-ink/55">
           All three are shown — the search page lets a buyer pick a currency, it
-          does not convert. Whole numbers, no symbols.
+          does not convert. Whole numbers, written however you write them:
+          450000, 450,000 and 450.000 are all read as the same price.
         </p>
 
         <label className="flex items-start gap-2.5 text-[13px] text-ink/80">
@@ -497,6 +800,7 @@ export function PropertyForm({
           accept="image/*"
           resourceType="image"
           defaultValue={property.image}
+          onValueChange={onUpload}
           placeholder="/images/units/…"
           hint="Shown on the search page and as the hero of the listing's own page. Roughly 3:2."
           required
@@ -509,6 +813,7 @@ export function PropertyForm({
           accept="image/*"
           resourceType="image"
           defaultValue={property.gallery}
+          onValueChange={onUpload}
           hint="Shown on the listing's page, in this order. The first is given the wide slot."
         />
 
@@ -519,6 +824,7 @@ export function PropertyForm({
           accept="image/*"
           resourceType="image"
           defaultValue={property.floorPlans}
+          onValueChange={onUpload}
           hint="Shown uncropped on white, so a plan is never cut off."
           rows={3}
         />
@@ -530,6 +836,7 @@ export function PropertyForm({
           accept="application/pdf"
           resourceType="raw"
           defaultValue={property.brochure}
+          onValueChange={onUpload}
           placeholder="/brochures/….pdf"
           preview={false}
           hint={
@@ -557,26 +864,38 @@ export function PropertyForm({
           note="Everything here is optional. Each section is left off the page rather than shown empty, so a listing with nothing but specs still reads as finished."
         />
 
-        <Field
-          label="Description"
-          name="description"
-          error={errors.description}
-          hint="One paragraph per blank line."
-        >
-          <Textarea
-            id="description"
+        <div className="grid gap-1.5">
+          <label htmlFor="description" className="text-[13px] font-medium text-ink">
+            Description
+          </label>
+          {/* The same editor and the same grammar the articles use, so a
+              lister who can write a blog post can write a listing. */}
+          <RichEditor
             name="description"
             defaultValue={property.description}
             error={errors.description}
-            rows={6}
+            variant="prose"
+            placeholder={
+              "Describe the residence.\n\nA blank line starts a new paragraph. Use the toolbar, or type **bold**, *italic* and - for a bullet."
+            }
           />
-        </Field>
+          {errors.description ? (
+            <p id="description-error" className="text-[12px] text-red-700">
+              {errors.description}
+            </p>
+          ) : (
+            <p className="text-[12px] leading-[18px] text-ink/55">
+              Bold, italic, links, headings and lists are all carried through to
+              the page. Preview shows exactly what a reader sees.
+            </p>
+          )}
+        </div>
 
         <Field
           label="Highlights"
           name="highlights"
           error={errors.highlights}
-          hint='One per line, written as "Title | The sentence under it". Three is the usual number.'
+          hint={`One per line, written as "Title | The sentence under it". Three is the usual number. The sentence takes ${FORMATTING_HINT}`}
         >
           <Textarea
             id="highlights"
@@ -584,7 +903,7 @@ export function PropertyForm({
             defaultValue={property.highlights}
             error={errors.highlights}
             rows={4}
-            placeholder="Sea Views | Every room on this floor faces the Marmara."
+            placeholder="Sea Views | Every room on this floor faces the **Marmara**."
           />
         </Field>
 
@@ -594,17 +913,22 @@ export function PropertyForm({
       <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">
         <SectionTitle
           title="Terms"
-          note="What a buyer asks before they enquire. Shown as written, in the language they are written in — so write them in English."
+          note="What a buyer asks before they enquire. The written ones are shown as written, in the language they are written in — so write them in English."
         />
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Payment plan" name="paymentPlan" error={errors.paymentPlan}>
+          <Field
+            label="Payment plan"
+            name="paymentPlan"
+            error={errors.paymentPlan}
+            hint={FORMATTING_HINT}
+          >
             <Input
               id="paymentPlan"
               name="paymentPlan"
               defaultValue={property.paymentPlan}
               error={errors.paymentPlan}
-              placeholder="30% on signing, 70% over 24 months"
+              placeholder="**30%** on signing, 70% over 24 months"
             />
           </Field>
           <Field label="Handover" name="handover" error={errors.handover}>
@@ -635,6 +959,65 @@ export function PropertyForm({
             />
           </Field>
         </div>
+
+        {/* The three that are answers rather than sentences. Each is a fixed
+            list: they are the same statutory figures on every listing, they
+            are what a buyer compares two units on, and a number picked from a
+            list is a number the page can translate. */}
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Field
+            label="REIT (GYO)"
+            name="gyo"
+            error={errors.gyo}
+            hint="Whether the development is held through a gayrimenkul yatırım ortaklığı."
+          >
+            <Select id="gyo" name="gyo" defaultValue={property.gyo} error={errors.gyo}>
+              <option value="">Not stated</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </Select>
+          </Field>
+
+          <Field label="VAT" name="vatRate" error={errors.vatRate}>
+            <Select
+              id="vatRate"
+              name="vatRate"
+              defaultValue={property.vatRate}
+              error={errors.vatRate}
+            >
+              <option value="">Not stated</option>
+              {vatRates.map((rate) => (
+                <option key={rate} value={String(rate)}>
+                  {rate}%
+                </option>
+              ))}
+            </Select>
+          </Field>
+
+          <Field
+            label="Title deed tax"
+            name="titleDeedTaxRate"
+            error={errors.titleDeedTaxRate}
+          >
+            <Select
+              id="titleDeedTaxRate"
+              name="titleDeedTaxRate"
+              defaultValue={property.titleDeedTaxRate}
+              error={errors.titleDeedTaxRate}
+            >
+              <option value="">Not stated</option>
+              {titleDeedTaxRates.map((rate) => (
+                <option key={rate} value={String(rate)}>
+                  {rate}%
+                </option>
+              ))}
+            </Select>
+          </Field>
+        </div>
+        <p className="text-[12px] leading-[18px] text-ink/55">
+          Left as “Not stated”, a row is omitted from the page rather than shown
+          empty — which is not the same as answering no or zero.
+        </p>
 
         <Field
           label="Video tour"
@@ -726,29 +1109,6 @@ export function PropertyForm({
           </span>
         </label>
       </section>
-
-      <div className="flex flex-wrap items-center gap-3">
-        <Button type="submit" name="intent" value="publish" disabled={pending}>
-          {property.status === "PUBLISHED" ? "Save and keep live" : "Publish"}
-        </Button>
-        <Button
-          type="submit"
-          name="intent"
-          value="draft"
-          variant="secondary"
-          disabled={pending}
-        >
-          {property.status === "PUBLISHED"
-            ? "Save and take offline"
-            : "Save as draft"}
-        </Button>
-        <Link
-          href="/admin/properties"
-          className="text-[13px] text-ink/60 underline underline-offset-2 hover:text-ink"
-        >
-          Cancel
-        </Link>
-      </div>
-    </form>
+    </>
   );
-}
+});

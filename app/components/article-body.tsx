@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {
   parseBlocks,
+  parseInline,
   type Block,
   type CalloutTone,
   type Inline,
@@ -207,6 +208,19 @@ function Callout({ block }: { block: CalloutBlock }) {
       </div>
     </aside>
   );
+}
+
+/**
+ * A single line of prose written in the body grammar.
+ *
+ * The one-line half of the same feature: a listing's highlight or its payment
+ * plan is a sentence in a text box, not a body, and a lister who can bold a
+ * word in the description expects to be able to bold one here. Rendered
+ * through exactly the components above, so emphasis looks the same wherever it
+ * is written and nothing here can produce markup the parser did not build.
+ */
+export function RichLine({ text }: { text: string }) {
+  return <Rich nodes={parseInline(text)} />;
 }
 
 /** Inline emphasis and links. */

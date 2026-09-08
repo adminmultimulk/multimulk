@@ -31,6 +31,10 @@ export type Listing = Unit & {
   handover: string | null;
   serviceCharge: string | null;
   titleDeed: string | null;
+  /** Null is "not stated" — the page leaves the row out rather than say no. */
+  gyo: boolean | null;
+  vatRate: number | null;
+  titleDeedTaxRate: number | null;
   videoUrl: string | null;
   mapLat: number | null;
   mapLng: number | null;
@@ -79,6 +83,9 @@ const load = unstable_cache(
       handover: row.handover,
       serviceCharge: row.serviceCharge,
       titleDeed: row.titleDeed,
+      gyo: row.gyo,
+      vatRate: row.vatRate,
+      titleDeedTaxRate: row.titleDeedTaxRate,
       videoUrl: row.videoUrl,
       mapLat: row.mapLat,
       mapLng: row.mapLng,

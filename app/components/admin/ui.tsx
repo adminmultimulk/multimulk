@@ -129,22 +129,33 @@ export function Button({
 export function Alert({
   tone = "error",
   children,
+  ref,
 }: {
   tone?: "error" | "success";
   children: ReactNode;
+  /**
+   * For the caller that has to put the reader in front of this — a form
+   * rejected from the bottom of a long page has its answer at the top, and an
+   * answer nobody scrolls to is the same as no answer at all.
+   */
+  ref?: React.Ref<HTMLDivElement>;
 }) {
   return (
-    <p
+    // A div rather than a paragraph: an error may be a summary with a list of
+    // the fields under it, and a list inside a <p> is not markup a browser keeps.
+    <div
+      ref={ref}
       role={tone === "error" ? "alert" : "status"}
+      tabIndex={-1}
       className={clsx(
-        "rounded-md border px-3 py-2 text-[13px]",
+        "rounded-md border px-3 py-2 text-[13px] outline-none",
         tone === "error"
           ? "border-red-200 bg-red-50 text-red-800"
           : "border-emerald-200 bg-emerald-50 text-emerald-800",
       )}
     >
       {children}
-    </p>
+    </div>
   );
 }
 

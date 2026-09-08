@@ -165,6 +165,8 @@ const zh = {
     columns: {
       turkiye: "土耳其",
       caribbean: "加勒比",
+      services: "服务",
+      resources: "资源与对比",
       about: "关于我们",
     },
     aboutItems: {
@@ -822,6 +824,9 @@ const zh = {
     handover: "交付时间",
     serviceCharge: "物业费",
     titleDeed: "产权状况",
+    gyo: "房地产投资信托 (GYO)",
+    vat: "增值税",
+    titleDeedTax: "产权过户税",
     watchTour: "观看视频导览",
     location: "位置",
     mapTitle: "{title} 地图",

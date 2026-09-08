@@ -368,6 +368,8 @@ const ur: Dictionary = {
     columns: {
       turkiye: "ترکیہ",
       caribbean: "کیریبیئن",
+      services: "خدمات",
+      resources: "وسائل و رہنمائی",
       about: "ہمارے بارے میں",
     },
     aboutItems: {
@@ -1477,6 +1479,9 @@ const ur: Dictionary = {
     handover: "حوالگی",
     serviceCharge: "سروس چارج",
     titleDeed: "ملکیتی دستاویز",
+    gyo: "ریئل اسٹیٹ انویسٹمنٹ ٹرسٹ (GYO)",
+    vat: "ویلیو ایڈڈ ٹیکس",
+    titleDeedTax: "ملکیتی دستاویز کا ٹیکس",
     watchTour: "ٹور دیکھیں",
     location: "محل وقوع",
     mapTitle: "{title} کا نقشہ",

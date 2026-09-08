@@ -152,6 +152,7 @@ export function UploadField({
   required,
   preview = true,
   previewRatio,
+  onValueChange,
 }: {
   name: string;
   label: string;
@@ -172,6 +173,12 @@ export function UploadField({
    * fixed box, which is enough for a listing photograph.
    */
   previewRatio?: string;
+  /**
+   * An upload writes the URL in from JavaScript, and a value React sets fires
+   * no event — so a form watching itself for changes never hears about the one
+   * field somebody did not type. Called when the box is filled in for them.
+   */
+  onValueChange?: () => void;
 }) {
   const [value, setValue] = useState(defaultValue);
   const { upload, progress, failure } = useUploader(resourceType, kind);
@@ -197,7 +204,9 @@ export function UploadField({
             progress={progress}
             onFiles={async ([file]) => {
               const url = await upload(file);
-              if (url) setValue(url);
+              if (!url) return;
+              setValue(url);
+              onValueChange?.();
             }}
           />
         </div>
@@ -253,6 +262,7 @@ export function UploadList({
   kind = "property",
   defaultValue,
   rows = 4,
+  onValueChange,
 }: {
   name: string;
   label: string;
@@ -263,6 +273,8 @@ export function UploadList({
   kind?: UploadKind;
   defaultValue: string[];
   rows?: number;
+  /** As above: an upload fills the box without an event of its own. */
+  onValueChange?: () => void;
 }) {
   const [value, setValue] = useState(defaultValue.join("\n"));
   const { upload, progress, failure } = useUploader(resourceType, kind);
@@ -296,6 +308,7 @@ export function UploadList({
                 setValue((current) =>
                   current.trim() ? `${current.trimEnd()}\n${url}` : url,
                 );
+                onValueChange?.();
               }
             }}
           />
