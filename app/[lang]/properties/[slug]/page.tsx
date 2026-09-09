@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { AmenityIcon } from "@/app/components/amenity-icon";
 import { AnimatedTitle } from "@/app/components/animated-title";
+import { ArticleBody, RichLine } from "@/app/components/article-body";
 import { BrochureButton } from "@/app/components/brochure-button";
 import { Container, SectionIntro } from "@/app/components/container";
 import { MapPin } from "@/app/components/icons";
@@ -42,6 +43,34 @@ import { plainText, toBlocks } from "@/app/lib/rich-text";
 export function generateStaticParams() {
   const slugs = legacyDevelopments.map((development) => development.slug);
   return locales.flatMap((lang) => slugs.map((slug) => ({ lang, slug })));
+}
+
+/**
+ * The opening of a development's prose, for the hero.
+ *
+ * A development written by hand carries a tagline and a couple of sentences.
+ * One assembled from listings carries whatever its lister wrote about the
+ * scheme — several hundred words, in the body grammar. All of it belongs on
+ * the page, and it is below under `about`; none of it belongs stacked in the
+ * hero, where it outgrows the banner, climbs behind the nav and buries the
+ * name it sits under.
+ */
+function excerpt(text: string, limit = 260): string {
+  // The prose without its markup: a banner line is a sentence, not the grammar
+  // it was written in.
+  const flat = plainText(toBlocks(text)).join(" ").trim();
+  if (flat.length <= limit) return flat;
+
+  const cut = flat.slice(0, limit);
+  const sentence = Math.max(
+    cut.lastIndexOf(". "),
+    cut.lastIndexOf("! "),
+    cut.lastIndexOf("? "),
+  );
+  // Cut on the last full sentence, unless that would throw most of the
+  // allowance away — then cut on a word and mark the ellipsis.
+  if (sentence > limit / 2) return cut.slice(0, sentence + 1);
+  return `${cut.slice(0, cut.lastIndexOf(" ")).trimEnd()}…`;
 }
 
 /**
@@ -143,6 +172,10 @@ export default async function PropertyPage({
   const t = await getDictionary(locale);
   const copy = localise(t, project);
 
+  // The prose the banner only opens with, where a development has no overview
+  // of its own to put in its place.
+  const about = copy.overviewBody ? "" : copy.description;
+
   const residences = project.units;
   // The card image of each residence, then whatever else was uploaded with
   // them. Three are shown beside the overview; the rest are behind them in the
@@ -190,7 +223,10 @@ export default async function PropertyPage({
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent rtl:bg-gradient-to-l" />
           <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/70 to-transparent" />
 
-          <Container className="relative pb-16">
+          {/* The nav above is absolutely positioned, so the banner leaves it
+              room: a development whose copy runs long grows upward off the
+              bottom of the section and would otherwise run underneath it. */}
+          <Container className="relative pb-16 pt-28 lg:pt-32">
             <div className="flex items-center gap-2 text-cream/85">
               <MapPin className="w-3" />
               {/* "Şişli, İstanbul, Türkiye" — each part looked up on its own,
@@ -212,9 +248,11 @@ export default async function PropertyPage({
                 <AnimatedTitle delay={0.25}>{copy.tagline}</AnimatedTitle>
               </p>
             ) : null}
-            <p className="mt-6 max-w-[620px] text-[13px] leading-[22px] text-cream/85">
-              {copy.description}
-            </p>
+            {copy.description ? (
+              <p className="mt-6 max-w-[620px] text-[13px] leading-[22px] text-cream/85">
+                {excerpt(copy.description)}
+              </p>
+            ) : null}
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#residences"
@@ -251,12 +289,14 @@ export default async function PropertyPage({
             <ul className="grid gap-10 sm:grid-cols-3 sm:gap-8">
               {copy.highlights.map((highlight) => (
                 <li key={highlight.title}>
-                  <h2 className="font-display text-[21px] leading-[1.3] text-ink">
+                  <h2 className="font-display text-[25px] font-bold leading-[1.25] text-ink sm:text-[28px]">
                     {highlight.title}
                   </h2>
                   <span className="mt-4 block h-px w-7 bg-gold" />
-                  <p className="mt-4 text-[13px] leading-[21px] text-ink/80">
-                    {highlight.text}
+                  {/* The same grammar a listing's highlight is written in, so
+                      a lister who bolds a word here sees it bolded. */}
+                  <p className="mt-4 text-[14.5px] leading-[24px] text-ink/80">
+                    <RichLine text={highlight.text} />
                   </p>
                 </li>
               ))}
@@ -269,23 +309,35 @@ export default async function PropertyPage({
           <Container>
             <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
               <div>
-                {/* Neither half exists for a development assembled from
-                    listings: the dashboard has no field for an overview, and
-                    the stats below say what is known instead. */}
+                {/* A development assembled from listings has no overview of its
+                    own — the dashboard has no field for one — so what its
+                    lister wrote about the scheme reads here instead, in full
+                    and in the body grammar it was written in. The banner above
+                    carries only its opening. */}
                 {copy.overviewHeading ? (
                   <h2 className="max-w-[460px] font-display text-[30px] leading-[1.28] text-ink sm:text-[38px]">
                     {copy.overviewHeading}
+                  </h2>
+                ) : about ? (
+                  <h2 className="max-w-[460px] font-display text-[30px] leading-[1.28] text-ink sm:text-[38px]">
+                    {t.property.about}
                   </h2>
                 ) : null}
                 {copy.overviewBody ? (
                   <p className="mt-6 max-w-[500px] text-[13.5px] leading-[23px] text-ink">
                     {copy.overviewBody}
                   </p>
+                ) : about ? (
+                  <div className="mt-6 max-w-[500px]">
+                    <ArticleBody body={toBlocks(about)} />
+                  </div>
                 ) : null}
 
                 <dl
                   className={`grid grid-cols-2 gap-x-8 gap-y-7 ${
-                    copy.overviewHeading || copy.overviewBody ? "mt-10" : ""
+                    copy.overviewHeading || copy.overviewBody || about
+                      ? "mt-10"
+                      : ""
                   }`}
                 >
                   {project.stats.map((stat) => (

@@ -1181,6 +1181,7 @@ const fr: Dictionary = {
     residencesEmpty:
       "Les résidences de {project} sont commercialisées par phases — consultez-nous pour les disponibilités actuelles.",
     browseAll: "Parcourir toutes les résidences",
+    about: "À propos du programme",
     amenities: "Prestations",
     otherDevelopments: "Autres programmes",
     projects: {

@@ -450,9 +450,13 @@ export const LATEST_ARTICLES = 4;
  * `SiteFooter` fills each column from the developments published in that
  * region and drops a column with nothing in it. Anything left in `names` is
  * still rendered, ahead of them, and routed through `footerLinks`.
+ *
+ * Türkiye is no longer one of them. With a single scheme published it was a
+ * column one link tall, and the fifth column tipped the grid from four across
+ * to three-by-two with the last cell empty. The scheme is reached from the
+ * Real Estate page instead.
  */
 export const footerColumns = [
-  { key: "turkiye" as const, names: [] as string[] },
   { key: "caribbean" as const, names: [] as string[] },
 ];
 

@@ -944,6 +944,7 @@ const ar: Dictionary = {
     residencesEmpty:
       "تُطرح المساكن في {project} على مراحل — تواصل معنا لمعرفة المتاح حاليًا.",
     browseAll: "تصفّح كل المساكن",
+    about: "عن المشروع",
     amenities: "المرافق",
     otherDevelopments: "مشاريع أخرى",
     projects: {

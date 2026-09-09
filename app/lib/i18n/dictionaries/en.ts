@@ -1136,6 +1136,8 @@ const en = {
     residencesEmpty:
       "Residences at {project} are released in phases — enquire for current availability.",
     browseAll: "Browse all residences",
+    /** The heading over a development's own prose, where it has no overview. */
+    about: "About the Development",
     amenities: "Amenities",
     otherDevelopments: "Other Developments",
     /**

@@ -1195,6 +1195,7 @@ const ru: Dictionary = {
     residencesEmpty:
       "Резиденции в проекте {project} выводятся очередями — уточните текущую доступность у нашей команды.",
     browseAll: "Смотреть все резиденции",
+    about: "О проекте",
     amenities: "Инфраструктура",
     otherDevelopments: "Другие проекты",
     projects: {

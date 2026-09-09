@@ -911,6 +911,7 @@ const ur: Dictionary = {
     residencesEmpty:
       "{project} کی رہائش گاہیں مرحلہ وار جاری کی جاتی ہیں — موجودہ دستیابی کے لیے ہم سے رابطہ کریں۔",
     browseAll: "تمام رہائش گاہیں دیکھیں",
+    about: "منصوبے کے بارے میں",
     amenities: "سہولیات",
     otherDevelopments: "دیگر منصوبے",
     projects: {

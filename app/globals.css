@@ -67,6 +67,21 @@ body {
 }
 
 /*
+ * Tailwind's utilities sit in a cascade layer and the rule above does not, so
+ * an unlayered declaration outranks every `font-*` utility however the classes
+ * are ordered — `font-display font-bold` would otherwise still set 300. The
+ * pairings below hand those two weights back, and The Seasons ships a face for
+ * each of them.
+ */
+.font-display.font-normal {
+  font-weight: 400;
+}
+
+.font-display.font-bold {
+  font-weight: 700;
+}
+
+/*
  * Arabic and Urdu.
  *
  * Neither The Seasons nor Manrope carries a single Arabic glyph, so on those

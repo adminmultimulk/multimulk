@@ -40,10 +40,11 @@ export async function SiteFooter() {
   const t = await getDictionary();
 
   /*
-   * The portfolio columns, filled from what is actually published. A
-   * development belongs to the column its country names; a column with nothing
-   * in it is not rendered, which is the whole reason these are built here
-   * rather than written out in `content.ts`.
+   * The portfolio column, filled from what is actually published — Caribbean
+   * resorts only, since the Türkiye column was a single link tall and is now
+   * reached from Real Estate instead. A column with nothing in it is not
+   * rendered, which is the whole reason these are built here rather than
+   * written out in `content.ts`.
    */
   const schemes = await developments();
   const columns = footerColumns
@@ -52,11 +53,7 @@ export async function SiteFooter() {
       items: [
         ...column.names.map((name) => ({ name, href: footerLinks[name] })),
         ...schemes
-          .filter((scheme) =>
-            column.key === "caribbean"
-              ? scheme.country.includes("Caribbean")
-              : !scheme.country.includes("Caribbean"),
-          )
+          .filter((scheme) => scheme.country.includes("Caribbean"))
           .map((scheme) => ({
             name: scheme.name,
             href: buildPath("development", { slug: scheme.slug }),
@@ -76,11 +73,11 @@ export async function SiteFooter() {
   ];
 
   /*
-   * Four columns is the design, and four is exactly what renders while no
-   * development is published. Publishing one or two adds a portfolio column
-   * apiece, and six columns in a row of four leaves a widowed pair; at that
-   * point three-by-two is the tidier grid, and the columns stay wide enough
-   * for "Citizenship by Investment" to sit on two lines rather than four.
+   * Four columns is the design, and four is what renders until a Caribbean
+   * resort is published. The fifth column is what tips the grid: five across
+   * a row of four leaves one widow, so three-by-two is the tidier grid at
+   * that point, and the columns stay wide enough for "Citizenship by
+   * Investment" to sit on two lines rather than four.
    */
   const columnCount = columns.length + routeColumns.length + 2;
   const gridColumns = columnCount > 4 ? "lg:grid-cols-3" : "lg:grid-cols-4";
