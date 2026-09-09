@@ -42,6 +42,7 @@ export default async function Home() {
       name: development.name,
       image: development.image,
       href: buildPath("development", { slug: development.slug }),
+      highlights: development.highlights,
       body: development.description,
     }));
 

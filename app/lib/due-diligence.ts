@@ -111,3 +111,34 @@ export function totalScore(score: PropertyScore): number {
   );
   return Math.round(weighted / SCORE_TOTAL);
 }
+
+/**
+ * The three filters, in the order a property has to clear them. Same split as
+ * `about.ts`: the structure and the numbering live here, the wording is looked
+ * up in `dictionary.protection.filters`.
+ */
+export const filters = [
+  { key: "eligible" as const, number: "01" },
+  { key: "sensible" as const, number: "02" },
+  { key: "exitReady" as const, number: "03" },
+];
+
+/**
+ * Photography for /investor-protection.
+ *
+ * Placeholders in the same sense as the rest of the site — the frames are ones
+ * the citizenship pages already use, keyed here so the page shows a place
+ * rather than a flat band until Multi Mulk's own photography lands.
+ */
+export const protectionImages = {
+  /**
+   * A skyline rather than a boardroom: the page's argument is that a market
+   * holds thousands of properties that clear a threshold and only some worth
+   * buying, and a photograph of hundreds of towers makes it before the
+   * headline does. Dark enough to carry white type, as /about's night hero is.
+   */
+  hero: "/images/cbi/hero-dubai-night.jpg",
+  filters: "/images/cbi/cbi-istanbul-strait.jpg",
+  checks: "/images/cbi/cbi-documents.jpg",
+  cta: "/images/cbi/hero-istanbul-dusk.jpg",
+};

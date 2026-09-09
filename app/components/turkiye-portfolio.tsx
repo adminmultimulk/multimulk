@@ -5,17 +5,28 @@ import { Link } from "./link";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Container, SectionIntro } from "./container";
+import { RichLine } from "./article-body";
 import { turkiyeProperties, type Property } from "@/app/lib/content";
 import { useI18n } from "@/app/lib/i18n/context";
+import { lookup } from "@/app/lib/i18n/format";
 
 /**
  * One entry in the section: a development, with the line shown beneath it.
  *
  * `key` still selects a description from `dictionary.turkiyeSection`, which is
  * what the six hand-written entries used. A development published from the
- * dashboard has no such key, so it carries its own `body` and its own link.
+ * dashboard has no such key, so it carries its own copy and its own link.
+ *
+ * `highlights` is what a lister actually writes for a scheme — three short
+ * "Sea View | one sentence" pairs. `body` is the full description, which runs
+ * to several hundred words and reads as a wall of text at this size, so it is
+ * only the fallback for a development that has no highlights yet.
  */
-export type PortfolioItem = Property & { href: string; body?: string };
+export type PortfolioItem = Property & {
+  href: string;
+  body?: string;
+  highlights?: { title: string; text: string }[];
+};
 
 function scrollDriven() {
   return (
@@ -170,11 +181,30 @@ export function TurkiyePortfolio({ items }: { items: PortfolioItem[] }) {
                             inert={!isActive}
                           >
                             <div className="mt-4 max-w-[520px]">
-                              <p className="text-[13.5px] leading-[22px] text-ink">
-                                {t.turkiyeSection.descriptions[
-                                  property.key as keyof typeof t.turkiyeSection.descriptions
-                                ] ?? property.body}
-                              </p>
+                              {property.highlights?.length ? (
+                                <ul className="grid gap-5">
+                                  {property.highlights.map((highlight) => (
+                                    <li key={highlight.title}>
+                                      <h3 className="font-display text-[17px] leading-[1.3] text-ink">
+                                        {lookup(
+                                          t.property.highlights,
+                                          highlight.title,
+                                        )}
+                                      </h3>
+                                      <span className="mt-2 block h-px w-7 bg-gold" />
+                                      <p className="mt-2 text-[13px] leading-[21px] text-ink/80">
+                                        <RichLine text={highlight.text} />
+                                      </p>
+                                    </li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <p className="text-[13.5px] leading-[22px] text-ink">
+                                  {t.turkiyeSection.descriptions[
+                                    property.key as keyof typeof t.turkiyeSection.descriptions
+                                  ] ?? property.body}
+                                </p>
+                              )}
                               <Link
                                 href={property.href}
                                 className="mt-[18px] inline-block border-b border-ink pb-1 text-[12.5px] font-medium text-ink"
