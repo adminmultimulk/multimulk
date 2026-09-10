@@ -72,6 +72,7 @@ export default async function EditPropertyPage({
               ? ""
               : String(property.titleDeedTaxRate),
           videoUrl: property.videoUrl ?? "",
+          mapDistrict: property.mapDistrict ?? "",
           mapLat: property.mapLat === null ? "" : String(property.mapLat),
           mapLng: property.mapLng === null ? "" : String(property.mapLng),
           seoTitle: property.seoTitle ?? "",

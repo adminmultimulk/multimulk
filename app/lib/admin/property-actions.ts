@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/app/lib/db";
 import { PROPERTIES_TAG } from "@/app/lib/cms/tags";
+import { isDistrict } from "@/app/lib/districts";
 import { developmentSlug, getDevelopment } from "@/app/lib/cms/developments";
 import {
   CBI_THRESHOLD_USD,
@@ -81,6 +82,7 @@ export async function saveProperty(
   const vatRate = rate(field(form, "vatRate"), vatRates);
   const titleDeedTaxRate = rate(field(form, "titleDeedTaxRate"), titleDeedTaxRates);
   const videoUrl = field(form, "videoUrl");
+  const mapDistrict = field(form, "mapDistrict");
   const mapLat = coordinate(field(form, "mapLat"), 90);
   const mapLng = coordinate(field(form, "mapLng"), 180);
   const seoTitle = field(form, "seoTitle");
@@ -160,6 +162,10 @@ export async function saveProperty(
     fieldErrors.videoUrl = "A full https:// link to the tour, or leave it empty.";
 
   // Both or neither: half a coordinate puts the pin in the sea.
+  // A district that is not in the table would be a pin that never draws, so
+  // it is refused here rather than silently falling back on the public page.
+  if (mapDistrict && !isDistrict(mapDistrict))
+    fieldErrors.mapDistrict = "Not a district the map knows. Pick one from the list.";
   if (mapLat === false) fieldErrors.mapLat = "A latitude between -90 and 90.";
   if (mapLng === false) fieldErrors.mapLng = "A longitude between -180 and 180.";
   if ((mapLat === null) !== (mapLng === null))
@@ -220,6 +226,7 @@ export async function saveProperty(
     vatRate: vatRate === false ? null : vatRate,
     titleDeedTaxRate: titleDeedTaxRate === false ? null : titleDeedTaxRate,
     videoUrl: videoUrl || null,
+    mapDistrict: mapDistrict || null,
     mapLat: mapLat === false ? null : mapLat,
     mapLng: mapLng === false ? null : mapLng,
     seoTitle: seoTitle || null,

@@ -191,7 +191,20 @@ model Property {
 
   /// A tour, on YouTube or Vimeo. Rendered as a link, never an autoplaying embed.
   videoUrl      String?
+  /// Which İstanbul district the location map pins. One of the names in
+  /// `app/lib/districts.ts`, which is also where its coordinates live.
+  ///
+  /// Deliberately a district and not a point: the public map draws a picture
+  /// of the whole city with one pin on it, and the pin says which part of
+  /// İstanbul the scheme is in — never which building. Absent, the district is
+  /// read out of `location` instead, which is right most of the time and is
+  /// why this is optional.
+  mapDistrict   String?
   /// Where the map pin goes. Both or neither; the map is omitted without them.
+  ///
+  /// No longer drawn on the public page — see `mapDistrict` — but still the
+  /// right thing for a lister to record, and still what gates whether the
+  /// location section appears at all.
   mapLat        Float?
   mapLng        Float?
   /// Overrides the <title>. A headline and a title tag are rarely one sentence.

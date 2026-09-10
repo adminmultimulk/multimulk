@@ -14,6 +14,7 @@ import clsx from "clsx";
 import { saveProperty } from "@/app/lib/admin/property-actions";
 import { money } from "@/app/lib/admin/money";
 import { slugify } from "@/app/lib/admin/slug";
+import { DISTRICT_NAMES } from "@/app/lib/districts";
 import {
   amenityGroups,
   amenityNames,
@@ -69,6 +70,7 @@ export type PropertyDraft = {
   vatRate: string;
   titleDeedTaxRate: string;
   videoUrl: string;
+  mapDistrict: string;
   mapLat: string;
   mapLng: string;
   seoTitle: string;
@@ -109,6 +111,7 @@ export const emptyProperty: PropertyDraft = {
   vatRate: "",
   titleDeedTaxRate: "",
   videoUrl: "",
+  mapDistrict: "",
   mapLat: "",
   mapLng: "",
   seoTitle: "",
@@ -167,6 +170,7 @@ function readDraft(form: FormData, base: PropertyDraft): PropertyDraft {
     vatRate: text("vatRate"),
     titleDeedTaxRate: text("titleDeedTaxRate"),
     videoUrl: text("videoUrl"),
+    mapDistrict: text("mapDistrict"),
     mapLat: text("mapLat"),
     mapLng: text("mapLng"),
     seoTitle: text("seoTitle"),
@@ -352,6 +356,7 @@ const FIELD_LABELS: Record<string, string> = {
   vatRate: "VAT",
   titleDeedTaxRate: "Title deed tax",
   videoUrl: "Video tour",
+  mapDistrict: "District",
   mapLat: "Latitude",
   mapLng: "Longitude",
   seoTitle: "SEO title",
@@ -1039,8 +1044,30 @@ const PropertyFields = memo(function PropertyFields({
       <section className="grid gap-4 rounded-lg border border-ink/10 bg-white p-5">
         <SectionTitle
           title="Map"
-          note="Both or neither. In Google Maps, right-click the spot and the first item on the menu is the pair, in this order."
+          note="The district is what the public page draws: a map of the whole of İstanbul with one pin on it. Left as read from the location, it uses whichever district the location names."
         />
+
+        <Field label="District" name="mapDistrict" error={errors.mapDistrict}>
+          <Select
+            id="mapDistrict"
+            name="mapDistrict"
+            defaultValue={property.mapDistrict}
+            error={errors.mapDistrict}
+          >
+            <option value="">Read from the location</option>
+            {DISTRICT_NAMES.map((name) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </Select>
+        </Field>
+
+        {/* Kept, and kept below the district: the coordinates are still what
+            says this listing has a location section at all, and they are the
+            right thing to have on file. They are simply not what the public
+            page pins any more — a street-level pin on the exact spot is the
+            development's name a moment later. */}
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Latitude" name="mapLat" error={errors.mapLat}>
             <Input

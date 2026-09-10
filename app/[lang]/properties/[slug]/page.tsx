@@ -194,6 +194,17 @@ export default async function PropertyPage({
     residences.find(
       (unit) => unit.location && unit.location !== project.location,
     )?.location ?? project.location;
+  // Where the pin goes. A development has no coordinates of its own, so the
+  // first residence that carries a pair stands for the scheme — they are all
+  // in the same place, and the pin is blunted to about a kilometre before it
+  // is drawn anyway.
+  const pin = residences.find(
+    (unit) => unit.mapLat !== null && unit.mapLng !== null,
+  );
+  // The district a lister picked on any of the scheme's units. They are one
+  // development, so the first that names one speaks for all of them.
+  const district =
+    residences.find((unit) => unit.mapDistrict)?.mapDistrict ?? null;
   const others = (await developments()).filter(
     (other) => other.slug !== project.slug,
   );
@@ -380,6 +391,9 @@ export default async function PropertyPage({
                 <DistrictMap
                   inline
                   area={area}
+                  district={district}
+                  lat={pin?.mapLat}
+                  lng={pin?.mapLng}
                   country={project.country}
                   heading={t.listing.location}
                   mapTitle={interpolate(t.listing.mapTitle, {
@@ -393,8 +407,42 @@ export default async function PropertyPage({
           </Container>
         </section>
 
+        {/* Amenities */}
+        {project.amenities.items.length ? (
+        <section className="bg-mist py-16 lg:py-24">
+          <Container>
+            <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+              <div>
+                <h2 className="font-display text-[30px] leading-[1.28] text-ink sm:text-[38px]">
+                  {t.property.amenities}
+                </h2>
+                {copy.amenitiesBody ? (
+                  <p className="mt-6 max-w-[500px] text-[13.5px] leading-[23px] text-ink">
+                    {copy.amenitiesBody}
+                  </p>
+                ) : null}
+              </div>
+              <ul className="grid grid-cols-2 gap-x-8 gap-y-4 self-center">
+                {project.amenities.items.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-3 border-b border-ink/10 pb-3 text-[13.5px] text-ink"
+                  >
+                    <AmenityIcon
+                      name={item}
+                      className="w-[18px] shrink-0 text-gold"
+                    />
+                    <span>{lookup(t.property.amenityItems, item)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Container>
+        </section>
+        ) : null}
+
         {/* Residences */}
-        <section id="residences" className="scroll-mt-24 bg-mist py-16 lg:py-24">
+        <section id="residences" className="scroll-mt-24 bg-white py-16 lg:py-24">
           <Container>
             <SectionIntro
               eyebrow={t.property.residencesEyebrow}
@@ -426,40 +474,6 @@ export default async function PropertyPage({
             </div>
           </Container>
         </section>
-
-        {/* Amenities */}
-        {project.amenities.items.length ? (
-        <section className="bg-white py-16 lg:py-24">
-          <Container>
-            <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
-              <div>
-                <h2 className="font-display text-[30px] leading-[1.28] text-ink sm:text-[38px]">
-                  {t.property.amenities}
-                </h2>
-                {copy.amenitiesBody ? (
-                  <p className="mt-6 max-w-[500px] text-[13.5px] leading-[23px] text-ink">
-                    {copy.amenitiesBody}
-                  </p>
-                ) : null}
-              </div>
-              <ul className="grid grid-cols-2 gap-x-8 gap-y-4 self-center">
-                {project.amenities.items.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-3 border-b border-ink/10 pb-3 text-[13.5px] text-ink"
-                  >
-                    <AmenityIcon
-                      name={item}
-                      className="w-[18px] shrink-0 text-gold"
-                    />
-                    <span>{lookup(t.property.amenityItems, item)}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Container>
-        </section>
-        ) : null}
 
         {/* Other developments */}
         {others.length ? (

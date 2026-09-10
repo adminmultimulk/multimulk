@@ -36,6 +36,8 @@ export type Listing = Unit & {
   vatRate: number | null;
   titleDeedTaxRate: number | null;
   videoUrl: string | null;
+  /** The district the location map pins; see `app/lib/districts.ts`. */
+  mapDistrict: string | null;
   mapLat: number | null;
   mapLng: number | null;
   seoTitle: string | null;
@@ -87,6 +89,7 @@ const load = unstable_cache(
       vatRate: row.vatRate,
       titleDeedTaxRate: row.titleDeedTaxRate,
       videoUrl: row.videoUrl,
+      mapDistrict: row.mapDistrict,
       mapLat: row.mapLat,
       mapLng: row.mapLng,
       seoTitle: row.seoTitle,
