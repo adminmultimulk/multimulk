@@ -26,6 +26,7 @@ import {
 } from "@/app/lib/legacy-developments";
 import { LegacyDevelopmentPage } from "@/app/components/legacy-development";
 import { ListingPage } from "@/app/components/listing-page";
+import { PropertyEnquire } from "@/app/components/property-enquire";
 import { PropertyGallery } from "@/app/components/property-gallery";
 import { JsonLd } from "@/app/components/json-ld";
 import { apartmentComplex, breadcrumbs } from "@/app/lib/seo/jsonld";
@@ -239,10 +240,16 @@ export default async function PropertyPage({
             fill
             sizes="100vw"
             priority
-            className="object-cover"
+            className="object-cover brightness-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent rtl:bg-gradient-to-l" />
-          <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/70 to-transparent" />
+          {/* Three light scrims rather than one heavy one. The renders are the
+              reason anyone is on the page, so the shade is put only where type
+              sits on them — a soft wash from the text edge, a band under the
+              nav, and one under the banner copy — and the open sky and the far
+              side of the frame are left at full brightness. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent rtl:bg-gradient-to-l" />
+          <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/45 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
           {/* The nav above is absolutely positioned, so the banner leaves it
               room: a development whose copy runs long grows upward off the
@@ -440,6 +447,26 @@ export default async function PropertyPage({
           </Container>
         </section>
         ) : null}
+
+        {/* Enquire */}
+        <PropertyEnquire
+          eyebrow={t.property.enquireEyebrow}
+          heading={interpolate(t.property.enquireHeading, {
+            project: project.name,
+          })}
+          body={t.property.enquireBody}
+          subject={interpolate(t.property.enquireSubject, {
+            project: project.name,
+          })}
+          // A development is in one country, and the country decides what the
+          // enquiry is actually about: a Caribbean scheme is bought for the
+          // passport, an İstanbul one as property.
+          enquiryType={
+            project.country.includes("Caribbean")
+              ? "caribbeanCbi"
+              : "turkiyeProperty"
+          }
+        />
 
         {/* Residences */}
         <section id="residences" className="scroll-mt-24 bg-white py-16 lg:py-24">

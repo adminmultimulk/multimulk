@@ -9,6 +9,7 @@ import { JsonLd } from "./json-ld";
 import { Link } from "./link";
 import { DistrictMap } from "./district-map";
 import { ListingImage } from "./listing-image";
+import { PropertyEnquire } from "./property-enquire";
 import { PropertyGallery } from "./property-gallery";
 import { SiteFooter } from "./site-footer";
 import { SiteNav } from "./site-nav";
@@ -153,9 +154,16 @@ export async function ListingPage({ listing }: { listing: Listing }) {
             alt={title}
             sizes="100vw"
             priority
+            className="object-cover brightness-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent rtl:bg-gradient-to-l" />
-          <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/70 to-transparent" />
+          {/* Three light scrims rather than one heavy one. The renders are the
+              reason anyone is on the page, so the shade is put only where type
+              sits on them — a soft wash from the text edge, a band under the
+              nav, and one under the banner copy — and the open sky and the far
+              side of the frame are left at full brightness. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent rtl:bg-gradient-to-l" />
+          <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/45 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
           <Container className="relative pb-16">
             <div className="flex flex-wrap items-center gap-3">
@@ -393,6 +401,17 @@ export async function ListingPage({ listing }: { listing: Listing }) {
             locale={locale}
           />
         ) : null}
+
+        {/* The form itself, not only the button that opens it — the same
+            enquiry context the "Enquire Now" above carries, so it arrives
+            naming this residence. */}
+        <PropertyEnquire
+          eyebrow={enquiry.eyebrow}
+          heading={interpolate(t.property.enquireHeading, { project: title })}
+          body={t.property.enquireBody}
+          subject={enquiry.subject}
+          enquiryType={enquiry.enquiryType}
+        />
 
         {siblings.length ? (
           <section className="bg-white py-16 lg:py-24">

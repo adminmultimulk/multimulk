@@ -914,6 +914,11 @@ const ur: Dictionary = {
     about: "منصوبے کے بارے میں",
     amenities: "سہولیات",
     otherDevelopments: "دیگر منصوبے",
+    enquireEyebrow: "مشیر سے بات کریں",
+    enquireHeading: "{project} کے بارے میں استفسار",
+    enquireSubject: "{project} کے بارے میں استفسار",
+    enquireBody:
+      "ہمیں بتائیے کہ آپ کیا تلاش کر رہے ہیں، ہمارا مشیر موجودہ دستیابی، قیمت اور اگلے مراحل کے ساتھ آپ سے رابطہ کرے گا۔",
     projects: {
       "levent-residences": {
         tagline: "استنبول کے قلب میں ایک نمایاں پتہ",

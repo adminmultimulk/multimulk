@@ -4,9 +4,11 @@ import { ArticleBody } from "./article-body";
 import { Container } from "./container";
 import { JsonLd } from "./json-ld";
 import { Link } from "./link";
+import { PropertyEnquire } from "./property-enquire";
 import { SiteFooter } from "./site-footer";
 import { SiteNav } from "./site-nav";
 import { getDictionary, getLocale } from "@/app/lib/i18n";
+import { interpolate } from "@/app/lib/i18n/format";
 import type { LegacyDevelopment } from "@/app/lib/legacy-developments";
 import { breadcrumbs, routeUrl } from "@/app/lib/seo/jsonld";
 import { searchPath } from "@/app/lib/routes";
@@ -105,6 +107,22 @@ export async function LegacyDevelopmentPage({
             </div>
           </Container>
         </section>
+
+        {/* These records carry no inventory to link at, so the enquiry is the
+            page's one way on. The type stays general: the legacy set spans
+            markets this site does not otherwise sell. */}
+        <PropertyEnquire
+          className="bg-white pb-[72px] lg:pb-[104px]"
+          eyebrow={t.property.enquireEyebrow}
+          heading={interpolate(t.property.enquireHeading, {
+            project: development.name,
+          })}
+          body={t.property.enquireBody}
+          subject={interpolate(t.property.enquireSubject, {
+            project: development.name,
+          })}
+          enquiryType="general"
+        />
       </main>
 
       <SiteFooter />

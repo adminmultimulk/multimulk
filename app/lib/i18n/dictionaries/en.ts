@@ -1140,6 +1140,12 @@ const en = {
     about: "About the Development",
     amenities: "Amenities",
     otherDevelopments: "Other Developments",
+    /** The enquiry form carried on a property's own page. */
+    enquireEyebrow: "Speak to an Adviser",
+    enquireHeading: "Enquire about {project}",
+    enquireSubject: "Enquiry about {project}",
+    enquireBody:
+      "Tell us what you are looking for and an adviser will come back to you with current availability, pricing and the next steps.",
     /**
      * Per-development copy, keyed by slug. Long-form prose — `description`,
      * the overview body, the amenity blurb and each highlight's text — is

@@ -947,6 +947,11 @@ const ar: Dictionary = {
     about: "عن المشروع",
     amenities: "المرافق",
     otherDevelopments: "مشاريع أخرى",
+    enquireEyebrow: "تحدّث إلى مستشار",
+    enquireHeading: "استفسر عن {project}",
+    enquireSubject: "استفسار عن {project}",
+    enquireBody:
+      "أخبرنا بما تبحث عنه وسيعاود أحد مستشارينا التواصل معك بشأن التوافر الحالي والأسعار والخطوات التالية.",
     projects: {
       "levent-residences": {
         tagline: "عنوان مميز في قلب إسطنبول",

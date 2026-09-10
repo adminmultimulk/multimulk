@@ -1184,6 +1184,11 @@ const fr: Dictionary = {
     about: "À propos du programme",
     amenities: "Prestations",
     otherDevelopments: "Autres programmes",
+    enquireEyebrow: "Parler à un conseiller",
+    enquireHeading: "Se renseigner sur {project}",
+    enquireSubject: "Demande concernant {project}",
+    enquireBody:
+      "Dites-nous ce que vous recherchez et un conseiller vous recontactera avec les disponibilités actuelles, les prix et les prochaines étapes.",
     projects: {
       "levent-residences": {
         tagline: "Une adresse emblématique au cœur d’İstanbul",

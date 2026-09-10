@@ -1198,6 +1198,11 @@ const ru: Dictionary = {
     about: "О проекте",
     amenities: "Инфраструктура",
     otherDevelopments: "Другие проекты",
+    enquireEyebrow: "Поговорить с консультантом",
+    enquireHeading: "Запрос по проекту {project}",
+    enquireSubject: "Запрос по проекту {project}",
+    enquireBody:
+      "Расскажите, что вы ищете, и консультант свяжется с вами, сообщив о наличии, ценах и дальнейших шагах.",
     projects: {
       "levent-residences": {
         tagline: "Знаковый адрес в сердце Стамбула",
