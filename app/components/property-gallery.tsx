@@ -29,6 +29,14 @@ import { useI18n } from "@/app/lib/i18n/context";
 const SHOWN = 5;
 
 /**
+ * The collage's tile count: three photographs of the development, then a
+ * fourth carrying the "+N" into the rest of the set. It was three all told,
+ * which meant the third was always spent on the overlay and only two of a
+ * twenty-photograph gallery were ever actually seen.
+ */
+const COLLAGE = 4;
+
+/**
  * How a tile sits in the desktop mosaic — four columns, two rows, the lead
  * photograph taking the left half.
  *
@@ -69,10 +77,10 @@ export function PropertyGallery({
   const touchX = useRef<number | null>(null);
 
   const count = images.length;
-  // Plans are all shown; the collage holds three; the mosaic five.
+  // Plans are all shown; the collage holds four; the mosaic five.
   const shown = Math.min(
     count,
-    variant === "plans" ? count : variant === "collage" ? 3 : SHOWN,
+    variant === "plans" ? count : variant === "collage" ? COLLAGE : SHOWN,
   );
   const hidden = count - shown;
 
@@ -186,22 +194,29 @@ export function PropertyGallery({
           )}
         </div>
       ) : variant === "collage" ? (
-        /* Half a column beside the overview: one wide frame over two square
-           ones, which is the shape this page has always had. The set behind it
-           is the whole development's, so the third frame carries the rest. */
-        <div className="grid grid-cols-2 gap-3">
+        /* Half a column beside the overview: one wide frame over a row of
+           three. The set behind it is the whole development's, so the last of
+           the three carries the rest.
+           `content-start` keeps the rows together wherever this is dropped. A
+           grid stretched taller than its content distributes the spare height
+           *between its rows*, and standing directly in the overview's column
+           this one was stretched to the height of the prose beside it — a
+           screen and a half of white between the lead photograph and the three
+           under it. The caller now wraps it, which also settles the height;
+           this makes the tiles hold together either way. */
+        <div className="grid grid-cols-3 content-start gap-3">
           {images
             .slice(0, shown)
             .map((src, index) =>
               frame(src, index, {
                 className:
                   index === 0
-                    ? "col-span-2 aspect-[16/9] bg-ink/5"
+                    ? "col-span-3 aspect-[16/9] bg-ink/5"
                     : "aspect-[4/3] bg-ink/5",
                 sizes:
                   index === 0
                     ? "(max-width: 1024px) 100vw, 600px"
-                    : "(max-width: 1024px) 50vw, 300px",
+                    : "(max-width: 1024px) 33vw, 200px",
               }),
             )}
         </div>

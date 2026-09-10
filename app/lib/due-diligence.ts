@@ -132,13 +132,19 @@ export const filters = [
  */
 export const protectionImages = {
   /**
-   * A skyline rather than a boardroom: the page's argument is that a market
-   * holds thousands of properties that clear a threshold and only some worth
-   * buying, and a photograph of hundreds of towers makes it before the
-   * headline does. Dark enough to carry white type, as /about's night hero is.
+   * The contract, not a skyline: this page is about the work done before a
+   * client signs, so the hero shows the moment that work protects. It was
+   * hero-dubai-night.jpg, which the residency pages use for the UAE — carrying
+   * it here too made the site look like it owned one photograph, and a city at
+   * night says nothing about investor protection.
+   *
+   * This frame was the `checks` panel below; it earns the hero and the panel
+   * takes the cranes. Reads 51 in the 18–62% band under the section's wash,
+   * well inside the ceiling in public/images/cbi/CREDITS.md.
    */
-  hero: "/images/cbi/hero-dubai-night.jpg",
+  hero: "/images/cbi/cbi-documents.jpg",
   filters: "/images/cbi/cbi-istanbul-strait.jpg",
-  checks: "/images/cbi/cbi-documents.jpg",
+  /** The asset under scrutiny — a 420px panel beside the checks, no type over it. */
+  checks: "/images/cbi/protection-cranes-dusk.jpg",
   cta: "/images/cbi/hero-istanbul-dusk.jpg",
 };

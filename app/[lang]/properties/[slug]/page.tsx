@@ -6,7 +6,9 @@ import { AnimatedTitle } from "@/app/components/animated-title";
 import { ArticleBody, RichLine } from "@/app/components/article-body";
 import { BrochureButton } from "@/app/components/brochure-button";
 import { Container, SectionIntro } from "@/app/components/container";
+import { DistrictMap } from "@/app/components/district-map";
 import { MapPin } from "@/app/components/icons";
+import { watermarked } from "@/app/lib/watermark";
 import { Link } from "@/app/components/link";
 import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
@@ -27,7 +29,7 @@ import { ListingPage } from "@/app/components/listing-page";
 import { PropertyGallery } from "@/app/components/property-gallery";
 import { JsonLd } from "@/app/components/json-ld";
 import { apartmentComplex, breadcrumbs } from "@/app/lib/seo/jsonld";
-import { lookup, pick, selectPlural } from "@/app/lib/i18n/format";
+import { interpolate, lookup, pick, selectPlural } from "@/app/lib/i18n/format";
 import { placeLine, unitTitle } from "@/app/lib/i18n/units";
 import type { Project } from "@/app/lib/projects";
 import { developments, getDevelopment } from "@/app/lib/cms/developments";
@@ -184,6 +186,14 @@ export default async function PropertyPage({
   const gallery = [
     ...new Set(residences.flatMap((unit) => [unit.image, ...unit.gallery])),
   ];
+  // A development's own `location` is the city — "İstanbul" — while the units
+  // inside it carry the district, "Kartal, Istanbul". The district is the one
+  // worth drawing a map of, so the first unit that names something more
+  // specific than the development wins, and the city is the fallback.
+  const area =
+    residences.find(
+      (unit) => unit.location && unit.location !== project.location,
+    )?.location ?? project.location;
   const others = (await developments()).filter(
     (other) => other.slug !== project.slug,
   );
@@ -213,7 +223,7 @@ export default async function PropertyPage({
         <SiteNav />
         <section className="relative flex min-h-[620px] items-end overflow-hidden bg-forest lg:min-h-[760px]">
           <Image
-            src={project.image}
+            src={watermarked(project.image)}
             alt={project.name}
             fill
             sizes="100vw"
@@ -353,13 +363,32 @@ export default async function PropertyPage({
                 </dl>
               </div>
 
-              {gallery.length ? (
-                <PropertyGallery
-                  images={gallery}
-                  label={project.name}
-                  variant="collage"
+              {/* The photography, then where it is. Both in the column beside
+                  the overview, because "where is this?" is the question the
+                  renders raise — and because the prose is far longer than the
+                  photographs, so without the map under them the column ends
+                  in most of a screen of white. */}
+              <div className="flex flex-col gap-12">
+                {gallery.length ? (
+                  <PropertyGallery
+                    images={gallery}
+                    label={project.name}
+                    variant="collage"
+                  />
+                ) : null}
+
+                <DistrictMap
+                  inline
+                  area={area}
+                  country={project.country}
+                  heading={t.listing.location}
+                  mapTitle={interpolate(t.listing.mapTitle, {
+                    title: project.name,
+                  })}
+                  linkLabel={t.contact.mapLink}
+                  locale={locale}
                 />
-              ) : null}
+              </div>
             </div>
           </Container>
         </section>
@@ -449,7 +478,7 @@ export default async function PropertyPage({
                       className="group relative block aspect-[430/280] overflow-hidden"
                     >
                       <Image
-                        src={other.image}
+                        src={watermarked(other.image)}
                         alt={other.name}
                         fill
                         sizes="(max-width: 640px) 100vw, 430px"

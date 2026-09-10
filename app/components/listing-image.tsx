@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { watermarked } from "@/app/lib/watermark";
 
 /**
  * An image whose source the site does not control.
@@ -15,7 +16,7 @@ import Image from "next/image";
 const OPTIMISED = /^https:\/\/res\.cloudinary\.com\//;
 
 export function ListingImage({
-  src,
+  src: given,
   alt,
   sizes,
   priority,
@@ -27,6 +28,12 @@ export function ListingImage({
   priority?: boolean;
   className?: string;
 }) {
+  // Every route out of this component delivers the marked file, including the
+  // unoptimised one: a listing pointing at a host `next/image` does not know
+  // is still a listing whose photography should not be reverse-searchable.
+  // A no-op unless the overlay is configured — see `app/lib/watermark.ts`.
+  const src = watermarked(given);
+
   if (src.startsWith("/") || OPTIMISED.test(src)) {
     return (
       <Image

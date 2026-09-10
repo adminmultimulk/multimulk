@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { BrochureProvider } from "@/app/components/brochure";
 import { EnquiryProvider } from "@/app/components/enquiry";
 import { WhatsAppButton } from "@/app/components/whatsapp-button";
+import { ImageProtection } from "@/app/components/image-protection";
 import { analyticsEnabled, gaId } from "@/app/lib/analytics";
 import {
   dirFor,
@@ -166,6 +167,10 @@ export default async function RootLayout({
             <BrochureProvider>
               {children}
               <WhatsAppButton />
+              {/* Cancels the browser image menu on the site's photography.
+                  Friction against a casual reverse-image search, nothing
+                  stronger — see the note in the component. */}
+              <ImageProtection />
             </BrochureProvider>
           </EnquiryProvider>
         </I18nProvider>

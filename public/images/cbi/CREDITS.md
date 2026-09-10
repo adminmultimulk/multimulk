@@ -26,6 +26,7 @@ below exist to prevent recurring.
 | File | Pexels ID | Band | Subject |
 |---|---|---|---|
 | hero-dubai-night.jpg | 17914739 | 43 | Dubai at night — Burj Khalifa, the Sheikh Zayed interchange |
+| protection-cranes-dusk.jpg | unrecorded | 133 | Tower cranes against a dusk sky — the /investor-protection checks panel. Far over the ceiling, so it is only ever a panel with no type over it, never a hero. No photographer or ID in the file's metadata; fill the ID in if the source turns up |
 | hero-island-dusk.jpg | 1028546 | 64 | An island under a storm sky at golden hour |
 | hero-island-lagoon.webp | supplied | 112 | Overwater bungalows on a turquoise lagoon — the one daylight frame, so it carries a 60% wash instead of 35% |
 | hero-istanbul-dusk.jpg | 32838840 | 65 | İstanbul at dusk — the Bosphorus Bridge lit, city beyond |

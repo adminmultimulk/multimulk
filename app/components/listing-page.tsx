@@ -52,6 +52,14 @@ export async function ListingPage({ listing }: { listing: Listing }) {
   const title = unitTitle(locale, t, listing);
   const place = placeLabel(t, listing.location);
   const country = placeLabel(t, listing.country);
+  // The map's query. Built from the stored names rather than the translated
+  // labels above: `placeLabel` renders "Kartal" in the reader's script, and
+  // Google resolves the Latin form far more reliably than a transliteration.
+  const area = encodeURIComponent(
+    listing.location.toLowerCase().includes(listing.country.toLowerCase())
+      ? listing.location
+      : `${listing.location}, ${listing.country}`,
+  );
   const url = routeUrl(locale, "development", { slug: listing.slug });
 
   const specs = unitSpecs(locale, t, listing)
@@ -370,15 +378,29 @@ export async function ListingPage({ listing }: { listing: Listing }) {
           </section>
         ) : null}
 
+        {/* Still gated on the coordinates even though the map no longer draws
+            them: they are how a lister says this listing should carry a
+            location section at all, and re-gating on `location` — a required
+            field — would put a map on every listing that has never had one. */}
         {listing.mapLat !== null && listing.mapLng !== null ? (
           <section className="bg-mist py-16 lg:py-20">
             <Container>
               <h2 className="font-display text-[26px] leading-[1.28] text-ink sm:text-[32px]">
                 {copy.location}
               </h2>
+              {/* The district, not the building.
+                  This was `q=<lat>,<lng>&z=15` — the exact coordinates, centred
+                  at street level, which handed a reader the development's name
+                  and let them take the enquiry straight to the developer.
+                  Watermarking the photography while leaving this here would
+                  have been bolting the window and leaving the door open.
+                  Querying a place name matters more than the zoom does: an
+                  embed centred on coordinates stays centred on them however far
+                  out it opens, and two turns of the wheel is the roof. See
+                  `app/components/district-map.tsx`. */}
               <div className="mt-8 aspect-[16/9] w-full overflow-hidden border border-ink/10 bg-white">
                 <iframe
-                  src={`https://www.google.com/maps?q=${listing.mapLat},${listing.mapLng}&hl=${locale}&z=15&output=embed`}
+                  src={`https://www.google.com/maps?q=${area}&hl=${locale}&z=12&output=embed`}
                   title={interpolate(copy.mapTitle, { title })}
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -386,7 +408,7 @@ export async function ListingPage({ listing }: { listing: Listing }) {
                 />
               </div>
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${listing.mapLat},${listing.mapLng}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${area}`}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-3 inline-block text-[11.5px] uppercase tracking-[0.12em] text-ink/60 transition-colors hover:text-gold"

@@ -369,3 +369,18 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/*
+ * The rest of the image-menu friction; the listener lives in
+ * `app/components/image-protection.tsx` and the note there says what this is
+ * and is not worth.
+ *
+ * `-webkit-touch-callout` is the one that matters on a phone, where there is
+ * no right click: a long press on a photograph otherwise raises Save Image and
+ * Copy, and cancelling `contextmenu` does not reach it on iOS.
+ */
+img {
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}

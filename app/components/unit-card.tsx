@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { watermarked } from "@/app/lib/watermark";
 import type { Currency, Unit } from "@/app/lib/properties";
 import { slugify } from "@/app/lib/admin/slug";
 import { useI18n } from "@/app/lib/i18n/context";
@@ -42,7 +43,7 @@ export function UnitCard({
     <article className="flex h-full flex-col">
       <div className="relative aspect-[448/300] w-full overflow-hidden bg-mist">
         <Image
-          src={unit.image}
+          src={watermarked(unit.image)}
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 440px"
