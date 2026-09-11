@@ -78,7 +78,7 @@ export function TeamCard({
       ) : (
         <div className="flex justify-center bg-mist px-6 pb-5 pt-7">
           <div
-            className={`relative ${large ? "w-[224px]" : "w-[184px]"} aspect-square`}
+            className={`group/portrait relative ${large ? "w-[224px]" : "w-[184px]"} aspect-square`}
           >
             <Image
               src={person.image}
@@ -86,6 +86,18 @@ export function TeamCard({
               fill
               sizes={large ? "224px" : "184px"}
               className="object-contain"
+            />
+            {/*
+             * The white ring around the face is painted into the file rather
+             * than drawn by CSS — it is the outermost 15px of a 440px frame,
+             * so there is no border here to recolour. This lays a ring of the
+             * same thickness exactly over it (3.4% of the width, hence 6px at
+             * 184 and 8px at 224) and fades it in on hover. Transparent at
+             * rest, so the white underneath shows through untouched.
+             */}
+            <span
+              aria-hidden
+              className={`pointer-events-none absolute inset-0 rounded-full border-transparent transition-colors duration-300 ease-out group-hover/portrait:border-gold ${large ? "border-[8px]" : "border-[6px]"}`}
             />
           </div>
         </div>
