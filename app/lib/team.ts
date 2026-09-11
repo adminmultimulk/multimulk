@@ -9,17 +9,15 @@ import type { Dictionary } from "./i18n";
  * role beneath it are keyed by slug in the dictionary, so they read in
  * whatever language the page is in.
  *
- * Most of the portraits are the ones the company already uses: a circular
- * photograph on the house green, pre-masked with transparent corners at
- * 440x440. That is why those cards frame them as circles rather than filling
- * a rectangle — cropping one to a portrait frame would slice the circle. They
- * sit on a light card so the green belongs to the picture rather than having
- * to match the page.
+ * Every card takes a rectangular studio frame at 186:287 — the shape the two
+ * executives already use at 620x956, and the one the About page sets its
+ * leadership pair in. The photograph fills the card and the name sits over its
+ * foot; the executives are the same card, larger.
  *
- * The two executives are the exception: they have rectangular studio frames at
- * 620x956, the same files the About page sets its leadership pair in, so their
- * cards fill the frame edge to edge and carry the name over the photograph the
- * way the About page does. Same faces on both pages, framed the same way.
+ * The roster was previously a mix: circular cut-outs on the house green,
+ * pre-masked at 440x440, for everyone below the executives. Those files are
+ * square, so `object-cover` crops them hard to 186:287 — a person still on a
+ * 440x440 circle needs a rectangular replacement, not a CSS adjustment.
  *
  * Nothing here is invented. A person, a title or a face that was not on the
  * page this was taken from does not belong here until someone at Multi Mulk
@@ -56,43 +54,18 @@ export const teamLeadership: TeamPerson[] = [
 ];
 
 /**
- * Everyone else, A to Z by the name as the card shows it.
+ * The row beneath the executives, in the order Multi Mulk set.
  *
- * First name first, because that is how these names are written and read —
- * several of them ("Muhammad Ali Shahid", "Asad Ullah Saif", "Sobhi Al Sabhi")
- * have no surname to sort on in the western sense. Alphabetical rather than by
- * department: the department is printed on every card, so the grid groups
- * itself visually without the array having to.
- *
- * Twenty-four of these joined in the September 2026 shoot. Two of that batch
- * turned out to be new photographs of people already listed — Niloofar Sadiq
- * and Seyhan Ozmen — and were updated in place rather than duplicated, taking
- * the newer photograph and the spelling the roster uses.
+ * Senior enough to sit above the grid but not to share the executives' row:
+ * they render at the grid's card size, under the same heading, so the eye
+ * reads two tiers of one section rather than a third section.
  */
-export const teamPeople: TeamPerson[] = [
+export const teamSeniorTeam: TeamPerson[] = [
   {
-    slug: "abdul-hadi",
-    name: "Abdul Hadi",
-    department: "mediaProduction",
-    image: "/images/team/abdul-hadi.webp",
-  },
-  {
-    slug: "alireza-akbari",
-    name: "Alireza Akbari",
-    department: "marketing",
-    image: "/images/team/alireza-akbari.webp",
-  },
-  {
-    slug: "amina-ashraf",
-    name: "Amina Ashraf",
-    department: "digitalMedia",
-    image: "/images/team/amina-ashraf.webp",
-  },
-  {
-    slug: "asad-ullah-saif",
-    name: "Asad Ullah Saif",
-    department: "clientAdvisory",
-    image: "/images/team/asad-ullah-saif.webp",
+    slug: "souha-koudmani",
+    name: "Souha Koudmani",
+    department: "executiveLeadership",
+    image: "/images/team/souha-koudmani-2.webp",
   },
   {
     slug: "ayshe-ali-haydar",
@@ -101,82 +74,191 @@ export const teamPeople: TeamPerson[] = [
     image: "/images/team/ayshe-ali-haydar.webp",
   },
   {
+    slug: "asad-ullah-saif",
+    name: "Asad Ullah Saif",
+    department: "clientAdvisory",
+    image: "/images/team/asad-ullah-saif.webp",
+  },
+  {
+    slug: "tariq-tahir",
+    name: "Tariq Tahir",
+    department: "clientAdvisory",
+    image: "/images/team/tariq-tahir.webp",
+  },
+];
+
+/**
+ * Everyone else, in the running order Multi Mulk set by hand.
+ *
+ * The grid reads in array order, so this array *is* the running order — there
+ * is no sort. It was alphabetical until the business supplied an explicit one,
+ * which is seniority and standing rather than anything a machine could derive,
+ * so nothing here should be re-sorted without asking them first.
+ *
+ * Names below the supplied order are the people that order did not mention;
+ * they sit at the end, alphabetically, rather than being dropped.
+ *
+ * Twenty-four of these joined in the September 2026 shoot. Two of that batch
+ * turned out to be new photographs of people already listed — Niloofar Sadiq
+ * and Seyhan Ozmen — and were updated in place rather than duplicated, taking
+ * the newer photograph and the spelling the roster uses.
+ */
+export const teamPeople: TeamPerson[] = [
+  {
+    slug: "kubra-senturk",
+    name: "Kubra Senturk",
+    department: "legal",
+    image: "/images/team/kubra-senturk-2.webp",
+  },
+  {
+    slug: "sarmad-al-kaseer",
+    name: "Sarmad Al Kaseer",
+    department: "clientAdvisory",
+    image: "/images/team/sarmad-al-kaseer-2.webp",
+  },
+  {
+    slug: "muhammet-kurtulus",
+    name: "Muhammet Kurtulus",
+    department: "clientAdvisory",
+    image: "/images/team/muhammet-kurtulus.webp",
+  },
+  {
+    slug: "sobhi-al-sabhi",
+    name: "Sobhi Al Sabhi",
+    department: "clientAdvisory",
+    image: "/images/team/sobhi-al-sabhi.webp",
+  },
+  {
+    slug: "afsheen",
+    name: "Afsheen Baig",
+    department: "digitalMedia",
+    image: "/images/team/afsheen.webp",
+  },
+  {
+    slug: "muhammad-ali-shahid",
+    name: "Muhammad Ali Shahid",
+    department: "clientAdvisory",
+    image: "/images/team/muhammad-ali-shahid-2.webp",
+  },
+  {
+    slug: "zeynep-nehir-karap",
+    name: "Zeynep Nehir Karap",
+    department: "clientAdvisory",
+    image: "/images/team/zeynep-nehir-karap-2.webp",
+  },
+  {
     slug: "badar-naseem",
     name: "Badar Naseem",
     department: "clientAdvisory",
     image: "/images/team/badar-naseem.webp",
   },
   {
-    slug: "danish-anwar",
-    name: "Danish Anwar",
-    department: "clientAdvisory",
-    image: "/images/team/danish-anwar.webp",
-  },
-  {
     slug: "elnaz-aminzadeh",
     name: "Elnaz Aminzadeh",
     department: "clientAdvisory",
-    image: "/images/team/elnaz-aminzadeh.webp",
-  },
-  {
-    slug: "errfan-balouch",
-    name: "Errfan Balouch",
-    department: "sales",
-    image: "/images/team/errfan-balouch.webp",
-  },
-  {
-    slug: "faizan-asif",
-    name: "Faizan Asif",
-    department: "digitalMedia",
-    image: "/images/team/faizan-asif.webp",
-  },
-  {
-    slug: "fatih-abbas",
-    name: "Fatih Abbas",
-    department: "istanbulSales",
-    image: "/images/team/fatih-abbas.webp",
-  },
-  {
-    slug: "iffah-mir",
-    name: "Iffah Mir",
-    department: "digitalMedia",
-    image: "/images/team/iffah-mir.webp",
-  },
-  {
-    slug: "kubra-senturk",
-    name: "Kubra Senturk",
-    department: "legal",
-    image: "/images/team/kubra-senturk.webp",
-  },
-  {
-    slug: "mahenur-azlem",
-    name: "Mahenur Azlem",
-    department: "humanResources",
-    image: "/images/team/mahenur-azlem.webp",
-  },
-  {
-    slug: "maryam-shad",
-    name: "Maryam Shad",
-    department: "digitalMedia",
-    image: "/images/team/maryam-shad.webp",
+    image: "/images/team/elnaz-aminzadeh-2.webp",
   },
   {
     slug: "mubark-ali",
     name: "Mubark Ali",
     department: "clientAdvisory",
-    image: "/images/team/mubark-ali.webp",
+    image: "/images/team/mubark-ali-2.webp",
   },
   {
-    slug: "muhammad-ali-shahid",
-    name: "Muhammad Ali Shahid",
-    department: "clientAdvisory",
-    image: "/images/team/muhammad-ali-shahid.webp",
+    slug: "seyhan-ozman",
+    name: "Seyhan Ozmen",
+    department: "operations",
+    image: "/images/team/seyhan-ozman.webp",
   },
   {
     slug: "muhammad-jamal",
     name: "Muhammad Jamal",
     department: "clientAdvisory",
-    image: "/images/team/muhammad-jamal.webp",
+    image: "/images/team/muhammad-jamal-2.webp",
+  },
+  {
+    slug: "sinan-sadikhov",
+    name: "Sinan Sadikhov",
+    department: "clientAdvisory",
+    image: "/images/team/sinan-sadikhov.webp",
+  },
+  {
+    slug: "raazia-sanam",
+    name: "Raazia Sanam",
+    department: "education",
+    image: "/images/team/raazia-sanam-2.webp",
+  },
+  {
+    slug: "mahenur-azlem",
+    name: "Mahenur Azlem",
+    department: "humanResources",
+    image: "/images/team/mahenur-azlem-2.webp",
+  },
+  {
+    slug: "alireza-akbari",
+    name: "Alireza Akbari",
+    department: "marketing",
+    image: "/images/team/alireza-akbari-2.webp",
+  },
+  {
+    slug: "rizwan-aslam",
+    name: "Rizwan Aslam",
+    department: "mediaProduction",
+    image: "/images/team/rizwan-aslam-2.webp",
+  },
+  {
+    slug: "maryam-shad",
+    name: "Maryam Shad",
+    department: "digitalMedia",
+    image: "/images/team/maryam-shad-2.webp",
+  },
+  {
+    slug: "hashim-hashimdan",
+    name: "Hashim Hashimdan",
+    department: "mediaProduction",
+    image: "/images/team/hashim-hashimdan.webp",
+  },
+  {
+    slug: "shahid",
+    name: "Muhammad Shahid",
+    department: "digitalMedia",
+    image: "/images/team/shahid.webp",
+  },
+  {
+    slug: "amina-ashraf",
+    name: "Amina Ashraf",
+    department: "digitalMedia",
+    image: "/images/team/amina-ashraf-2.webp",
+  },
+  {
+    slug: "zeeshan-haider",
+    name: "Zeeshan Haider",
+    department: "mediaProduction",
+    image: "/images/team/zeeshan-haider.webp",
+  },
+  {
+    slug: "shaik-mohammed-aburuddin",
+    name: "Shaik Mohammed Aburuddin",
+    department: "clientAdvisory",
+    image: "/images/team/shaik-mohammed-aburuddin-2.webp",
+  },
+  {
+    slug: "faizan-asif",
+    name: "Faizan Asif",
+    department: "digitalMedia",
+    image: "/images/team/faizan-asif-2.webp",
+  },
+  {
+    slug: "iffah-mir",
+    name: "Iffah Mir",
+    department: "digitalMedia",
+    image: "/images/team/iffah-mir-2.webp",
+  },
+  {
+    slug: "mohd-imad",
+    name: "Mohd Imad",
+    department: "digitalMedia",
+    image: "/images/team/mohd-imad.webp",
   },
   {
     slug: "muhammad-mubashir",
@@ -188,81 +270,14 @@ export const teamPeople: TeamPerson[] = [
     slug: "muhammad-riyasat",
     name: "Muhammad Riyasat",
     department: "clientAdvisory",
-    image: "/images/team/muhammad-riyasat.webp",
-  },
-  {
-    slug: "muhammet-kurtulus",
-    name: "Muhammet Kurtulus",
-    department: "clientAdvisory",
-    image: "/images/team/muhammet-kurtulus.webp",
-  },
-  {
-    slug: "nargis-sadiq",
-    name: "Nargis Sadiq",
-    department: "turkeyOperations",
-    image: "/images/team/nargis-sadiq.webp",
+    image: "/images/team/muhammad-riyasat-2.webp",
   },
   {
     slug: "nilofar-sadiq",
     name: "Niloofar Sadiq",
     department: "clientAdvisory",
-    image: "/images/team/nilofar-sadiq.webp",
+    image: "/images/team/nilofar-sadiq-2.webp",
   },
-  {
-    slug: "rizwan-aslam",
-    name: "Rizwan Aslam",
-    department: "mediaProduction",
-    image: "/images/team/rizwan-aslam.webp",
-  },
-  {
-    slug: "rizwan-saeed",
-    name: "Rizwan Saeed",
-    department: "clientAdvisory",
-    image: "/images/team/rizwan-saeed.webp",
-  },
-  {
-    slug: "sadaf-sarwar",
-    name: "Sadaf Sarwar",
-    department: "digitalMedia",
-    image: "/images/team/sadaf-sarwar.webp",
-  },
-  {
-    slug: "sarmad-al-kaseer",
-    name: "Sarmad Al Kaseer",
-    department: "clientAdvisory",
-    image: "/images/team/sarmad-al-kaseer.webp",
-  },
-  {
-    slug: "seyhan-ozman",
-    name: "Seyhan Ozmen",
-    department: "operations",
-    image: "/images/team/seyhan-ozman.webp",
-  },
-  {
-    slug: "sinan-sadikhov",
-    name: "Sinan Sadikhov",
-    department: "clientAdvisory",
-    image: "/images/team/sinan-sadikhov.webp",
-  },
-  {
-    slug: "sobhi-al-sabhi",
-    name: "Sobhi Al Sabhi",
-    department: "clientAdvisory",
-    image: "/images/team/sobhi-al-sabhi.webp",
-  },
-  {
-    slug: "tariq-tahir",
-    name: "Tariq Tahir",
-    department: "clientAdvisory",
-    image: "/images/team/tariq-tahir.webp",
-  },
-  {
-    slug: "zeeshan-haider",
-    name: "Zeeshan Haider",
-    department: "mediaProduction",
-    image: "/images/team/zeeshan-haider.webp",
-  },
-
 ];
 
 /**

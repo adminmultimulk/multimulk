@@ -2,14 +2,16 @@ import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
 import { TeamCard } from "./team-card";
 import { getDictionary } from "@/app/lib/i18n";
-import { teamLeadership } from "@/app/lib/team";
+import { teamLeadership, teamSeniorTeam } from "@/app/lib/team";
 
 /**
- * The two executives, at the larger card size.
+ * The executives, and the senior row beneath them.
  *
- * Centred heading and standfirst over a centred row — the roster is two people
- * long here, so the row is flex rather than a grid, which would sit them off
- * to one side.
+ * Centred heading and standfirst over two centred rows. The executives sit at
+ * the larger card size in a centred flex row — a grid would sit two people
+ * off to one side. The senior four beneath them use the roster's own grid,
+ * so they sit at its size and on its columns: one heading, two tiers, not a
+ * grid that starts early.
  */
 export async function TeamLeadership() {
   const t = await getDictionary();
@@ -39,9 +41,19 @@ export async function TeamLeadership() {
               person={person}
               t={t}
               size="lg"
-              frame="portrait"
               className="w-full max-w-[330px] shrink-0 grow-0 basis-[330px]"
             />
+          ))}
+        </ul>
+
+        {/*
+         * Same grid as the roster beneath, so the four columns line up with
+         * it edge to edge. A fixed-width flex row was ~12px too wide for its
+         * cap and wrapped the fourth card onto a row of its own.
+         */}
+        <ul className="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {teamSeniorTeam.map((person) => (
+            <TeamCard key={person.slug} person={person} t={t} />
           ))}
         </ul>
       </Container>

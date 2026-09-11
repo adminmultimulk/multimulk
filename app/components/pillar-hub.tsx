@@ -45,13 +45,6 @@ export async function PillarHub({
   const locale = await getLocale();
   const t = await getDictionary(locale);
   const category = programmes[0]?.category ?? "citizenship";
-  const featured = programmes.find(
-    (programme) =>
-      programme.category === "citizenship" && programme.slug === "turkiye",
-  );
-  const grid = featured
-    ? programmes.filter((programme) => programme !== featured)
-    : programmes;
 
   return (
     <>
@@ -120,22 +113,23 @@ export async function PillarHub({
             </p>
 
             {programmes.length ? (
-              <div className="mt-12 space-y-3">
-                {featured ? (
-                  <ProgrammeCard
-                    programme={featured}
-                    href={buildPath(programmeRouteId, {
-                      programme: featured.slug,
-                    })}
-                    locale={locale}
-                    t={t}
-                    featured
-                  />
-                ) : null}
-
-                <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  {grid.map((programme) => (
-                    <li key={`${programme.category}-${programme.slug}`}>
+              /*
+               * Every card carries a rule on its inline-start edge, which puts
+               * one hairline between each pair of columns and a stray one down
+               * the outside of the first. The list is pulled out by its own
+               * gutter so the photographs sit flush with the container, which
+               * carries that stray rule past the edge, and this wrapper clips
+               * it. The alternative — nth-child rules that change with the
+               * column count at each breakpoint — comes down to which of two
+               * equally specific selectors Tailwind happens to emit last.
+               */
+              <div className="mt-12 overflow-hidden border-t border-ink/12">
+                <ul className="-mx-6 grid sm:grid-cols-2 lg:-mx-8 lg:grid-cols-3">
+                  {programmes.map((programme) => (
+                    <li
+                      key={`${programme.category}-${programme.slug}`}
+                      className="border-ink/12 px-6 py-11 sm:border-s lg:px-8 lg:py-14"
+                    >
                       <ProgrammeCard
                         programme={programme}
                         href={buildPath(programmeRouteId, {
@@ -202,13 +196,11 @@ function ProgrammeCard({
   href,
   locale,
   t,
-  featured = false,
 }: {
   programme: Programme;
   href: string;
   locale: Locale;
   t: Dictionary;
-  featured?: boolean;
 }) {
   const { image, flag } = pillarVisual(programme);
   const placeKey = pillarPlace[programme.country];
@@ -219,98 +211,68 @@ function ProgrammeCard({
   const suspended = programme.status === "suspended";
 
   return (
-    <Link
-      href={href}
-      className={`group relative block overflow-hidden ${
-        featured
-          ? "min-h-[380px] lg:min-h-[520px]"
-          : "aspect-[660/400]"
-      }`}
-    >
-      <Image
-        src={image}
-        alt=""
-        fill
-        sizes={featured ? "100vw" : "(max-width: 1024px) 50vw, 33vw"}
-        className={`object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105 ${
-          suspended ? "grayscale" : ""
-        }`}
-      />
-      {/*
-       * On a grid card the text block runs almost the full height, so the
-       * scrim has to carry cream type over a photograph that is pale from
-       * top to bottom — Grenada, Saint Lucia and Antigua all are — and not
-       * merely over the dark foot of one. The featured card is twice the
-       * height for the same block of text, so it keeps the lighter wash.
-       */}
-      <div
-        className={`absolute inset-0 bg-gradient-to-t from-forest-deep to-transparent ${
-          featured ? "via-forest-deep/35" : "via-forest-deep/80 via-55%"
-        }`}
-      />
-      <div
-        className={`absolute inset-x-0 top-0 bg-gradient-to-b to-transparent ${
-          featured ? "h-1/3 from-black/35" : "h-3/5 from-black/70"
-        }`}
-      />
-
-      <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
-        <div className="flex items-center gap-2.5">
-          {flag ? (
-            <Image
-              src={flag}
-              alt=""
-              width={22}
-              height={16}
-              unoptimized={flag.endsWith(".svg")}
-              className="h-4 w-[22px] object-cover"
-            />
-          ) : null}
-          {place ? (
-            <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-sand">
-              {place}
-            </p>
-          ) : null}
-        </div>
-
-        <h2
-          className={`mt-3 font-display leading-[1.2] text-cream ${
-            featured
-              ? "text-[28px] sm:text-[36px] lg:text-[42px]"
-              : "text-[22px] sm:text-[24px]"
+    <Link href={href} className="group block text-center">
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <Image
+          src={image}
+          alt=""
+          fill
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className={`object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105 ${
+            suspended ? "grayscale" : ""
           }`}
-        >
-          {programme.officialName}
-        </h2>
-
-        <p
-          className={`mt-2 text-[11.5px] uppercase tracking-[0.1em] ${
-            suspended ? "text-gold-light" : "text-cream/65"
-          }`}
-        >
-          {t.programmes.status[programme.status]}
-        </p>
-
-        {starting ? (
-          <p className="mt-4 text-[13px] text-cream/90">
-            <span className="text-cream/60">{t.common.startingFrom}</span>{" "}
-            <span className="num">{formatMoney(locale, starting.minimum)}</span>
-          </p>
-        ) : null}
-
-        {programme.visaFreeCount !== "unknown" ? (
-          <p className="mt-1 text-[12.5px] text-cream/70">
-            <span className="num">
-              {formatNumber(locale, programme.visaFreeCount)}
-            </span>{" "}
-            {t.figures.units.count}
-          </p>
-        ) : null}
-
-        <span className="mt-5 inline-block text-[12.5px] text-gold group-hover:underline">
-          {t.common.learnMore}
-        </span>
+        />
       </div>
+
+      <div className="flex items-center justify-center gap-2.5 pt-7">
+        {flag ? (
+          <Image
+            src={flag}
+            alt=""
+            width={22}
+            height={16}
+            unoptimized={flag.endsWith(".svg")}
+            className="h-4 w-[22px] object-cover"
+          />
+        ) : null}
+        {place ? (
+          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-ink/55">
+            {place}
+          </p>
+        ) : null}
+      </div>
+
+      <h2 className="mt-3.5 font-display text-[22px] leading-[1.25] text-ink transition-colors group-hover:text-forest sm:text-[26px]">
+        {programme.officialName}
+      </h2>
+
+      <p
+        className={`mt-3 text-[11.5px] uppercase tracking-[0.1em] ${
+          suspended ? "text-gold" : "text-ink/45"
+        }`}
+      >
+        {t.programmes.status[programme.status]}
+      </p>
+
+      {starting ? (
+        <p className="mt-4 text-[14px] leading-[24px] text-ink/75">
+          <span className="text-ink/50">{t.common.startingFrom}</span>{" "}
+          <span className="num">{formatMoney(locale, starting.minimum)}</span>
+        </p>
+      ) : null}
+
+      {programme.visaFreeCount !== "unknown" ? (
+        <p className="mt-1 text-[13px] leading-[22px] text-ink/60">
+          <span className="num">
+            {formatNumber(locale, programme.visaFreeCount)}
+          </span>{" "}
+          {t.figures.units.count}
+        </p>
+      ) : null}
+
+      <span className="mt-6 inline-block text-[12.5px] text-gold group-hover:underline">
+        {t.common.learnMore}
+      </span>
     </Link>
   );
 }
