@@ -299,11 +299,15 @@ export default async function PropertyPage({
                   className="inline-flex items-center gap-2 rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
                 />
               ) : null}
+              {/* The page's one destination for "I want to talk to someone" —
+                  see `PropertyEnquire`. A construction-progress page was
+                  designed here, but the dashboard has no progress field to
+                  fill one from, and a button to nowhere is worse than none. */}
               <a
-                href="#"
+                href="#enquire"
                 className="rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
               >
-                {t.property.viewProgress}
+                {t.common.enquireNow}
               </a>
             </div>
           </Container>

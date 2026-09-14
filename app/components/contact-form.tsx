@@ -6,6 +6,7 @@ import { useI18n } from "@/app/lib/i18n/context";
 import { trackEvent } from "@/app/lib/analytics";
 import { submitLead, type LeadState } from "@/app/lib/leads/actions";
 import { enquiryTypes, type EnquiryType } from "@/app/lib/leads/schema";
+import { PhoneField } from "./phone-field";
 import { SelectMenu } from "./select-menu";
 
 export type { EnquiryType };
@@ -110,12 +111,10 @@ export function ContactForm({
         required
         error={errors?.name && form.errors[errors.name]}
       />
-      <Field
+      <PhoneField
         label={form.phone}
-        name="phone"
-        type="tel"
+        codeLabel={form.countryCode}
         placeholder={form.phonePlaceholder}
-        required
         error={errors?.phone && form.errors[errors.phone]}
       />
       <Field

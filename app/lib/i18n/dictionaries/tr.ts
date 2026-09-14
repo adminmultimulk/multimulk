@@ -219,6 +219,21 @@ const tr = {
     yes: "Evet",
     no: "Hayır",
     bestLabel: "En elverişli",
+    /** Marks the column the practice would advise; the verdict argues it. */
+    recommended: "Multi Mulk tavsiyesi",
+    verdictHeading: "Görüşümüz",
+    /** The comparison page in the resort design; see /compare/[slug]. */
+    heroTagline: "Aynı gerçekler üzerinden yan yana, tek bir öneriyle",
+    programmesLabel: "Program",
+    factorsLabel: "Ölçüt",
+    tableHeading: "Ölçüt Ölçüt",
+    programmeIndex: "Program {index}",
+    recommendedHeading: "Multi Mulk’un Önerisi: {name}",
+    otherComparisons: "Diğer Karşılaştırmalar",
+    allComparisons: "Tüm Karşılaştırmalar",
+    enquireSubject: "Karşılaştırma: {programmes}",
+    ctaHeading: "Hâlâ Karar Veremediniz mi?",
+    ctaBody: "Neyi çözmek istediğinizi ve hangi programları tarttığınızı söyleyin; bir danışman bu tabloyu aileniz için doldurup yanıtlasın.",
     rows: {
       minimumInvestment: "Asgari yatırım",
       holdingPeriod: "Elde tutma süresi",
@@ -232,6 +247,34 @@ const tr = {
       parentsIncluded: "Ebeveynler dâhil edilebilir",
       citizenshipAfter: "Vatandaşlık süresi",
       worldwideTax: "Dünya genelindeki geliri vergilendirir",
+      rentalYield: "Brüt kira getirisi",
+    },
+    /** The verdict under each table, keyed by the comparison's `copyKey`. */
+    copy: {
+      "turkiye-vs-caribbean": {
+        verdict:
+          "Grenada daha az ister ve pasaportu kâğıt üzerinde daha uzağa gider. Türkiye ise daha güçlü yatırımdır: nitelikli varlık on altı milyonluk bir şehirde tapulu bir konuttur; elde tutulduğu sürece piyasa getirisiyle kiralanır, üç yıl sonra açık piyasada satılır — Karayipler'deki bir tatil köyü payı daha az kazandırır ve çıkışı zordur. Vatandaşlık doğrudan verilir, süreç daha kısadır ve ziyaret gerekmez. Kendini amorti eden ikinci bir vatandaşlık isteyen aile için tavsiyemiz Türkiye'dir.",
+      },
+      "turkiye-citizenship-vs-residency": {
+        verdict:
+          "İkamet izni yarı maliyetlidir ve daha hızlıdır; ama bir izindir: yenilenir, taşınmazın elde tutulmasına bağlıdır ve garanti olmayan bir vatandaşlık başvurusuna beş yıl uzaktadır. Vatandaşlık doğrudan verilir, aileye geçer ve aynı taşınmaz her iki durumda da aynı getiriyi sağlar. Bütçe eşiğe ulaşıyorsa tavsiyemiz vatandaşlıktır.",
+      },
+      "turkiye-vs-uae": {
+        verdict:
+          "Golden Residence her on yılda yenilenen bir ikamet iznidir ve hiçbir zaman pasaport olmaz; Türkiye vatandaşlığı doğrudan, daha düşük bir giriş eşiğiyle ve benzer getiri sağlayan bir taşınmazla verir. İkisi birbirini dışlamaz — müşterilerimizin çoğu Dubai'deki üsleriyle Türk pasaportunu birlikte taşır. Hedef ikinci bir vatandaşlıksa tavsiyemiz Türkiye'dir.",
+      },
+      "caribbean-islands": {
+        verdict:
+          "Üçü arasında en azını Dominika ister; yalnızca tabloya bakılırsa en uzağa St. Kitts ve Nevis pasaportu gider. Kararı belirleyen ise tabloda değildir. Grenada, pasaportu ABD E-2 anlaşmalı yatırımcı vizesine hak kazandıran ve Çin’e vizesiz giriş sağlayan tek ülkedir; St. Kitts ve Nevis dünyanın en eski programı ve sınırda en yerleşik isimdir; Dominika’nın gayrimenkul rotası markalı bir tesis payına en düşük giriştir. Hedefi ABD’ye giden bir yolu da kapsayan bir aile için önerimiz Grenada’dır. En düşük maliyetli tesis payı için ise Dominika.",
+      },
+      "golden-visas": {
+        verdict:
+          "Portekiz ve Yunanistan, neredeyse her ilk görüşmede sorulan iki Avrupa altın vizesidir ve ikisi de beş yıl önce yaptığını artık yapmıyor: Portekiz gayrimenkul rotasını 2023’te kapattı; fon rotası ise vatandaşlık başvurusuna on yıl ve bir dil sınavı uzaklıkta. Yunanistan hâlâ gayrimenkul karşılığı oturma izni veriyor ama dünya genelindeki geliri vergilendiriyor ve pasaporta giden yolu yedi yıl sürüyor. BAE Altın İkameti bir izindir, asla pasaport değildir; ancak yenilenebilir, dünya genelindeki gelire vergi getirmez, asgari kalış şartı yoktur ve hak kazandıran varlık piyasa getirisiyle kiralanan bir Dubai gayrimenkulüdür — işlem yaptığımız ikamet bu yüzden budur. Vergi yükü olmadan Körfez’de bir üs için önerimiz BAE’dir; hedefi Avrupa pasaportu olan bir aile için Yunanistan iki yolun kısa olanıdır ve işlem yapmaktan çok yönlendireceğimiz bir yoldur.",
+      },
+      "turkiye-vs-portugal": {
+        verdict:
+          "Portekiz neredeyse her ilk görüşmedeki Avrupa ismidir ve artık insanların hatırladığını yapmıyor: gayrimenkul rotası 2023’te kapandı, geriye bir fon katılımı kaldı, işlem yıllara yayılıyor ve çoğu ailenin asıl sorduğu vatandaşlık artık on yıl ve bir dil sınavı uzaklıkta. Türkiye vatandaşlığı doğrudan, aylar içinde, elde tutulduğu sürece getiri sağlayan tapulu bir gayrimenkul karşılığında verir; ikamet, ziyaret ve dil sınavı gerekmez. Türk pasaportu Schengen bölgesine vizesiz girmez, Portekiz oturma kartı girer — Portekiz lehine tartılmaya değer tek nokta budur. Hedefi bir Avrupa adresi değil ikinci bir vatandaşlık olan bir aile için önerimiz Türkiye’dir.",
+      },
     },
   },
 
@@ -256,6 +299,24 @@ const tr = {
     },
     sinceLabel: "Açılış yılı",
     unreviewed: "Bu sayfadaki rakamların hukuki incelemesi henüz tamamlanmadı ve yayımlanmış değil. Herhangi birine göre hareket etmeden önce bize teyit ettirin.",
+    /** The banner and sections of a programme page; see `programme-pages.ts`. */
+    aboutEyebrow: "Program Hakkında",
+    highlightsEyebrow: "Programın Öne Çıkanları",
+    highlightHeadings: {
+      grants: "Ne Sağlar",
+      family: "Kimler Dahil Edilebilir",
+      asks: "Sizden Ne İster",
+    },
+    routesBody: "Programın tanıdığı rotalar ve bunlardan işlem yaptıklarımız.",
+    compareEyebrow: "Yan Yana",
+    compareHeading: "{name} Karşılaştırması",
+    compareBody: "Bu sayfadaki her rakam, en sık kıyaslandığı programlarla aynı tabloda yer alır — aynı kayıttan okunur, altında da önerimiz bulunur.",
+    compareButton: "Karşılaştırmayı Görün",
+    allComparisons: "Tüm Karşılaştırmalar",
+    otherProgrammes: "Diğer Programlar",
+    viewProgramme: "Programı Görüntüleyin",
+    ctaHeading: "{name} Programını Keşfedin",
+    ctaBody: "Neyi çözmek istediğinizi söyleyin; bu programın size uygun olup olmadığını ve her şey dahil ne kadara mal olacağını söyleyelim.",
   },
 
   faq: {
@@ -287,6 +348,9 @@ const tr = {
     reasoning: "Neden bu ve nelerin elendiği",
     complication: "Nerede aksadı",
     consentPending: "Henüz yayımlanmış bir müşteri sonucu yok. Bunun için müşterinin yazılı onayı gerekiyor ve Multi Mulk şu ana kadar hiçbiri için bu onaya sahip değil.",
+    /** Shown wherever a composed, no-client engagement is listed. */
+    representativeNote:
+      "Temsili dosyalar: her biri danışmanlık ekibimizin yürüttüğü dosyaların genel yapısından oluşturulmuştur; hiçbir müşterinin kişisel bilgisini içermez. Gerçek dosyaların sonuçları yalnızca müşterinin yazılı onayıyla yayımlanır.",
   },
 
   tools: {
@@ -435,6 +499,10 @@ const tr = {
     "Cabrits National Park": "Cabrits National Park",
     "Christophe Harbour": "Christophe Harbour",
     Portsmouth: "Portsmouth",
+    "United Arab Emirates": "Birleşik Arap Emirlikleri",
+    Portugal: "Portekiz",
+    Greece: "Yunanistan",
+    Malta: "Malta",
   },
 
   unit: {
@@ -620,13 +688,15 @@ const tr = {
     emailLabel: "E-posta",
     phoneLabel: "Telefon",
     addressLabel: "Adres",
-    mapTitle: "Multi Mulk'un Beykent, İstanbul ofisinin haritası",
+    mapTitle: "Multi Mulk ofisinin haritası — {office}",
     mapLink: "Google Haritalar'da aç",
     form: {
       name: "Ad Soyad",
       namePlaceholder: "Adınızı yazın",
       phone: "Telefon numarası",
       phonePlaceholder: "Telefon numarası",
+      /** Accessible name of the dialling-code picker beside the number. */
+      countryCode: "Ülke kodu",
       email: "E-posta",
       emailPlaceholder: "eposta@ornek.com",
       enquiryAbout: "Talebiniz ne hakkında?",
@@ -656,7 +726,7 @@ const tr = {
       errors: {
         required: "Bu alan zorunludur.",
         email: "Geçerli bir e-posta adresi girin.",
-        phone: "Ülke kodu dâhil geçerli bir telefon numarası girin.",
+        phone: "Geçerli bir telefon numarası girin.",
         tooLong: "Bu, kabul edebileceğimizden daha uzun.",
         load: "Formu yükleyemedik. İletişim sayfasında aynısı var — ya da yandaki bilgileri kullanın.",
         rate: "Kısa süre içinde birkaç talep gönderdiniz. Lütfen daha sonra tekrar deneyin veya info@multimulk.com adresine yazın.",
@@ -814,6 +884,24 @@ const tr = {
     },
   },
   /** /properties/<slug> adresindeki tek bir rezidansın sayfası. */
+  resort: {
+    about: "Hakkında",
+    highlights: "Tesisin Öne Çıkanları",
+    location: "Konum",
+    caribbeanSea: "Karayip Denizi",
+    exterior: "Dış Mekân",
+    interior: "İç Mekân",
+    video: "Video",
+    galleryLabel: "{name} fotoğrafları",
+    findYourWay: "{name} tesisine ulaşım",
+    otherProperties: "Karayipler’deki Diğer Tesisler",
+    cbiEyebrow: "Yatırım Yoluyla Vatandaşlık",
+    cbiButton: "Vatandaşlık Seçenekleri Hakkında Bilgi Alın",
+    ctaHeading: "{name} tesisini keşfedin",
+    viewResort: "Tesisi Görüntüle",
+    slide: "{index} / {count}",
+  },
+
   listing: {
     specs: "Bir Bakışta",
     about: "Bu Rezidans Hakkında",

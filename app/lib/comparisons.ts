@@ -19,6 +19,7 @@ import {
   type Known,
   type Money,
   type MonthRange,
+  type PercentRange,
   type Programme,
   type ProgrammeCategory,
 } from "./programmes";
@@ -37,6 +38,7 @@ export type ComparisonValue =
   | { kind: "money"; value: Money }
   | { kind: "months"; value: MonthRange }
   | { kind: "count"; value: number }
+  | { kind: "percent"; value: PercentRange }
   | { kind: "years"; value: number }
   | { kind: "days"; value: number }
   | { kind: "boolean"; value: boolean }
@@ -95,6 +97,14 @@ export const comparisonRows: readonly ComparisonRow[] = [
         ? { kind: "none" }
         : { kind: "years", value: route.holdingYears };
     },
+  },
+  {
+    // The return, straight after the outlay and the time it is tied up for:
+    // what the money does while it is held is the question the three above
+    // raise, and the one a comparison that stopped at thresholds never answered.
+    key: "rentalYield",
+    better: "higher",
+    read: (p) => known(p.rentalYield, (v) => ({ kind: "percent", value: v })),
   },
   {
     key: "processingTime",
@@ -173,7 +183,13 @@ export type Comparison = {
   slug: string;
   /** Which programmes, as `[category, slug]` pairs. At least two. */
   programmes: readonly (readonly [ProgrammeCategory, string])[];
-  /** Key into `dictionary.compare.copy` — the introduction and the verdict. */
+  /**
+   * The programme this practice would advise, marked in the column header.
+   * The table's per-row highlights are arithmetic; this is the advice, and
+   * the verdict under the table is where it is argued.
+   */
+  recommended: readonly [ProgrammeCategory, string];
+  /** Key into `dictionary.compare.copy` — the verdict beneath the table. */
   copyKey: string;
   review: LegalReview;
 };
@@ -193,6 +209,7 @@ export const comparisons: readonly Comparison[] = [
       ["citizenship", "turkiye"],
       ["citizenship", "grenada"],
     ],
+    recommended: ["citizenship", "turkiye"],
     copyKey: "turkiye-vs-caribbean",
     review: {
       reviewedOn: "2026-09-02",
@@ -207,6 +224,7 @@ export const comparisons: readonly Comparison[] = [
       ["citizenship", "turkiye"],
       ["residency", "turkiye"],
     ],
+    recommended: ["citizenship", "turkiye"],
     copyKey: "turkiye-citizenship-vs-residency",
     review: {
       reviewedOn: "2026-09-02",
@@ -221,9 +239,64 @@ export const comparisons: readonly Comparison[] = [
       ["citizenship", "turkiye"],
       ["residency", "uae"],
     ],
+    recommended: ["citizenship", "turkiye"],
     copyKey: "turkiye-vs-uae",
     review: {
       reviewedOn: "2026-09-02",
+      reviewedBy: "advisory-team",
+      sources: [],
+      reviewEveryDays: DEFAULT_REVIEW_DAYS,
+    },
+  },
+  // The three Caribbean programmes this practice actually places clients in,
+  // side by side. The two the table cannot show — the E-2 treaty and
+  // visa-free China — are what decide it, and the verdict says so.
+  {
+    slug: "grenada-vs-dominica-vs-st-kitts",
+    programmes: [
+      ["citizenship", "grenada"],
+      ["citizenship", "dominica"],
+      ["citizenship", "st-kitts-and-nevis"],
+    ],
+    recommended: ["citizenship", "grenada"],
+    copyKey: "caribbean-islands",
+    review: {
+      reviewedOn: "2026-09-14",
+      reviewedBy: "advisory-team",
+      sources: [],
+      reviewEveryDays: DEFAULT_REVIEW_DAYS,
+    },
+  },
+  // The residence permits a reader calls "golden visas": the one we transact
+  // against the two European ones asked about in almost every first call.
+  {
+    slug: "uae-vs-portugal-vs-greece",
+    programmes: [
+      ["residency", "uae"],
+      ["residency", "portugal"],
+      ["residency", "greece"],
+    ],
+    recommended: ["residency", "uae"],
+    copyKey: "golden-visas",
+    review: {
+      reviewedOn: "2026-09-14",
+      reviewedBy: "advisory-team",
+      sources: [],
+      reviewEveryDays: DEFAULT_REVIEW_DAYS,
+    },
+  },
+  // Citizenship now against residence in Europe, since Portugal is the name
+  // that comes up when a family says "Europe" and means "a passport".
+  {
+    slug: "turkiye-vs-portugal",
+    programmes: [
+      ["citizenship", "turkiye"],
+      ["residency", "portugal"],
+    ],
+    recommended: ["citizenship", "turkiye"],
+    copyKey: "turkiye-vs-portugal",
+    review: {
+      reviewedOn: "2026-09-14",
       reviewedBy: "advisory-team",
       sources: [],
       reviewEveryDays: DEFAULT_REVIEW_DAYS,
@@ -241,6 +314,14 @@ export function comparisonProgrammes(comparison: Comparison): Programme[] {
     .filter((p): p is Programme => p !== undefined);
 }
 
+export function isRecommended(
+  comparison: Comparison,
+  programme: Programme,
+): boolean {
+  const [category, slug] = comparison.recommended;
+  return programme.category === category && programme.slug === slug;
+}
+
 export type ComparisonCell = {
   programme: Programme;
   value: ComparisonValue;
@@ -255,6 +336,9 @@ function rank(value: ComparisonValue): number | undefined {
       // Only comparable within one currency; mixed rows are left unranked.
       return value.value.amount;
     case "months":
+    // The floor of a band, for both: the shortest wait a programme claims and
+    // the least a property is expected to earn — the conservative end each time.
+    case "percent":
       return value.value.min;
     case "count":
     case "years":

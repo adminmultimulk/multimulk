@@ -37,7 +37,7 @@ export type ImageCredit = {
 export const imageCredits: ImageCredit[] = [
   {
     subject: "Soufrière and the Pitons at golden hour, Saint Lucia",
-    usedOn: "Caribbean citizenship programme page, opening image",
+    usedOn: "Caribbean citizenship programme page, opening image; Saint Lucia programme page, banner",
     author: "Jim Vajda",
     source: {
       label: "Soufriere, St. Lucia Sunset.jpg on Wikimedia Commons",

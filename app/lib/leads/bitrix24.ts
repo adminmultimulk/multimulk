@@ -32,6 +32,7 @@ import en from "../i18n/dictionaries/en";
 import { localeNames } from "../i18n/config";
 import { absoluteUrl } from "../site";
 import { escape } from "./email";
+import { countryNameFor } from "./phone";
 import type { Lead } from "./schema";
 
 /**
@@ -200,6 +201,13 @@ function comments(lead: Lead): string {
   const page = absoluteUrl(lead.source.path);
   const rows: [string, string][] = [
     ["Subject", lead.subject],
+    // The number itself is on the card's PHONE field; this names the country
+    // it belongs to, which the code alone does not always say — `+1` and `+7`
+    // are each shared — and which decides who on the team places the call.
+    [
+      "Phone country",
+      `${countryNameFor(lead.phoneCountry)} (${lead.phoneCode})`,
+    ],
     // Which language they wrote in decides who picks the enquiry up, so it is
     // stated rather than left to be inferred from the message.
     ["Language", localeNames[lead.locale].english],
@@ -223,7 +231,10 @@ function comments(lead: Lead): string {
  * `EMAIL` and `PHONE` are multi-value on a Bitrix lead, so they go as arrays
  * of typed entries rather than plain strings — a string is silently dropped,
  * which is the mistake worth not making, because it produces a lead with no
- * way to answer it.
+ * way to answer it. The phone is E.164 with the country code on the front,
+ * which is the one form Bitrix's own telephony can dial from any office; the
+ * country is spelled out again in `COMMENTS` and in `ADDRESS_COUNTRY`, so it
+ * can be filtered on without parsing the number.
  *
  * `REGISTER_SONET_EVENT` puts the creation in the activity stream and fires
  * the portal's own notifications, which is what makes an assignee actually
@@ -248,6 +259,11 @@ export async function createBitrixLead(lead: Lead): Promise<void> {
       OPENED: "Y",
       EMAIL: [{ VALUE: lead.email, VALUE_TYPE: "WORK" }],
       PHONE: [{ VALUE: lead.phone, VALUE_TYPE: "WORK" }],
+      // The country the number belongs to, which is the best the form knows
+      // about where the reader is. Nobody typed an address, so the other
+      // ADDRESS_* fields stay empty for sales to fill in.
+      ADDRESS_COUNTRY: countryNameFor(lead.phoneCountry),
+      ADDRESS_COUNTRY_CODE: lead.phoneCountry,
       ...(assignedTo ? { ASSIGNED_BY_ID: assignedTo } : {}),
     },
     params: { REGISTER_SONET_EVENT: "Y" },

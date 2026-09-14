@@ -13,6 +13,7 @@ import {
   type CountryCode,
   type Programme,
 } from "@/app/lib/programmes";
+import { countryNames } from "@/app/lib/programme-pages";
 import { buildPath } from "@/app/lib/routes";
 import { breadcrumbs, collectionPage, routeUrl } from "@/app/lib/seo/jsonld";
 
@@ -22,19 +23,6 @@ import { breadcrumbs, collectionPage, routeUrl } from "@/app/lib/seo/jsonld";
  * separately. They are also where the legacy site's own country roots —
  * /turkey, /uae, /eu — are redirected, so these URLs have history behind them.
  */
-const countryNames: Record<CountryCode, string> = {
-  tr: "Türkiye",
-  gd: "Grenada",
-  dm: "Dominica",
-  kn: "St Kitts and Nevis",
-  lc: "Saint Lucia",
-  ag: "Antigua and Barbuda",
-  ae: "United Arab Emirates",
-  pt: "Portugal",
-  gr: "Greece",
-  mt: "Malta",
-};
-
 const countries = [...new Set(programmes.map((p) => p.country))];
 
 function isCountry(value: string): value is CountryCode {

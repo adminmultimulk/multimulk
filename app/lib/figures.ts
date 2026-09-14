@@ -205,6 +205,58 @@ export const figures = {
       },
     ]),
   },
+  /**
+   * What the qualifying property earns while it is held, gross, as a market
+   * range. The comparison tables read these for their return row; a `market`
+   * figure by definition, since no instrument states a yield.
+   */
+  "tr.property.rental-yield": {
+    id: "tr.property.rental-yield",
+    value: 5,
+    max: 7,
+    unit: "percent",
+    qualifier: "market",
+    review: unreviewed([
+      {
+        label: "Global Property Guide — Türkiye rental yields",
+        url: "https://www.globalpropertyguide.com/asia/turkey/rental-yields",
+        retrievedOn: "2026-09-14",
+      },
+    ], "2026-09-14"),
+  },
+  "uae.property.rental-yield": {
+    id: "uae.property.rental-yield",
+    value: 5,
+    max: 7,
+    unit: "percent",
+    qualifier: "market",
+    review: unreviewed([
+      {
+        label: "Global Property Guide — UAE rental yields",
+        url: "https://www.globalpropertyguide.com/middle-east/united-arab-emirates/rental-yields",
+        retrievedOn: "2026-09-14",
+      },
+    ], "2026-09-14"),
+  },
+  /**
+   * A Caribbean real-estate route buys a share or unit in a government-approved
+   * resort development, and the developer's projection is the only yield
+   * figure that exists. Stated conservatively below the projections.
+   */
+  "caribbean.cbi.rental-yield": {
+    id: "caribbean.cbi.rental-yield",
+    value: 2,
+    max: 4,
+    unit: "percent",
+    qualifier: "market",
+    review: unreviewed([
+      {
+        label: "Approved-project developer projections, per island",
+        url: "https://www.multimulk.com/caribbean/citizenship-by-investment/",
+        retrievedOn: "2026-09-14",
+      },
+    ], "2026-09-14"),
+  },
 } as const satisfies Record<string, Omit<Figure, "id"> & { id: string }>;
 
 export type FigureId = keyof typeof figures;

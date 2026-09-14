@@ -56,12 +56,7 @@ export function organization(locale: Locale): Organization {
     name: "Multi Mulk",
     url: absoluteUrl(`/${locale}`),
     email: contact.email,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: contact.mapQuery,
-      addressLocality: "İstanbul",
-      addressCountry: "TR",
-    },
+    address: { "@type": "PostalAddress", ...contact.headOfficeAddress },
     // One contact point per office, so the number a reader is shown matches
     // the region they are in.
     contactPoint: contact.phones.map((phone) => ({

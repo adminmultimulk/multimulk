@@ -62,7 +62,12 @@ export default async function CompareIndexPage() {
           <Container>
             <ul className="grid gap-px border border-ink/12 bg-ink/12 sm:grid-cols-2">
               {comparisons.map((comparison) => (
-                <li key={comparison.slug} className="bg-white">
+                <li
+                  key={comparison.slug}
+                  // An odd last card takes the whole row rather than leaving
+                  // a grey cell beside it.
+                  className="bg-white sm:last:odd:col-span-2"
+                >
                   <Link
                     href={buildPath("comparison", { slug: comparison.slug })}
                     className="group block h-full p-8 transition-colors hover:bg-mist"

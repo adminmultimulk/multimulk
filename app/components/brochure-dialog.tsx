@@ -26,6 +26,7 @@ import type { BrochureContext } from "./brochure";
 import { Download } from "./icons";
 import { Link } from "./link";
 import { Modal } from "./modal";
+import { PhoneField } from "./phone-field";
 
 const initialState: BrochureState = { status: "idle" };
 
@@ -216,11 +217,9 @@ function Body({
             placeholder={form.emailPlaceholder}
             error={errors?.email && form.errors[errors.email]}
           />
-          <Field
+          <PhoneField
             label={form.phone}
-            name="phone"
-            type="tel"
-            autoComplete="tel"
+            codeLabel={form.countryCode}
             placeholder={form.phonePlaceholder}
             error={errors?.phone && form.errors[errors.phone]}
           />

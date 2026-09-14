@@ -268,17 +268,29 @@ export const heroSlides: HeroSlide[] = [
   { key: "advisory", name: "", image: "/images/cbi/cbi-documents.jpg" },
 ];
 
+/**
+ * The two regions, as the home page tiles and the Real Estate hub list them.
+ *
+ * Each carries the page its portfolio actually lives on. Türkiye is sold as
+ * property, so the tile opens the search filtered to it; the Caribbean is
+ * sold as citizenship — a share in an approved resort — so the tile opens the
+ * qualifying developments on the programme page, where each resort links
+ * through to its own. The search filtered to the Caribbean would answer with
+ * nothing, since resorts are not listed as units.
+ */
 export const regions = [
   {
     key: "turkiye" as const,
     /** The caption is a run of place names, joined with a middot. */
     places: ["İstanbul", "Bodrum", "Antalya"],
     image: "/images/cbi/cbi-istanbul-strait.jpg",
+    href: searchPath({ currency: "USD", location: "Türkiye" }),
   },
   {
     key: "caribbean" as const,
     places: ["Caribbean"],
     image: "/images/cbi/cbi-caribbean-bay.webp",
+    href: `${buildPath("citizenshipProgramme", { programme: "caribbean" })}#projects`,
   },
 ];
 
@@ -320,43 +332,49 @@ export type Resort = {
   logo?: string;
   /** Photography of this resort, revealed alongside it in the retreats list. */
   images?: string[];
+  /**
+   * The resort's own page, where it has one. None does: the resorts are
+   * described in the retreats list and nowhere else, so no row carries a
+   * button through to a page.
+   */
+  href?: string;
 };
 
 export const caribbeanResorts: Resort[] = [
-  {
-    key: "park-hyatt-st-kitts",
-    name: "Park Hyatt St. Kitts",
-    images: ["/images/cb-park-hyatt.webp"],
-  },
-  {
-    key: "intercontinental-grenada",
-    name: "InterContinental Grenada - La Sagesse",
-    images: ["/images/caribbean-grenada.webp"],
-  },
-  {
-    key: "intercontinental-dominica",
-    name: "InterContinental Dominica Cabrits Resort & Spa",
-    images: ["/images/cb-ic-dominica.webp"],
-  },
-  {
-    key: "six-senses-la-sagesse",
-    name: "Six Senses La Sagesse",
-    images: ["/images/hero-six-senses.webp", "/images/article-six-senses.avif"],
-  },
-  {
-    key: "la-sagesse-collection",
-    name: "The La Sagesse Collection Residences",
-    images: [
-      "/images/cb-la-sagesse-residences.webp",
-      "/images/hero-la-sagesse.webp",
-    ],
-  },
-  {
-    key: "port-cabrits-marina",
-    name: "Port Cabrits Marina",
-    images: ["/images/cb-port-cabrits.png"],
-    logo: "/logos/port-cabrits.svg",
-  },
+    {
+      key: "park-hyatt-st-kitts",
+      name: "Park Hyatt St. Kitts",
+      images: ["/images/cb-park-hyatt.webp"],
+    },
+    {
+      key: "intercontinental-grenada",
+      name: "InterContinental Grenada - La Sagesse",
+      images: ["/images/caribbean-grenada.webp"],
+    },
+    {
+      key: "intercontinental-dominica",
+      name: "InterContinental Dominica Cabrits Resort & Spa",
+      images: ["/images/cb-ic-dominica.webp"],
+    },
+    {
+      key: "six-senses-la-sagesse",
+      name: "Six Senses La Sagesse",
+      images: ["/images/hero-six-senses.webp", "/images/article-six-senses.avif"],
+    },
+    {
+      key: "la-sagesse-collection",
+      name: "The La Sagesse Collection Residences",
+      images: [
+        "/images/cb-la-sagesse-residences.webp",
+        "/images/hero-la-sagesse.webp",
+      ],
+    },
+    {
+      key: "port-cabrits-marina",
+      name: "Port Cabrits Marina",
+      images: ["/images/cb-port-cabrits.png"],
+      logo: "/logos/port-cabrits.svg",
+    },
 ];
 
 /**
@@ -502,7 +520,9 @@ export const footerResourceItems: FooterRouteItem[] = [
 ];
 
 /**
- * The About column, keyed; `href` is unset for pages that do not exist yet.
+ * The About column, keyed. Every entry has a page; `href` is optional only so
+ * that a new item can be listed before its page is written, and the footer
+ * renders such an item as plain text rather than as a link to nowhere.
  *
  * `mediaCentre` is gone from here: it linked to `/knowledge` under a second
  * name, and the Resources column now lists that page as the Knowledge Centre,
@@ -517,8 +537,8 @@ export const footerAboutItems = [
   // No standing construction-updates page yet; the footer points readers at
   // the portfolio, where each development's own page carries its progress.
   { key: "construction" as const, href: routes.realEstateHub.pattern },
-  { key: "terms" as const },
-  { key: "privacy" as const },
+  { key: "terms" as const, href: buildPath("legal", { slug: "terms" }) },
+  { key: "privacy" as const, href: buildPath("legal", { slug: "privacy-policy" }) },
   // The one item here that is not waiting for copy: two Creative Commons
   // images on the site are only licensed while this link is reachable.
   { key: "imageCredits" as const, href: buildPath("legal", { slug: "image-credits" }) },
@@ -538,18 +558,47 @@ export const contact = {
    * lives in `t.footer.addresses` under the same key rather than here.
    */
   offices: [
-    { key: "UAE" as const, headOffice: true, phone: "+971 50 169 4283" },
-    { key: "Türkiye" as const, headOffice: false, phone: "+90 543 337 7899" },
-    { key: "Pakistan" as const, headOffice: false, phone: "+92 300 847 8644" },
-  ],
-  /** The head office as Google Maps resolves it, for the embed and the link out. */
-  mapQuery:
-    "Grosvenor Business Tower, Barsha Heights, Dubai",
+    {
+      key: "UAE",
+      headOffice: true,
+      phone: "+971 50 169 4283",
+      mapQuery: "Grosvenor Business Tower, Barsha Heights, Dubai",
+    },
+    {
+      key: "Türkiye",
+      headOffice: false,
+      phone: "+90 543 337 7899",
+      mapQuery: "Burç Plaza, Gökevler Mahallesi, 2312. Sokak, Esenyurt, İstanbul",
+    },
+    // No `mapQuery`: the contact page shows a map for each office that has
+    // one, and Lahore has not asked for one.
+    { key: "Pakistan", headOffice: false, phone: "+92 300 847 8644" },
+  ] satisfies Office[],
+  /** The head office for structured data, as a postal address rather than a search. */
+  headOfficeAddress: {
+    streetAddress:
+      "Grosvenor Business Tower, Office 1909, Al Thanyah First, Barsha Heights",
+    addressLocality: "Dubai",
+    addressCountry: "AE",
+  },
 };
 
-/** The office on Google Maps: the keyless embed for the frame, `href` to open it. */
-export function officeMap(locale: string) {
-  const q = encodeURIComponent(contact.mapQuery);
+export type Office = {
+  key: "UAE" | "Türkiye" | "Pakistan";
+  headOffice: boolean;
+  phone: string;
+  /** The address as Google Maps resolves it; absent, the office gets no map. */
+  mapQuery?: string;
+};
+
+/**
+ * An office on Google Maps: the keyless embed for the frame, `href` to open
+ * it. `mapQuery` is the address as Google resolves it, which is not always the
+ * address as it is written — the Beykent office is found by its street, not by
+ * its block and floor.
+ */
+export function officeMap(query: string, locale: string) {
+  const q = encodeURIComponent(query);
   return {
     embed: `https://www.google.com/maps?q=${q}&hl=${locale}&z=15&output=embed`,
     href: `https://www.google.com/maps/search/?api=1&query=${q}`,
@@ -570,7 +619,7 @@ export const socialLinks = [
 
 /**
  * Hand-written footer names whose page exists are routed here; the rest render
- * inert. Empty, now that the columns are filled from what is published — a
+ * as text. Empty, now that the columns are filled from what is published — a
  * development assembled from listings brings its own href.
  */
 export const footerLinks: Record<string, string> = {};

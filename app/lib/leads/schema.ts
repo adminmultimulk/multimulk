@@ -8,6 +8,7 @@
  */
 
 import { isLocale, type Locale } from "../i18n/config";
+import { composePhone, isCountryCode, type CountryCode } from "./phone";
 
 /** Option keys; the labels beside them come from the dictionary. */
 export const enquiryTypes = [
@@ -48,7 +49,12 @@ export type LeadErrors = Partial<Record<LeadField, LeadErrorKey>>;
 
 export type Lead = {
   name: string;
+  /** E.164, country code included: `+905321234567`. */
   phone: string;
+  /** ISO 3166-1 alpha-2 of the number's country. */
+  phoneCountry: CountryCode;
+  /** The dialling prefix on its own — `+90` — for anything that wants it apart. */
+  phoneCode: string;
   email: string;
   enquiryType: EnquiryType;
   subject: string;
@@ -76,16 +82,6 @@ const limits: Record<LeadField, number> = {
  */
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-/**
- * Multi Mulk's enquiries arrive from the Gulf, Türkiye, Pakistan and Europe in
- * every local convention, so this checks only that enough digits are present
- * to dial. Punctuation, spacing and country prefixes are left alone.
- */
-function looksDialable(value: string): boolean {
-  const digits = value.replace(/\D/g, "");
-  return digits.length >= 7 && digits.length <= 15;
-}
-
 function text(raw: unknown): string {
   return typeof raw === "string" ? raw.trim() : "";
 }
@@ -104,6 +100,7 @@ export function validateLead(raw: Record<string, unknown>): LeadValidation {
 
   const name = text(raw.name);
   const phone = text(raw.phone);
+  const phoneCountry = text(raw.phoneCountry);
   const email = text(raw.email);
   const subject = text(raw.subject);
   const message = text(raw.message);
@@ -112,9 +109,20 @@ export function validateLead(raw: Record<string, unknown>): LeadValidation {
   if (!name) errors.name = "required";
   else if (name.length > limits.name) errors.name = "tooLong";
 
+  // The country arrives as a separate field from the picker beside the
+  // number, and the two are joined here rather than trusted as typed. Multi
+  // Mulk's enquiries arrive from the Gulf, Türkiye, Pakistan and Europe in
+  // every local convention, and the picker is what spares this code from
+  // guessing which one it is looking at. A missing or unknown country is
+  // reported against the phone field: it is the one the reader can see.
+  const composed =
+    phone && isCountryCode(phoneCountry)
+      ? composePhone(phoneCountry, phone)
+      : null;
+
   if (!phone) errors.phone = "required";
   else if (phone.length > limits.phone) errors.phone = "tooLong";
-  else if (!looksDialable(phone)) errors.phone = "phone";
+  else if (!composed) errors.phone = "phone";
 
   if (!email) errors.email = "required";
   else if (email.length > limits.email) errors.email = "tooLong";
@@ -128,7 +136,9 @@ export function validateLead(raw: Record<string, unknown>): LeadValidation {
 
   if (!isEnquiryType(enquiryType)) errors.enquiryType = "required";
 
-  if (Object.keys(errors).length > 0) return { ok: false, errors };
+  if (Object.keys(errors).length > 0 || !composed) {
+    return { ok: false, errors };
+  }
 
   // The hidden locale field comes from the rendering page, but it arrives over
   // the wire like everything else, so it is re-checked rather than trusted.
@@ -141,7 +151,9 @@ export function validateLead(raw: Record<string, unknown>): LeadValidation {
     ok: true,
     lead: {
       name,
-      phone,
+      phone: composed.phone,
+      phoneCountry: composed.country,
+      phoneCode: composed.code,
       email,
       enquiryType: enquiryType as EnquiryType,
       subject,

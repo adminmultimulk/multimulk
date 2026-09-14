@@ -154,6 +154,8 @@ const id = await call("crm.lead.add", {
     OPENED: "Y",
     EMAIL: [{ VALUE: "test@example.com", VALUE_TYPE: "WORK" }],
     PHONE: [{ VALUE: "+900000000000", VALUE_TYPE: "WORK" }],
+    ADDRESS_COUNTRY: "Türkiye",
+    ADDRESS_COUNTRY_CODE: "TR",
     ...(assignee ? { ASSIGNED_BY_ID: assignee } : {}),
   },
   params: { REGISTER_SONET_EVENT: "Y" },
@@ -164,6 +166,6 @@ const id = await call("crm.lead.add", {
 console.log(`  created lead ${id}:`);
 console.log(`  ${new URL(`/crm/lead/details/${id}/`, base).toString()}`);
 console.log(
-  "\nOpen it to confirm the name, phone, email and comments all arrived,\n" +
+  "\nOpen it to confirm the name, phone, country, email and comments all arrived,\n" +
     "then delete it from that page. The website sends exactly these fields.",
 );

@@ -185,7 +185,7 @@ export const teamPeople: TeamPerson[] = [
   {
     slug: "raazia-sanam",
     name: "Raazia Sanam",
-    department: "education",
+    department: "clientAdvisory",
     image: "/images/team/raazia-sanam-2.webp",
   },
   {
@@ -265,12 +265,6 @@ export const teamPeople: TeamPerson[] = [
     name: "Muhammad Mubashir",
     department: "clientAdvisory",
     image: "/images/team/muhammad-mubashir.webp",
-  },
-  {
-    slug: "muhammad-riyasat",
-    name: "Muhammad Riyasat",
-    department: "clientAdvisory",
-    image: "/images/team/muhammad-riyasat-2.webp",
   },
   {
     slug: "nilofar-sadiq",

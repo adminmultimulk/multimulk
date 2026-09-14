@@ -10,7 +10,7 @@
  */
 
 import type { Locale } from "./i18n/config";
-import { routes, searchPath } from "./routes";
+import { buildPath, routes, searchPath } from "./routes";
 
 export const aboutHero = {
   image: "/images/cbi/about-hero-earth-night.jpg",
@@ -76,7 +76,9 @@ export const aboutRegions: AboutRegion[] = [
       tr: "KARAYİPLER",
       zh: "加勒比",
     },
-    href: searchPath({ currency: "USD", location: "Caribbean" }),
+    // The Caribbean is sold as resort shares under the programme, not as
+    // units in the search, so the region opens the qualifying developments.
+    href: `${buildPath("citizenshipProgramme", { programme: "caribbean" })}#projects`,
     image: "/images/cbi/cbi-island.jpg",
   },
 ];
@@ -105,7 +107,7 @@ export const aboutDevelopments = {
     },
     {
       key: "caribbean" as const,
-      href: searchPath({ currency: "USD", location: "Caribbean" }),
+      href: `${buildPath("citizenshipProgramme", { programme: "caribbean" })}#projects`,
     },
   ],
 };

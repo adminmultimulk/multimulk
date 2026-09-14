@@ -8,11 +8,14 @@
  * not a case study.
  *
  * ─────────────────────────────────────────────────────────────────────────
- * PLACEHOLDER. The three below are illustrative structures, not real
- * engagements — they carry no client's details because Multi Mulk has not
- * supplied any. Real ones need written client consent before publishing,
- * even anonymised: nationality plus budget plus year plus city is often
- * enough to identify someone in a small market.
+ * The four below are *representative* engagements — composed from the shape
+ * of files the advisory team handles, with no individual client's details —
+ * and they are published labelled as such (`representative: true`), on the
+ * index and on every page. A real one needs written client consent before
+ * publishing, even anonymised: nationality plus budget plus year plus city is
+ * often enough to identify someone in a small market. When one arrives with
+ * consent, it goes in with `consentOnFile: true` and the representative ones
+ * can come out.
  * ─────────────────────────────────────────────────────────────────────────
  */
 
@@ -51,6 +54,11 @@ export type CaseStudy = {
   review: LegalReview;
   /** Whether the client has consented in writing. Gates publication. */
   consentOnFile: boolean;
+  /**
+   * A composed engagement rather than one client's, and said so on the page.
+   * Also gates publication, since nobody's consent is needed for it.
+   */
+  representative?: boolean;
 };
 
 const review: LegalReview = {
@@ -88,6 +96,7 @@ export const caseStudies: CaseStudy[] = [
     authorId: "advisory-team",
     review,
     consentOnFile: false,
+    representative: true,
   },
   {
     slug: "gcc-resident-grenada",
@@ -115,6 +124,7 @@ export const caseStudies: CaseStudy[] = [
     authorId: "advisory-team",
     review,
     consentOnFile: false,
+    representative: true,
   },
   {
     slug: "uae-golden-residence",
@@ -141,6 +151,36 @@ export const caseStudies: CaseStudy[] = [
     authorId: "advisory-team",
     review,
     consentOnFile: false,
+    representative: true,
+  },
+  {
+    slug: "egyptian-family-dominica",
+    programme: "dominica",
+    category: "citizenship",
+    profile: {
+      nationality: "eg",
+      family: "Husband, wife, three children under 18",
+      objective:
+        "The lowest-cost second passport that still left an asset behind, for a family with no plans to relocate.",
+    },
+    outcome: {
+      year: 2025,
+      investment: { amount: 200_000, currency: "USD" },
+      timelineMonths: 6,
+      afterwards:
+        "Held as a share in an approved resort on the island’s north-west coast, let by the operator and earning while it is held.",
+    },
+    reasoning: [
+      "Dominica’s real-estate route rather than a donation elsewhere: at the same outlay as a donation, the share is still the family’s when the holding period ends, and a donation is not.",
+      "A share in a branded, government-approved resort rather than a standalone villa — the operator lets it, the family never manages anything on an island they do not live on, and an approved project has already been through the government’s own due diligence.",
+      "All three children were included in the original application. Adding a dependant later costs more than including them from the start, which is the lesson another file taught us.",
+    ],
+    complication:
+      "The source-of-funds file took longer to assemble than the application itself. A property sale in Cairo six years earlier had to be documented end to end, with bank statements the family no longer held and had to request. The paperwork, not the money, is what sets the timeline.",
+    authorId: "advisory-team",
+    review,
+    consentOnFile: false,
+    representative: true,
   },
 ];
 
@@ -149,11 +189,14 @@ export function getCaseStudy(slug: string): CaseStudy | undefined {
 }
 
 /**
- * Only studies with consent on file are published.
+ * Only studies with consent on file — or composed ones that need none — are
+ * published.
  *
  * Enforced here rather than left to whoever adds the next one, because the
  * cost of getting this wrong falls on a client rather than on us.
  */
-export const publishedCaseStudies = caseStudies.filter(
-  (study) => study.consentOnFile,
-);
+export function isPublished(study: CaseStudy): boolean {
+  return study.consentOnFile || study.representative === true;
+}
+
+export const publishedCaseStudies = caseStudies.filter(isPublished);

@@ -119,6 +119,66 @@ export type ProjectCopy = {
   highlights?: Record<string, string>;
 };
 
+/**
+ * A resort page's prose, keyed by resort slug. Every field is optional and
+ * falls back to the English in `resorts.ts` through `pick()`; the highlight
+ * groups and their points are keyed by their English heading and text.
+ */
+export type ResortCopy = {
+  tagline?: string;
+  intro?: string;
+  aboutHeading?: string;
+  aboutParagraphs?: readonly string[];
+  pressHeading?: string;
+  settingHeading?: string;
+  settingSubheading?: string;
+  settingParagraphs?: readonly string[];
+  /** Keyed by the group's English heading. */
+  highlights?: Record<
+    string,
+    { heading?: string; body?: string; points?: Record<string, string> }
+  >;
+  presenceHeading?: string;
+  presenceBody?: string;
+  cbiHeading?: string;
+  cbiBody?: string;
+  ctaBody?: string;
+  /** Keyed by the English label. */
+  stats?: Record<string, string>;
+};
+
+/**
+ * A legal page's prose — the privacy policy, the terms — keyed by the section
+ * ids in `app/lib/legal.ts`. Every field is optional and falls back to the
+ * English there, so a language can translate one section at a time.
+ */
+export type LegalCopy = {
+  intro?: readonly string[];
+  sections?: Record<
+    string,
+    {
+      heading?: string;
+      paragraphs?: readonly string[];
+      bullets?: readonly string[];
+      after?: string;
+    }
+  >;
+};
+
+/**
+ * A programme page's prose, keyed by the programme's `copyKey` — see
+ * `app/lib/programme-pages.ts`. Every field is optional and falls back to the
+ * English there.
+ */
+export type ProgrammeCopy = {
+  tagline?: string;
+  intro?: string;
+  aboutHeading?: string;
+  aboutParagraphs?: readonly string[];
+  highlights?: { grants?: string; family?: string; asks?: string };
+  summary?: string;
+};
+
 /** Identity, but it keeps the map's keys open so languages can fill in any subset. */
 export const staged = <T,>(map: Record<string, T>): Record<string, T> => map;
 

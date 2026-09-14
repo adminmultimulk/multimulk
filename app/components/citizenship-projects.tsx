@@ -1,16 +1,34 @@
 import Image from "next/image";
 import { Container, SectionIntro } from "./container";
 import { Link } from "./link";
-import type { Programme, ProgrammeProject } from "@/app/lib/citizenship";
+import type { Programme } from "@/app/lib/citizenship";
 import { getDictionary, type Dictionary } from "@/app/lib/i18n";
-import { lookup } from "@/app/lib/i18n/format";
 import { placeLine } from "@/app/lib/i18n/units";
+
+/**
+ * A card in the qualifying-developments grid, with its strings already
+ * resolved: a resort written in `citizenship.ts` and a development published
+ * from the dashboard arrive here looking the same.
+ */
+export type ProjectCard = {
+  /** A development or resort name — rendered as written, in every language. */
+  name: string;
+  /** Place-name tokens, looked up in `dictionary.places` and joined. */
+  eyebrow: string[];
+  /** The line under the name — a unit count, a room count. */
+  detail: string;
+  image: string;
+  /** Unset for a development with no page yet; the card is then not a link. */
+  href?: string;
+};
 
 /** The developments that qualify under the programme. */
 export async function CitizenshipProjects({
   programme,
+  projects,
 }: {
   programme: Programme;
+  projects: ProjectCard[];
 }) {
   const t = await getDictionary();
   const copy = t.citizenship[programme.key].projects;
@@ -23,22 +41,31 @@ export async function CitizenshipProjects({
       <Container>
         <SectionIntro heading={copy.heading} body={copy.body} />
 
-        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
-          {programme.projects.map((project) => (
-            <li key={project.name}>
-              <ProjectCard project={project} t={t} />
-            </li>
-          ))}
-        </ul>
+        {/* With nothing published the intro and the search remain: the
+            section is linked from the rail, and the search is where the
+            inventory would be answered anyway. */}
+        {projects.length ? (
+          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3">
+            {projects.map((project) => (
+              <li key={project.name}>
+                <Card project={project} t={t} />
+              </li>
+            ))}
+          </ul>
+        ) : null}
 
-        <div className="mt-14 text-center">
-          <Link
-            href={programme.searchHref}
-            className="inline-block rounded-full border border-ink/25 px-8 py-3.5 text-[13px] text-ink transition-colors hover:border-ink"
-          >
-            {t.citizenship.browseAll}
-          </Link>
-        </div>
+        {/* Not where "browse" is this very section — the Caribbean's
+            qualifying developments are the resort cards above. */}
+        {programme.searchHref.startsWith("#") ? null : (
+          <div className="mt-14 text-center">
+            <Link
+              href={programme.searchHref}
+              className="inline-block rounded-full border border-ink/25 px-8 py-3.5 text-[13px] text-ink transition-colors hover:border-ink"
+            >
+              {t.citizenship.browseAll}
+            </Link>
+          </div>
+        )}
       </Container>
     </section>
   );
@@ -48,13 +75,7 @@ export async function CitizenshipProjects({
  * A development with a page of its own is a link; the rest render as plain
  * cards rather than dead links, which is how the menus treat them too.
  */
-function ProjectCard({
-  project,
-  t,
-}: {
-  project: ProgrammeProject;
-  t: Dictionary;
-}) {
+function Card({ project, t }: { project: ProjectCard; t: Dictionary }) {
   const body = (
     <>
       <div className="relative aspect-[430/300] overflow-hidden">
@@ -76,7 +97,7 @@ function ProjectCard({
           {project.name}
         </h3>
         <p className="mt-3 text-[12px] leading-[18px] text-ink/70">
-          {lookup(t.menus.detail, project.detailKey)}
+          {project.detail}
         </p>
       </div>
     </>

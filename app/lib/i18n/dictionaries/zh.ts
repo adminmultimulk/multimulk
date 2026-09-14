@@ -221,6 +221,21 @@ const zh = {
     yes: "是",
     no: "否",
     bestLabel: "最有利",
+    /** Marks the column the practice would advise; the verdict argues it. */
+    recommended: "Multi Mulk 推荐",
+    verdictHeading: "我们的看法",
+    /** The comparison page in the resort design; see /compare/[slug]. */
+    heroTagline: "基于同一事实并列阅读，附一条明确建议",
+    programmesLabel: "个项目",
+    factorsLabel: "项因素",
+    tableHeading: "逐项比较",
+    programmeIndex: "项目 {index}",
+    recommendedHeading: "Multi Mulk 推荐{name}",
+    otherComparisons: "其他对比",
+    allComparisons: "全部对比",
+    enquireSubject: "对比：{programmes}",
+    ctaHeading: "仍在犹豫？",
+    ctaBody: "告诉我们您想解决的问题以及正在权衡的项目，顾问将为您的家庭填好这张表并作答。",
     rows: {
       minimumInvestment: "最低投资额",
       holdingPeriod: "持有期",
@@ -234,6 +249,34 @@ const zh = {
       parentsIncluded: "可包含父母",
       citizenshipAfter: "入籍所需年限",
       worldwideTax: "对全球收入征税",
+      rentalYield: "毛租金收益率",
+    },
+    /** The verdict under each table, keyed by the comparison's `copyKey`. */
+    copy: {
+      "turkiye-vs-caribbean": {
+        verdict:
+          "格林纳达门槛更低，其护照在纸面上通行范围更广。但土耳其是更稳健的投资：合格资产是一座千六百万人口城市中的永久产权住宅，持有期间按市场收益率出租，三年后可在公开市场出售——而加勒比度假村份额收益更低、退出更难。公民身份直接授予，办理更快，且无需到访。对于希望以第二国籍实现自我回报的家庭，我们推荐土耳其。",
+      },
+      "turkiye-citizenship-vs-residency": {
+        verdict:
+          "居留许可成本减半、办理更快，但它终究是许可：需要续签，取决于是否继续持有房产，且距离并无保证的入籍申请还有五年。公民身份直接授予、惠及家庭，同一房产在两种情况下收益相同。预算达到门槛时，我们建议选择公民身份。",
+      },
+      "turkiye-vs-uae": {
+        verdict:
+          "黄金居留是每十年续签一次的居留许可，永远不是护照；土耳其以更低的入门金额直接授予公民身份，且房产收益相当。两者并不互斥——我们的许多客户同时拥有迪拜的基地和土耳其护照。若目标是第二国籍，我们推荐土耳其。",
+      },
+      "caribbean-islands": {
+        verdict:
+          "三者之中多米尼克门槛最低，而仅看表格，圣基茨和尼维斯的护照通行范围最广。但决定性的因素不在表格里。格林纳达是三者中唯一凭护照可申请美国 E-2 条约投资者签证的国家，也是唯一免签进入中国的国家；圣基茨和尼维斯是全球最古老的项目，也是在边境最为公认的名字；多米尼克的房产路径则是入股品牌度假村的最低门槛。若家庭的目标包含通往美国的路径，我们推荐格林纳达；若追求度假村份额的最低成本，则选多米尼克。",
+      },
+      "golden-visas": {
+        verdict:
+          "葡萄牙和希腊是几乎每次初次咨询都会被问到的两个欧洲黄金签证，而两者都已不再是五年前的样子：葡萄牙于 2023 年关闭了房产路径，其基金路径如今距离入籍申请还有十年和一场语言考试；希腊仍以房产换居留许可，但对全球收入征税，通往护照的路要走七年。阿联酋黄金居留是一种许可，永远不是护照，但它可续期、不对全球收入征税、没有最低居住要求，且合格资产是一处按市场收益率出租的迪拜房产——这正是我们实际办理的居留项目。若要在海湾地区建立没有税务风险的落脚点，我们推荐阿联酋；若家庭的目标是欧洲护照，希腊是两条路中较短的一条，我们会转介而非亲自办理。",
+      },
+      "turkiye-vs-portugal": {
+        verdict:
+          "葡萄牙几乎是每次初次咨询中都会提到的欧洲名字，但它已不再是人们记忆中的样子：房产路径于 2023 年关闭，剩下的是基金认购，审批耗时数年，而多数家庭真正询问的入籍如今距离十年和一场语言考试。土耳其直接授予公民身份，数月即可，凭一处持有期间持续产生收益的永久产权房产，无需居住、无需到访、无需语言考试。土耳其护照不能免签进入申根区，而葡萄牙居留卡可以——这是唯一值得权衡的葡萄牙优势。若家庭的目标是第二公民身份而非一个欧洲地址，我们推荐土耳其。",
+      },
     },
   },
 
@@ -258,6 +301,24 @@ const zh = {
     },
     sinceLabel: "开放年份",
     unreviewed: "本页数据尚未完成法律复核，未予发布。在依据其中任何一项作出决定前，请先向我们确认。",
+    /** The banner and sections of a programme page; see `programme-pages.ts`. */
+    aboutEyebrow: "关于本项目",
+    highlightsEyebrow: "项目亮点",
+    highlightHeadings: {
+      grants: "项目授予什么",
+      family: "谁可以随同申请",
+      asks: "项目对您的要求",
+    },
+    routesBody: "项目认可的投资路径，以及我们实际办理的路径。",
+    compareEyebrow: "并列比较",
+    compareHeading: "{name}对比",
+    compareBody: "本页的每一个数字都与最常被比较的项目同列一表——读自同一份记录，并附有我们的建议。",
+    compareButton: "查看对比",
+    allComparisons: "全部对比",
+    otherProgrammes: "其他项目",
+    viewProgramme: "查看项目",
+    ctaHeading: "了解{name}",
+    ctaBody: "告诉我们您想解决的问题，我们会告诉您这个项目是否合适——以及全部费用是多少。",
   },
 
   faq: {
@@ -289,6 +350,9 @@ const zh = {
     reasoning: "为何选它，又排除了什么",
     complication: "哪里出了问题",
     consentPending: "目前尚未发布任何客户成果。发布需取得客户书面同意，而 Multi Mulk 迄今未就任何一例取得该同意。",
+    /** Shown wherever a composed, no-client engagement is listed. */
+    representativeNote:
+      "代表性案例：每个案例均根据我们顾问团队处理的典型档案的结构编写，不包含任何特定客户的信息。真实案例的结果仅在获得客户书面同意后发布。",
   },
 
   tools: {
@@ -437,6 +501,10 @@ const zh = {
     "Cabrits National Park": "卡布里茨国家公园",
     "Christophe Harbour": "克里斯托夫港",
     Portsmouth: "朴次茅斯",
+    "United Arab Emirates": "阿拉伯联合酋长国",
+    Portugal: "葡萄牙",
+    Greece: "希腊",
+    Malta: "马耳他",
   },
 
   unit: {
@@ -621,13 +689,15 @@ const zh = {
     emailLabel: "电子邮箱",
     phoneLabel: "电话",
     addressLabel: "地址",
-    mapTitle: "Multi Mulk 位于伊斯坦布尔 Beykent 办公室的地图",
+    mapTitle: "Multi Mulk 办公室地图 — {office}",
     mapLink: "在 Google 地图中打开",
     form: {
       name: "姓名",
       namePlaceholder: "请输入您的姓名",
       phone: "电话号码",
       phonePlaceholder: "电话号码",
+      /** Accessible name of the dialling-code picker beside the number. */
+      countryCode: "国家区号",
       email: "电子邮箱",
       emailPlaceholder: "myemail@email.com",
       enquiryAbout: "您想咨询哪方面？",
@@ -656,7 +726,7 @@ const zh = {
       errors: {
         required: "此项为必填。",
         email: "请输入有效的电子邮箱地址。",
-        phone: "请输入含国家区号的有效电话号码。",
+        phone: "请输入有效的电话号码。",
         tooLong: "内容超出了可接受的长度。",
         load: "表单加载失败。联系页面提供同样的表单，或使用旁边的联系方式。",
         rate: "您近期已发送多条咨询。请稍后再试，或发送邮件至 info@multimulk.com。",
@@ -814,6 +884,24 @@ const zh = {
     },
   },
   /** /properties/<slug> 上单套住宅的页面。 */
+  resort: {
+    about: "关于",
+    highlights: "度假村亮点",
+    location: "位置",
+    caribbeanSea: "加勒比海",
+    exterior: "外观",
+    interior: "室内",
+    video: "视频",
+    galleryLabel: "{name}的照片",
+    findYourWay: "如何前往{name}",
+    otherProperties: "其他加勒比物业",
+    cbiEyebrow: "投资入籍",
+    cbiButton: "了解投资入籍方案",
+    ctaHeading: "探索{name}",
+    viewResort: "查看度假村",
+    slide: "第 {index} 张，共 {count} 张",
+  },
+
   listing: {
     specs: "概览",
     about: "关于这套住宅",

@@ -8,7 +8,7 @@ import { SiteNav } from "@/app/components/site-nav";
 import { regions } from "@/app/lib/content";
 import { alternatesFor, getDictionary, getLocale } from "@/app/lib/i18n";
 import { developments } from "@/app/lib/cms/developments";
-import { buildPath, searchPath } from "@/app/lib/routes";
+import { buildPath } from "@/app/lib/routes";
 import { breadcrumbs, collectionPage, routeUrl } from "@/app/lib/seo/jsonld";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -71,10 +71,7 @@ export default async function RealEstateHubPage() {
               {regions.map((region) => (
                 <li key={region.key} className="bg-white">
                   <Link
-                    href={searchPath({
-                      currency: "USD",
-                      location: region.key === "turkiye" ? "Türkiye" : "Caribbean",
-                    })}
+                    href={region.href}
                     className="group block h-full p-8 transition-colors hover:bg-mist"
                   >
                     <h2 className="font-display text-[24px] leading-[1.25] text-ink">

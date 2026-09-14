@@ -1,7 +1,7 @@
 "use client";
 
 import { useI18n } from "@/app/lib/i18n/context";
-import { figureValue } from "@/app/lib/format-figure";
+import { comparisonValueText, figureValue } from "@/app/lib/format-figure";
 import type {
   ComparisonCell,
   ComparisonTableRow,
@@ -18,7 +18,14 @@ import type { Programme } from "@/app/lib/programmes";
  * whole table free to render in a seventh language, since numbers and booleans
  * need no translating.
  */
-export function ProgrammeTable({ rows }: { rows: readonly ComparisonTableRow[] }) {
+export function ProgrammeTable({
+  rows,
+  recommended,
+}: {
+  rows: readonly ComparisonTableRow[];
+  /** `category-slug` of the column carrying the practice's recommendation. */
+  recommended?: string;
+}) {
   const { t } = useI18n();
   const programmes = rows[0]?.cells.map((cell) => cell.programme) ?? [];
 
@@ -34,15 +41,23 @@ export function ProgrammeTable({ rows }: { rows: readonly ComparisonTableRow[] }
             >
               {t.compare.factor}
             </th>
-            {programmes.map((programme) => (
-              <th
-                key={`${programme.category}-${programme.slug}`}
-                scope="col"
-                className="py-4 pe-4 text-start font-display text-[17px] font-normal leading-[1.3] text-ink"
-              >
-                {programme.officialName}
-              </th>
-            ))}
+            {programmes.map((programme) => {
+              const id = `${programme.category}-${programme.slug}`;
+              return (
+                <th
+                  key={id}
+                  scope="col"
+                  className="py-4 pe-4 text-start font-display text-[17px] font-normal leading-[1.3] text-ink"
+                >
+                  {id === recommended ? (
+                    <span className="mb-2 block font-sans text-[10.5px] uppercase tracking-[0.12em] text-gold">
+                      {t.compare.recommended}
+                    </span>
+                  ) : null}
+                  {programme.officialName}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>
@@ -86,51 +101,10 @@ function Cell({ cell }: { cell: ComparisonCell }) {
   );
 }
 
-/**
- * Formats a cell.
- *
- * The absent cases each get their own wording. "None required" and "no route"
- * were the same `null` in an earlier cut of the data model, and rendering them
- * identically told readers that a programme with no path to citizenship simply
- * had no waiting period.
- */
+/** Formats a cell; see `comparisonValueText`. */
 function useCellText(value: ComparisonValue): string {
-  const { t, locale, num } = useI18n();
-
-  switch (value.kind) {
-    case "money":
-      return new Intl.NumberFormat(locale === "en" ? "en-GB" : locale, {
-        style: "currency",
-        currency: value.value.currency,
-        maximumFractionDigits: 0,
-        numberingSystem: "latn",
-      }).format(value.value.amount);
-    case "months": {
-      const range =
-        value.value.max !== undefined
-          ? `${num(value.value.min)}–${num(value.value.max)}`
-          : num(value.value.min);
-      return `${range} ${t.figures.units.months}`;
-    }
-    case "count":
-      return num(value.value);
-    case "years":
-      return `${num(value.value)} ${t.figures.units.years}`;
-    case "days":
-      return `${num(value.value)} ${t.figures.units.days}`;
-    case "boolean":
-      return value.value ? t.compare.yes : t.compare.no;
-    case "none":
-      return t.compare.noneRequired;
-    case "unlimited":
-      return t.compare.noAgeLimit;
-    case "immediate":
-      return t.compare.grantedDirectly;
-    case "notAvailable":
-      return t.compare.noRoute;
-    default:
-      return t.compare.unknownLabel;
-  }
+  const { t, locale } = useI18n();
+  return comparisonValueText(locale, t, value);
 }
 
 /** The routes a programme recognises, and which of them we actually transact. */

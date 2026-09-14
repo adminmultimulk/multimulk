@@ -4,6 +4,7 @@ import { getDictionary } from "@/app/lib/i18n";
 import { placeLine } from "@/app/lib/i18n/units";
 import { AnimatedTitle } from "./animated-title";
 import { MapPin } from "./icons";
+import { Link } from "./link";
 
 export async function Regions() {
   const t = await getDictionary();
@@ -13,9 +14,9 @@ export async function Regions() {
       {regions.map((region) => {
         const label = t.regions[region.key].label;
         return (
-          <a
+          <Link
             key={region.key}
-            href="#"
+            href={region.href}
             className="group relative block h-[520px] overflow-hidden lg:h-[900px]"
           >
             <Image
@@ -42,7 +43,7 @@ export async function Regions() {
               <MapPin className="w-3" />
               <span className="text-[12px]">{placeLine(t, region.places)}</span>
             </div>
-          </a>
+          </Link>
         );
       })}
     </section>

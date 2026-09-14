@@ -28,6 +28,17 @@ function clippingAncestor(el: HTMLElement | null): HTMLElement | null {
   return null;
 }
 
+/**
+ * Case- and accent-insensitive, so "tur" reaches Türkiye on a keyboard with
+ * no ü, and "cote" reaches Côte d'Ivoire.
+ */
+function fold(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase();
+}
+
 export type SelectMenuProps = {
   label: string;
   value: string;
@@ -35,6 +46,12 @@ export type SelectMenuProps = {
   options: readonly string[];
   /** Presentation only — `value` stays the raw option. */
   format?: (value: string) => string;
+  /**
+   * What the closed control shows, where that is shorter than the option
+   * itself — a dialling code in place of the country it belongs to. Defaults
+   * to `format`.
+   */
+  formatSelected?: (value: string) => string;
   /** Renders a hidden input so the value posts with a native form. */
   name?: string;
   required?: boolean;
@@ -54,6 +71,7 @@ export function SelectMenu({
   onChange,
   options,
   format,
+  formatSelected,
   name,
   required,
   className = "",
@@ -164,10 +182,10 @@ export function SelectMenu({
     const now = Date.now();
     typed.current.text =
       (now - typed.current.at < 1000 ? typed.current.text : "") +
-      event.key.toLowerCase();
+      fold(event.key);
     typed.current.at = now;
     const match = options.findIndex((option) =>
-      text(option).toLowerCase().startsWith(typed.current.text),
+      fold(text(option)).startsWith(typed.current.text),
     );
     if (match !== -1) setHighlight(match);
   };
@@ -194,7 +212,9 @@ export function SelectMenu({
         }}
         className={`flex w-full cursor-pointer items-center justify-between gap-3 text-start outline-none ${triggerClassName}`}
       >
-        <span className="truncate">{text(value)}</span>
+        <span className="truncate">
+          {formatSelected ? formatSelected(value) : text(value)}
+        </span>
         <Chevron
           className={`w-2 shrink-0 transition-transform duration-300 ${
             open ? "-scale-y-100" : ""

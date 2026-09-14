@@ -8,6 +8,7 @@ import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
 import { contact, officeMap } from "@/app/lib/content";
 import { alternatesFor, getDictionary, getI18n } from "@/app/lib/i18n";
+import { interpolate } from "@/app/lib/i18n/format";
 import { mintFormToken } from "@/app/lib/leads/token";
 import { JsonLd } from "@/app/components/json-ld";
 import { breadcrumbs } from "@/app/lib/seo/jsonld";
@@ -19,7 +20,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ContactPage() {
   const { locale, t } = await getI18n();
-  const map = officeMap(locale);
 
   return (
     <>
@@ -119,33 +119,47 @@ export default async function ContactPage() {
                         </span>
                       </dd>
                     ))}
-                    {/* The head office — the first of the three above — shown
-                        rather than described. */}
-                    <dd className="mt-5">
-                      <div className="aspect-[16/10] w-full max-w-[440px] overflow-hidden border border-ink/10 bg-white">
-                        <iframe
-                          src={map.embed}
-                          title={t.contact.mapTitle}
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                          className="h-full w-full border-0"
-                        />
-                      </div>
-                      <a
-                        href={map.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-3 inline-block text-[11.5px] uppercase tracking-[0.12em] text-ink/60 transition-colors hover:text-gold"
-                      >
-                        {t.contact.mapLink}
-                      </a>
-                    </dd>
                   </div>
                 </dl>
               </div>
 
               <ContactForm token={mintFormToken()} />
             </div>
+
+            {/* Each office with a map, shown rather than described. A row
+                beneath both columns rather than a stack inside the narrow
+                one, so each map is wide enough to read. */}
+            <ul className="mt-12 grid gap-8 sm:grid-cols-2 lg:mt-16">
+              {contact.offices.map((office) => {
+                if (!office.mapQuery) return null;
+                const map = officeMap(office.mapQuery, locale);
+                const name = t.footer.offices[office.key];
+                return (
+                  <li key={office.key}>
+                    <p className="mb-2 text-[11.5px] uppercase tracking-[0.12em] text-ink/60">
+                      {name}
+                    </p>
+                    <div className="aspect-[16/10] w-full overflow-hidden border border-ink/10 bg-white">
+                      <iframe
+                        src={map.embed}
+                        title={interpolate(t.contact.mapTitle, { office: name })}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        className="h-full w-full border-0"
+                      />
+                    </div>
+                    <a
+                      href={map.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-3 inline-block text-[11.5px] uppercase tracking-[0.12em] text-ink/60 transition-colors hover:text-gold"
+                    >
+                      {t.contact.mapLink}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </Container>
       </main>

@@ -18,7 +18,6 @@
 import { getFigure, type FigureId } from "./figures";
 import type { LegalReview, ReviewSource } from "./review";
 import {
-  buildPath,
   isProgrammeSlug,
   programmeSlugs,
   searchPath,
@@ -73,7 +72,17 @@ export const sections = [
 
 export type SectionId = (typeof sections)[number];
 
-/** A qualifying development. `href` is unset for the ones with no page yet. */
+/**
+ * A qualifying development written into this file — a Caribbean resort.
+ * `href` is unset where there is no page behind the card, which is every one
+ * of them now, and the card then renders as a card rather than as a link to
+ * nowhere.
+ *
+ * The Türkiye developments are not written here at all: they are whatever the
+ * dashboard has published, read at request time by the programme page, so a
+ * listing entered this morning is on the page by lunch and a scheme that has
+ * sold out is not on it at all.
+ */
 export type ProgrammeProject = {
   /** A development or resort name — rendered as written, in every language. */
   name: string;
@@ -93,6 +102,12 @@ export type GalleryShot = {
 
 export type Programme = {
   key: ProgrammeKey;
+  /**
+   * Which published developments belong on this page, matched against the
+   * country a lister typed on the listing — the same test the footer and the
+   * home page apply.
+   */
+  region: "Türkiye" | "Caribbean";
   images: {
     /** The hero rotates through these; the first is the LCP image. */
     hero: string[];
@@ -103,7 +118,11 @@ export type Programme = {
     /** Three developments shown beside the "who we are" block. */
     about: string[];
   };
-  /** The gallery strip between the benefits and the projects. */
+  /**
+   * The gallery strip between the benefits and the projects. The published
+   * developments' photography follows whatever is written here; Türkiye
+   * writes nothing and shows the portfolio alone.
+   */
   gallery: GalleryShot[];
   /**
    * The four headline figures. Each names an entry in `app/lib/figures.ts`
@@ -184,6 +203,7 @@ export const industryMarket = {
 export const programmes: Record<ProgrammeKey, Programme> = {
   turkiye: {
     key: "turkiye",
+    region: "Türkiye",
     images: {
       // Editorial slots carry the programme, not the portfolio: the passport,
       // the city, the paperwork. Development photography stays on the
@@ -202,20 +222,19 @@ export const programmes: Record<ProgrammeKey, Programme> = {
       benefits: "/images/cbi/hero-istanbul.jpg",
       signature: "/images/cbi/cbi-documents.jpg",
       cta: "/images/cbi/hero-istanbul-dusk.jpg",
+      // The city, until the published developments supply their own: the
+      // page swaps these for the portfolio's photography where it has any.
+      // The renders that used to sit here were of developments that do not
+      // exist, which is a worse thing to show beside "who we are" than a
+      // skyline.
       about: [
-        "/images/levent-residences.webp",
-        "/images/marmara-vista.webp",
-        "/images/aegean-bay.webp",
+        "/images/cbi/hero-istanbul.jpg",
+        "/images/cbi/cbi-istanbul-strait.jpg",
+        "/images/cbi/hero-istanbul-dusk.jpg",
       ],
     },
-    gallery: [
-      { image: "/images/bosphorus-heights.webp", name: "Bosphorus Heights" },
-      { image: "/images/levent-residences.webp", name: "Levent Residences" },
-      { image: "/images/marmara-vista.webp", name: "Marmara Vista" },
-      { image: "/images/aegean-bay.webp", name: "Aegean Bay Residences" },
-      { image: "/images/antalya-coast.webp", name: "Antalya Coast" },
-      { image: "/images/anatolian-villas.webp", name: "Anatolian Villas" },
-    ],
+    // Filled from the published developments; see `region`.
+    gallery: [],
     stats: [
       { key: "investment", figure: "tr.cbi.minimum-property" },
       { key: "timeline", figure: "tr.cbi.processing" },
@@ -224,54 +243,15 @@ export const programmes: Record<ProgrammeKey, Programme> = {
     ],
     benefits,
     steps,
-    projects: [
-      {
-        name: "Bosphorus Heights",
-        eyebrow: ["İstanbul", "Beyoğlu"],
-        detailKey: "bosphorus-heights",
-        image: "/images/bosphorus-heights.webp",
-        href: buildPath("development", { slug: "bosphorus-heights" }),
-      },
-      {
-        name: "Levent Residences",
-        eyebrow: ["İstanbul", "Şişli"],
-        detailKey: "levent-residences",
-        image: "/images/levent-residences.webp",
-        href: buildPath("development", { slug: "levent-residences" }),
-      },
-      {
-        name: "Marmara Vista",
-        eyebrow: ["İstanbul", "Beylikdüzü"],
-        detailKey: "marmara-vista",
-        image: "/images/marmara-vista.webp",
-        href: buildPath("development", { slug: "marmara-vista" }),
-      },
-      {
-        name: "Aegean Bay Residences",
-        eyebrow: ["Muğla", "Bodrum"],
-        detailKey: "aegean-bay-residences",
-        image: "/images/aegean-bay.webp",
-        href: buildPath("development", { slug: "aegean-bay-residences" }),
-      },
-      {
-        name: "Antalya Coast",
-        eyebrow: ["Antalya", "Konyaaltı"],
-        detailKey: "antalya-coast",
-        image: "/images/antalya-coast.webp",
-      },
-      {
-        name: "Anatolian Villas",
-        eyebrow: ["İstanbul", "Sarıyer"],
-        detailKey: "anatolian-villas",
-        image: "/images/anatolian-villas.webp",
-      },
-    ],
+    // Filled from the published developments; see `region`.
+    projects: [],
     faq,
     searchHref: searchPath({ currency: "USD", location: "Türkiye", cbiOnly: true }),
   },
 
   caribbean: {
     key: "caribbean",
+    region: "Caribbean",
     images: {
       // As with Türkiye: the editorial slots carry the programme. The gallery
       // below still shows the approved developments, which is where showing
@@ -357,7 +337,10 @@ export const programmes: Record<ProgrammeKey, Programme> = {
       },
     ],
     faq,
-    searchHref: searchPath({ currency: "USD", location: "Caribbean", cbiOnly: true }),
+    // The qualifying developments are the resort shares above, not units in
+    // the search — which answers "Caribbean" with nothing — so "browse" lands
+    // on them. The projects section drops its own button for that reason.
+    searchHref: "#projects",
   },
 };
 

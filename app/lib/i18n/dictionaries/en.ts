@@ -13,7 +13,15 @@
  * `../format`, so plural rules stay out of the components.
  */
 
-import { plural, staged, type ArticleCopy, type ProjectCopy } from "../format";
+import {
+  plural,
+  staged,
+  type ArticleCopy,
+  type LegalCopy,
+  type ProgrammeCopy,
+  type ProjectCopy,
+  type ResortCopy,
+} from "../format";
 
 const en = {
   /** <title> and <meta description> per route. */
@@ -145,6 +153,9 @@ const en = {
     reasoning: "Why this, and what was rejected",
     complication: "What went wrong",
     consentPending: "No client outcomes are published yet. These require written client consent, which Multi Mulk holds for none of them so far.",
+    /** Shown wherever a composed, no-client engagement is listed. */
+    representativeNote:
+      "Representative engagements: each is composed from the shape of files our advisory team handles, with no individual client's details. Outcomes from named engagements are published only with the client's written consent.",
   },
 
   tools: {
@@ -190,6 +201,16 @@ const en = {
    *  and the scoring model. Structure lives in `app/lib/due-diligence.ts`. */
   legal: {
     pending: "This page is awaiting its final text from Multi Mulk. Until it is published here, write to info@multimulk.com for the current terms.",
+    /** Under the title of the privacy policy and the terms. */
+    updated: "Last revised {date}",
+    /** The office block that closes both documents. */
+    headOffice: "Head office",
+    /**
+     * Staged prose for the privacy policy and the terms, keyed by page slug
+     * and then by section id. Empty here: the English is the source in
+     * `legal.ts`, and a language fills in what it has.
+     */
+    copy: staged<LegalCopy>({}),
     /** The image credits page. Author names and licence names are not
      *  translated: they identify a person and a licence, and a translated
      *  licence name cites a licence that does not exist. */
@@ -293,6 +314,21 @@ const en = {
     yes: "Yes",
     no: "No",
     bestLabel: "Most favourable",
+    /** Marks the column the practice would advise; the verdict argues it. */
+    recommended: "Multi Mulk recommends",
+    verdictHeading: "Our view",
+    /** The comparison page in the resort design; see /compare/[slug]. */
+    heroTagline: "Read side by side, on the same facts, with one recommendation",
+    programmesLabel: "Programmes",
+    factorsLabel: "Factors",
+    tableHeading: "Factor by Factor",
+    programmeIndex: "Programme {index}",
+    recommendedHeading: "Multi Mulk Recommends {name}",
+    otherComparisons: "Other Comparisons",
+    allComparisons: "All Comparisons",
+    enquireSubject: "Comparing {programmes}",
+    ctaHeading: "Still Deciding?",
+    ctaBody: "Tell us what you are solving for and which programmes you are weighing, and an adviser will answer with this table filled in for your family.",
     rows: {
       minimumInvestment: "Minimum investment",
       holdingPeriod: "Holding period",
@@ -306,6 +342,34 @@ const en = {
       parentsIncluded: "Parents can be included",
       citizenshipAfter: "Citizenship after",
       worldwideTax: "Taxes worldwide income",
+      rentalYield: "Gross rental yield",
+    },
+    /** The verdict under each table, keyed by the comparison's `copyKey`. */
+    copy: {
+      "turkiye-vs-caribbean": {
+        verdict:
+          "Grenada asks for less and its passport travels further on paper. Türkiye is the stronger investment: the qualifying asset is a freehold home in a city of sixteen million, let at a market yield while it is held and sold on an open market after three years — a Caribbean resort share earns less and is harder to exit. Citizenship is granted directly, processing is quicker, and no visit is required. For a family whose objective is a second citizenship that pays for itself, Türkiye is our recommendation.",
+      },
+      "turkiye-citizenship-vs-residency": {
+        verdict:
+          "The residence permit costs half as much and is quicker, but it is a permit: renewed, tied to keeping the property, and five years from a citizenship application that is not guaranteed. Citizenship is granted directly, passes to the family, and the same property earns the same either way. Where the budget reaches the threshold, we recommend citizenship.",
+      },
+      "turkiye-vs-uae": {
+        verdict:
+          "The Golden Residence is a residence permit, renewable every ten years and never a passport; Türkiye grants citizenship outright, at a lower entry point, with a property that yields comparably. The two are not exclusive — many of our clients hold a Dubai base and a Turkish passport together. Where the objective is a second nationality, Türkiye is our recommendation.",
+      },
+      "caribbean-islands": {
+        verdict:
+          "Dominica asks for the least of the three and St. Kitts & Nevis, on the table alone, travels furthest. What decides it is not in the table. Grenada is the only one of the three whose passport carries the United States E-2 treaty investor visa, and the only one with visa-free entry to China; St. Kitts & Nevis is the oldest programme in the world and the most established name at a border; Dominica’s real-estate route is the lowest entry into a branded resort share. For a family whose objective includes a route into the United States, Grenada is our recommendation. For the lowest cost of a resort share, Dominica.",
+      },
+      "golden-visas": {
+        verdict:
+          "Portugal and Greece are the two European golden visas asked about in almost every first conversation, and neither does what it did five years ago: Portugal closed its property route in 2023, and its fund route now sits ten years and a language test from a citizenship application; Greece still sells a property permit, but it taxes worldwide income and its road to a passport runs seven years. The UAE Golden Residence is a permit and never a passport, but it is renewable, carries no tax on worldwide income, asks for no minimum stay, and the qualifying asset is a Dubai property at a market yield — which is why it is the residence we transact. For a base in the Gulf with no tax exposure, we recommend the UAE; for a family whose objective is a European passport, Greece is the shorter of the two roads, and one we would refer rather than transact.",
+      },
+      "turkiye-vs-portugal": {
+        verdict:
+          "Portugal is the European name in almost every first conversation, and it no longer does what people remember: the property route closed in 2023, what remains is a fund subscription, processing runs to years, and citizenship — the reason most families ask — is now ten years and a language test away. Türkiye grants citizenship directly, in months, against a freehold property that earns while it is held, with no residence, no visit and no language test. A Turkish passport does not reach the Schengen Area visa-free and a Portuguese residence card does, which is the one point in Portugal’s favour worth weighing. For a family whose objective is a second citizenship rather than a European address, Türkiye is our recommendation.",
+      },
     },
   },
 
@@ -332,6 +396,26 @@ const en = {
     /** Shown on a programme whose figures are not yet signed off. */
     unreviewed:
       "The figures on this page have not yet completed legal review and are not published. Confirm every one with us before acting on it.",
+    /** The banner and sections of a programme page; see `programme-pages.ts`. */
+    aboutEyebrow: "About the Programme",
+    highlightsEyebrow: "Programme Highlights",
+    highlightHeadings: {
+      grants: "What It Grants",
+      family: "Who Can Be Included",
+      asks: "What It Asks of You",
+    },
+    routesBody: "The routes the programme recognises, and which of them we transact.",
+    compareEyebrow: "Side by Side",
+    compareHeading: "How {name} Compares",
+    compareBody: "Every figure on this page sits in the same table as the programmes it is most often weighed against — read from the same record, with our recommendation beneath it.",
+    compareButton: "See the Comparison",
+    allComparisons: "All Comparisons",
+    otherProgrammes: "Other Programmes",
+    viewProgramme: "View the Programme",
+    ctaHeading: "Discover {name}",
+    ctaBody: "Tell us what you are solving for, and we will tell you whether this programme is the right fit — and what it would cost all in.",
+    /** Staged prose per programme, keyed by `copyKey`; English is in `programme-pages.ts`. */
+    copy: staged<ProgrammeCopy>({}),
   },
 
   routes: {
@@ -1117,6 +1201,10 @@ const en = {
     "Cabrits National Park": "Cabrits National Park",
     "Christophe Harbour": "Christophe Harbour",
     Portsmouth: "Portsmouth",
+    "United Arab Emirates": "United Arab Emirates",
+    Portugal: "Portugal",
+    Greece: "Greece",
+    Malta: "Malta",
   },
 
   /** /properties/[slug] */
@@ -1301,7 +1389,7 @@ const en = {
     people: {
       "mohd-imad": ["SEO Specialist"],
       "afsheen": ["Content Creator"],
-      "raazia-sanam": ["Education Consultant"],
+      "raazia-sanam": ["Investment Advisor"],
       "shahid": ["Associate Social Media Manager"],
       "shaik-mohammed-aburuddin": ["Investment Advisor"],
       "souha-koudmani": ["General Manager"],
@@ -1313,7 +1401,7 @@ const en = {
       "nilofar-sadiq": ["Investment Advisor"],
       "zeeshan-haider": ["Video Editor"],
 
-      "mahenur-azlem": ["HR & Investment Advisor"],
+      "mahenur-azlem": ["HR Coordinator"],
       "mubark-ali": ["Investment Advisor"],
       "tariq-tahir": ["Senior Investment Advisor"],
       "sobhi-al-sabhi": ["Senior Investment Advisor"],
@@ -1326,7 +1414,6 @@ const en = {
       "elnaz-aminzadeh": ["Investment Advisor"],
       "alireza-akbari": ["Marketing Team Manager"],
       "asad-ullah-saif": ["Senior Investment Advisor"],
-      "muhammad-riyasat": ["Senior Investment Advisor"],
       "muhammad-ali-shahid": ["Investment Advisor"],
       "rizwan-aslam": ["Video Production Specialist"],
       "ayshe-ali-haydar": ["Investment Advisor"],
@@ -1350,13 +1437,15 @@ const en = {
     emailLabel: "Email",
     phoneLabel: "Phone",
     addressLabel: "Address",
-    mapTitle: "Map of the Multi Mulk office in Beykent, İstanbul",
+    mapTitle: "Map of the Multi Mulk office — {office}",
     mapLink: "Open in Google Maps",
     form: {
       name: "Name",
       namePlaceholder: "Insert your name",
       phone: "Phone Number",
       phonePlaceholder: "Phone Number",
+      /** Accessible name of the dialling-code picker beside the number. */
+      countryCode: "Country code",
       email: "Email",
       emailPlaceholder: "myemail@email.com",
       enquiryAbout: "What is your enquiry about?",
@@ -1393,7 +1482,7 @@ const en = {
       errors: {
         required: "This field is required.",
         email: "Enter a valid email address.",
-        phone: "Enter a valid phone number, including the country code.",
+        phone: "Enter a valid phone number.",
         tooLong: "This is longer than we can accept.",
         /** The enquiry dialog could not fetch what it needs to submit. */
         load: "We could not load the form. The contact page carries the same one — or use the details alongside.",
@@ -1435,6 +1524,32 @@ const en = {
    * developments that ship with the site use `property` above; this is the
    * page a lister's unit gets, and every section it names is optional.
    */
+  /** A Caribbean resort's own page — /caribbean/[slug]. */
+  resort: {
+    about: "About",
+    highlights: "Resort Highlights",
+    location: "Location",
+    caribbeanSea: "Caribbean Sea",
+    exterior: "Exterior",
+    interior: "Interior",
+    video: "Video",
+    /** The tab strip's accessible name. */
+    galleryLabel: "Photographs of {name}",
+    findYourWay: "Find Your Way to {name}",
+    otherProperties: "Other Caribbean Properties",
+    cbiEyebrow: "Citizenship by Investment",
+    cbiButton: "Learn More About CBI Options",
+    ctaHeading: "Discover {name}",
+    viewResort: "View the Resort",
+    /** The counter under the highlight carousel: "1 / 3". */
+    slide: "{index} of {count}",
+    /**
+     * Staged prose, keyed by resort slug. Empty here: the English is the
+     * source in `resorts.ts`, and a language fills in what it has.
+     */
+    copy: staged<ResortCopy>({}),
+  },
+
   listing: {
     specs: "At a Glance",
     about: "About This Residence",

@@ -14,6 +14,7 @@ import { Container, SectionIntro } from "./container";
 import { caribbeanResorts, type Resort } from "@/app/lib/content";
 import { useI18n } from "@/app/lib/i18n/context";
 import { Diamond } from "./icons";
+import { Link } from "./link";
 
 /**
  * The photography sits in three slots pinned to the viewport rather than to any
@@ -334,6 +335,16 @@ function ResortRow({
                 ]
               }
             </p>
+            {/* Only a resort with a page of its own gets the way through to
+                it; the rest are described here and nowhere else. */}
+            {resort.href ? (
+              <Link
+                href={resort.href}
+                className="mt-6 inline-block rounded-full border border-cream/70 px-7 py-3 text-[12.5px] text-cream transition-colors hover:bg-cream hover:text-forest"
+              >
+                {t.resort.viewResort}
+              </Link>
+            ) : null}
           </div>
         </div>
       </div>

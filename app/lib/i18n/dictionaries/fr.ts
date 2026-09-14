@@ -8,7 +8,15 @@
  */
 
 import type { Dictionary } from "../index";
-import { plural, staged, type ArticleCopy, type ProjectCopy } from "../format";
+import {
+  plural,
+  staged,
+  type ArticleCopy,
+  type LegalCopy,
+  type ProgrammeCopy,
+  type ProjectCopy,
+  type ResortCopy,
+} from "../format";
 
 const fr: Dictionary = {
   meta: {
@@ -134,6 +142,9 @@ const fr: Dictionary = {
     reasoning: "Pourquoi ce choix, et ce qui a été écarté",
     complication: "Ce qui a coincé",
     consentPending: "Aucun résultat client n’est encore publié. Cela exige le consentement écrit du client, que Multi Mulk ne détient pour aucun à ce jour.",
+    /** Shown wherever a composed, no-client engagement is listed. */
+    representativeNote:
+      "Dossiers représentatifs : chacun est composé à partir de la structure des dossiers que traite notre équipe conseil, sans aucun détail d’un client en particulier. Les résultats de dossiers réels ne sont publiés qu’avec l’accord écrit du client.",
   },
 
   tools: {
@@ -178,6 +189,9 @@ const fr: Dictionary = {
    *  and the scoring model. Structure lives in `app/lib/due-diligence.ts`. */
   legal: {
     pending: "Cette page attend son texte définitif de Multi Mulk. En attendant sa publication ici, écrivez à info@multimulk.com pour connaître les conditions en vigueur.",
+    updated: "Dernière révision le {date}",
+    headOffice: "Siège",
+    copy: staged<LegalCopy>({}),
     credits: {
       intro: "Presque toutes les photographies de ce site sont des banques d’images ou relèvent du domaine public, et n’exigent rien en retour. Deux sont sous licence Creative Commons, et cette licence demande à être créditée ici.",
       authorLabel: "Photographe",
@@ -274,6 +288,21 @@ const fr: Dictionary = {
     yes: "Oui",
     no: "Non",
     bestLabel: "Le plus favorable",
+    /** Marks the column the practice would advise; the verdict argues it. */
+    recommended: "Recommandation Multi Mulk",
+    verdictHeading: "Notre avis",
+    /** The comparison page in the resort design; see /compare/[slug]. */
+    heroTagline: "Lus côte à côte, sur les mêmes faits, avec une seule recommandation",
+    programmesLabel: "Programmes",
+    factorsLabel: "Critères",
+    tableHeading: "Critère par critère",
+    programmeIndex: "Programme {index}",
+    recommendedHeading: "Multi Mulk recommande {name}",
+    otherComparisons: "Autres comparaisons",
+    allComparisons: "Toutes les comparaisons",
+    enquireSubject: "Comparaison : {programmes}",
+    ctaHeading: "Vous hésitez encore ?",
+    ctaBody: "Dites-nous ce que vous cherchez à résoudre et quels programmes vous pesez : un conseiller vous répondra avec ce tableau rempli pour votre famille.",
     rows: {
       minimumInvestment: "Investissement minimum",
       holdingPeriod: "Durée de détention",
@@ -287,6 +316,34 @@ const fr: Dictionary = {
       parentsIncluded: "Parents pouvant être inclus",
       citizenshipAfter: "Citoyenneté après",
       worldwideTax: "Impose les revenus mondiaux",
+      rentalYield: "Rendement locatif brut",
+    },
+    /** The verdict under each table, keyed by the comparison's `copyKey`. */
+    copy: {
+      "turkiye-vs-caribbean": {
+        verdict:
+          "La Grenade demande moins et son passeport va plus loin sur le papier. La Türkiye est le placement le plus solide : l’actif éligible est un logement en pleine propriété dans une ville de seize millions d’habitants, loué au rendement du marché pendant la détention et revendu sur un marché ouvert après trois ans — une part de complexe hôtelier caribéen rapporte moins et se revend plus difficilement. La citoyenneté est accordée directement, le traitement est plus rapide et aucune visite n’est requise. Pour une famille dont l’objectif est une seconde citoyenneté qui se finance elle-même, la Türkiye est notre recommandation.",
+      },
+      "turkiye-citizenship-vs-residency": {
+        verdict:
+          "Le permis de séjour coûte moitié moins et s’obtient plus vite, mais c’est un permis : renouvelé, conditionné à la conservation du bien, et à cinq ans d’une demande de citoyenneté qui n’est pas garantie. La citoyenneté est accordée directement, se transmet à la famille, et le même bien rapporte autant dans les deux cas. Lorsque le budget atteint le seuil, nous recommandons la citoyenneté.",
+      },
+      "turkiye-vs-uae": {
+        verdict:
+          "La Golden Residence est un permis de séjour, renouvelable tous les dix ans et jamais un passeport ; la Türkiye accorde la citoyenneté d’emblée, à un seuil d’entrée plus bas, avec un bien au rendement comparable. Les deux ne s’excluent pas — beaucoup de nos clients conjuguent une base à Dubaï et un passeport turc. Lorsque l’objectif est une seconde nationalité, la Türkiye est notre recommandation.",
+      },
+      "caribbean-islands": {
+        verdict:
+          "La Dominique demande le moins des trois et Saint-Christophe-et-Niévès, à en croire le tableau seul, voyage le plus loin. Ce qui tranche n’est pas dans le tableau. La Grenade est la seule des trois dont le passeport ouvre le visa d’investisseur américain E-2, et la seule à entrer en Chine sans visa ; Saint-Christophe-et-Niévès est le plus ancien programme au monde et le nom le mieux établi à une frontière ; la voie immobilière de la Dominique est l’entrée la plus basse dans une part de resort de marque. Pour une famille dont l’objectif comprend une voie vers les États-Unis, la Grenade est notre recommandation. Pour le coût le plus bas d’une part de resort, la Dominique.",
+      },
+      "golden-visas": {
+        verdict:
+          "Le Portugal et la Grèce sont les deux golden visas européens évoqués dans presque chaque premier entretien, et ni l’un ni l’autre ne fait plus ce qu’il faisait il y a cinq ans : le Portugal a fermé sa voie immobilière en 2023, et sa voie par fonds se trouve désormais à dix ans et un examen de langue d’une demande de citoyenneté ; la Grèce vend toujours un permis adossé à un bien, mais elle impose les revenus mondiaux et sa route vers un passeport dure sept ans. La Golden Residence des Émirats est un permis et jamais un passeport, mais il se renouvelle, n’impose pas les revenus mondiaux, n’exige aucun séjour minimum, et l’actif éligible est un bien à Dubaï au rendement du marché — c’est pourquoi c’est la résidence que nous traitons. Pour une base dans le Golfe sans exposition fiscale, nous recommandons les Émirats ; pour une famille dont l’objectif est un passeport européen, la Grèce est la plus courte des deux routes, et une que nous orienterions plutôt que traiterions.",
+      },
+      "turkiye-vs-portugal": {
+        verdict:
+          "Le Portugal est le nom européen de presque chaque premier entretien, et il ne fait plus ce dont on se souvient : la voie immobilière a fermé en 2023, il reste une souscription à un fonds, l’instruction se compte en années, et la citoyenneté — la raison pour laquelle la plupart des familles demandent — est désormais à dix ans et un examen de langue. La Türkiye accorde la citoyenneté d’emblée, en quelques mois, contre un bien en pleine propriété qui rapporte pendant qu’il est détenu, sans résidence, sans visite et sans examen de langue. Un passeport turc n’entre pas dans l’espace Schengen sans visa et une carte de séjour portugaise si : c’est le seul point en faveur du Portugal qui mérite d’être pesé. Pour une famille dont l’objectif est une seconde citoyenneté plutôt qu’une adresse européenne, la Türkiye est notre recommandation.",
+      },
     },
   },
 
@@ -311,6 +368,26 @@ const fr: Dictionary = {
     },
     sinceLabel: "Ouvert depuis",
     unreviewed: "Les chiffres de cette page n’ont pas achevé leur revue juridique et ne sont pas publiés. Confirmez chacun d’eux auprès de nous avant d’agir.",
+    /** The banner and sections of a programme page; see `programme-pages.ts`. */
+    aboutEyebrow: "À propos du programme",
+    highlightsEyebrow: "Points forts du programme",
+    highlightHeadings: {
+      grants: "Ce qu’il accorde",
+      family: "Qui peut être inclus",
+      asks: "Ce qu’il exige",
+    },
+    routesBody: "Les voies que le programme reconnaît, et celles que nous traitons.",
+    compareEyebrow: "Côte à côte",
+    compareHeading: "{name} en comparaison",
+    compareBody: "Chaque chiffre de cette page figure dans le même tableau que les programmes auxquels on le compare le plus souvent — lu dans le même dossier, avec notre recommandation en dessous.",
+    compareButton: "Voir la comparaison",
+    allComparisons: "Toutes les comparaisons",
+    otherProgrammes: "Autres programmes",
+    viewProgramme: "Voir le programme",
+    ctaHeading: "Découvrir {name}",
+    ctaBody: "Dites-nous ce que vous cherchez à résoudre, et nous vous dirons si ce programme est le bon — et ce qu’il coûterait tout compris.",
+    /** Staged prose per programme, keyed by `copyKey`; English is in `programme-pages.ts`. */
+    copy: staged<ProgrammeCopy>({}),
   },
 
   routes: {
@@ -1162,6 +1239,10 @@ const fr: Dictionary = {
     "Cabrits National Park": "Parc national des Cabrits",
     "Christophe Harbour": "Christophe Harbour",
     Portsmouth: "Portsmouth",
+    "United Arab Emirates": "Émirats arabes unis",
+    Portugal: "Portugal",
+    Greece: "Grèce",
+    Malta: "Malte",
   },
 
   property: {
@@ -1382,7 +1463,7 @@ const fr: Dictionary = {
     people: {
       "mohd-imad": ["Fonction à confirmer"],
       "afsheen": ["Fonction à confirmer"],
-      "raazia-sanam": ["Fonction à confirmer"],
+      "raazia-sanam": ["Conseillère en investissement"],
       "shahid": ["Fonction à confirmer"],
       "shaik-mohammed-aburuddin": ["Fonction à confirmer"],
       "souha-koudmani": ["Fonction à confirmer"],
@@ -1394,7 +1475,7 @@ const fr: Dictionary = {
       "nilofar-sadiq": ["Conseillère en investissement"],
       "zeeshan-haider": ["Monteur vidéo"],
 
-      "mahenur-azlem": ["Responsable RH et conseillère en investissement"],
+      "mahenur-azlem": ["Coordinatrice RH"],
       "mubark-ali": ["Conseiller en investissement"],
       "tariq-tahir": ["Conseiller principal en investissement"],
       "sobhi-al-sabhi": ["Conseiller principal en investissement"],
@@ -1407,7 +1488,6 @@ const fr: Dictionary = {
       "elnaz-aminzadeh": ["Conseillère en investissement"],
       "alireza-akbari": ["Responsable de l’équipe marketing"],
       "asad-ullah-saif": ["Conseiller principal en investissement"],
-      "muhammad-riyasat": ["Conseiller principal en investissement"],
       "muhammad-ali-shahid": ["Conseiller en investissement"],
       "rizwan-aslam": ["Spécialiste de la production vidéo"],
       "ayshe-ali-haydar": ["Conseillère en investissement"],
@@ -1432,13 +1512,15 @@ const fr: Dictionary = {
     emailLabel: "E-mail",
     phoneLabel: "Téléphone",
     addressLabel: "Adresse",
-    mapTitle: "Carte du bureau Multi Mulk à Beykent, İstanbul",
+    mapTitle: "Carte du bureau Multi Mulk — {office}",
     mapLink: "Ouvrir dans Google Maps",
     form: {
       name: "Nom",
       namePlaceholder: "Saisissez votre nom",
       phone: "Téléphone",
       phonePlaceholder: "Numéro de téléphone",
+      /** Accessible name of the dialling-code picker beside the number. */
+      countryCode: "Indicatif du pays",
       email: "E-mail",
       emailPlaceholder: "monadresse@email.com",
       enquiryAbout: "Quel est l’objet de votre demande ?",
@@ -1470,7 +1552,7 @@ const fr: Dictionary = {
       errors: {
         required: "Ce champ est obligatoire.",
         email: "Saisissez une adresse e-mail valide.",
-        phone: "Saisissez un numéro de téléphone valide, avec l’indicatif du pays.",
+        phone: "Saisissez un numéro de téléphone valide.",
         tooLong: "Ce texte dépasse la longueur acceptée.",
         load: "Nous n’avons pas pu charger le formulaire. La page de contact propose le même — ou utilisez nos coordonnées ci-contre.",
         rate: "Vous avez envoyé plusieurs demandes récemment. Réessayez plus tard ou écrivez à info@multimulk.com.",
@@ -1500,6 +1582,25 @@ const fr: Dictionary = {
     },
   },
   /** La page d’une résidence, sur /properties/<slug>. */
+  resort: {
+    about: "À propos",
+    highlights: "Points forts du resort",
+    location: "Localisation",
+    caribbeanSea: "Mer des Caraïbes",
+    exterior: "Extérieur",
+    interior: "Intérieur",
+    video: "Vidéo",
+    galleryLabel: "Photographies de {name}",
+    findYourWay: "Comment rejoindre {name}",
+    otherProperties: "Autres adresses dans les Caraïbes",
+    cbiEyebrow: "Citoyenneté par investissement",
+    cbiButton: "En savoir plus sur les options de citoyenneté",
+    ctaHeading: "Découvrez {name}",
+    viewResort: "Voir le resort",
+    slide: "{index} sur {count}",
+    copy: staged<ResortCopy>({}),
+  },
+
   listing: {
     specs: "En bref",
     about: "À propos de cette résidence",

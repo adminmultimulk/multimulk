@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Container, SectionIntro } from "./container";
-import type { Programme } from "@/app/lib/citizenship";
+import type { GalleryShot, Programme } from "@/app/lib/citizenship";
 import { getDictionary } from "@/app/lib/i18n";
 
 /**
@@ -13,8 +13,12 @@ import { getDictionary } from "@/app/lib/i18n";
  */
 export async function CitizenshipGallery({
   programme,
+  shots,
 }: {
   programme: Programme;
+  /** Resolved by the page: what is written in `citizenship.ts`, then the
+   *  photography of whatever the dashboard has published in the region. */
+  shots: GalleryShot[];
 }) {
   const t = await getDictionary();
   const copy = t.citizenship[programme.key].gallery;
@@ -39,7 +43,7 @@ export async function CitizenshipGallery({
           snaps flush to the viewport edge and swallows the page gutter — which
           it did, in both directions. */}
       <div className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 pb-4 [scrollbar-width:none] sm:scroll-px-10 sm:px-10 lg:mt-16 lg:scroll-px-[72px] lg:px-[72px] [&::-webkit-scrollbar]:hidden">
-        {programme.gallery.map((shot, i) => (
+        {shots.map((shot, i) => (
           <figure
             key={`${shot.image}-${i}`}
             className="relative aspect-[4/5] w-[78vw] shrink-0 snap-start overflow-hidden sm:w-[42vw] lg:aspect-[3/4] lg:w-[26vw]"

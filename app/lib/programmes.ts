@@ -32,7 +32,7 @@
  * ─────────────────────────────────────────────────────────────────────────
  */
 
-import type { FigureId } from "./figures";
+import { getFigure, type FigureId } from "./figures";
 import { DEFAULT_REVIEW_DAYS, type LegalReview } from "./review";
 
 /** ISO 3166-1 alpha-2, lowercased. Also the `/countries/<code>` slug. */
@@ -53,6 +53,9 @@ export type Currency = "USD" | "EUR" | "AED" | "XCD";
 export type Money = { amount: number; currency: Currency };
 
 export type MonthRange = { min: number; max?: number };
+
+/** A percentage band — a rental yield of "5–7%". */
+export type PercentRange = { min: number; max?: number };
 
 /**
  * A fact we have not confirmed. Explicit, so a comparison cell can say so
@@ -114,6 +117,13 @@ export type Programme = {
   citizenshipAfterYears: Known<number | null>;
   /** Whether the country taxes worldwide income of its tax residents. */
   taxOnWorldwideIncome: Known<boolean>;
+  /**
+   * What the qualifying asset earns while it is held — gross rental yield, as
+   * a market range. The return on the investment, as distinct from its size.
+   * Read from the figures registry so the table and the programme page cannot
+   * quote two different bands.
+   */
+  rentalYield: Known<PercentRange>;
   // ────────────────────────────────────────────────────────────────────────
 
   /** Slugs into `projects.ts` for the developments that qualify. */
@@ -146,6 +156,12 @@ const COMPARISON_SOURCE = {
 };
 
 const usd = (amount: number): Money => ({ amount, currency: "USD" });
+
+/** A yield band from the registry, so the number lives in one place. */
+const yieldOf = (id: FigureId): PercentRange => {
+  const figure = getFigure(id);
+  return { min: figure.value, ...(figure.max !== undefined ? { max: figure.max } : {}) };
+};
 const eur = (amount: number): Money => ({ amount, currency: "EUR" });
 
 const TR_SOURCE = {
@@ -226,6 +242,7 @@ function caribbean(
     includesParents: { allowed: true, minAge: 55 },
     citizenshipAfterYears: null,
     taxOnWorldwideIncome: false,
+    rentalYield: yieldOf("caribbean.cbi.rental-yield"),
     qualifyingProjects: [],
     copyKey: slug,
     review: reviewed([CARIBBEAN_SOURCE]),
@@ -279,12 +296,10 @@ export const programmes: readonly Programme[] = [
     includesParents: { allowed: false },
     citizenshipAfterYears: null,
     taxOnWorldwideIncome: true,
-    qualifyingProjects: [
-      "bosphorus-heights",
-      "marmara-vista",
-      "levent-residences",
-      "aegean-bay-residences",
-    ],
+    rentalYield: yieldOf("tr.property.rental-yield"),
+    // The qualifying developments are whatever the dashboard has published in
+    // Türkiye; the programme page reads them from there rather than from here.
+    qualifyingProjects: [],
     copyKey: "turkiye",
     review: reviewed([TR_SOURCE, COMPARISON_SOURCE]),
   },
@@ -320,6 +335,8 @@ export const programmes: readonly Programme[] = [
     includesParents: { allowed: false },
     citizenshipAfterYears: 5,
     taxOnWorldwideIncome: true,
+    // The same property market as the citizenship route, at a lower entry.
+    rentalYield: yieldOf("tr.property.rental-yield"),
     qualifyingProjects: [],
     copyKey: "turkiye-residency",
     review: reviewed([TR_SOURCE, COMPARISON_SOURCE]),
@@ -355,6 +372,7 @@ export const programmes: readonly Programme[] = [
     includesParents: { allowed: true },
     citizenshipAfterYears: null,
     taxOnWorldwideIncome: false,
+    rentalYield: yieldOf("uae.property.rental-yield"),
     qualifyingProjects: [],
     copyKey: "uae-golden-visa",
     review: reviewed([ICP_SOURCE]),
@@ -429,6 +447,8 @@ export const programmes: readonly Programme[] = [
     // Ten years under the 2026 law, up from five.
     citizenshipAfterYears: 10,
     taxOnWorldwideIncome: true,
+    // No figure we would stand behind for a fund share or a donation.
+    rentalYield: UNKNOWN,
     qualifyingProjects: [],
     copyKey: "portugal-golden-visa",
     review: reviewed([
@@ -463,6 +483,8 @@ export const programmes: readonly Programme[] = [
     includesParents: { allowed: true },
     citizenshipAfterYears: 7,
     taxOnWorldwideIncome: true,
+    // A property route, but not one this practice transacts, so no yield band we have checked.
+    rentalYield: UNKNOWN,
     qualifyingProjects: [],
     copyKey: "greece-golden-visa",
     review: reviewed([
@@ -500,6 +522,8 @@ export const programmes: readonly Programme[] = [
     includesParents: { allowed: true, minAge: 55 },
     citizenshipAfterYears: null,
     taxOnWorldwideIncome: true,
+    // No figure we would stand behind for a fund share or a donation.
+    rentalYield: UNKNOWN,
     qualifyingProjects: [],
     copyKey: "malta",
     review: reviewed([COMPARISON_SOURCE]),

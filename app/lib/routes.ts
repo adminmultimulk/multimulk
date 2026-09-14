@@ -23,6 +23,7 @@ import { comparisons } from "./comparisons";
 import { answeredInFull } from "./faqs";
 import { knowledgeArticles } from "./knowledge";
 import { legacyDevelopments } from "./legacy-developments";
+import { legalSlugs } from "./legal";
 import { mediaArticles } from "./media";
 import { isPublishable, programmes } from "./programmes";
 
@@ -402,10 +403,7 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     pattern: "/legal/:slug",
     parent: "home",
     labelKey: "legal",
-    enumerate: () =>
-      ["privacy-policy", "terms", "image-credits"].map((slug) => ({
-        values: { slug },
-      })),
+    enumerate: () => legalSlugs.map((slug) => ({ values: { slug } })),
     // Reachable and linked, but there is nothing to rank for here.
     sitemap: { include: false, priority: 0.1, changeFrequency: "yearly" },
     schema: [],

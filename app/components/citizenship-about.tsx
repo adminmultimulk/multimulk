@@ -7,9 +7,11 @@ import { getDictionary } from "@/app/lib/i18n";
 
 /** Who the reader would be working with, and the work behind that claim. */
 export async function CitizenshipAbout({
-  programme,
+  images,
 }: {
   programme: Programme;
+  /** Three frames: the published developments' own where there are any. */
+  images: string[];
 }) {
   const t = await getDictionary();
   const copy = t.citizenship.about;
@@ -43,14 +45,14 @@ export async function CitizenshipAbout({
           <div className="grid grid-cols-2 gap-3 self-center">
             <div className="relative col-span-2 aspect-[16/9] overflow-hidden">
               <Image
-                src={programme.images.about[0]}
+                src={images[0]}
                 alt=""
                 fill
                 sizes="(max-width: 1024px) 100vw, 600px"
                 className="object-cover"
               />
             </div>
-            {programme.images.about.slice(1, 3).map((src) => (
+            {images.slice(1, 3).map((src) => (
               <div key={src} className="relative aspect-[4/3] overflow-hidden">
                 <Image
                   src={src}

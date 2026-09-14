@@ -5,7 +5,11 @@ import { Container } from "@/app/components/container";
 import { JsonLd } from "@/app/components/json-ld";
 import { PageHero } from "@/app/components/page-hero";
 import { SiteFooter } from "@/app/components/site-footer";
-import { getCaseStudy, publishedCaseStudies } from "@/app/lib/case-studies";
+import {
+  getCaseStudy,
+  isPublished,
+  publishedCaseStudies,
+} from "@/app/lib/case-studies";
 import { alternatesFor, getDictionary, getLocale } from "@/app/lib/i18n";
 import { locales } from "@/app/lib/i18n/config";
 import { breadcrumbs } from "@/app/lib/seo/jsonld";
@@ -26,9 +30,9 @@ export async function generateMetadata({
   return {
     title: study.profile.objective,
     alternates: await alternatesFor(`/case-studies/${slug}`),
-    // Belt and braces alongside the enumeration: a study without written
-    // consent must not be indexed even if it becomes reachable.
-    ...(study.consentOnFile ? {} : { robots: { index: false, follow: false } }),
+    // Belt and braces alongside the enumeration: a study that is not
+    // published must not be indexed even if it becomes reachable.
+    ...(isPublished(study) ? {} : { robots: { index: false, follow: false } }),
   };
 }
 
@@ -70,6 +74,11 @@ export default async function CaseStudyPage({
         <section className="bg-white py-[72px] lg:py-[96px]">
           <Container>
             <div className="max-w-[820px]">
+              {study.representative ? (
+                <p className="mb-8 border border-ink/12 bg-mist px-6 py-4 text-[12.5px] leading-[20px] text-ink/70">
+                  {copy.representativeNote}
+                </p>
+              ) : null}
               <dl className="grid gap-x-10 gap-y-6 border-y border-ink/15 py-8 sm:grid-cols-2 lg:grid-cols-4">
                 {[
                   [copy.family, study.profile.family],

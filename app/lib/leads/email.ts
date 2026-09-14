@@ -27,6 +27,7 @@ import {
 import en from "../i18n/dictionaries/en";
 import { localeNames } from "../i18n/config";
 import { absoluteUrl } from "../site";
+import { countryNameFor } from "./phone";
 import type { Lead } from "./schema";
 
 /** Where enquiries land. Comma-separated for more than one inbox. */
@@ -116,7 +117,11 @@ function rows(lead: Lead): { label: string; value: string; href?: string }[] {
     {
       label: "Phone",
       value: lead.phone,
-      href: `tel:${lead.phone.replace(/\s/g, "")}`,
+      href: `tel:${lead.phone}`,
+    },
+    {
+      label: "Phone country",
+      value: `${countryNameFor(lead.phoneCountry)} (${lead.phoneCode})`,
     },
     { label: "Enquiry about", value: en.contact.form.types[lead.enquiryType] },
     { label: "Subject", value: lead.subject },

@@ -23,22 +23,28 @@ import { useI18n } from "@/app/lib/i18n/context";
 /** Just below the rail — where a section counts as the one being read. */
 const LINE_PX = 140;
 
-export function CitizenshipAnchors() {
+export function CitizenshipAnchors({
+  ids = sections,
+}: {
+  /** The sections the page actually rendered, in order. A page with nothing
+   *  to put in its gallery leaves that one out rather than link to nothing. */
+  ids?: readonly SectionId[];
+}) {
   const { t } = useI18n();
-  const [active, setActive] = useState<SectionId>(sections[0]);
+  const [active, setActive] = useState<SectionId>(ids[0]);
 
   useEffect(() => {
-    const nodes = sections.map((id) => document.getElementById(id));
+    const nodes = ids.map((id) => document.getElementById(id));
     if (!nodes.some(Boolean)) return;
 
     // Coalesced into a frame: five rects is cheap, but not once per scroll event.
     let frame = 0;
     const read = () => {
       frame = 0;
-      let current: SectionId = sections[0];
+      let current: SectionId = ids[0];
       nodes.forEach((node, i) => {
         if (node && node.getBoundingClientRect().top <= LINE_PX) {
-          current = sections[i];
+          current = ids[i];
         }
       });
       setActive(current);
@@ -55,7 +61,7 @@ export function CitizenshipAnchors() {
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
     };
-  }, []);
+  }, [ids]);
 
   return (
     <nav
@@ -65,7 +71,7 @@ export function CitizenshipAnchors() {
       {/* The rail scrolls sideways rather than wrapping: five labels in a long
           language would otherwise push the page content down by a whole row. */}
       <ul className="mx-auto flex w-full max-w-[1440px] gap-7 overflow-x-auto px-6 [scrollbar-width:none] sm:px-10 lg:justify-center lg:px-[72px] [&::-webkit-scrollbar]:hidden">
-        {sections.map((id) => (
+        {ids.map((id) => (
           <li key={id} className="shrink-0">
             <a
               href={`#${id}`}

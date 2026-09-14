@@ -6,8 +6,11 @@
  * can be tested directly.
  */
 
+import type { ComparisonValue } from "./comparisons";
 import type { Figure } from "./figures";
+import type { Dictionary } from "./i18n";
 import { intlLocale, type Locale } from "./i18n/config";
+import { formatNumber } from "./i18n/format";
 
 const currencyFor: Partial<Record<Figure["unit"], string>> = {
   usd: "USD",
@@ -42,4 +45,68 @@ export function figureValue(locale: Locale, figure: Figure): string {
   if (figure.max !== undefined) return `${format(figure.value)}–${format(figure.max)}`;
   if (figure.atLeast) return `${format(figure.value)}+`;
   return format(figure.value);
+}
+
+/**
+ * A comparison cell as words — "US$270,000", "4–6 months", "None required".
+ *
+ * Shared by the comparison table, which is a Client Component, and by the
+ * programme and comparison pages, which build the numbered points of their
+ * highlight sliders from the same cells on the server. One formatter, so a
+ * figure cannot read one way in the table and another in the sentence beside
+ * it.
+ *
+ * The absent cases each get their own wording. "None required" and "no route"
+ * were the same `null` in an earlier cut of the data model, and rendering them
+ * identically told readers that a programme with no path to citizenship simply
+ * had no waiting period.
+ */
+export function comparisonValueText(
+  locale: Locale,
+  t: Pick<Dictionary, "compare" | "figures">,
+  value: ComparisonValue,
+): string {
+  const num = (n: number) => formatNumber(locale, n);
+
+  switch (value.kind) {
+    case "money":
+      return new Intl.NumberFormat(locale === "en" ? "en-GB" : locale, {
+        style: "currency",
+        currency: value.value.currency,
+        maximumFractionDigits: 0,
+        numberingSystem: "latn",
+      }).format(value.value.amount);
+    case "months": {
+      const range =
+        value.value.max !== undefined
+          ? `${num(value.value.min)}–${num(value.value.max)}`
+          : num(value.value.min);
+      return `${range} ${t.figures.units.months}`;
+    }
+    case "count":
+      return num(value.value);
+    case "percent": {
+      const range =
+        value.value.max !== undefined
+          ? `${num(value.value.min)}–${num(value.value.max)}`
+          : num(value.value.min);
+      return `${range}${t.figures.units.percent}`;
+    }
+    case "years":
+      return `${num(value.value)} ${t.figures.units.years}`;
+    case "days":
+      return `${num(value.value)} ${t.figures.units.days}`;
+    case "boolean":
+      return value.value ? t.compare.yes : t.compare.no;
+    case "none":
+      return t.compare.noneRequired;
+    case "unlimited":
+      return t.compare.noAgeLimit;
+    case "immediate":
+      return t.compare.grantedDirectly;
+    case "notAvailable":
+      return t.compare.noRoute;
+    default:
+      return t.compare.unknownLabel;
+  }
 }

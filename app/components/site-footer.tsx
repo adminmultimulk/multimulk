@@ -179,14 +179,14 @@ export async function SiteFooter() {
                     <ul className="mt-[18px] flex flex-col gap-[11px]">
                       {column.items.map((item) => (
                         <li key={item.name}>
+                          {/* A name with no page yet is text, not a link to
+                              nowhere. */}
                           {item.href ? (
                             <Link href={item.href} className={itemStyle}>
                               {item.name}
                             </Link>
                           ) : (
-                            <a href="#" className={itemStyle}>
-                              {item.name}
-                            </a>
+                            <span className={itemStyle}>{item.name}</span>
                           )}
                         </li>
                       ))}
@@ -223,9 +223,9 @@ export async function SiteFooter() {
                             {t.footer.aboutItems[item.key]}
                           </Link>
                         ) : (
-                          <a href="#" className={itemStyle}>
+                          <span className={itemStyle}>
                             {t.footer.aboutItems[item.key]}
-                          </a>
+                          </span>
                         )}
                       </li>
                     ))}
