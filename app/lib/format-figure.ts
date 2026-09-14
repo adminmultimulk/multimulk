@@ -10,7 +10,7 @@ import type { ComparisonValue } from "./comparisons";
 import type { Figure } from "./figures";
 import type { Dictionary } from "./i18n";
 import { intlLocale, type Locale } from "./i18n/config";
-import { formatNumber } from "./i18n/format";
+import { formatNumber, interpolate } from "./i18n/format";
 
 const currencyFor: Partial<Record<Figure["unit"], string>> = {
   usd: "USD",
@@ -91,6 +91,32 @@ export function comparisonValueText(
           ? `${num(value.value.min)}–${num(value.value.max)}`
           : num(value.value.min);
       return `${range}${t.figures.units.percent}`;
+    }
+    case "resale":
+      return t.compare.resale[value.value];
+    case "return": {
+      const money = (amount: number) =>
+        new Intl.NumberFormat(locale === "en" ? "en-GB" : locale, {
+          style: "currency",
+          currency: value.value.money.currency,
+          maximumFractionDigits: 0,
+          numberingSystem: "latn",
+        }).format(amount);
+      if (!value.value.retained) {
+        return interpolate(t.compare.returnLost, {
+          money: money(value.value.money.amount),
+        });
+      }
+      const { percent } = value.value;
+      const band =
+        percent.max !== undefined
+          ? `+${num(percent.min)}–${num(percent.max)}${t.figures.units.percent}`
+          : `+${num(percent.min)}${t.figures.units.percent}`;
+      const income =
+        value.value.moneyMax !== undefined
+          ? `${money(value.value.money.amount)}–${money(value.value.moneyMax)}`
+          : money(value.value.money.amount);
+      return interpolate(t.compare.returnRetained, { percent: band, money: income });
     }
     case "years":
       return `${num(value.value)} ${t.figures.units.years}`;

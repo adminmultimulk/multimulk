@@ -15,6 +15,7 @@
 import {
   cheapestOfferedRoute,
   getProgramme,
+  resaleOf,
   UNKNOWN,
   type Known,
   type Money,
@@ -22,6 +23,7 @@ import {
   type PercentRange,
   type Programme,
   type ProgrammeCategory,
+  type ResaleMarket,
 } from "./programmes";
 import { DEFAULT_REVIEW_DAYS, type LegalReview } from "./review";
 
@@ -39,6 +41,17 @@ export type ComparisonValue =
   | { kind: "months"; value: MonthRange }
   | { kind: "count"; value: number }
   | { kind: "percent"; value: PercentRange }
+  /** How the money comes back; see `ResaleMarket`. */
+  | { kind: "resale"; value: ResaleMarket }
+  /**
+   * The illustrative return over the holding illustration: total gross yield
+   * as a percentage of the outlay, and the same in money, with whether the
+   * capital itself comes back. A donation is `-100` and nothing returned.
+   */
+  | {
+      kind: "return";
+      value: { percent: PercentRange; money: Money; moneyMax?: number; retained: boolean };
+    }
   | { kind: "years"; value: number }
   | { kind: "days"; value: number }
   | { kind: "boolean"; value: boolean }
@@ -65,6 +78,14 @@ export type ComparisonRow = {
 };
 
 const unknown = (): ComparisonValue => ({ kind: "unknown" });
+
+/**
+ * The span the return row illustrates. Five years, because it is the longest
+ * holding period any offered route asks for, so every programme is shown
+ * over the same stretch — and because a family that buys for a passport
+ * seldom sells the day the holding period ends.
+ */
+export const RETURN_YEARS = 5;
 
 function known<T>(value: Known<T>, map: (v: T) => ComparisonValue): ComparisonValue {
   return value === UNKNOWN ? unknown() : map(value as T);
@@ -105,6 +126,67 @@ export const comparisonRows: readonly ComparisonRow[] = [
     key: "rentalYield",
     better: "higher",
     read: (p) => known(p.rentalYield, (v) => ({ kind: "percent", value: v })),
+  },
+  // ── The return, spelled out ────────────────────────────────────────────
+  // Three rows the thresholds never answered: whether the money comes back,
+  // to whom the asset can be sold, and what five years of holding it looks
+  // like. Each reads the same route as "Minimum investment" above, so the
+  // row cannot quote a return on a route the reader is not being offered.
+  {
+    key: "capitalReturned",
+    better: "higher",
+    read: (p) => {
+      const route = cheapestOfferedRoute(p) ?? p.routes[0];
+      if (!route) return unknown();
+      return { kind: "boolean", value: resaleOf(route) !== "none" };
+    },
+  },
+  {
+    key: "resaleMarket",
+    better: "higher",
+    read: (p) => {
+      const route = cheapestOfferedRoute(p) ?? p.routes[0];
+      return route ? { kind: "resale", value: resaleOf(route) } : unknown();
+    },
+  },
+  {
+    key: "fiveYearReturn",
+    better: "higher",
+    read: (p) => {
+      const route = cheapestOfferedRoute(p) ?? p.routes[0];
+      if (!route) return unknown();
+      if (resaleOf(route) === "none") {
+        // A donation: every unit of it is gone, and nothing is returned.
+        return {
+          kind: "return",
+          value: {
+            percent: { min: -100 },
+            money: route.minimum,
+            retained: false,
+          },
+        };
+      }
+      if (p.rentalYield === UNKNOWN) return unknown();
+      const years = RETURN_YEARS;
+      const at = (rate: number) =>
+        Math.round((route.minimum.amount * rate * years) / 100);
+      return {
+        kind: "return",
+        value: {
+          percent: {
+            min: p.rentalYield.min * years,
+            ...(p.rentalYield.max !== undefined
+              ? { max: p.rentalYield.max * years }
+              : {}),
+          },
+          money: { amount: at(p.rentalYield.min), currency: route.minimum.currency },
+          ...(p.rentalYield.max !== undefined
+            ? { moneyMax: at(p.rentalYield.max) }
+            : {}),
+          retained: true,
+        },
+      };
+    },
   },
   {
     key: "processingTime",
@@ -248,17 +330,19 @@ export const comparisons: readonly Comparison[] = [
       reviewEveryDays: DEFAULT_REVIEW_DAYS,
     },
   },
-  // The three Caribbean programmes this practice actually places clients in,
-  // side by side. The two the table cannot show — the E-2 treaty and
-  // visa-free China — are what decide it, and the verdict says so.
+  // Türkiye against the three Caribbean programmes this practice actually
+  // places clients in. Türkiye is in every comparison on the site, as the
+  // column the others are read against: it is the programme the practice
+  // recommends, and the return rows are where it shows why.
   {
-    slug: "grenada-vs-dominica-vs-st-kitts",
+    slug: "turkiye-vs-grenada-vs-dominica-vs-st-kitts",
     programmes: [
+      ["citizenship", "turkiye"],
       ["citizenship", "grenada"],
       ["citizenship", "dominica"],
       ["citizenship", "st-kitts-and-nevis"],
     ],
-    recommended: ["citizenship", "grenada"],
+    recommended: ["citizenship", "turkiye"],
     copyKey: "caribbean-islands",
     review: {
       reviewedOn: "2026-09-14",
@@ -267,16 +351,18 @@ export const comparisons: readonly Comparison[] = [
       reviewEveryDays: DEFAULT_REVIEW_DAYS,
     },
   },
-  // The residence permits a reader calls "golden visas": the one we transact
-  // against the two European ones asked about in almost every first call.
+  // The residence permits a reader calls "golden visas" — the one we transact
+  // and the two European ones asked about in almost every first call — read
+  // against the citizenship that costs less than any of them.
   {
-    slug: "uae-vs-portugal-vs-greece",
+    slug: "turkiye-vs-uae-vs-portugal-vs-greece",
     programmes: [
+      ["citizenship", "turkiye"],
       ["residency", "uae"],
       ["residency", "portugal"],
       ["residency", "greece"],
     ],
-    recommended: ["residency", "uae"],
+    recommended: ["citizenship", "turkiye"],
     copyKey: "golden-visas",
     review: {
       reviewedOn: "2026-09-14",
@@ -344,6 +430,15 @@ function rank(value: ComparisonValue): number | undefined {
     case "years":
     case "days":
       return value.value;
+    case "boolean":
+      // Only read on rows whose `better` is not `none`, where yes is the
+      // better answer — whether the capital comes back.
+      return value.value ? 1 : 0;
+    case "resale":
+      return { open: 2, limited: 1, none: 0 }[value.value];
+    case "return":
+      // The floor of the band, as for a yield; a donation sits at -100.
+      return value.value.percent.min;
     case "none":
     case "immediate":
       return 0;

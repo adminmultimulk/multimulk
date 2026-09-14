@@ -21,9 +21,12 @@ export function ResortHero({
   stats,
   brandLogo,
   brandName,
+  compact = false,
 }: {
   image: string;
   name: string;
+  /** A smaller title — for a comparison, whose name is three or four programmes long. */
+  compact?: boolean;
   /** Already localised — "Portsmouth · Dominica". */
   place: string;
   tagline: string;
@@ -73,7 +76,13 @@ export function ResortHero({
               </span>
             </div>
             {/* The resort name is the same in every language. */}
-            <h1 className="mt-5 font-display text-[40px] leading-[1.1] text-white sm:text-[58px] lg:text-[68px]">
+            <h1
+              className={`mt-5 font-display leading-[1.1] text-white ${
+                compact
+                  ? "text-[32px] sm:text-[44px] lg:text-[52px]"
+                  : "text-[40px] sm:text-[58px] lg:text-[68px]"
+              }`}
+            >
               <AnimatedTitle>{name}</AnimatedTitle>
             </h1>
             <p className="mt-6 max-w-[600px] text-[19px] leading-[1.4] text-cream sm:text-[22px]">

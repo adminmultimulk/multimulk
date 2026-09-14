@@ -74,8 +74,11 @@ export default async function CaseStudiesPage() {
                           · {study.outcome.year}
                         </p>
                         <h2 className="mt-3 font-display text-[22px] leading-[1.28] text-ink">
-                          {study.profile.objective}
+                          {study.title}
                         </h2>
+                        <p className="mt-3 text-[13px] leading-[21px] text-ink/70">
+                          {study.profile.objective}
+                        </p>
                         <span className="mt-6 block text-[12.5px] text-gold group-hover:underline">
                           {t.common.readMore}
                         </span>

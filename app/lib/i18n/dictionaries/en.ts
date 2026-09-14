@@ -150,6 +150,15 @@ const en = {
     invested: "Invested",
     timeline: "Start to finish",
     afterwards: "Afterwards",
+    year: "Year",
+    /** The case-study page in the resort design; see /case-studies/[slug]. */
+    aboutHeading: "About This Engagement",
+    outcome: "The Outcome",
+    otherOutcomes: "Other Client Outcomes",
+    allOutcomes: "All Client Outcomes",
+    viewOutcome: "Read the Outcome",
+    ctaHeading: "Could This Be Your File?",
+    ctaBody: "Tell us what you are solving for, and an adviser will tell you how a family like yours has done it — and what it cost, all in.",
     reasoning: "Why this, and what was rejected",
     complication: "What went wrong",
     consentPending: "No client outcomes are published yet. These require written client consent, which Multi Mulk holds for none of them so far.",
@@ -215,7 +224,7 @@ const en = {
      *  translated: they identify a person and a licence, and a translated
      *  licence name cites a licence that does not exist. */
     credits: {
-      intro: "Almost every photograph on this site is stock or public domain, and asks for nothing in return. Two are Creative Commons, and their licences ask to be credited here.",
+      intro: "Almost every photograph on this site is stock or public domain, and asks for nothing in return. A few are Creative Commons, and their licences ask to be credited here.",
       authorLabel: "Photographer",
       sourceLabel: "Source",
       licenceLabel: "Licence",
@@ -317,6 +326,15 @@ const en = {
     /** Marks the column the practice would advise; the verdict argues it. */
     recommended: "Multi Mulk recommends",
     verdictHeading: "Our view",
+    /** The three return rows; see `comparisonRows`. */
+    resale: {
+      open: "Open market",
+      limited: "Programme buyers or the instrument’s terms",
+      none: "Nothing to sell",
+    },
+    returnRetained: "{percent} · {money} income",
+    returnLost: "−100% · {money} not returned",
+    returnNote: "Illustrative 5-year return: the gross rental yield shown above, over five years, on the minimum investment shown — before purchase costs, taxes and fees — with the capital itself retained where the route is an asset that can be resold. A market range, not a forecast or a guarantee.",
     /** The comparison page in the resort design; see /compare/[slug]. */
     heroTagline: "Read side by side, on the same facts, with one recommendation",
     programmesLabel: "Programmes",
@@ -343,32 +361,35 @@ const en = {
       citizenshipAfter: "Citizenship after",
       worldwideTax: "Taxes worldwide income",
       rentalYield: "Gross rental yield",
+      capitalReturned: "Capital returned at exit",
+      resaleMarket: "Resale market",
+      fiveYearReturn: "Illustrative 5-year return (ROI)",
     },
     /** The verdict under each table, keyed by the comparison's `copyKey`. */
     copy: {
       "turkiye-vs-caribbean": {
         verdict:
-          "Grenada asks for less and its passport travels further on paper. Türkiye is the stronger investment: the qualifying asset is a freehold home in a city of sixteen million, let at a market yield while it is held and sold on an open market after three years — a Caribbean resort share earns less and is harder to exit. Citizenship is granted directly, processing is quicker, and no visit is required. For a family whose objective is a second citizenship that pays for itself, Türkiye is our recommendation.",
+          "On return, the two are not close. Türkiye’s qualifying asset is a freehold home in a city of sixteen million: it lets at 5–7% a year, sells on the open market after three years, and comes back with the capital and the passport. A Grenada resort share earns 2–4%, is held for five years, and in practice sells only to the next programme applicant. Grenada asks for less and its passport travels further — the United States E-2 treaty and visa-free China are real advantages, and the table shows them. But a second citizenship that pays for itself is what most families we meet are actually after, and on that measure Türkiye is our recommendation.",
       },
       "turkiye-citizenship-vs-residency": {
         verdict:
-          "The residence permit costs half as much and is quicker, but it is a permit: renewed, tied to keeping the property, and five years from a citizenship application that is not guaranteed. Citizenship is granted directly, passes to the family, and the same property earns the same either way. Where the budget reaches the threshold, we recommend citizenship.",
+          "The property is the same and so is the return: 5–7% a year on an İstanbul apartment, sold on the open market whenever the family chooses. What differs is what the money buys. The residence permit costs half as much and is quicker, but it is a permit — renewed, tied to keeping the property, and five years from a citizenship application that is not guaranteed. Citizenship is granted directly and passes to the family, on an asset that earns exactly the same. Where the budget reaches the threshold, we recommend citizenship.",
       },
       "turkiye-vs-uae": {
         verdict:
-          "The Golden Residence is a residence permit, renewable every ten years and never a passport; Türkiye grants citizenship outright, at a lower entry point, with a property that yields comparably. The two are not exclusive — many of our clients hold a Dubai base and a Turkish passport together. Where the objective is a second nationality, Türkiye is our recommendation.",
+          "Both are bought on a property that lets at 5–7% a year and sells on the open market, so on return they are level — and Türkiye’s entry is the lower of the two. The difference is what is granted: the Golden Residence is a residence permit, renewable every ten years and never a passport, while Türkiye grants citizenship outright. The two are not exclusive — many of our clients hold a Dubai base and a Turkish passport together. Where the objective is a second nationality, Türkiye is our recommendation.",
       },
       "caribbean-islands": {
         verdict:
-          "Dominica asks for the least of the three and St. Kitts & Nevis, on the table alone, travels furthest. What decides it is not in the table. Grenada is the only one of the three whose passport carries the United States E-2 treaty investor visa, and the only one with visa-free entry to China; St. Kitts & Nevis is the oldest programme in the world and the most established name at a border; Dominica’s real-estate route is the lowest entry into a branded resort share. For a family whose objective includes a route into the United States, Grenada is our recommendation. For the lowest cost of a resort share, Dominica.",
+          "Dominica asks for the least and St. Kitts & Nevis travels furthest, but on return none of the three comes near Türkiye: an İstanbul apartment lets at 5–7% a year and sells on the open market after three years, while a Caribbean resort share earns 2–4%, is held for five, and in practice sells only to the next applicant. Among the islands, Grenada is the one to choose — the only passport in the region with the United States E-2 treaty and visa-free China. Between the region and Türkiye, Türkiye is our recommendation: a citizenship that pays for itself.",
       },
       "golden-visas": {
         verdict:
-          "Portugal and Greece are the two European golden visas asked about in almost every first conversation, and neither does what it did five years ago: Portugal closed its property route in 2023, and its fund route now sits ten years and a language test from a citizenship application; Greece still sells a property permit, but it taxes worldwide income and its road to a passport runs seven years. The UAE Golden Residence is a permit and never a passport, but it is renewable, carries no tax on worldwide income, asks for no minimum stay, and the qualifying asset is a Dubai property at a market yield — which is why it is the residence we transact. For a base in the Gulf with no tax exposure, we recommend the UAE; for a family whose objective is a European passport, Greece is the shorter of the two roads, and one we would refer rather than transact.",
+          "Türkiye and the UAE are the two whose asset earns — a property at 5–7% a year, resold on the open market. Portugal closed its property route in 2023 and its fund route is ten years and a language test from a passport; Greece still sells a property permit, but taxes worldwide income and its road to citizenship runs seven years. The UAE Golden Residence is the residence we transact — renewable, no tax on worldwide income, no minimum stay — but it is a permit and never a passport. Türkiye grants citizenship outright, at the lowest entry of the four, on a property that yields the same. For a family whose objective is a second nationality that pays for itself, Türkiye is our recommendation; for a Gulf base alongside it, the UAE.",
       },
       "turkiye-vs-portugal": {
         verdict:
-          "Portugal is the European name in almost every first conversation, and it no longer does what people remember: the property route closed in 2023, what remains is a fund subscription, processing runs to years, and citizenship — the reason most families ask — is now ten years and a language test away. Türkiye grants citizenship directly, in months, against a freehold property that earns while it is held, with no residence, no visit and no language test. A Turkish passport does not reach the Schengen Area visa-free and a Portuguese residence card does, which is the one point in Portugal’s favour worth weighing. For a family whose objective is a second citizenship rather than a European address, Türkiye is our recommendation.",
+          "On return there is no contest: Türkiye’s property lets at 5–7% a year and sells on the open market after three years, while a Portuguese fund subscription returns whatever the fund does, on the fund’s terms — the property route that made the programme famous closed in 2023. Citizenship, the reason most families ask, is granted outright in Türkiye and is ten years and a language test away in Portugal. A Turkish passport does not reach the Schengen Area visa-free and a Portuguese residence card does, which is the one point in Portugal’s favour worth weighing. For a family whose objective is a second citizenship rather than a European address, Türkiye is our recommendation.",
       },
     },
   },

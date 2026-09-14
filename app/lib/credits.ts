@@ -1,10 +1,10 @@
 /**
  * Image attributions that are an obligation rather than a courtesy.
  *
- * Most of the photography on this site is Pexels stock or public domain, which
- * asks for nothing. One file does not: it is Creative Commons, and its licence
- * requires the author's name, the licence, and a link to both — placed
- * somewhere a reader can actually reach. `public/images/cbi/CREDITS.md` records
+ * Most of the photography on this site is Pexels stock, public domain, or the
+ * company's own. A few files are not: they are Creative Commons, and their
+ * licences require the author's name, the licence, and a link to both —
+ * placed somewhere a reader can actually reach. `public/images/cbi/CREDITS.md` records
  * where every asset came from, but a file in the repository is not published,
  * so it does not discharge anything. This list is what `/legal/image-credits`
  * renders, and that page is the discharge.
@@ -35,6 +35,67 @@ export type ImageCredit = {
 };
 
 export const imageCredits: ImageCredit[] = [
+  // The client-outcome pages: Grenada and Dominica, from Wikimedia Commons.
+  {
+    subject: "Grand Anse beach and St. George's from the air, Grenada",
+    usedOn: "Client outcome: A Gulf Resident in Grenada, banner",
+    author: "madmack66",
+    source: {
+      label: "Grand Anse and St. George's.jpg on Wikimedia Commons",
+      href: "https://commons.wikimedia.org/wiki/File:Grand_Anse_and_St._George%27s.jpg",
+    },
+    licence: { label: "CC BY 2.0", href: "https://creativecommons.org/licenses/by/2.0/" },
+  },
+  {
+    subject: "Grand Anse beach at sunset, Grenada",
+    usedOn: "Client outcome: A Gulf Resident in Grenada, closing band",
+    author: "madmack66",
+    source: {
+      label: "Grand Anse - 1.jpg on Wikimedia Commons",
+      href: "https://commons.wikimedia.org/wiki/File:Grand_Anse_-_1.jpg",
+    },
+    licence: { label: "CC BY 2.0", href: "https://creativecommons.org/licenses/by/2.0/" },
+  },
+  {
+    subject: "Grand Anse beach under the palms, Grenada",
+    usedOn: "Client outcome: A Gulf Resident in Grenada, first frame",
+    author: "Ian Gratton",
+    source: {
+      label: "Great Anse beach, Grenada.jpg on Wikimedia Commons",
+      href: "https://commons.wikimedia.org/wiki/File:Great_Anse_beach,_Grenada.jpg",
+    },
+    licence: { label: "CC BY 2.0", href: "https://creativecommons.org/licenses/by/2.0/" },
+  },
+  {
+    subject: "Grand Anse beach, Grenada",
+    usedOn: "Client outcome: A Gulf Resident in Grenada, collage",
+    author: "Varun Kapoor / Vkap",
+    source: {
+      label: "Grand Anse Beach Grenada.jpg on Wikimedia Commons",
+      href: "https://commons.wikimedia.org/wiki/File:Grand_Anse_Beach_Grenada.jpg",
+    },
+    licence: { label: "CC BY 3.0", href: "https://creativecommons.org/licenses/by/3.0/" },
+  },
+  {
+    subject: "The Cabrits National Park from Prince Rupert Bay, Dominica",
+    usedOn: "Client outcome: An Egyptian Family in Dominica, banner and closing band",
+    author: "David Broad",
+    source: {
+      label: "Cabritts National Park, Dominica - panoramio.jpg on Wikimedia Commons",
+      href: "https://commons.wikimedia.org/wiki/File:Cabritts_National_Park,_Dominica_-_panoramio.jpg",
+    },
+    licence: { label: "CC BY 3.0", href: "https://creativecommons.org/licenses/by/3.0/" },
+  },
+  {
+    subject: "The Soufrière coast, Dominica",
+    usedOn: "Client outcome: An Egyptian Family in Dominica, second frame",
+    author: "giggel",
+    source: {
+      label: "Dominica, Karibik - The Soufriere Coast - panoramio.jpg on Wikimedia Commons",
+      href: "https://commons.wikimedia.org/wiki/File:Dominica,_Karibik_-_Dominica_-_The_Soufriere_Coast_-_panoramio.jpg",
+    },
+    licence: { label: "CC BY 3.0", href: "https://creativecommons.org/licenses/by/3.0/" },
+  },
   {
     subject: "Soufrière and the Pitons at golden hour, Saint Lucia",
     usedOn: "Caribbean citizenship programme page, opening image; Saint Lucia programme page, banner",

@@ -74,7 +74,7 @@ export default async function CompareIndexPage() {
                   >
                     <h2 className="font-display text-[22px] leading-[1.3] text-ink">
                       {comparisonProgrammes(comparison)
-                        .map((programme) => programme.officialName)
+                        .map((programme) => programme.shortName)
                         .join(" · ")}
                     </h2>
                     <span className="mt-6 block text-[12.5px] text-gold group-hover:underline">

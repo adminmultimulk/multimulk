@@ -222,6 +222,15 @@ const tr = {
     /** Marks the column the practice would advise; the verdict argues it. */
     recommended: "Multi Mulk tavsiyesi",
     verdictHeading: "Görüşümüz",
+    /** The three return rows; see `comparisonRows`. */
+    resale: {
+      open: "Açık pazar",
+      limited: "Program alıcıları veya aracın kendi koşulları",
+      none: "Satılacak bir şey yok",
+    },
+    returnRetained: "{percent} · {money} gelir",
+    returnLost: "−%100 · {money} geri dönmez",
+    returnNote: "5 yıllık örnek getiri: yukarıda gösterilen brüt kira getirisinin, gösterilen asgari yatırım üzerinden beş yıl boyunca hesaplanmış hali — satın alma masrafları, vergiler ve ücretler öncesi — ve rotanın yeniden satılabilir bir varlık olduğu durumlarda sermayenin kendisi korunur. Bir piyasa aralığıdır; tahmin ya da garanti değildir.",
     /** The comparison page in the resort design; see /compare/[slug]. */
     heroTagline: "Aynı gerçekler üzerinden yan yana, tek bir öneriyle",
     programmesLabel: "Program",
@@ -248,32 +257,35 @@ const tr = {
       citizenshipAfter: "Vatandaşlık süresi",
       worldwideTax: "Dünya genelindeki geliri vergilendirir",
       rentalYield: "Brüt kira getirisi",
+      capitalReturned: "Çıkışta sermayenin geri dönüşü",
+      resaleMarket: "Yeniden satış pazarı",
+      fiveYearReturn: "5 yıllık örnek getiri (ROI)",
     },
     /** The verdict under each table, keyed by the comparison's `copyKey`. */
     copy: {
       "turkiye-vs-caribbean": {
         verdict:
-          "Grenada daha az ister ve pasaportu kâğıt üzerinde daha uzağa gider. Türkiye ise daha güçlü yatırımdır: nitelikli varlık on altı milyonluk bir şehirde tapulu bir konuttur; elde tutulduğu sürece piyasa getirisiyle kiralanır, üç yıl sonra açık piyasada satılır — Karayipler'deki bir tatil köyü payı daha az kazandırır ve çıkışı zordur. Vatandaşlık doğrudan verilir, süreç daha kısadır ve ziyaret gerekmez. Kendini amorti eden ikinci bir vatandaşlık isteyen aile için tavsiyemiz Türkiye'dir.",
+          "Getiri açısından ikisi yakın bile değil. Türkiye’de hak kazandıran varlık on altı milyonluk bir şehirde tapulu bir konuttur: yılda %5–7 kira getirir, üç yıl sonra açık pazarda satılır ve sermayeyle pasaportu birlikte geri getirir. Grenada’da bir tesis payı %2–4 kazandırır, beş yıl elde tutulur ve fiilen yalnızca programın bir sonraki başvurucusuna satılır. Grenada daha azını ister ve pasaportu daha uzağa gider — ABD E-2 anlaşması ve vizesiz Çin gerçek avantajlardır ve tablo bunları gösterir. Ama görüştüğümüz ailelerin çoğunun aradığı, kendi masrafını çıkaran ikinci bir vatandaşlıktır; bu ölçüte göre önerimiz Türkiye’dir.",
       },
       "turkiye-citizenship-vs-residency": {
         verdict:
-          "İkamet izni yarı maliyetlidir ve daha hızlıdır; ama bir izindir: yenilenir, taşınmazın elde tutulmasına bağlıdır ve garanti olmayan bir vatandaşlık başvurusuna beş yıl uzaktadır. Vatandaşlık doğrudan verilir, aileye geçer ve aynı taşınmaz her iki durumda da aynı getiriyi sağlar. Bütçe eşiğe ulaşıyorsa tavsiyemiz vatandaşlıktır.",
+          "Gayrimenkul aynı, getiri de aynı: İstanbul’da bir dairede yılda %5–7, aile dilediğinde açık pazarda satılır. Fark, paranın ne aldığındadır. Oturma izni yarı fiyata ve daha hızlıdır; ama bir izindir — yenilenir, gayrimenkulü elde tutmaya bağlıdır ve garantisi olmayan bir vatandaşlık başvurusuna beş yıl uzaktadır. Vatandaşlık doğrudan verilir ve aileye geçer; üstelik tıpatıp aynı getiriyi sağlayan bir varlık üzerinden. Bütçe eşiğe ulaştığında önerimiz vatandaşlıktır.",
       },
       "turkiye-vs-uae": {
         verdict:
-          "Golden Residence her on yılda yenilenen bir ikamet iznidir ve hiçbir zaman pasaport olmaz; Türkiye vatandaşlığı doğrudan, daha düşük bir giriş eşiğiyle ve benzer getiri sağlayan bir taşınmazla verir. İkisi birbirini dışlamaz — müşterilerimizin çoğu Dubai'deki üsleriyle Türk pasaportunu birlikte taşır. Hedef ikinci bir vatandaşlıksa tavsiyemiz Türkiye'dir.",
+          "İkisi de yılda %5–7 kira getiren ve açık pazarda satılan bir gayrimenkulle alınır; getiride başa baştırlar — ve Türkiye’nin giriş eşiği ikisinin daha düşüğüdür. Fark verilendedir: Altın İkamet her on yılda bir yenilenen bir oturma iznidir ve asla pasaport olmaz; Türkiye ise vatandaşlığı doğrudan verir. İkisi birbirini dışlamaz — birçok müşterimiz Dubai’de bir üs ile Türk pasaportunu birlikte tutar. Hedef ikinci bir vatandaşlıksa önerimiz Türkiye’dir.",
       },
       "caribbean-islands": {
         verdict:
-          "Üçü arasında en azını Dominika ister; yalnızca tabloya bakılırsa en uzağa St. Kitts ve Nevis pasaportu gider. Kararı belirleyen ise tabloda değildir. Grenada, pasaportu ABD E-2 anlaşmalı yatırımcı vizesine hak kazandıran ve Çin’e vizesiz giriş sağlayan tek ülkedir; St. Kitts ve Nevis dünyanın en eski programı ve sınırda en yerleşik isimdir; Dominika’nın gayrimenkul rotası markalı bir tesis payına en düşük giriştir. Hedefi ABD’ye giden bir yolu da kapsayan bir aile için önerimiz Grenada’dır. En düşük maliyetli tesis payı için ise Dominika.",
+          "En azını Dominika ister, en uzağa St. Kitts ve Nevis gider; ama getiride üçünden hiçbiri Türkiye’ye yaklaşamaz: İstanbul’da bir daire yılda %5–7 kira getirir ve üç yıl sonra açık pazarda satılır; bir Karayip tesis payı ise %2–4 kazandırır, beş yıl tutulur ve fiilen yalnızca bir sonraki başvurucuya satılır. Adalar arasında seçilecek olan Grenada’dır — bölgede ABD E-2 anlaşması ve vizesiz Çin’i taşıyan tek pasaport. Bölge ile Türkiye arasında ise önerimiz Türkiye’dir: kendi masrafını çıkaran bir vatandaşlık.",
       },
       "golden-visas": {
         verdict:
-          "Portekiz ve Yunanistan, neredeyse her ilk görüşmede sorulan iki Avrupa altın vizesidir ve ikisi de beş yıl önce yaptığını artık yapmıyor: Portekiz gayrimenkul rotasını 2023’te kapattı; fon rotası ise vatandaşlık başvurusuna on yıl ve bir dil sınavı uzaklıkta. Yunanistan hâlâ gayrimenkul karşılığı oturma izni veriyor ama dünya genelindeki geliri vergilendiriyor ve pasaporta giden yolu yedi yıl sürüyor. BAE Altın İkameti bir izindir, asla pasaport değildir; ancak yenilenebilir, dünya genelindeki gelire vergi getirmez, asgari kalış şartı yoktur ve hak kazandıran varlık piyasa getirisiyle kiralanan bir Dubai gayrimenkulüdür — işlem yaptığımız ikamet bu yüzden budur. Vergi yükü olmadan Körfez’de bir üs için önerimiz BAE’dir; hedefi Avrupa pasaportu olan bir aile için Yunanistan iki yolun kısa olanıdır ve işlem yapmaktan çok yönlendireceğimiz bir yoldur.",
+          "Varlığı gelir getiren ikisi Türkiye ve BAE’dir — yılda %5–7 getiren, açık pazarda yeniden satılan bir gayrimenkul. Portekiz gayrimenkul rotasını 2023’te kapattı; fon rotası pasaporta on yıl ve bir dil sınavı uzaklıkta. Yunanistan hâlâ gayrimenkul karşılığı oturma izni satıyor ama dünya genelindeki geliri vergilendiriyor ve vatandaşlığa giden yolu yedi yıl sürüyor. BAE Altın İkameti işlem yaptığımız ikamettir — yenilenebilir, dünya genelindeki gelire vergi yok, asgari kalış şartı yok — ama bir izindir, asla pasaport değil. Türkiye vatandaşlığı doğrudan, dördü arasında en düşük girişle, aynı getiriyi sağlayan bir gayrimenkul üzerinden verir. Hedefi kendi masrafını çıkaran ikinci bir vatandaşlık olan bir aile için önerimiz Türkiye’dir; yanına Körfez’de bir üs için BAE.",
       },
       "turkiye-vs-portugal": {
         verdict:
-          "Portekiz neredeyse her ilk görüşmedeki Avrupa ismidir ve artık insanların hatırladığını yapmıyor: gayrimenkul rotası 2023’te kapandı, geriye bir fon katılımı kaldı, işlem yıllara yayılıyor ve çoğu ailenin asıl sorduğu vatandaşlık artık on yıl ve bir dil sınavı uzaklıkta. Türkiye vatandaşlığı doğrudan, aylar içinde, elde tutulduğu sürece getiri sağlayan tapulu bir gayrimenkul karşılığında verir; ikamet, ziyaret ve dil sınavı gerekmez. Türk pasaportu Schengen bölgesine vizesiz girmez, Portekiz oturma kartı girer — Portekiz lehine tartılmaya değer tek nokta budur. Hedefi bir Avrupa adresi değil ikinci bir vatandaşlık olan bir aile için önerimiz Türkiye’dir.",
+          "Getiride tartışma yok: Türkiye’deki gayrimenkul yılda %5–7 kira getirir ve üç yıl sonra açık pazarda satılır; bir Portekiz fon katılımı ise fonun kazandığı kadarını, fonun koşullarıyla geri verir — programı ünlü yapan gayrimenkul rotası 2023’te kapandı. Çoğu ailenin asıl sorduğu vatandaşlık Türkiye’de doğrudan verilir; Portekiz’de ise on yıl ve bir dil sınavı uzaktadır. Türk pasaportu Schengen bölgesine vizesiz girmez, Portekiz oturma kartı girer — Portekiz lehine tartılmaya değer tek nokta budur. Hedefi bir Avrupa adresi değil ikinci bir vatandaşlık olan bir aile için önerimiz Türkiye’dir.",
       },
     },
   },
@@ -345,6 +357,15 @@ const tr = {
     invested: "Yatırılan",
     timeline: "Baştan sona",
     afterwards: "Sonrasında",
+    year: "Yıl",
+    /** The case-study page in the resort design; see /case-studies/[slug]. */
+    aboutHeading: "Bu Dosya Hakkında",
+    outcome: "Sonuç",
+    otherOutcomes: "Diğer Müşteri Sonuçları",
+    allOutcomes: "Tüm Müşteri Sonuçları",
+    viewOutcome: "Sonucu Okuyun",
+    ctaHeading: "Bu Sizin Dosyanız Olabilir mi?",
+    ctaBody: "Neyi çözmek istediğinizi söyleyin; bir danışman sizinki gibi bir ailenin bunu nasıl yaptığını ve her şey dahil neye mal olduğunu anlatsın.",
     reasoning: "Neden bu ve nelerin elendiği",
     complication: "Nerede aksadı",
     consentPending: "Henüz yayımlanmış bir müşteri sonucu yok. Bunun için müşterinin yazılı onayı gerekiyor ve Multi Mulk şu ana kadar hiçbiri için bu onaya sahip değil.",

@@ -41,7 +41,11 @@ export function ResortCbi({
             />
           </div>
 
-          <div className="bg-ink px-8 py-10 text-cream sm:px-12 sm:py-14 lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:mt-24 lg:px-16 lg:py-16">
+          {/* Positioned, so it paints over the photograph: the frame beside
+              it is positioned for `fill`, and without this the overlap ran
+              the other way and the photo covered the first word of every
+              line. */}
+          <div className="relative z-10 bg-ink px-8 py-10 text-cream sm:px-12 sm:py-14 lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:mt-24 lg:px-16 lg:py-16">
             <p className="text-[11.5px] font-bold uppercase tracking-[0.12em] text-sand">
               {eyebrow}
             </p>

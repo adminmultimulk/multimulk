@@ -46,9 +46,13 @@ export function generateStaticParams() {
   );
 }
 
+/**
+ * The comparison's name: the programmes' short names — four official names
+ * run to six lines of banner — joined with "vs", or with a middot for a card.
+ */
 function heading(comparison: Comparison, separator = " vs "): string {
   return comparisonProgrammes(comparison)
-    .map((programme) => programme.officialName)
+    .map((programme) => programme.shortName)
     .join(separator);
 }
 
@@ -163,6 +167,7 @@ export default async function ComparisonPage({
       <div className="relative">
         <SiteNav />
         <ResortHero
+          compact
           image={imagery.hero}
           name={title}
           place={t.compare.eyebrow}
@@ -207,20 +212,22 @@ export default async function ComparisonPage({
                 recommended={comparison.recommended.join("-")}
               />
             </div>
-            <LastReviewed review={comparison.review} className="mt-10" />
+            {/* What the return row is and is not, next to the row itself. */}
+            <p className="mt-6 max-w-[760px] text-[12px] leading-[19px] text-ink/60">
+              {t.compare.returnNote}
+            </p>
+            <LastReviewed review={comparison.review} className="mt-8" />
           </Container>
         </section>
 
         <ResortHighlights groups={groups} name={title} />
 
+        {/* The recommended programme once more, in its own words — what it
+            grants rather than the introduction the slider has just given. */}
         <ResortCbi
-          eyebrow={
-            recommended.category === "citizenship"
-              ? t.pillars.citizenship.eyebrow
-              : t.pillars.goldenVisa.eyebrow
-          }
+          eyebrow={t.compare.recommended}
           heading={recommended.officialName}
-          body={localiseProgramme(t, recommended).intro}
+          body={localiseProgramme(t, recommended).grants}
           button={t.programmes.viewProgramme}
           href={recommendedHref}
           image={imagery.compare}

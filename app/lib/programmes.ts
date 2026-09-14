@@ -65,6 +65,16 @@ export const UNKNOWN = "unknown" as const;
 export type Unknown = typeof UNKNOWN;
 export type Known<T> = T | Unknown;
 
+/**
+ * How the money comes back — the fact a comparison of thresholds leaves out.
+ *
+ * `open`: the asset sells on an open market, to anyone. `limited`: it comes
+ * back on the instrument's own terms — a fund at its term, a bond at maturity,
+ * a resort share that in practice sells to the next programme applicant.
+ * `none`: a donation, which is gone once it is paid.
+ */
+export type ResaleMarket = "open" | "limited" | "none";
+
 export type InvestmentRoute = {
   key: "real-estate" | "donation" | "bonds" | "business" | "deposit" | "fund";
   minimum: Money;
@@ -74,7 +84,22 @@ export type InvestmentRoute = {
   offered: boolean;
   /** The registry entry, where one exists, so the page shows its source. */
   figure?: FigureId;
+  /** Overrides the default for the route's kind; see `resaleOf`. */
+  resale?: ResaleMarket;
 };
+
+/**
+ * The exit a route offers. Property sells on an open market and a donation
+ * is gone; everything else — funds, bonds, deposits, a business — comes back
+ * on its own terms. A route states its own where the default is wrong: a
+ * Caribbean resort share is real estate, but it is not an open market.
+ */
+export function resaleOf(route: InvestmentRoute): ResaleMarket {
+  if (route.resale) return route.resale;
+  if (route.key === "real-estate") return "open";
+  if (route.key === "donation") return "none";
+  return "limited";
+}
 
 export type ProgrammeCategory = "citizenship" | "residency";
 
@@ -91,6 +116,11 @@ export type Programme = {
   category: ProgrammeCategory;
   /** The programme's legal name. Never translated. */
   officialName: string;
+  /**
+   * The name a banner or a title uses where four official names would run to
+   * six lines — "Grenada", "Türkiye Citizenship". Never translated either.
+   */
+  shortName: string;
   /** Year the programme opened. */
   since: Known<number>;
   status: ProgrammeStatus;
@@ -187,6 +217,7 @@ function caribbean(
   slug: string,
   country: CountryCode,
   officialName: string,
+  shortName: string,
   since: number,
   {
     realEstate,
@@ -209,6 +240,7 @@ function caribbean(
     country,
     category: "citizenship",
     officialName,
+    shortName,
     since,
     status: "open",
     dataStatus: "reviewed",
@@ -218,6 +250,10 @@ function caribbean(
         minimum: usd(realEstate),
         holdingYears: 5,
         offered: true,
+        // A share in an approved resort, priced at the programme threshold:
+        // after the holding period its buyer is, in practice, the next
+        // applicant to the same programme.
+        resale: "limited",
       },
       // Donation is the cheaper route and the one most applicants take, but it
       // leaves no asset behind, which is the opposite of what this practice
@@ -256,6 +292,7 @@ export const programmes: readonly Programme[] = [
     country: "tr",
     category: "citizenship",
     officialName: "Türkiye Citizenship by Investment",
+    shortName: "Türkiye Citizenship",
     since: 2017,
     status: "open",
     dataStatus: "reviewed",
@@ -308,6 +345,7 @@ export const programmes: readonly Programme[] = [
     country: "tr",
     category: "residency",
     officialName: "Türkiye Short-Term Residence Permit (property)",
+    shortName: "Türkiye Residence Permit",
     since: UNKNOWN,
     status: "open",
     dataStatus: "reviewed",
@@ -346,6 +384,7 @@ export const programmes: readonly Programme[] = [
     country: "ae",
     category: "residency",
     officialName: "UAE Golden Residence",
+    shortName: "UAE Golden Residence",
     since: 2019,
     status: "open",
     dataStatus: "reviewed",
@@ -377,13 +416,13 @@ export const programmes: readonly Programme[] = [
     copyKey: "uae-golden-visa",
     review: reviewed([ICP_SOURCE]),
   },
-  caribbean("grenada", "gd", "Grenada Citizenship by Investment", 2013, {
+  caribbean("grenada", "gd", "Grenada Citizenship by Investment", "Grenada", 2013, {
     realEstate: 270_000,
     donation: 235_000,
     processing: { min: 4, max: 6 },
     visaFree: 140,
   }),
-  caribbean("dominica", "dm", "Dominica Citizenship by Investment", 1993, {
+  caribbean("dominica", "dm", "Dominica Citizenship by Investment", "Dominica", 1993, {
     realEstate: 200_000,
     donation: 200_000,
     processing: { min: 4, max: 6 },
@@ -393,6 +432,7 @@ export const programmes: readonly Programme[] = [
     "st-kitts-and-nevis",
     "kn",
     "St Kitts and Nevis Citizenship by Investment",
+    "St Kitts & Nevis",
     1984,
     {
       realEstate: 325_000,
@@ -401,7 +441,7 @@ export const programmes: readonly Programme[] = [
       visaFree: 155,
     },
   ),
-  caribbean("st-lucia", "lc", "Saint Lucia Citizenship by Investment", 2015, {
+  caribbean("st-lucia", "lc", "Saint Lucia Citizenship by Investment", "Saint Lucia", 2015, {
     realEstate: 300_000,
     donation: 240_000,
     processing: { min: 6, max: 12 },
@@ -411,6 +451,7 @@ export const programmes: readonly Programme[] = [
     "antigua-and-barbuda",
     "ag",
     "Antigua and Barbuda Citizenship by Investment",
+    "Antigua & Barbuda",
     2013,
     {
       realEstate: 300_000,
@@ -427,6 +468,7 @@ export const programmes: readonly Programme[] = [
     country: "pt",
     category: "residency",
     officialName: "Portugal Golden Residence Permit",
+    shortName: "Portugal Golden Visa",
     since: 2012,
     status: "open",
     dataStatus: "reviewed",
@@ -465,6 +507,7 @@ export const programmes: readonly Programme[] = [
     country: "gr",
     category: "residency",
     officialName: "Greece Golden Visa",
+    shortName: "Greece Golden Visa",
     since: 2013,
     status: "open",
     dataStatus: "reviewed",
@@ -500,6 +543,7 @@ export const programmes: readonly Programme[] = [
     country: "mt",
     category: "citizenship",
     officialName: "Malta Citizenship by Naturalisation for Exceptional Services",
+    shortName: "Malta Citizenship",
     since: 2014,
     // Listed as suspended rather than omitted: readers ask about Malta
     // constantly, and "we do not mention it" is not an answer to "is it open?"

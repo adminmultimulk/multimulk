@@ -25,6 +25,8 @@ import type { CountryCode, Money } from "./programmes";
 
 export type CaseStudy = {
   slug: string;
+  /** The banner name — "A Pakistani Family in İstanbul". Never a client's. */
+  title: string;
   /** The programme record it ran under. */
   programme: string;
   /** Which pillar, for the index filter. */
@@ -49,7 +51,18 @@ export type CaseStudy = {
   reasoning: string[];
   /** What went wrong or nearly did. A case study without one is a brochure. */
   complication: string;
-  image?: string;
+  /**
+   * The page's photography: the place the family bought into, the asset,
+   * the passport, the paperwork — pictures of the engagement rather than of
+   * a country. `collage` is the pair beside the outcome, `slides` the
+   * full-bleed frames behind the reasoning, one per point where possible.
+   */
+  images: {
+    hero: string;
+    slides: string[];
+    collage: [string, string];
+    cta: string;
+  };
   authorId: AuthorId;
   review: LegalReview;
   /** Whether the client has consented in writing. Gates publication. */
@@ -71,6 +84,7 @@ const review: LegalReview = {
 export const caseStudies: CaseStudy[] = [
   {
     slug: "pakistani-family-istanbul",
+    title: "A Pakistani Family in İstanbul",
     programme: "turkiye",
     category: "citizenship",
     profile: {
@@ -93,6 +107,22 @@ export const caseStudies: CaseStudy[] = [
     ],
     complication:
       "One birth certificate was apostilled but not translated by a sworn translator, which was returned and cost about three weeks. It is the single commonest reason a file stalls, and it has nothing to do with money.",
+    images: {
+      // Multi Mulk's own İstanbul photography: the city from the air, a
+      // terrace over it, the kind of apartment the file was about, and the
+      // people around the table. Nothing here appears on the programme pages.
+      hero: "/images/case-studies/istanbul-aerial-dusk.webp",
+      slides: [
+        "/images/case-studies/istanbul-terrace-city.webp",
+        "/images/case-studies/istanbul-apartment-interior.webp",
+        "/images/case-studies/advisers-reviewing-figures.webp",
+      ],
+      collage: [
+        "/images/case-studies/istanbul-residence-terrace.webp",
+        "/images/case-studies/couple-with-passports.webp",
+      ],
+      cta: "/images/case-studies/istanbul-tower-bosphorus.webp",
+    },
     authorId: "advisory-team",
     review,
     consentOnFile: false,
@@ -100,6 +130,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "gcc-resident-grenada",
+    title: "A Gulf Resident in Grenada",
     programme: "grenada",
     category: "citizenship",
     profile: {
@@ -121,6 +152,21 @@ export const caseStudies: CaseStudy[] = [
     ],
     complication:
       "The parents were added after the main application was approved rather than alongside it, which cost more in fees than including them from the start would have.",
+    images: {
+      // Grand Anse and St. George's — Creative Commons photographs credited
+      // on /legal/image-credits — with the treaty and the capital as the two
+      // things the reasoning is about.
+      hero: "/images/case-studies/grenada-grand-anse-aerial.webp",
+      slides: [
+        "/images/case-studies/grenada-grand-anse-palms.webp",
+        "/images/case-studies/flags-at-the-table.webp",
+      ],
+      collage: [
+        "/images/case-studies/grenada-grand-anse-beach.webp",
+        "/images/case-studies/world-map-and-capital.webp",
+      ],
+      cta: "/images/case-studies/grenada-grand-anse-sunset.webp",
+    },
     authorId: "advisory-team",
     review,
     consentOnFile: false,
@@ -128,6 +174,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "uae-golden-residence",
+    title: "A British Couple in Dubai",
     programme: "uae",
     category: "residency",
     profile: {
@@ -148,6 +195,20 @@ export const caseStudies: CaseStudy[] = [
     ],
     complication:
       "A mortgage on the property required a bank no-objection certificate that took longer to obtain than the permit itself.",
+    images: {
+      // Multi Mulk's UAE portfolio photography: the tower, a ready villa, the
+      // couple planning it, and the coming and going the permit allows.
+      hero: "/images/case-studies/dubai-tower.webp",
+      slides: [
+        "/images/case-studies/uae-villa.webp",
+        "/images/case-studies/couple-planning-globe.webp",
+      ],
+      collage: [
+        "/images/case-studies/dubai-towers-night.webp",
+        "/images/case-studies/travellers-with-luggage.webp",
+      ],
+      cta: "/images/case-studies/uae-beach-towers.webp",
+    },
     authorId: "advisory-team",
     review,
     consentOnFile: false,
@@ -155,6 +216,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: "egyptian-family-dominica",
+    title: "An Egyptian Family in Dominica",
     programme: "dominica",
     category: "citizenship",
     profile: {
@@ -177,6 +239,22 @@ export const caseStudies: CaseStudy[] = [
     ],
     complication:
       "The source-of-funds file took longer to assemble than the application itself. A property sale in Cairo six years earlier had to be documented end to end, with bank statements the family no longer held and had to request. The paperwork, not the money, is what sets the timeline.",
+    images: {
+      // The Cabrits headland the resort stands under, the Nature Island, the
+      // fort on the point — Creative Commons and CC0 photographs credited on
+      // /legal/image-credits — and the family and the paperwork.
+      hero: "/images/case-studies/dominica-cabrits.webp",
+      slides: [
+        "/images/case-studies/dominica-trafalgar-falls.webp",
+        "/images/case-studies/dominica-soufriere-coast.webp",
+        "/images/case-studies/family-at-the-agency.webp",
+      ],
+      collage: [
+        "/images/case-studies/dominica-fort-shirley.webp",
+        "/images/case-studies/paperwork-on-laptop.webp",
+      ],
+      cta: "/images/case-studies/dominica-cabrits.webp",
+    },
     authorId: "advisory-team",
     review,
     consentOnFile: false,

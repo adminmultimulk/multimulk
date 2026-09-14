@@ -139,6 +139,15 @@ const fr: Dictionary = {
     invested: "Investi",
     timeline: "Du début à la fin",
     afterwards: "Ensuite",
+    year: "Année",
+    /** The case-study page in the resort design; see /case-studies/[slug]. */
+    aboutHeading: "À propos de ce dossier",
+    outcome: "Le résultat",
+    otherOutcomes: "Autres résultats clients",
+    allOutcomes: "Tous les résultats clients",
+    viewOutcome: "Lire le résultat",
+    ctaHeading: "Et si c’était votre dossier ?",
+    ctaBody: "Dites-nous ce que vous cherchez à résoudre, et un conseiller vous expliquera comment une famille comme la vôtre y est parvenue — et ce que cela a coûté, tout compris.",
     reasoning: "Pourquoi ce choix, et ce qui a été écarté",
     complication: "Ce qui a coincé",
     consentPending: "Aucun résultat client n’est encore publié. Cela exige le consentement écrit du client, que Multi Mulk ne détient pour aucun à ce jour.",
@@ -193,7 +202,7 @@ const fr: Dictionary = {
     headOffice: "Siège",
     copy: staged<LegalCopy>({}),
     credits: {
-      intro: "Presque toutes les photographies de ce site sont des banques d’images ou relèvent du domaine public, et n’exigent rien en retour. Deux sont sous licence Creative Commons, et cette licence demande à être créditée ici.",
+      intro: "Presque toutes les photographies de ce site sont des banques d’images ou relèvent du domaine public, et n’exigent rien en retour. Quelques-unes sont sous licence Creative Commons, et cette licence demande à être créditée ici.",
       authorLabel: "Photographe",
       sourceLabel: "Source",
       licenceLabel: "Licence",
@@ -291,6 +300,15 @@ const fr: Dictionary = {
     /** Marks the column the practice would advise; the verdict argues it. */
     recommended: "Recommandation Multi Mulk",
     verdictHeading: "Notre avis",
+    /** The three return rows; see `comparisonRows`. */
+    resale: {
+      open: "Marché ouvert",
+      limited: "Acheteurs du programme ou conditions de l’instrument",
+      none: "Rien à revendre",
+    },
+    returnRetained: "{percent} · {money} de revenus",
+    returnLost: "−100 % · {money} non restitués",
+    returnNote: "Rendement indicatif sur 5 ans : le rendement locatif brut indiqué ci-dessus, sur cinq ans, appliqué à l’investissement minimum indiqué — avant frais d’acquisition, impôts et honoraires — le capital lui-même étant conservé lorsque la voie est un actif revendable. Une fourchette de marché, ni une prévision ni une garantie.",
     /** The comparison page in the resort design; see /compare/[slug]. */
     heroTagline: "Lus côte à côte, sur les mêmes faits, avec une seule recommandation",
     programmesLabel: "Programmes",
@@ -317,32 +335,35 @@ const fr: Dictionary = {
       citizenshipAfter: "Citoyenneté après",
       worldwideTax: "Impose les revenus mondiaux",
       rentalYield: "Rendement locatif brut",
+      capitalReturned: "Capital restitué à la sortie",
+      resaleMarket: "Marché de revente",
+      fiveYearReturn: "Rendement indicatif sur 5 ans (ROI)",
     },
     /** The verdict under each table, keyed by the comparison's `copyKey`. */
     copy: {
       "turkiye-vs-caribbean": {
         verdict:
-          "La Grenade demande moins et son passeport va plus loin sur le papier. La Türkiye est le placement le plus solide : l’actif éligible est un logement en pleine propriété dans une ville de seize millions d’habitants, loué au rendement du marché pendant la détention et revendu sur un marché ouvert après trois ans — une part de complexe hôtelier caribéen rapporte moins et se revend plus difficilement. La citoyenneté est accordée directement, le traitement est plus rapide et aucune visite n’est requise. Pour une famille dont l’objectif est une seconde citoyenneté qui se finance elle-même, la Türkiye est notre recommandation.",
+          "Sur le rendement, il n’y a pas photo. L’actif éligible en Türkiye est un logement en pleine propriété dans une ville de seize millions d’habitants : il se loue à 5–7 % par an, se revend sur le marché libre après trois ans, et revient avec le capital et le passeport. Une part de resort à la Grenade rapporte 2–4 %, se conserve cinq ans et ne se revend en pratique qu’au prochain candidat du programme. La Grenade demande moins et son passeport va plus loin — le traité E-2 avec les États-Unis et la Chine sans visa sont de vrais atouts, et le tableau les montre. Mais une seconde citoyenneté qui se finance elle-même est ce que recherchent la plupart des familles que nous rencontrons, et à cette aune, la Türkiye est notre recommandation.",
       },
       "turkiye-citizenship-vs-residency": {
         verdict:
-          "Le permis de séjour coûte moitié moins et s’obtient plus vite, mais c’est un permis : renouvelé, conditionné à la conservation du bien, et à cinq ans d’une demande de citoyenneté qui n’est pas garantie. La citoyenneté est accordée directement, se transmet à la famille, et le même bien rapporte autant dans les deux cas. Lorsque le budget atteint le seuil, nous recommandons la citoyenneté.",
+          "Le bien est le même et le rendement aussi : 5–7 % par an sur un appartement à İstanbul, revendu sur le marché libre quand la famille le décide. Ce qui diffère, c’est ce que l’argent achète. Le permis de séjour coûte moitié moins et va plus vite, mais c’est un permis — renouvelé, lié à la conservation du bien, et à cinq ans d’une demande de citoyenneté qui n’est pas garantie. La citoyenneté est accordée d’emblée et se transmet à la famille, sur un actif qui rapporte exactement autant. Lorsque le budget atteint le seuil, nous recommandons la citoyenneté.",
       },
       "turkiye-vs-uae": {
         verdict:
-          "La Golden Residence est un permis de séjour, renouvelable tous les dix ans et jamais un passeport ; la Türkiye accorde la citoyenneté d’emblée, à un seuil d’entrée plus bas, avec un bien au rendement comparable. Les deux ne s’excluent pas — beaucoup de nos clients conjuguent une base à Dubaï et un passeport turc. Lorsque l’objectif est une seconde nationalité, la Türkiye est notre recommandation.",
+          "Les deux s’achètent avec un bien qui se loue à 5–7 % par an et se revend sur le marché libre : sur le rendement, ils sont à égalité — et le seuil d’entrée de la Türkiye est le plus bas des deux. La différence tient à ce qui est accordé : la Golden Residence est un permis de séjour, renouvelable tous les dix ans et jamais un passeport, tandis que la Türkiye accorde la citoyenneté d’emblée. Les deux ne s’excluent pas — beaucoup de nos clients conjuguent une base à Dubaï et un passeport turc. Lorsque l’objectif est une seconde nationalité, la Türkiye est notre recommandation.",
       },
       "caribbean-islands": {
         verdict:
-          "La Dominique demande le moins des trois et Saint-Christophe-et-Niévès, à en croire le tableau seul, voyage le plus loin. Ce qui tranche n’est pas dans le tableau. La Grenade est la seule des trois dont le passeport ouvre le visa d’investisseur américain E-2, et la seule à entrer en Chine sans visa ; Saint-Christophe-et-Niévès est le plus ancien programme au monde et le nom le mieux établi à une frontière ; la voie immobilière de la Dominique est l’entrée la plus basse dans une part de resort de marque. Pour une famille dont l’objectif comprend une voie vers les États-Unis, la Grenade est notre recommandation. Pour le coût le plus bas d’une part de resort, la Dominique.",
+          "La Dominique demande le moins et Saint-Christophe-et-Niévès voyage le plus loin, mais sur le rendement aucun des trois n’approche la Türkiye : un appartement à İstanbul se loue à 5–7 % par an et se revend sur le marché libre après trois ans, tandis qu’une part de resort caribéen rapporte 2–4 %, se conserve cinq ans et ne se revend en pratique qu’au prochain candidat. Parmi les îles, c’est la Grenade qu’il faut choisir — le seul passeport de la région avec le traité E-2 américain et la Chine sans visa. Entre la région et la Türkiye, la Türkiye est notre recommandation : une citoyenneté qui se finance elle-même.",
       },
       "golden-visas": {
         verdict:
-          "Le Portugal et la Grèce sont les deux golden visas européens évoqués dans presque chaque premier entretien, et ni l’un ni l’autre ne fait plus ce qu’il faisait il y a cinq ans : le Portugal a fermé sa voie immobilière en 2023, et sa voie par fonds se trouve désormais à dix ans et un examen de langue d’une demande de citoyenneté ; la Grèce vend toujours un permis adossé à un bien, mais elle impose les revenus mondiaux et sa route vers un passeport dure sept ans. La Golden Residence des Émirats est un permis et jamais un passeport, mais il se renouvelle, n’impose pas les revenus mondiaux, n’exige aucun séjour minimum, et l’actif éligible est un bien à Dubaï au rendement du marché — c’est pourquoi c’est la résidence que nous traitons. Pour une base dans le Golfe sans exposition fiscale, nous recommandons les Émirats ; pour une famille dont l’objectif est un passeport européen, la Grèce est la plus courte des deux routes, et une que nous orienterions plutôt que traiterions.",
+          "La Türkiye et les Émirats sont les deux dont l’actif rapporte — un bien à 5–7 % par an, revendu sur le marché libre. Le Portugal a fermé sa voie immobilière en 2023 et sa voie par fonds est à dix ans et un examen de langue d’un passeport ; la Grèce vend toujours un permis adossé à un bien, mais impose les revenus mondiaux et sa route vers la citoyenneté dure sept ans. La Golden Residence des Émirats est la résidence que nous traitons — renouvelable, sans impôt sur les revenus mondiaux, sans séjour minimum — mais c’est un permis, jamais un passeport. La Türkiye accorde la citoyenneté d’emblée, au seuil le plus bas des quatre, sur un bien au même rendement. Pour une famille dont l’objectif est une seconde nationalité qui se finance elle-même, la Türkiye est notre recommandation ; pour une base dans le Golfe à ses côtés, les Émirats.",
       },
       "turkiye-vs-portugal": {
         verdict:
-          "Le Portugal est le nom européen de presque chaque premier entretien, et il ne fait plus ce dont on se souvient : la voie immobilière a fermé en 2023, il reste une souscription à un fonds, l’instruction se compte en années, et la citoyenneté — la raison pour laquelle la plupart des familles demandent — est désormais à dix ans et un examen de langue. La Türkiye accorde la citoyenneté d’emblée, en quelques mois, contre un bien en pleine propriété qui rapporte pendant qu’il est détenu, sans résidence, sans visite et sans examen de langue. Un passeport turc n’entre pas dans l’espace Schengen sans visa et une carte de séjour portugaise si : c’est le seul point en faveur du Portugal qui mérite d’être pesé. Pour une famille dont l’objectif est une seconde citoyenneté plutôt qu’une adresse européenne, la Türkiye est notre recommandation.",
+          "Sur le rendement, il n’y a pas débat : le bien turc se loue à 5–7 % par an et se revend sur le marché libre après trois ans, tandis qu’une souscription à un fonds portugais rend ce que le fonds réalise, aux conditions du fonds — la voie immobilière qui a fait la réputation du programme a fermé en 2023. La citoyenneté, la raison pour laquelle la plupart des familles demandent, est accordée d’emblée en Türkiye et se trouve à dix ans et un examen de langue au Portugal. Un passeport turc n’entre pas dans l’espace Schengen sans visa et une carte de séjour portugaise si : c’est le seul point en faveur du Portugal qui mérite d’être pesé. Pour une famille dont l’objectif est une seconde citoyenneté plutôt qu’une adresse européenne, la Türkiye est notre recommandation.",
       },
     },
   },
