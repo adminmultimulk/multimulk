@@ -625,6 +625,6 @@ export const socialLinks = [
 export const footerLinks: Record<string, string> = {};
 
 export const whatsapp = {
-  /** The UAE line doubles as the WhatsApp business number. */
-  number: "+971 50 169 4283",
+  /** The Türkiye line doubles as the WhatsApp business number. */
+  number: "+90 543 337 7899",
 };
