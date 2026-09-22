@@ -752,3 +752,164 @@ export function Wave({ className }: IconProps) {
     </svg>
   );
 }
+
+/* ---- Place icons ----
+   One glyph per kind of place in a development's distances table — a
+   landmark, an airport, a hospital — rather than per place. `DistanceIcon` in
+   `distance-icon.tsx` maps a group's name onto these. Same stroke and the
+   same 20-unit box as the amenity icons above, so the two lists read as one
+   set. */
+
+/** A landmark — a columned façade, for cultural hubs and sights. */
+export function Landmark({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="m10 2.5 7 3.5H3l7-3.5Z" />
+      <path d="M4.5 6v8M8.2 6v8M11.8 6v8M15.5 6v8" />
+      <path d="M2.5 17.5h15M3.5 14h13" />
+    </svg>
+  );
+}
+
+export function Plane({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M17.5 10c0 .8-.6 1.3-1.4 1.3H12l-3.4 5.2H6.8l1.7-5.2H4.6l-1.4 1.7H1.8L2.9 10 1.8 7h1.4l1.4 1.7h3.9L6.8 3.5h1.8L12 8.7h4.1c.8 0 1.4.5 1.4 1.3Z" />
+    </svg>
+  );
+}
+
+/** A hospital — a cross in a rounded square. */
+export function Hospital({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <rect x="3" y="3" width="14" height="14" rx="2.5" />
+      <path d="M10 6.5v7M6.5 10h7" />
+    </svg>
+  );
+}
+
+export function Briefcase({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <rect x="2.5" y="6" width="15" height="10.5" rx="1.8" />
+      <path d="M7 6V4.4A1.4 1.4 0 0 1 8.4 3h3.2A1.4 1.4 0 0 1 13 4.4V6M2.5 10.5h15" />
+      <path d="M8.5 10.5v1.5h3v-1.5" />
+    </svg>
+  );
+}
+
+/** A metro carriage, for transport. */
+export function Train({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <rect x="4.5" y="2.5" width="11" height="12.5" rx="2.5" />
+      <path d="M4.5 9.5h11M7.5 12.5h.01M12.5 12.5h.01" />
+      <path d="M8 2.5h4M7 15l-1.5 2.5M13 15l1.5 2.5" />
+    </svg>
+  );
+}
+
+/** A mortarboard, for schools and universities. */
+export function Graduation({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="m1.5 7.5 8.5-4 8.5 4-8.5 4-8.5-4Z" />
+      <path d="M5 9.2v4.1c0 1.2 2.2 2.4 5 2.4s5-1.2 5-2.4V9.2M18.5 7.5v4.5" />
+    </svg>
+  );
+}
+
+export function ShoppingBag({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M4 6.5h12l-.9 10a1.2 1.2 0 0 1-1.2 1H6.1a1.2 1.2 0 0 1-1.2-1L4 6.5Z" />
+      <path d="M7 8.5V6a3 3 0 0 1 6 0v2.5" />
+    </svg>
+  );
+}
+
+/** A building on deep piles, for the earthquake-resistance panel. */
+export function Foundation({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <path d="M5.5 11.5V3.5h9v8" />
+      <path d="M8 6h1.2M10.8 6H12M8 8.5h1.2M10.8 8.5H12" />
+      <path d="M2.5 11.5h15" />
+      <path d="M6.5 11.5v5M10 11.5v5.5M13.5 11.5v5" />
+      <path d="M1.5 14.5c1 0 1 .8 2 .8s1-.8 2-.8M14.5 14.5c1 0 1 .8 2 .8s1-.8 2-.8" />
+    </svg>
+  );
+}

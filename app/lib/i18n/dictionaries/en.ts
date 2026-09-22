@@ -41,6 +41,21 @@ const en = {
       description:
         "Press coverage, announcements and guides from Multi Mulk — Turkish citizenship by investment, İstanbul and coastal developments, and our Caribbean portfolio.",
     },
+    publications: {
+      title: "Publications",
+      description:
+        "Multi Mulk's own guides and reports — Turkish citizenship by investment, Caribbean CBI and Golden Visa residency, written for people deciding between them.",
+    },
+    marketInsights: {
+      title: "Market Insights",
+      description:
+        "What the Türkiye and Caribbean markets are actually doing — prices, approvals, thresholds and timelines, read from the record and dated.",
+    },
+    events: {
+      title: "Events",
+      description:
+        "Where to meet Multi Mulk — exhibitions, seminars and private briefings across the Gulf, Türkiye and beyond.",
+    },
     search: {
       title: "Search Property",
       description:
@@ -445,7 +460,10 @@ const en = {
     team: "Our Team",
     contact: "Contact Us",
     search: "Properties",
-    knowledge: "Knowledge Centre",
+    knowledge: "News & Insights",
+    publications: "Publications",
+    marketInsights: "Market Insights",
+    events: "Events",
     article: "Article",
     development: "Development",
     citizenshipHub: "Citizenship by Investment",
@@ -457,6 +475,8 @@ const en = {
     compareIndex: "Compare Programmes",
     comparison: "Comparison",
     investorProtection: "Investor Protection",
+    secondPassport: "Second Passport",
+    eligibilityReview: "Eligibility Review",
     faqIndex: "Ask Multi Mulk",
     faq: "Question",
     caseStudies: "Client Outcomes",
@@ -472,7 +492,7 @@ const en = {
     goldenVisa: "Golden Visa",
     realEstate: "Real Estate",
     protection: "Investor Protection",
-    knowledge: "Knowledge",
+    knowledge: "News & Insights",
     about: "About",
   },
 
@@ -494,6 +514,15 @@ const en = {
         "Held for {holding}",
         "Spouse and children under 18 included",
       ],
+    },
+    /**
+     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * names come from `places`, and every figure on a card is read from the
+     * programme record and labelled with the comparison table's own row
+     * names, so the menu has nothing else of its own to translate.
+     */
+    goldenVisa: {
+      label: "Golden Visa & Residency",
     },
     /** Unit counts under each portfolio card, keyed by development slug. */
     detail: {
@@ -647,6 +676,9 @@ const en = {
       All: "All",
       "Press Media": "Press Media",
       Blog: "Blog",
+      Publication: "Publication",
+      "Market Insight": "Market Insight",
+      Event: "Event",
     },
     /** The Knowledge Centre's pillars; the index filters on these. */
     topics: {
@@ -659,6 +691,9 @@ const en = {
     sort: { Newest: "Newest", Oldest: "Oldest" },
     sortLabel: "Sort articles",
     empty: "Nothing filed under {filter} yet.",
+    /** The same message with no filter applied — a section nobody has filed
+     *  anything into yet, which all three new ones are on day one. */
+    emptyHere: "Nothing has been published here yet.",
     /**
      * Headlines and bodies, keyed by article slug. English is the source, so
      * this stays empty here; the other four fill in whichever pieces have been
@@ -1115,11 +1150,8 @@ const en = {
 
   /** /media-centre and /media-centre/[slug] */
   media: {
-    heroEyebrow: "Media Centre",
+    heroEyebrow: "News & Insights",
     showArticle: "Show “{title}”",
-    indexHeading: "All Articles",
-    indexBody:
-      "Discover all the latest updates, insights, and valuable resources right here. This hub provides blog posts, press releases, and detailed guides to keep you up to date on our projects.",
     newsletter: {
       heading: "Dive deeper, stay informed",
       body: "Never miss a wave — stay in the loop with every update.",
@@ -1132,6 +1164,47 @@ const en = {
       relatedHeading: "Related Articles",
       /** `{count}` is pre-formatted for the locale before substitution. */
       readingTime: plural({ one: "{count} min read", other: "{count} min read" }),
+    },
+  },
+
+  /**
+   * News & Insights: the menu that hangs from the nav label, and the four
+   * section indexes beneath it.
+   *
+   * One corpus filed four ways — see `app/lib/sections.ts` — so the copy for
+   * all four lives together rather than one block per page. `label` is the
+   * name in the menu, the mobile list and the section nav; `menuLine` is the
+   * line under it on the menu card; `heading` and `body` open the index.
+   */
+  insights: {
+    menuHeading: "News & Insights",
+    menuBody:
+      "Everything Multi Mulk publishes — the coverage we appear in, the guides we write, what the markets are actually doing, and where to meet us.",
+    sections: {
+      articles: {
+        label: "Articles",
+        menuLine: "News and blogs",
+        heading: "News & Blogs",
+        body: "Discover all the latest updates, insights, and valuable resources right here. This hub provides blog posts, press releases, and detailed guides to keep you up to date on our projects.",
+      },
+      publications: {
+        label: "Publications",
+        menuLine: "Guides and reports",
+        heading: "Publications",
+        body: "Our own guides and reports, written for the decision rather than the click — what each programme grants, what it asks, and what it costs all in.",
+      },
+      marketInsights: {
+        label: "Market Insights",
+        menuLine: "Data and analysis",
+        heading: "Market Insights",
+        body: "What the Türkiye and Caribbean markets are actually doing — prices, approvals, thresholds and timelines, read from the record and dated so you can see how old the reading is.",
+      },
+      events: {
+        label: "Events",
+        menuLine: "Where to meet us",
+        heading: "Events",
+        body: "Exhibitions, seminars and private briefings across the Gulf, Türkiye and beyond. Come and put the questions to us in person.",
+      },
     },
   },
 
@@ -1248,6 +1321,31 @@ const en = {
     /** The heading over a development's own prose, where it has no overview. */
     about: "About the Development",
     amenities: "Amenities",
+    /** The development's story — see `app/lib/story.ts` and `PropertyStory`. */
+    architecture: "Architectural Concept",
+    earthquake: "Earthquake Resistance",
+    distancesEyebrow: "Getting Around",
+    distancesHeading: "Distances To and From {project}",
+    areaEyebrow: "The District",
+    areaOverview: "About the Location",
+    marketEyebrow: "Market Insight",
+    marketPerformance: "Residential Market Performance",
+    /**
+     * Distance group names, keyed by their English text — the same deal as
+     * `amenityItems`: a group a lister names that is not here is shown as
+     * written.
+     */
+    distanceGroups: {
+      "Cultural Hubs": "Cultural Hubs",
+      Airports: "Airports",
+      Hospitals: "Hospitals",
+      "Business Hubs": "Business Hubs",
+      Transportation: "Transportation",
+      Education: "Education",
+      Universities: "Universities",
+      Schools: "Schools",
+      "Shopping Centres": "Shopping Centres",
+    },
     otherDevelopments: "Other Developments",
     /** The enquiry form carried on a property's own page. */
     enquireEyebrow: "Speak to an Adviser",
@@ -1367,6 +1465,12 @@ const en = {
       "Smart Home": "Smart Home",
       "Pet Friendly": "Pet Friendly",
       "Beach Access": "Beach Access",
+      "Spa & Wellness": "Spa & Wellness",
+      "Green Spaces": "Green Spaces",
+      "Walking Paths": "Walking Paths",
+      "Dining Areas": "Dining Areas",
+      "Educational Facilities": "Educational Facilities",
+      "Private Parking": "Private Parking",
     },
   },
 

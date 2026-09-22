@@ -25,7 +25,9 @@ export function Field({
   children: ReactNode;
 }) {
   return (
-    <div className="grid gap-1.5">
+    // `content-start`: beside a field with a hint, this one is stretched to
+    // the same height, and without it the extra space goes into the box.
+    <div className="grid content-start gap-1.5">
       <label htmlFor={name} className="text-[13px] font-medium text-ink">
         {label}
         {required ? <span className="text-red-600"> *</span> : null}

@@ -3,11 +3,15 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/app/lib/db";
 import { allArticles, type AnyArticle } from "@/app/lib/knowledge";
 import { isTopic, type Topic } from "@/app/lib/topics";
-import type { ArticleCategory } from "@/app/lib/media";
+import {
+  isArticleCategory,
+  sectionOf,
+  type ArticleCategory,
+} from "@/app/lib/sections";
 import { ARTICLES_TAG } from "./tags";
 
 /**
- * The Knowledge Centre, with everything written in the dashboard merged in.
+ * News & Insights, with everything written in the dashboard merged in.
  *
  * The static lists in `media.ts` and `knowledge.ts` stay exactly as they were:
  * they are the archive, they are what the legacy redirects point at, and they
@@ -53,8 +57,11 @@ const load = unstable_cache(
       body: row.body,
       topics: row.topics.filter(isTopic) as Topic[],
       source: row.source ?? undefined,
-      category: (row.category === "Press Media"
-        ? "Press Media"
+      // A row written before a category existed, or one carrying a value that
+      // has since been retired, reads as a blog post — which is where the
+      // Articles section lists it, rather than nowhere.
+      category: (isArticleCategory(row.category)
+        ? row.category
         : "Blog") as ArticleCategory,
       readMore: row.readMore ?? undefined,
       seoTitle: row.seoTitle ?? undefined,
@@ -107,12 +114,18 @@ export async function findMergedArticle(
 }
 
 /**
- * The rail beside an article: pieces sharing a topic first, then the newest of
- * whatever is left, so it is never short.
+ * The rail beside an article: the reader's own section first, a shared topic
+ * next, then the newest of whatever is left, so it is never short.
  *
- * The same rule as `related` in `knowledge.ts`, over the merged list. That one
- * stays where it is — it is synchronous, and the static pages that do not
- * touch the database still use it.
+ * `related` in `knowledge.ts` is the synchronous version of this, over the
+ * static archive alone, and stays where it is — the pages that do not touch
+ * the database still use it.
+ *
+ * Section outranks topic. Somebody reading a market
+ * insight is reading the market, and a rail that answers with three blog posts
+ * because they happen to share the "turkiye" topic sends them out of the
+ * section they came for. The whole corpus is still the fallback, so the rail
+ * is never short in a section holding fewer than three pieces.
  */
 export async function relatedMerged(
   slug: string,
@@ -122,11 +135,13 @@ export async function relatedMerged(
   const current = all.find((a) => a.slug === slug);
   const others = all.filter((a) => a.slug !== slug);
   if (!current) return others.slice(0, count);
-  const shared = others.filter((a) =>
-    a.topics.some((topic) => current.topics.includes(topic)),
-  );
-  return [...shared, ...others.filter((a) => !shared.includes(a))].slice(
-    0,
-    count,
-  );
+
+  const section = sectionOf(current.category);
+  /** Same section outranks a shared topic; both beat neither. */
+  const score = (a: AnyArticle) =>
+    (sectionOf(a.category) === section ? 2 : 0) +
+    (a.topics.some((topic) => current.topics.includes(topic)) ? 1 : 0);
+
+  // `sort` is stable, so the list stays newest-first inside each band.
+  return [...others].sort((a, b) => score(b) - score(a)).slice(0, count);
 }

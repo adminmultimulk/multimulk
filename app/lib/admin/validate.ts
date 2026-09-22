@@ -1,6 +1,8 @@
 import { allArticles } from "@/app/lib/knowledge";
 import { legacyDevelopments } from "@/app/lib/legacy-developments";
 import { units } from "@/app/lib/properties";
+import { routes } from "@/app/lib/routes";
+import { isArticleCategory, sectionRoute, sections } from "@/app/lib/sections";
 import { isTopic } from "@/app/lib/topics";
 
 export { checkSlug, slugify } from "./slug";
@@ -14,7 +16,18 @@ export { money } from "./money";
  * error at the moment of typing rather than a page that renders whichever
  * source happened to sort first.
  */
-export const reservedArticleSlugs = new Set(allArticles.map((a) => a.slug));
+export const reservedArticleSlugs = new Set([
+  ...allArticles.map((a) => a.slug),
+  /*
+   * And the three section indexes, which are literal segments under the same
+   * /knowledge prefix as an article. Next resolves a literal ahead of the
+   * dynamic segment, so a piece slugged "events" would be written, published
+   * and permanently unreachable — the section index would answer instead.
+   */
+  ...sections
+    .filter((section) => section !== "articles")
+    .map((section) => routes[sectionRoute[section]].pattern.split("/").pop()!),
+]);
 /*
  * A published listing answers at /properties/<slug>, which is the namespace
  * the ninety-four legacy developments already occupy. Those win a collision —
@@ -174,6 +187,11 @@ export function when(value: string): Date | null | "invalid" {
   if (!iso) return "invalid";
   const date = new Date(iso);
   return Number.isNaN(date.getTime()) ? "invalid" : date;
+}
+
+/** The filing category, which decides which section lists the piece. */
+export function checkCategory(value: string): string | null {
+  return isArticleCategory(value) ? null : `Not a category: ${value}.`;
 }
 
 export function checkTopics(values: string[]): string | null {

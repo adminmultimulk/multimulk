@@ -37,6 +37,21 @@ const ur: Dictionary = {
       description:
         "Multi Mulk کی پریس کوریج، اعلانات اور رہنما مضامین — ترک شہریت بذریعہ سرمایہ کاری، استنبول اور ساحلی منصوبے، اور ہمارا کیریبیئن پورٹ فولیو۔",
     },
+    publications: {
+      title: "اشاعتیں",
+      description:
+        "Multi Mulk کے اپنے رہنما مضامین اور رپورٹس — ترک شہریت بذریعہ سرمایہ کاری، کیریبیئن پروگرام اور گولڈن ویزا رہائش، اُن کے لیے لکھے گئے جو اِن میں سے انتخاب کر رہے ہیں۔",
+    },
+    marketInsights: {
+      title: "مارکیٹ تجزیے",
+      description:
+        "ترکیہ اور کیریبیئن کی مارکیٹوں کی اصل صورتِ حال — قیمتیں، منظوریاں، حدیں اور دورانیے، سرکاری ریکارڈ سے لیے گئے اور تاریخ کے ساتھ درج۔",
+    },
+    events: {
+      title: "تقریبات",
+      description:
+        "Multi Mulk سے ملاقات کہاں ہو سکتی ہے — خلیج، ترکیہ اور دیگر مقامات پر نمائشیں، سیمینار اور نجی نشستیں۔",
+    },
     search: {
       title: "جائیداد تلاش کریں",
       description:
@@ -94,7 +109,7 @@ const ur: Dictionary = {
     goldenVisa: "گولڈن ویزا",
     realEstate: "جائیداد",
     protection: "سرمایہ کار کا تحفظ",
-    knowledge: "نالج",
+    knowledge: "خبریں اور تجزیے",
     about: "ہمارے بارے میں",
   },
 
@@ -117,6 +132,15 @@ const ur: Dictionary = {
         "{holding} تک ملکیت",
         "شریکِ حیات اور 18 سال سے کم عمر بچے شامل",
       ],
+    },
+    /**
+     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * names come from `places`, and every figure on a card is read from the
+     * programme record and labelled with the comparison table's own row
+     * names, so the menu has nothing else of its own to translate.
+     */
+    goldenVisa: {
+      label: "گولڈن ویزا اور رہائش",
     },
     detail: {
       "bosphorus-heights": "165 اپارٹمنٹس",
@@ -264,6 +288,9 @@ const ur: Dictionary = {
       All: "سب",
       "Press Media": "پریس",
       Blog: "بلاگ",
+      Publication: "اشاعت",
+      "Market Insight": "مارکیٹ تجزیہ",
+      Event: "تقریب",
     },
     topics: {
       citizenship: "شہریت",
@@ -275,6 +302,7 @@ const ur: Dictionary = {
     sort: { Newest: "نئے پہلے", Oldest: "پرانے پہلے" },
     sortLabel: "مضامین ترتیب دیں",
     empty: "«{filter}» میں فی الحال کچھ نہیں ہے۔",
+    emptyHere: "یہاں ابھی کچھ شائع نہیں ہوا۔",
     copy: staged<ArticleCopy>({
       "levent-residences-tops-out": {
         title: "Levent Residences اپنی مکمل بلندی کو پہنچ گیا، شیشلی کا نیا نمایاں پتہ",
@@ -800,11 +828,8 @@ const ur: Dictionary = {
   },
 
   media: {
-    heroEyebrow: "میڈیا سینٹر",
+    heroEyebrow: "خبریں اور تجزیے",
     showArticle: "«{title}» دکھائیں",
-    indexHeading: "تمام مضامین",
-    indexBody:
-      "تمام تازہ خبریں، تجزیے اور مفید معلومات یہیں دیکھیے۔ اس مرکز میں بلاگ، پریس ریلیز اور تفصیلی رہنما مضامین شامل ہیں تاکہ آپ ہمارے منصوبوں سے باخبر رہیں۔",
     newsletter: {
       heading: "مزید گہرائی میں جائیے، باخبر رہیے",
       body: "کوئی خبر نہ چھوٹے — ہر تازہ اطلاع سے جُڑے رہیے۔",
@@ -819,6 +844,37 @@ const ur: Dictionary = {
         one: "{count} منٹ کا مطالعہ",
         other: "{count} منٹ کا مطالعہ",
       }),
+    },
+  },
+
+  insights: {
+    menuHeading: "خبریں اور تجزیے",
+    menuBody: "Multi Mulk جو کچھ شائع کرتا ہے وہ سب یہاں ہے — ہماری میڈیا کوریج، ہمارے لکھے ہوئے رہنما مضامین، مارکیٹ کی اصل صورتِ حال، اور ہم سے ملاقات کے مواقع۔",
+    sections: {
+      articles: {
+        label: "مضامین",
+        menuLine: "خبریں اور بلاگ",
+        heading: "خبریں اور بلاگ",
+        body: "تمام تازہ خبریں، تجزیے اور مفید معلومات یہیں دیکھیے۔ اس مرکز میں بلاگ، پریس ریلیز اور تفصیلی رہنما مضامین شامل ہیں تاکہ آپ ہمارے منصوبوں سے باخبر رہیں۔",
+      },
+      publications: {
+        label: "اشاعتیں",
+        menuLine: "رہنما مضامین اور رپورٹس",
+        heading: "اشاعتیں",
+        body: "ہمارے اپنے رہنما مضامین اور رپورٹس، جو کلک کے لیے نہیں بلکہ فیصلے کے لیے لکھی گئی ہیں — ہر پروگرام کیا دیتا ہے، کیا مانگتا ہے، اور کل لاگت کتنی بنتی ہے۔",
+      },
+      marketInsights: {
+        label: "مارکیٹ تجزیے",
+        menuLine: "اعداد و شمار اور تجزیہ",
+        heading: "مارکیٹ تجزیے",
+        body: "ترکیہ اور کیریبیئن کی مارکیٹوں کی اصل صورتِ حال — قیمتیں، منظوریاں، حدیں اور دورانیے، سرکاری ریکارڈ سے لیے گئے اور تاریخ کے ساتھ درج تاکہ آپ کو اعداد کی عمر معلوم ہو۔",
+      },
+      events: {
+        label: "تقریبات",
+        menuLine: "ہم سے ملاقات",
+        heading: "تقریبات",
+        body: "خلیج، ترکیہ اور دیگر مقامات پر نمائشیں، سیمینار اور نجی نشستیں۔ آئیے اور اپنے سوالات براہِ راست ہم سے پوچھیے۔",
+      },
     },
   },
 
@@ -925,6 +981,25 @@ const ur: Dictionary = {
     browseAll: "تمام رہائش گاہیں دیکھیں",
     about: "منصوبے کے بارے میں",
     amenities: "سہولیات",
+    architecture: "تعمیراتی تصور",
+    earthquake: "زلزلے سے مزاحمت",
+    distancesEyebrow: "آمد و رفت",
+    distancesHeading: "{project} سے فاصلے",
+    areaEyebrow: "علاقہ",
+    areaOverview: "مقام کے بارے میں",
+    marketEyebrow: "مارکیٹ کا جائزہ",
+    marketPerformance: "رہائشی مارکیٹ کی کارکردگی",
+    distanceGroups: {
+      "Cultural Hubs": "ثقافتی مراکز",
+      Airports: "ہوائی اڈے",
+      Hospitals: "ہسپتال",
+      "Business Hubs": "کاروباری مراکز",
+      Transportation: "ٹرانسپورٹ",
+      Education: "تعلیم",
+      Universities: "یونیورسٹیاں",
+      Schools: "اسکول",
+      "Shopping Centres": "شاپنگ سینٹرز",
+    },
     otherDevelopments: "دیگر منصوبے",
     enquireEyebrow: "مشیر سے بات کریں",
     enquireHeading: "{project} کے بارے میں استفسار",
@@ -1094,6 +1169,12 @@ const ur: Dictionary = {
       "Smart Home": "سمارٹ ہوم",
       "Pet Friendly": "پالتو جانوروں کی اجازت",
       "Beach Access": "ساحل تک رسائی",
+      "Spa & Wellness": "اسپا اور ویلنیس",
+      "Green Spaces": "سبز علاقے",
+      "Walking Paths": "پیدل چلنے کے راستے",
+      "Dining Areas": "کھانے کے مقامات",
+      "Educational Facilities": "تعلیمی سہولیات",
+      "Private Parking": "نجی پارکنگ",
     },
   },
 
@@ -1234,7 +1315,10 @@ const ur: Dictionary = {
     team: "ہماری ٹیم",
     contact: "رابطہ کریں",
     search: "جائیدادیں",
-    knowledge: "نالج سینٹر",
+    knowledge: "خبریں اور تجزیے",
+    publications: "اشاعتیں",
+    marketInsights: "مارکیٹ تجزیے",
+    events: "تقریبات",
     article: "مضمون",
     development: "منصوبہ",
     citizenshipHub: "سرمایہ کاری کے ذریعے شہریت",
@@ -1246,6 +1330,8 @@ const ur: Dictionary = {
     compareIndex: "پروگراموں کا موازنہ",
     comparison: "موازنہ",
     investorProtection: "سرمایہ کار کا تحفظ",
+    secondPassport: "دوسرا پاسپورٹ",
+    eligibilityReview: "اہلیت کا جائزہ",
     faqIndex: "ملٹی ملک سے پوچھیں",
     faq: "سوال",
     caseStudies: "کلائنٹ کے نتائج",

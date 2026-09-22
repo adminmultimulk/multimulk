@@ -44,7 +44,7 @@ export default async function DashboardLayout({
     items.push({
       href: "/admin/articles",
       label: "Articles",
-      hint: "Knowledge Centre",
+      hint: "News & Insights",
     });
   if (canEditProperties(user.role))
     items.push({

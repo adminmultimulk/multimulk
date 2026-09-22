@@ -11,6 +11,7 @@ import {
 } from "@/app/lib/content";
 import { localeNames } from "@/app/lib/i18n/config";
 import { useI18n } from "@/app/lib/i18n/context";
+import { lookup } from "@/app/lib/i18n/format";
 import { LanguageSwitcher } from "./language-switcher";
 import { Link } from "./link";
 import { MegaMenuPanel } from "./mega-menu";
@@ -392,6 +393,16 @@ function mobileItems(
       }));
     case "portfolio":
       return menu.cards.map((card) => ({ label: card.title, href: card.href }));
+    case "sections":
+      return menu.cards.map((card) => ({
+        label: t.insights.sections[card.key].label,
+        href: card.href,
+      }));
+    case "residency":
+      return menu.cards.map((card) => ({
+        label: lookup(t.places, card.place),
+        href: card.href,
+      }));
     case "programmes":
       return menu.cards.map((card) => ({
         label:

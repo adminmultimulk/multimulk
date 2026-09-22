@@ -39,6 +39,21 @@ const ru: Dictionary = {
       description:
         "Публикации в прессе, анонсы и обзоры Multi Mulk — турецкое гражданство за инвестиции, проекты в Стамбуле и на побережье, карибский портфель.",
     },
+    publications: {
+      title: "Публикации",
+      description:
+        "Собственные руководства и отчёты Multi Mulk — турецкое гражданство за инвестиции, карибские программы и резидентство по Golden Visa, написанные для тех, кто выбирает между ними.",
+    },
+    marketInsights: {
+      title: "Аналитика рынка",
+      description:
+        "Что на самом деле происходит на рынках Турции и Карибского бассейна — цены, одобрения, пороги и сроки, взятые из документов и датированные.",
+    },
+    events: {
+      title: "События",
+      description:
+        "Где встретиться с Multi Mulk — выставки, семинары и частные встречи в странах Залива, Турции и за их пределами.",
+    },
     search: {
       title: "Поиск недвижимости",
       description:
@@ -421,7 +436,10 @@ const ru: Dictionary = {
     team: "Наша команда",
     contact: "Контакты",
     search: "Недвижимость",
-    knowledge: "База знаний",
+    knowledge: "Новости и аналитика",
+    publications: "Публикации",
+    marketInsights: "Аналитика рынка",
+    events: "События",
     article: "Статья",
     development: "Проект",
     citizenshipHub: "Гражданство за инвестиции",
@@ -433,6 +451,8 @@ const ru: Dictionary = {
     compareIndex: "Сравнение программ",
     comparison: "Сравнение",
     investorProtection: "Защита инвестора",
+    secondPassport: "Второй паспорт",
+    eligibilityReview: "Проверка соответствия",
     faqIndex: "Спросить Multi Mulk",
     faq: "Вопрос",
     caseStudies: "Результаты клиентов",
@@ -448,7 +468,7 @@ const ru: Dictionary = {
     goldenVisa: "Золотая виза",
     realEstate: "Недвижимость",
     protection: "Защита инвестора",
-    knowledge: "База знаний",
+    knowledge: "Новости и аналитика",
     about: "О компании",
   },
 
@@ -470,6 +490,15 @@ const ru: Dictionary = {
         "Владение в течение {holding}",
         "Супруг(а) и дети до 18 лет включены",
       ],
+    },
+    /**
+     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * names come from `places`, and every figure on a card is read from the
+     * programme record and labelled with the comparison table's own row
+     * names, so the menu has nothing else of its own to translate.
+     */
+    goldenVisa: {
+      label: "Золотая виза и ВНЖ",
     },
     detail: {
       "bosphorus-heights": "165 апартаментов",
@@ -618,6 +647,9 @@ const ru: Dictionary = {
       All: "Все",
       "Press Media": "Пресса",
       Blog: "Блог",
+      Publication: "Публикация",
+      "Market Insight": "Аналитика рынка",
+      Event: "Событие",
     },
     topics: {
       citizenship: "Гражданство",
@@ -629,6 +661,7 @@ const ru: Dictionary = {
     sort: { Newest: "Сначала новые", Oldest: "Сначала старые" },
     sortLabel: "Сортировать материалы",
     empty: "В разделе «{filter}» пока ничего нет.",
+    emptyHere: "Здесь пока ничего не опубликовано.",
     copy: staged<ArticleCopy>({
       "levent-residences-tops-out": {
         title: "Levent Residences достиг проектной высоты и стал новой доминантой Шишли",
@@ -1155,11 +1188,8 @@ const ru: Dictionary = {
   },
 
   media: {
-    heroEyebrow: "Пресс-центр",
+    heroEyebrow: "Новости и аналитика",
     showArticle: "Показать «{title}»",
-    indexHeading: "Все материалы",
-    indexBody:
-      "Здесь собраны все новости, аналитика и полезные материалы: статьи, пресс-релизы и подробные обзоры, которые держат вас в курсе наших проектов.",
     newsletter: {
       heading: "Глубже в тему, всегда в курсе",
       body: "Не пропустите ни одной волны — следите за каждым обновлением.",
@@ -1176,6 +1206,37 @@ const ru: Dictionary = {
         many: "{count} мин чтения",
         other: "{count} мин чтения",
       }),
+    },
+  },
+
+  insights: {
+    menuHeading: "Новости и аналитика",
+    menuBody: "Всё, что публикует Multi Mulk: упоминания в прессе, наши руководства, реальное положение дел на рынках и места, где нас можно встретить.",
+    sections: {
+      articles: {
+        label: "Материалы",
+        menuLine: "Новости и блог",
+        heading: "Новости и блог",
+        body: "Здесь собраны все новости, аналитика и полезные материалы: статьи, пресс-релизы и подробные обзоры, которые держат вас в курсе наших проектов.",
+      },
+      publications: {
+        label: "Публикации",
+        menuLine: "Руководства и отчёты",
+        heading: "Публикации",
+        body: "Наши собственные руководства и отчёты, написанные ради решения, а не ради клика: что даёт каждая программа, чего требует и во что обходится целиком.",
+      },
+      marketInsights: {
+        label: "Аналитика рынка",
+        menuLine: "Цифры и анализ",
+        heading: "Аналитика рынка",
+        body: "Что на самом деле происходит на рынках Турции и Карибского бассейна — цены, одобрения, пороги и сроки, взятые из документов и датированные, чтобы вы видели, насколько свежи данные.",
+      },
+      events: {
+        label: "События",
+        menuLine: "Где нас встретить",
+        heading: "События",
+        body: "Выставки, семинары и частные встречи в странах Залива, Турции и за их пределами. Приходите и задайте свои вопросы лично.",
+      },
     },
   },
 
@@ -1299,6 +1360,25 @@ const ru: Dictionary = {
     browseAll: "Смотреть все резиденции",
     about: "О проекте",
     amenities: "Инфраструктура",
+    architecture: "Архитектурная концепция",
+    earthquake: "Сейсмостойкость",
+    distancesEyebrow: "Транспортная доступность",
+    distancesHeading: "Расстояния от {project}",
+    areaEyebrow: "Район",
+    areaOverview: "О расположении",
+    marketEyebrow: "Обзор рынка",
+    marketPerformance: "Динамика рынка жилья",
+    distanceGroups: {
+      "Cultural Hubs": "Культурные центры",
+      Airports: "Аэропорты",
+      Hospitals: "Больницы",
+      "Business Hubs": "Деловые центры",
+      Transportation: "Транспорт",
+      Education: "Образование",
+      Universities: "Университеты",
+      Schools: "Школы",
+      "Shopping Centres": "Торговые центры",
+    },
     otherDevelopments: "Другие проекты",
     enquireEyebrow: "Поговорить с консультантом",
     enquireHeading: "Запрос по проекту {project}",
@@ -1461,6 +1541,12 @@ const ru: Dictionary = {
       "Smart Home": "Умный дом",
       "Pet Friendly": "Можно с питомцами",
       "Beach Access": "Выход к пляжу",
+      "Spa & Wellness": "Спа и велнес",
+      "Green Spaces": "Зелёные зоны",
+      "Walking Paths": "Пешеходные дорожки",
+      "Dining Areas": "Зоны ресторанов и кафе",
+      "Educational Facilities": "Образовательные учреждения",
+      "Private Parking": "Частная парковка",
     },
   },
 

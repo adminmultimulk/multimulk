@@ -13,12 +13,21 @@ import {
 } from "@/app/lib/admin/article-actions";
 import { requireArticleAccess } from "@/app/lib/admin/guard";
 import { prisma } from "@/app/lib/db";
+import { sectionOf } from "@/app/lib/sections";
 
 export const metadata: Metadata = { title: "Articles" };
 
 function day(value: Date | null) {
   return value ? value.toISOString().slice(0, 10) : "—";
 }
+
+/** What each section is called in the dashboard, and where it answers. */
+const sectionLabels: Record<ReturnType<typeof sectionOf>, string> = {
+  articles: "Articles",
+  publications: "Publications",
+  marketInsights: "Market insights",
+  events: "Events",
+};
 
 /** Marked published, but with a date still to come. */
 function isScheduled(article: { status: string; publishedAt: Date | null }) {
@@ -40,7 +49,7 @@ export default async function ArticlesPage() {
     <>
       <PageHeading
         title="Articles"
-        description="Everything written here is merged into the Knowledge Centre alongside the existing archive. Drafts stay invisible to readers."
+        description="Everything written here is merged into News & Insights alongside the existing archive, into whichever section its kind files it under. Drafts stay invisible to readers."
         actions={
           <Link href="/admin/articles/new">
             <Button>Write an article</Button>
@@ -50,8 +59,8 @@ export default async function ArticlesPage() {
 
       {articles.length === 0 ? (
         <Empty>
-          Nothing yet. The Knowledge Centre is still showing only the articles
-          that ship with the site.
+          Nothing yet. News & Insights is still showing only the articles that
+          ship with the site.
         </Empty>
       ) : (
         <div className="overflow-x-auto rounded-lg border border-ink/10 bg-white">
@@ -59,6 +68,7 @@ export default async function ArticlesPage() {
             <thead className="border-b border-ink/10 text-[11px] tracking-[0.06em] text-ink/50 uppercase">
               <tr>
                 <th className="px-4 py-3 font-medium">Headline</th>
+                <th className="px-4 py-3 font-medium">Section</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Published</th>
                 <th className="px-4 py-3 font-medium">Author</th>
@@ -78,6 +88,9 @@ export default async function ArticlesPage() {
                     <span className="block text-[11px] text-ink/45">
                       /knowledge/{article.slug}
                     </span>
+                  </td>
+                  <td className="px-4 py-3 text-ink/70">
+                    {sectionLabels[sectionOf(article.category)]}
                   </td>
                   <td className="px-4 py-3">
                     <StatusPill

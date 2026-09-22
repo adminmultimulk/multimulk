@@ -2,6 +2,7 @@ import "server-only";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/app/lib/db";
 import { units, type Unit } from "@/app/lib/properties";
+import type { Story } from "@/app/lib/story";
 import { PROPERTIES_TAG } from "./tags";
 
 /**
@@ -22,7 +23,8 @@ import { PROPERTIES_TAG } from "./tags";
  * to write a brochure to do it. Every section of the page is omitted rather
  * than empty when its field is absent.
  */
-export type Listing = Unit & {
+export type Listing = Unit &
+  Story & {
   description: string | null;
   highlights: { title: string; text: string }[];
   amenities: string[];
@@ -81,6 +83,18 @@ const load = unstable_cache(
       })),
       amenities: row.amenities,
       floorPlans: row.floorPlans,
+      architecture: row.architecture,
+      earthquake: row.earthquake,
+      distances: row.distances.map((distance) => ({
+        group: distance.group,
+        name: distance.name,
+        distance: distance.distance,
+        time: distance.time,
+      })),
+      areaOverview: row.areaOverview,
+      areaGallery: row.areaGallery,
+      marketPerformance: row.marketPerformance,
+      marketChart: row.marketChart,
       paymentPlan: row.paymentPlan,
       handover: row.handover,
       serviceCharge: row.serviceCharge,

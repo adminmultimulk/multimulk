@@ -28,6 +28,7 @@ import { LegacyDevelopmentPage } from "@/app/components/legacy-development";
 import { ListingPage } from "@/app/components/listing-page";
 import { PropertyEnquire } from "@/app/components/property-enquire";
 import { PropertyGallery } from "@/app/components/property-gallery";
+import { PropertyStory } from "@/app/components/property-story";
 import { JsonLd } from "@/app/components/json-ld";
 import { apartmentComplex, breadcrumbs } from "@/app/lib/seo/jsonld";
 import { interpolate, lookup, pick, selectPlural } from "@/app/lib/i18n/format";
@@ -451,6 +452,15 @@ export default async function PropertyPage({
           </Container>
         </section>
         ) : null}
+
+        {/* The building, the ground, what is near, the district and its
+            market — whatever of it the listers wrote. See `PropertyStory`. */}
+        <PropertyStory
+          story={project}
+          name={project.name}
+          t={t}
+          first={project.amenities.items.length ? "white" : "mist"}
+        />
 
         {/* Enquire */}
         <PropertyEnquire

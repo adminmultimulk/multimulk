@@ -6,6 +6,7 @@ import { requirePropertyAccess } from "@/app/lib/admin/guard";
 import { mergedLocations } from "@/app/lib/cms/properties";
 import { prisma } from "@/app/lib/db";
 import { locations } from "@/app/lib/properties";
+import { formatDistances } from "@/app/lib/story";
 
 export const metadata: Metadata = { title: "Edit listing" };
 
@@ -61,6 +62,13 @@ export default async function EditPropertyPage({
           amenities: property.amenities,
           brochure: property.brochure ?? "",
           floorPlans: property.floorPlans,
+          architecture: property.architecture ?? "",
+          earthquake: property.earthquake ?? "",
+          distances: formatDistances(property.distances),
+          areaOverview: property.areaOverview ?? "",
+          areaGallery: property.areaGallery,
+          marketPerformance: property.marketPerformance ?? "",
+          marketChart: property.marketChart ?? "",
           paymentPlan: property.paymentPlan ?? "",
           handover: property.handover ?? "",
           serviceCharge: property.serviceCharge ?? "",

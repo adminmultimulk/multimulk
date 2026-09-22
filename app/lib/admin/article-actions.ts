@@ -10,6 +10,7 @@ import { requireArticleAccess, type ActionState } from "./guard";
 import {
   checkbox,
   checkBody,
+  checkCategory,
   checkImage,
   checkSlug,
   checkTopics,
@@ -30,6 +31,12 @@ import {
 function publishedArticlesChanged() {
   updateTag(ARTICLES_TAG);
   revalidatePath("/[lang]/knowledge", "page");
+  // The other three section indexes. Each is its own prerendered page, and a
+  // publication published into a stale /knowledge/publications is a row in the
+  // database that nothing renders.
+  revalidatePath("/[lang]/knowledge/publications", "page");
+  revalidatePath("/[lang]/knowledge/market-insights", "page");
+  revalidatePath("/[lang]/knowledge/events", "page");
   revalidatePath("/[lang]/knowledge/[slug]", "page");
   revalidatePath("/[lang]", "page");
 }
@@ -54,7 +61,7 @@ export async function saveArticle(
   const excerpt = field(form, "excerpt");
   const body = toBlocks(field(form, "body"));
   const topics = form.getAll("topics").map(String);
-  const category = field(form, "category") === "Press Media" ? "Press Media" : "Blog";
+  const category = field(form, "category");
   const source = field(form, "source");
   const image = field(form, "image");
   const hero = field(form, "hero");
@@ -82,6 +89,12 @@ export async function saveArticle(
 
   const topicError = checkTopics(topics);
   if (topicError) fieldErrors.topics = topicError;
+
+  // Which of the four News & Insights sections lists the piece. Checked rather
+  // than coerced: a select that has silently fallen back to "Blog" files a
+  // market insight in the wrong section and says nothing about it.
+  const categoryError = checkCategory(category);
+  if (categoryError) fieldErrors.category = categoryError;
 
   const imageError = checkImage(image, "The card image");
   if (imageError) fieldErrors.image = imageError;

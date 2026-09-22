@@ -35,6 +35,21 @@ const tr = {
       description:
         "Yatırım yoluyla vatandaşlık, ikamet ve gayrimenkul piyasalarına dair haberler ve rehberler.",
     },
+    publications: {
+      title: "Yayınlar",
+      description:
+        "Multi Mulk’un kendi rehber ve raporları — yatırım yoluyla Türk vatandaşlığı, Karayip programları ve Altın Vize ikameti; aralarında karar verenler için yazıldı.",
+    },
+    marketInsights: {
+      title: "Pazar Analizleri",
+      description:
+        "Türkiye ve Karayipler piyasalarının gerçekte ne yaptığı — fiyatlar, onaylar, eşikler ve süreler; kayıtlardan okunmuş ve tarihlendirilmiş.",
+    },
+    events: {
+      title: "Etkinlikler",
+      description:
+        "Multi Mulk ile nerede buluşabilirsiniz — Körfez, Türkiye ve ötesinde fuarlar, seminerler ve özel görüşmeler.",
+    },
     search: {
       title: "Gayrimenkul Arayın",
       description:
@@ -105,7 +120,10 @@ const tr = {
     about: "Hakkımızda",
     contact: "İletişim",
     search: "Gayrimenkuller",
-    knowledge: "Bilgi Merkezi",
+    knowledge: "Haberler ve Analizler",
+    publications: "Yayınlar",
+    marketInsights: "Pazar Analizleri",
+    events: "Etkinlikler",
     article: "Makale",
     development: "Proje",
     citizenshipHub: "Yatırım Yoluyla Vatandaşlık",
@@ -117,6 +135,8 @@ const tr = {
     compareIndex: "Programları Karşılaştır",
     comparison: "Karşılaştırma",
     investorProtection: "Yatırımcı Koruması",
+    secondPassport: "İkinci Pasaport",
+    eligibilityReview: "Uygunluk Değerlendirmesi",
     faqIndex: "Multi Mulk'a Sorun",
     faq: "Soru",
     caseStudies: "Müşteri Sonuçları",
@@ -155,7 +175,7 @@ const tr = {
     goldenVisa: "Altın Vize",
     realEstate: "Gayrimenkul",
     protection: "Yatırımcı Koruması",
-    knowledge: "Bilgi",
+    knowledge: "Haberler ve Analizler",
     about: "Hakkımızda",
   },
 
@@ -451,6 +471,9 @@ const tr = {
       All: "Tümü",
       "Press Media": "Basında Biz",
       Blog: "Blog",
+      Publication: "Yayın",
+      "Market Insight": "Pazar Analizi",
+      Event: "Etkinlik",
     },
     sort: {
       Newest: "En yeni",
@@ -458,14 +481,13 @@ const tr = {
     },
     sortLabel: "Yazıları sırala",
     empty: "{filter} altında henüz bir şey yok.",
+    emptyHere: "Burada henüz bir şey yayımlanmadı.",
     copy: {},
   },
 
   media: {
-    heroEyebrow: "Medya Merkezi",
+    heroEyebrow: "Haberler ve Analizler",
     showArticle: "“{title}” yazısını göster",
-    indexHeading: "Tüm Yazılar",
-    indexBody: "En güncel haberleri, analizleri ve kaynakları burada bulun. Bu merkez; blog yazıları, basın bültenleri ve ayrıntılı rehberlerle projelerimizden haberdar olmanızı sağlar.",
     newsletter: {
       heading: "Daha derine inin, haberdar kalın",
       body: "Hiçbir gelişmeyi kaçırmayın — her güncellemeden haberiniz olsun.",
@@ -477,6 +499,37 @@ const tr = {
       sourceLabel: "Kaynak:",
       relatedHeading: "İlgili Yazılar",
       readingTime: { one: "{count} dk okuma", other: "{count} dk okuma" },
+    },
+  },
+
+  insights: {
+    menuHeading: "Haberler ve Analizler",
+    menuBody: "Multi Mulk’un yayımladığı her şey — hakkımızda çıkan haberler, yazdığımız rehberler, piyasaların gerçekte ne yaptığı ve bizimle nerede buluşabileceğiniz.",
+    sections: {
+      articles: {
+        label: "Yazılar",
+        menuLine: "Haberler ve blog",
+        heading: "Haberler ve Blog",
+        body: "En güncel haberleri, analizleri ve kaynakları burada bulun. Bu merkez; blog yazıları, basın bültenleri ve ayrıntılı rehberlerle projelerimizden haberdar olmanızı sağlar.",
+      },
+      publications: {
+        label: "Yayınlar",
+        menuLine: "Rehberler ve raporlar",
+        heading: "Yayınlar",
+        body: "Tıklanmak için değil, karar verilmek için yazılmış kendi rehber ve raporlarımız: her program ne veriyor, ne istiyor ve her şey dâhil ne tutuyor.",
+      },
+      marketInsights: {
+        label: "Pazar Analizleri",
+        menuLine: "Veri ve analiz",
+        heading: "Pazar Analizleri",
+        body: "Türkiye ve Karayipler piyasalarının gerçekte ne yaptığı — fiyatlar, onaylar, eşikler ve süreler; kayıtlardan okunmuş ve ne zamana ait olduğu görülsün diye tarihlendirilmiş.",
+      },
+      events: {
+        label: "Etkinlikler",
+        menuLine: "Bizimle nerede buluşursunuz",
+        heading: "Etkinlikler",
+        body: "Körfez, Türkiye ve ötesinde fuarlar, seminerler ve özel görüşmeler. Gelin, sorularınızı yüz yüze sorun.",
+      },
     },
   },
 
@@ -673,6 +726,15 @@ const tr = {
         "{holding} elde tutma",
         "Eş ve 18 yaşından küçük çocuklar dâhil",
       ],
+    },
+    /**
+     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * names come from `places`, and every figure on a card is read from the
+     * programme record and labelled with the comparison table's own row
+     * names, so the menu has nothing else of its own to translate.
+     */
+    goldenVisa: {
+      label: "Altın Vize ve Oturum",
     },
     detail: {
       "bosphorus-heights": "165 daire",

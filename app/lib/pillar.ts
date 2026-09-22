@@ -26,6 +26,12 @@ const flags: Partial<Record<CountryCode, string>> = {
 /**
  * Place-name tokens that exist in `dictionary.places`. Countries without a
  * translation yet are omitted and the card leads with the official name.
+ *
+ * All ten are listed. The four below the Caribbean were missing rather than
+ * untranslated — `places` has carried them in every language since the
+ * comparison pages were written — so the UAE, Portugal and Greece hub cards
+ * were rendering with no country over the name, and the Golden Visa menu,
+ * which drops a programme it cannot name, was a menu of one.
  */
 export const pillarPlace: Partial<Record<CountryCode, string>> = {
   tr: "Türkiye",
@@ -34,6 +40,10 @@ export const pillarPlace: Partial<Record<CountryCode, string>> = {
   kn: "St. Kitts & Nevis",
   lc: "St. Lucia",
   ag: "Antigua & Barbuda",
+  ae: "United Arab Emirates",
+  pt: "Portugal",
+  gr: "Greece",
+  mt: "Malta",
 };
 
 const cardImage: Record<string, string> = {
@@ -46,8 +56,8 @@ const cardImage: Record<string, string> = {
   "citizenship:malta": "/images/cbi/cbi-documents.jpg",
   "residency:turkiye": "/images/cbi/hero-istanbul.jpg",
   "residency:uae": "/images/cbi/hero-dubai-night.jpg",
-  "residency:portugal": "/images/cbi/cbi-advisory.jpg",
-  "residency:greece": "/images/cbi/cbi-documents.jpg",
+  "residency:portugal": "/images/cbi/hero-lisbon.jpg",
+  "residency:greece": "/images/cbi/hero-santorini.jpg",
 };
 
 export const pillarHero: Record<ProgrammeCategory, string> = {

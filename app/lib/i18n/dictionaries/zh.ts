@@ -37,6 +37,21 @@ const zh = {
       title: "媒体中心",
       description: "投资入籍、居留项目与房地产市场的最新资讯与指南。",
     },
+    publications: {
+      title: "刊物",
+      description:
+        "Multi Mulk 自行撰写的指南与报告——投资入籍土耳其、加勒比计划与黄金签证居留，为正在权衡取舍的人而写。",
+    },
+    marketInsights: {
+      title: "市场洞察",
+      description:
+        "土耳其与加勒比市场的真实状况——价格、审批、门槛与时限，取自公开记录并标注日期。",
+    },
+    events: {
+      title: "活动",
+      description:
+        "在哪里与 Multi Mulk 见面——海湾地区、土耳其及其他地方的展会、研讨会与私人洽谈。",
+    },
     search: {
       title: "房源搜索",
       description:
@@ -107,7 +122,10 @@ const zh = {
     about: "关于我们",
     contact: "联系我们",
     search: "房源",
-    knowledge: "知识中心",
+    knowledge: "资讯与洞察",
+    publications: "刊物",
+    marketInsights: "市场洞察",
+    events: "活动",
     article: "文章",
     development: "项目",
     citizenshipHub: "投资入籍",
@@ -119,6 +137,8 @@ const zh = {
     compareIndex: "项目对比",
     comparison: "对比",
     investorProtection: "投资者保护",
+    secondPassport: "第二本护照",
+    eligibilityReview: "资格评估",
     faqIndex: "向 Multi Mulk 提问",
     faq: "问题",
     caseStudies: "客户成果",
@@ -157,7 +177,7 @@ const zh = {
     goldenVisa: "黄金签证",
     realEstate: "房地产",
     protection: "投资者保护",
-    knowledge: "知识中心",
+    knowledge: "资讯与洞察",
     about: "关于我们",
   },
 
@@ -453,6 +473,9 @@ const zh = {
       All: "全部",
       "Press Media": "媒体报道",
       Blog: "博客",
+      Publication: "刊物",
+      "Market Insight": "市场洞察",
+      Event: "活动",
     },
     sort: {
       Newest: "最新",
@@ -460,14 +483,13 @@ const zh = {
     },
     sortLabel: "文章排序",
     empty: "{filter} 下暂无内容。",
+    emptyHere: "此处尚未发布任何内容。",
     copy: {},
   },
 
   media: {
-    heroEyebrow: "媒体中心",
+    heroEyebrow: "资讯与洞察",
     showArticle: "显示《{title}》",
-    indexHeading: "全部文章",
-    indexBody: "在此获取最新动态、洞察与实用资料。本栏目汇集博客文章、新闻稿与详尽指南，让您及时了解我们的项目。",
     newsletter: {
       heading: "深入了解，持续关注",
       body: "不错过任何一次更新。",
@@ -479,6 +501,37 @@ const zh = {
       sourceLabel: "来源：",
       relatedHeading: "相关文章",
       readingTime: { one: "阅读 {count} 分钟", other: "阅读 {count} 分钟" },
+    },
+  },
+
+  insights: {
+    menuHeading: "资讯与洞察",
+    menuBody: "Multi Mulk 发布的全部内容——我们获得的媒体报道、我们撰写的指南、市场的真实走向，以及与我们见面的场合。",
+    sections: {
+      articles: {
+        label: "文章",
+        menuLine: "新闻与博客",
+        heading: "新闻与博客",
+        body: "在此获取最新动态、洞察与实用资料。本栏目汇集博客文章、新闻稿与详尽指南，让您及时了解我们的项目。",
+      },
+      publications: {
+        label: "刊物",
+        menuLine: "指南与报告",
+        heading: "刊物",
+        body: "我们自己的指南与报告，为决策而写而非为点击而写——每项计划给予什么、要求什么，以及全部费用是多少。",
+      },
+      marketInsights: {
+        label: "市场洞察",
+        menuLine: "数据与分析",
+        heading: "市场洞察",
+        body: "土耳其与加勒比市场的真实状况——价格、审批、门槛与时限，取自公开记录并标注日期，让您清楚数据的新旧。",
+      },
+      events: {
+        label: "活动",
+        menuLine: "与我们见面",
+        heading: "活动",
+        body: "在海湾地区、土耳其及其他地方举办的展会、研讨会与私人洽谈。欢迎当面向我们提问。",
+      },
     },
   },
 
@@ -674,6 +727,15 @@ const zh = {
         "持有 {holding}",
         "配偶及 18 岁以下子女均可包含",
       ],
+    },
+    /**
+     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * names come from `places`, and every figure on a card is read from the
+     * programme record and labelled with the comparison table's own row
+     * names, so the menu has nothing else of its own to translate.
+     */
+    goldenVisa: {
+      label: "黄金签证与居留",
     },
     detail: {
       "bosphorus-heights": "165 套公寓",

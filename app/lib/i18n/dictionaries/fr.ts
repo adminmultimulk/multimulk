@@ -35,6 +35,21 @@ const fr: Dictionary = {
       description:
         "Retombées presse, annonces et guides signés Multi Mulk — citoyenneté turque par investissement, programmes d’İstanbul et du littoral, et portefeuille caribéen.",
     },
+    publications: {
+      title: "Publications",
+      description:
+        "Les guides et rapports de Multi Mulk — citoyenneté turque par investissement, programmes caribéens et résidence par Golden Visa, écrits pour ceux qui arbitrent entre eux.",
+    },
+    marketInsights: {
+      title: "Analyses de marché",
+      description:
+        "Ce que font réellement les marchés turc et caribéen — prix, agréments, seuils et délais, lus dans les registres et datés.",
+    },
+    events: {
+      title: "Événements",
+      description:
+        "Où rencontrer Multi Mulk — salons, conférences et rendez-vous privés dans le Golfe, en Türkiye et ailleurs.",
+    },
     search: {
       title: "Rechercher un bien",
       description:
@@ -417,7 +432,10 @@ const fr: Dictionary = {
     team: "Notre équipe",
     contact: "Nous contacter",
     search: "Biens immobiliers",
-    knowledge: "Centre de ressources",
+    knowledge: "Actualités & Analyses",
+    publications: "Publications",
+    marketInsights: "Analyses de marché",
+    events: "Événements",
     article: "Article",
     development: "Programme immobilier",
     citizenshipHub: "Citoyenneté par investissement",
@@ -429,6 +447,8 @@ const fr: Dictionary = {
     compareIndex: "Comparer les programmes",
     comparison: "Comparaison",
     investorProtection: "Protection de l’investisseur",
+    secondPassport: "Second passeport",
+    eligibilityReview: "Examen d’éligibilité",
     faqIndex: "Demandez à Multi Mulk",
     faq: "Question",
     caseStudies: "Résultats clients",
@@ -444,7 +464,7 @@ const fr: Dictionary = {
     goldenVisa: "Visa doré",
     realEstate: "Immobilier",
     protection: "Protection",
-    knowledge: "Ressources",
+    knowledge: "Actualités & Analyses",
     about: "À propos",
   },
 
@@ -466,6 +486,15 @@ const fr: Dictionary = {
         "Détention pendant {holding}",
         "Conjoint et enfants de moins de 18 ans inclus",
       ],
+    },
+    /**
+     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * names come from `places`, and every figure on a card is read from the
+     * programme record and labelled with the comparison table's own row
+     * names, so the menu has nothing else of its own to translate.
+     */
+    goldenVisa: {
+      label: "Visa doré et résidence",
     },
     detail: {
       "bosphorus-heights": "165 appartements",
@@ -615,6 +644,9 @@ const fr: Dictionary = {
       All: "Tout",
       "Press Media": "Presse",
       Blog: "Blog",
+      Publication: "Publication",
+      "Market Insight": "Analyse de marché",
+      Event: "Événement",
     },
     topics: {
       citizenship: "Citoyenneté",
@@ -626,6 +658,7 @@ const fr: Dictionary = {
     sort: { Newest: "Plus récents", Oldest: "Plus anciens" },
     sortLabel: "Trier les articles",
     empty: "Rien de classé sous « {filter} » pour l’instant.",
+    emptyHere: "Rien n’a encore été publié ici.",
     copy: staged<ArticleCopy>({
       "levent-residences-tops-out": {
         title: "Levent Residences atteint sa hauteur définitive et devient la nouvelle adresse phare de Şişli",
@@ -1155,11 +1188,8 @@ const fr: Dictionary = {
   },
 
   media: {
-    heroEyebrow: "Espace presse",
+    heroEyebrow: "Actualités & Analyses",
     showArticle: "Afficher « {title} »",
-    indexHeading: "Tous les articles",
-    indexBody:
-      "Retrouvez ici l’ensemble des actualités, analyses et ressources utiles. Cet espace réunit articles de fond, communiqués de presse et guides détaillés pour suivre nos projets.",
     newsletter: {
       heading: "Aller plus loin, rester informé",
       body: "Ne manquez aucune actualité — suivez chaque étape avec nous.",
@@ -1174,6 +1204,37 @@ const fr: Dictionary = {
         one: "{count} min de lecture",
         other: "{count} min de lecture",
       }),
+    },
+  },
+
+  insights: {
+    menuHeading: "Actualités & Analyses",
+    menuBody: "Tout ce que publie Multi Mulk — les articles qui parlent de nous, les guides que nous écrivons, ce que font réellement les marchés, et où nous rencontrer.",
+    sections: {
+      articles: {
+        label: "Articles",
+        menuLine: "Actualités et blog",
+        heading: "Actualités & Blog",
+        body: "Retrouvez ici l’ensemble des actualités, analyses et ressources utiles. Cet espace réunit articles de fond, communiqués de presse et guides détaillés pour suivre nos projets.",
+      },
+      publications: {
+        label: "Publications",
+        menuLine: "Guides et rapports",
+        heading: "Publications",
+        body: "Nos propres guides et rapports, écrits pour la décision et non pour le clic — ce que chaque programme accorde, ce qu’il exige, et ce qu’il coûte au total.",
+      },
+      marketInsights: {
+        label: "Analyses de marché",
+        menuLine: "Chiffres et analyses",
+        heading: "Analyses de marché",
+        body: "Ce que font réellement les marchés turc et caribéen — prix, agréments, seuils et délais, lus dans les registres et datés pour que vous sachiez de quand ils datent.",
+      },
+      events: {
+        label: "Événements",
+        menuLine: "Où nous rencontrer",
+        heading: "Événements",
+        body: "Salons, conférences et rendez-vous privés dans le Golfe, en Türkiye et ailleurs. Venez nous poser vos questions en personne.",
+      },
     },
   },
 
@@ -1285,6 +1346,25 @@ const fr: Dictionary = {
     browseAll: "Parcourir toutes les résidences",
     about: "À propos du programme",
     amenities: "Prestations",
+    architecture: "Concept architectural",
+    earthquake: "Résistance sismique",
+    distancesEyebrow: "Se déplacer",
+    distancesHeading: "Distances depuis {project}",
+    areaEyebrow: "Le quartier",
+    areaOverview: "À propos de l’emplacement",
+    marketEyebrow: "Regard sur le marché",
+    marketPerformance: "Performance du marché résidentiel",
+    distanceGroups: {
+      "Cultural Hubs": "Pôles culturels",
+      Airports: "Aéroports",
+      Hospitals: "Hôpitaux",
+      "Business Hubs": "Quartiers d’affaires",
+      Transportation: "Transports",
+      Education: "Éducation",
+      Universities: "Universités",
+      Schools: "Écoles",
+      "Shopping Centres": "Centres commerciaux",
+    },
     otherDevelopments: "Autres programmes",
     enquireEyebrow: "Parler à un conseiller",
     enquireHeading: "Se renseigner sur {project}",
@@ -1447,6 +1527,12 @@ const fr: Dictionary = {
       "Smart Home": "Domotique",
       "Pet Friendly": "Animaux acceptés",
       "Beach Access": "Accès à la plage",
+      "Spa & Wellness": "Spa & bien-être",
+      "Green Spaces": "Espaces verts",
+      "Walking Paths": "Allées de promenade",
+      "Dining Areas": "Espaces de restauration",
+      "Educational Facilities": "Établissements éducatifs",
+      "Private Parking": "Parking privé",
     },
   },
 

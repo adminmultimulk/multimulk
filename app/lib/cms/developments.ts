@@ -2,6 +2,7 @@ import "server-only";
 import { cmsUnits, type Listing } from "./properties";
 import { slugify } from "../admin/slug";
 import type { Project } from "../projects";
+import type { Story } from "../story";
 
 /**
  * Developments, assembled out of the listings that belong to them.
@@ -74,6 +75,32 @@ function statsFor(units: Listing[], from: Listing): Project["stats"] {
 }
 
 /**
+ * The development's story, out of whichever listings carry it.
+ *
+ * Per section rather than from the lead alone: a lister who wrote the
+ * architecture on the first unit and came back to add the distances on the
+ * third has described one building between them, and the page should read
+ * both. Each section comes from the first unit — cheapest first — that has it.
+ */
+function storyFor(units: Listing[]): Story {
+  const first = <K extends keyof Story>(key: K): Story[K] | undefined =>
+    units.find((unit) => {
+      const value = unit[key];
+      return Array.isArray(value) ? value.length > 0 : Boolean(value);
+    })?.[key];
+
+  return {
+    architecture: first("architecture") ?? null,
+    earthquake: first("earthquake") ?? null,
+    distances: first("distances") ?? [],
+    areaOverview: first("areaOverview") ?? null,
+    areaGallery: first("areaGallery") ?? [],
+    marketPerformance: first("marketPerformance") ?? null,
+    marketChart: first("marketChart") ?? null,
+  };
+}
+
+/**
  * One development, out of the listings in it.
  *
  * Shaped as a `Project` so the development page, the menu and the hub render
@@ -105,6 +132,7 @@ function assemble(name: string, units: Listing[]): Development {
       // another has described one building between them.
       items: [...new Set(sorted.flatMap((unit) => unit.amenities))],
     },
+    ...storyFor(sorted),
     units: sorted,
   };
 }

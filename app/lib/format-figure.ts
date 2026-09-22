@@ -8,6 +8,7 @@
 
 import type { ComparisonValue } from "./comparisons";
 import type { Figure } from "./figures";
+import type { Money } from "./programmes";
 import type { Dictionary } from "./i18n";
 import { intlLocale, type Locale } from "./i18n/config";
 import { formatNumber, interpolate } from "./i18n/format";
@@ -17,6 +18,24 @@ const currencyFor: Partial<Record<Figure["unit"], string>> = {
   eur: "EUR",
   aed: "AED",
 };
+
+/**
+ * A programme's threshold — "$400,000", "AED 2,000,000".
+ *
+ * The same rules as `figureValue` below, for the amounts that live on a
+ * `Programme` record rather than in the figures registry. Here rather than
+ * beside one of its callers because there were already four hand-rolled
+ * copies of this `Intl.NumberFormat` call in the tree, and a fifth in a menu
+ * is how "AED 2,000,000.00" ends up in the navigation of one language.
+ */
+export function formatMoney(locale: Locale, money: Money): string {
+  return new Intl.NumberFormat(intlLocale[locale], {
+    style: "currency",
+    currency: money.currency,
+    maximumFractionDigits: 0,
+    numberingSystem: "latn",
+  }).format(money.amount);
+}
 
 /**
  * The number alone — "$400,000", "3–6", "110+".

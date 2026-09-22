@@ -11,6 +11,10 @@ import Link from "next/link";
 import { saveArticle } from "@/app/lib/admin/article-actions";
 import { slugify } from "@/app/lib/admin/slug";
 import { fromBlocks } from "@/app/lib/rich-text";
+import {
+  categories as allCategories,
+  type ArticleCategory,
+} from "@/app/lib/sections";
 import { topics as allTopics } from "@/app/lib/topics";
 import { Alert, Button, Field, Input, Select, Textarea } from "./ui";
 import { RichEditor } from "./rich-editor";
@@ -55,6 +59,40 @@ export const emptyArticle: ArticleDraft = {
   noindex: false,
   status: "DRAFT",
 };
+
+/**
+ * The Filing select, in the order the dashboard offers it.
+ *
+ * `where` is the section the piece lands in once it is live — spelled out
+ * because the mapping from a category to a page is the one thing about filing
+ * a writer cannot see from the form, and filing a market insight under Blog is
+ * a mistake nothing else on this screen would catch.
+ */
+const categoryOptions: Record<
+  ArticleCategory,
+  { label: string; where: string }
+> = {
+  Blog: { label: "Blog — our own writing", where: "/knowledge" },
+  "Press Media": {
+    label: "Press — coverage elsewhere",
+    where: "/knowledge",
+  },
+  Publication: {
+    label: "Publication — a guide or report",
+    where: "/knowledge/publications",
+  },
+  "Market Insight": {
+    label: "Market insight — data and analysis",
+    where: "/knowledge/market-insights",
+  },
+  Event: {
+    label: "Event — an exhibition, seminar or briefing",
+    where: "/knowledge/events",
+  },
+};
+
+/** The two categories that ran somewhere other than this site. */
+const CARRIES_SOURCE: ArticleCategory[] = ["Press Media", "Publication"];
 
 const topicLabels: Record<string, string> = {
   citizenship: "Citizenship",
@@ -335,8 +373,9 @@ export function ArticleForm({
               <p className="mt-2 text-[12px] text-red-700">{errors.topics}</p>
             ) : (
               <p className="mt-2 text-[12px] leading-[17px] text-ink/55">
-                What the Knowledge Centre filters on, and how the related rail
-                finds neighbours.
+                What News & Insights filters on, and how the related rail
+                finds neighbours. Separate from Filing below, which is the page
+                the piece is listed on.
               </p>
             )}
           </fieldset>
@@ -356,7 +395,7 @@ export function ArticleForm({
             defaultValue={article.image}
             placeholder="/images/…"
             previewRatio="3/2"
-            hint="Roughly 3:2. Shown on the Knowledge Centre index, and everywhere the piece is linked."
+            hint="Roughly 3:2. Shown on the News & Insights index, and everywhere the piece is linked."
           />
 
           <UploadField
@@ -373,24 +412,39 @@ export function ArticleForm({
           />
         </Card>
 
-        <Card title="Filing">
-          <Field label="Kind" name="category">
+        <Card
+          title="Filing"
+          hint="Which of the four News & Insights sections lists the piece. The URL is the same either way."
+        >
+          <Field label="Kind" name="category" error={errors.category}>
             <Select
               id="category"
               name="category"
               value={category}
+              error={errors.category}
               onChange={(event) => setCategory(event.target.value)}
             >
-              <option value="Blog">Blog — our own writing</option>
-              <option value="Press Media">Press — coverage elsewhere</option>
+              {allCategories.map((kind) => (
+                <option key={kind} value={kind}>
+                  {categoryOptions[kind].label}
+                </option>
+              ))}
             </Select>
+            <p className="text-[12px] leading-[17px] text-ink/55">
+              Listed under{" "}
+              <b className="font-medium text-ink/75">
+                {categoryOptions[category as ArticleCategory]?.where ??
+                  "/knowledge"}
+              </b>
+              .
+            </p>
           </Field>
 
-          {category === "Press Media" ? (
+          {CARRIES_SOURCE.includes(category as ArticleCategory) ? (
             <Field
               label="Publication"
               name="source"
-              hint="The outlet the piece ran in."
+              hint="The outlet the piece ran in. Leave it empty for something we published ourselves."
             >
               <Input id="source" name="source" defaultValue={article.source} />
             </Field>

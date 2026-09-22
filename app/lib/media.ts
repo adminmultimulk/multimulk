@@ -19,9 +19,16 @@ import {
   pickAll,
   type ArticleCopy,
 } from "./i18n/format";
+import type { ArticleCategory } from "./sections";
 import type { Topic } from "./topics";
 
-export type ArticleCategory = "Press Media" | "Blog";
+/**
+ * Press, blog, publication, market insight or event — defined in
+ * `sections.ts`, which is where the four News & Insights sections map onto it,
+ * and re-exported here because this is where everything that files an article
+ * already imports from.
+ */
+export type { ArticleCategory };
 
 export type Article = {
   /** Also the URL: /knowledge/<slug>. */
@@ -55,6 +62,11 @@ export type Article = {
   readMore?: string;
 };
 
+/**
+ * The home page strip's filter, which is the two article categories and not
+ * the whole filing axis: the strip is headlined "Latest Articles", and a
+ * publication or a market insight is read in its own section.
+ */
 export const articleCategories = ["All", "Press Media", "Blog"] as const;
 export type ArticleFilter = (typeof articleCategories)[number];
 

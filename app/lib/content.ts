@@ -13,7 +13,15 @@
  * Multi Mulk's own before this goes anywhere public.
  */
 
+import { pillarPlace, pillarVisual } from "./pillar";
+import {
+  cheapestOfferedRoute,
+  isPublishable,
+  programmesIn,
+  type Money,
+} from "./programmes";
 import { buildPath, routes, searchPath, type RouteId } from "./routes";
+import { sectionRoute, sections, type SectionId } from "./sections";
 
 export { type Article } from "./media";
 
@@ -77,14 +85,14 @@ export const navLinks: NavLink[] = [
     hasMenu: true,
     href: routes.citizenshipHub.pattern,
   },
-  { key: "goldenVisa", hasMenu: false, href: routes.goldenVisaHub.pattern },
+  { key: "goldenVisa", hasMenu: true, href: routes.goldenVisaHub.pattern },
   { key: "realEstate", hasMenu: true, href: routes.realEstateHub.pattern },
   {
     key: "protection",
     hasMenu: false,
     href: routes.investorProtection.pattern,
   },
-  { key: "knowledge", hasMenu: false, href: routes.knowledge.pattern },
+  { key: "knowledge", hasMenu: true, href: routes.knowledge.pattern },
   { key: "about", hasMenu: true, href: routes.about.pattern },
 ];
 
@@ -135,7 +143,125 @@ export type MegaMenu =
         /** Caribbean lists development names; Türkiye lists translated routes. */
         projects?: string[];
       }[];
+    }
+  | {
+      /**
+       * A menu that is a list of sections rather than of inventory: News &
+       * Insights, whose four children are the same corpus filed four ways.
+       * The keys come from `sections.ts`, so adding a fifth section adds a
+       * fifth card here and nothing else.
+       */
+      kind: "sections";
+      cards: { key: SectionId; image: string; href: string }[];
+    }
+  | {
+      /**
+       * Golden Visa: one card per residency programme, read from the
+       * programme records rather than written out.
+       *
+       * The Citizenship menu beside it is the `programmes` kind above, and the
+       * two are deliberately not the same kind. That one is editorial — two
+       * hand-built cards, one of which stands for a whole region and lists
+       * development names — while this one is generated, so adding a
+       * programme to `programmes.ts` and signing it off puts it in the
+       * navigation with no second edit anywhere.
+       */
+      kind: "residency";
+      cards: ResidencyCard[];
     };
+
+/**
+ * One residency programme in the Golden Visa menu.
+ *
+ * Photography rather than a flag strip: the site holds flags for Türkiye and
+ * the five Caribbean islands only, and three of these four countries have
+ * none. `pillar.ts` already keys a photograph to every programme for the hub
+ * cards, so the menu shows the same frame the hub does rather than introducing
+ * a second set of artwork that can disagree with it.
+ *
+ * The facts are carried as data, not as formatted strings: a threshold has to
+ * be printed in the reader's own locale, and `formatMoney` needs a locale the
+ * navigation cannot know at module scope.
+ */
+export type ResidencyCard = {
+  /** The programme slug, which is also the card's key. */
+  key: string;
+  /** Token looked up in `dictionary.places` for the card's name. */
+  place: string;
+  image: string;
+  href: string;
+  /** The entry threshold, on the cheapest route we would actually transact. */
+  from?: Money;
+  /** Months to a decision, as the record states them. */
+  processing?: { min: number; max?: number };
+  /** Years to a citizenship application, where the programme leads to one. */
+  citizenshipAfter?: number;
+};
+
+/**
+ * The Golden Visa cards, built from the signed-off residency programmes.
+ *
+ * Unreviewed ones are filtered exactly as the hub and the sitemap filter them
+ * — `isPublishable` is the one gate — so a programme still in legal review
+ * cannot reach the navigation.
+ *
+ * A programme with no place name in `dictionary.places` is dropped rather than
+ * shown under its slug: every country here has one today, and a card reading
+ * "portugal" in seven languages is worse than a menu of three.
+ */
+function residencyCards(): ResidencyCard[] {
+  return programmesIn("residency")
+    .filter(isPublishable)
+    .flatMap((programme) => {
+      const place = pillarPlace[programme.country];
+      if (!place) return [];
+
+      // The cheapest route we transact, and the cheapest route at all where we
+      // transact none — Portugal and Greece are both recognised rather than
+      // offered, and a card with no figure on it says less than the truth.
+      const route =
+        cheapestOfferedRoute(programme) ??
+        [...programme.routes].sort(
+          (a, b) => a.minimum.amount - b.minimum.amount,
+        )[0];
+
+      return [
+        {
+          key: programme.slug,
+          place,
+          image: pillarVisual(programme).image,
+          href: buildPath("goldenVisaProgramme", { programme: programme.slug }),
+          from: route?.minimum,
+          processing:
+            programme.processingMonths === "unknown"
+              ? undefined
+              : programme.processingMonths,
+          citizenshipAfter:
+            typeof programme.citizenshipAfterYears === "number"
+              ? programme.citizenshipAfterYears
+              : undefined,
+        },
+      ];
+    });
+}
+
+/**
+ * The photograph behind each News & Insights card.
+ *
+ * Chosen for what the section is rather than for what is in it: documents on a
+ * desk for the publications, the skyline under construction for the market,
+ * and Dubai after dark for the events, which is where most of them are held.
+ *
+ * Not the IPS Dubai poster, which was the obvious choice and the wrong one:
+ * it carries its own headline set into the artwork, and a card reading "Best
+ * Projects of Türkiye 2026" above the word Events is two headlines arguing.
+ */
+const sectionImages: Record<SectionId, string> = {
+  articles: "/images/cbi/cbi-istanbul-strait.jpg",
+  publications: "/images/cbi/cbi-documents.jpg",
+  marketInsights: "/images/cbi/protection-cranes-dusk.jpg",
+  events: "/images/cbi/hero-dubai-night.jpg",
+};
 
 /** Keyed by the nav key the menu hangs from. */
 export const menus: Partial<Record<NavKey, MegaMenu>> = {
@@ -167,6 +293,29 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
     // reason entering a listing changed nothing in the menu: the menu did not
     // read the inventory, it repeated a list somebody had typed beside it.
     cards: [],
+  },
+
+  /**
+   * News & Insights. Articles is the section that answers at /knowledge
+   * itself, so the label and its first child open the same page — which is
+   * what a reader expects of a parent that is also a destination.
+   */
+  knowledge: {
+    kind: "sections",
+    cards: sections.map((key) => ({
+      key,
+      image: sectionImages[key],
+      href: routes[sectionRoute[key]].pattern,
+    })),
+  },
+
+  /**
+   * Golden Visa & Residency, generated from the programme records. See
+   * `residencyCards`.
+   */
+  goldenVisa: {
+    kind: "residency",
+    cards: residencyCards(),
   },
 
   citizenship: {

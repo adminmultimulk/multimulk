@@ -3,12 +3,15 @@
 import { useMemo, useState, useSyncExternalStore } from "react";
 import { ARTICLES_PER_PAGE, sortOptions, type SortOption } from "@/app/lib/media";
 import type { AnyArticle } from "@/app/lib/article-shape";
+import { buildPath } from "@/app/lib/routes";
+import { sectionRoute, sections, type SectionId } from "@/app/lib/sections";
 import { isTopic, topics, type Topic } from "@/app/lib/topics";
 import { useI18n } from "@/app/lib/i18n/context";
 import { interpolate } from "@/app/lib/i18n/format";
 import { AnimatedTitle } from "./animated-title";
 import { ArticleCard } from "./article-card";
 import { Container } from "./container";
+import { Link } from "./link";
 import { SelectMenu } from "./select-menu";
 
 type Filter = Topic | "all";
@@ -22,8 +25,12 @@ function subscribeToHistory(onChange: () => void) {
 }
 
 /**
- * The Knowledge Centre index: every article, all three collections, filterable
- * by pillar.
+ * One News & Insights index — Articles, Publications, Market Insights or
+ * Events — filterable by pillar.
+ *
+ * The same component for all four. They differ in which categories the server
+ * hands down and in the copy above the grid; the filtering, the sort, the
+ * paging and the cards are identical, and four copies of that would drift.
  *
  * The list is a prop rather than an import. The archive in `knowledge.ts` is
  * close to a megabyte of prose, and importing it here shipped every word of it
@@ -46,8 +53,23 @@ function subscribeToHistory(onChange: () => void) {
  * trade. Prerendering unfiltered and narrowing on hydration keeps the links in
  * the HTML and costs a reader arriving on a category redirect one frame.
  */
-export function MediaArticles({ articles }: { articles: AnyArticle[] }) {
+export function MediaArticles({
+  articles,
+  section,
+  showHeading = true,
+}: {
+  articles: AnyArticle[];
+  /** Which of the four News & Insights sections this index is. */
+  section: SectionId;
+  /**
+   * False where the page opens on a `PageHero` carrying the same heading and
+   * standfirst — the three sections beneath /knowledge do, and two headings
+   * saying the same thing is one `h1` too many for the page to be read.
+   */
+  showHeading?: boolean;
+}) {
   const { t } = useI18n();
+  const copy = t.insights.sections[section];
 
   // The server snapshot is an empty query, so the prerender is the full list.
   const query = useSyncExternalStore(subscribeToHistory, readQuery, () => "");
@@ -83,18 +105,49 @@ export function MediaArticles({ articles }: { articles: AnyArticle[] }) {
   }
 
   return (
-    <section className="bg-white py-[72px] lg:py-[144px]">
+    <section
+      className={`bg-white pb-[72px] lg:pb-[144px] ${
+        // Where the heading has been lifted into a `PageHero`, the full
+        // opening pad leaves the section tabs floating in a field of white.
+        showHeading ? "pt-[72px] lg:pt-[144px]" : "pt-[40px] lg:pt-[56px]"
+      }`}
+    >
       <Container>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-[64px]">
-          <h1 className="font-display text-[34px] leading-[1.36] text-ink sm:text-[42px] lg:text-[48px]">
-            <AnimatedTitle variant="banner">
-              {t.media.indexHeading}
-            </AnimatedTitle>
-          </h1>
-          <p className="max-w-[713px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink lg:text-end">
-            {t.media.indexBody}
-          </p>
-        </div>
+        {/* The four sections, so a reader who lands on one from search can
+            reach the other three without going back up to the nav. */}
+        <nav aria-label={t.insights.menuHeading}>
+          <ul className="flex flex-wrap items-center gap-x-[28.8px] gap-y-2 pb-[36px]">
+            {sections.map((id) => {
+              const here = id === section;
+              return (
+                <li key={id}>
+                  <Link
+                    href={buildPath(sectionRoute[id])}
+                    aria-current={here ? "page" : undefined}
+                    className={`block border-b-2 pb-1 text-[13px] tracking-[0.02em] transition-colors ${
+                      here
+                        ? "border-ink text-ink"
+                        : "border-transparent text-ink/55 hover:text-ink"
+                    }`}
+                  >
+                    {t.insights.sections[id].label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {showHeading ? (
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-[64px]">
+            <h1 className="font-display text-[34px] leading-[1.36] text-ink sm:text-[42px] lg:text-[48px]">
+              <AnimatedTitle variant="banner">{copy.heading}</AnimatedTitle>
+            </h1>
+            <p className="max-w-[713px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink lg:text-end">
+              {copy.body}
+            </p>
+          </div>
+        ) : null}
 
         <span className="mt-[43.2px] block h-px w-full bg-ink/50" />
 
@@ -151,9 +204,14 @@ export function MediaArticles({ articles }: { articles: AnyArticle[] }) {
           </ul>
         ) : (
           <p className="py-16 text-center text-[14.4px] text-ink/70">
-            {interpolate(t.articles.empty, {
-              filter: filter === "all" ? t.common.viewAll : t.articles.topics[filter],
-            })}
+            {/* "Nothing filed under View All yet" is what naming the filter
+                produces when there is no filter, and a section with nothing in
+                it is the common case for the three new ones. */}
+            {filter === "all"
+              ? t.articles.emptyHere
+              : interpolate(t.articles.empty, {
+                  filter: t.articles.topics[filter],
+                })}
           </p>
         )}
 

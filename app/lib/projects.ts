@@ -16,7 +16,9 @@
  * lister wrote rather than not at all.
  */
 
-export type Project = {
+import type { Story } from "./story";
+
+export type Project = Story & {
   slug: string;
   /** Never translated — the name a buyer searches for, in every language. */
   name: string;
@@ -40,4 +42,9 @@ export type Project = {
   overview: { heading: string; body: string };
   stats: { label: string; value: string }[];
   amenities: { body: string; items: string[] };
+  /*
+   * …and the sections of `Story`: the architecture, the ground, the distances,
+   * the district and its market. Read from whichever of the development's
+   * listings carries each; see `app/lib/cms/developments.ts`.
+   */
 };

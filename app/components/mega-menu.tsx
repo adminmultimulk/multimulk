@@ -2,17 +2,20 @@
 
 import Image from "next/image";
 import { Link } from "./link";
-import type { MegaMenu, MenuCard } from "@/app/lib/content";
+import type { MegaMenu, MenuCard, ResidencyCard } from "@/app/lib/content";
 import { useI18n } from "@/app/lib/i18n/context";
 import { lookup, selectPlural } from "@/app/lib/i18n/format";
 import { placeLine } from "@/app/lib/i18n/units";
 import { getFigure } from "@/app/lib/figures";
-import { figureValue } from "@/app/lib/format-figure";
+import { figureValue, formatMoney } from "@/app/lib/format-figure";
 import type { Dictionary } from "@/app/lib/i18n";
 import type { Locale } from "@/app/lib/i18n/config";
 
 /** Children enter one after another rather than all at once. */
 const stagger = (i: number) => ({ animationDelay: `${60 + i * 55}ms` });
+
+/** A figure the programme record does not carry. See `ResidencyTile`. */
+const DASH = "—";
 
 export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
   const { t, locale, fill } = useI18n();
@@ -74,6 +77,39 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
       );
     }
 
+    case "sections": {
+      // News & Insights: four sections of one corpus, so the cards are read as
+      // a list and carry a line each rather than a photograph each with a name
+      // dropped over it. The strip sits at the same aspect as the About cards.
+      const copy = t.insights;
+      return (
+        <div className="grid grid-cols-[260px_1fr] gap-10">
+          <Intro heading={copy.menuHeading} body={copy.menuBody} />
+          <div className="grid grid-cols-4 gap-2">
+            {menu.cards.map((card, i) => (
+              <Link
+                key={card.key}
+                href={card.href}
+                style={stagger(i)}
+                className="group animate-menu-rise relative block aspect-[330/300] overflow-hidden"
+              >
+                <CardImage src={card.image} sizes="320px" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/55 via-55% to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <span className="block font-display text-[22px] leading-tight text-cream">
+                    {copy.sections[card.key].label}
+                  </span>
+                  <span className="mt-1.5 block text-[11.5px] leading-[17px] text-cream/75">
+                    {copy.sections[card.key].menuLine}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
     case "programmes": {
       // Two programmes read best side by side in a wider frame; three or more
       // fall back to the compact three-up row.
@@ -127,7 +163,114 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
         </div>
       );
     }
+    case "residency": {
+      // Four programmes, so a four-up row. Each card stacks its facts under
+      // the country name rather than setting them beside it the way the two
+      // wide Citizenship cards do — at a quarter of the row there is no room
+      // for a name and a list shoulder to shoulder.
+      return (
+        <div className="grid grid-cols-4 gap-3">
+          {menu.cards.map((card, i) => (
+            <ResidencyTile
+              key={card.key}
+              card={card}
+              index={i}
+              t={t}
+              locale={locale}
+            />
+          ))}
+        </div>
+      );
+    }
   }
+}
+
+/**
+ * One Golden Visa card: the country photograph, its name, and the three
+ * figures a reader weighs a residency programme on.
+ *
+ * Every figure is read from the programme record and every label is one the
+ * comparison table already uses, so the menu cannot state a threshold the
+ * comparison contradicts — which is the whole reason `programmes.ts` keeps
+ * these as structured fields rather than as written lines.
+ */
+function ResidencyTile({
+  card,
+  index,
+  t,
+  locale,
+}: {
+  card: ResidencyCard;
+  index: number;
+  t: Dictionary;
+  locale: Locale;
+}) {
+  const months = card.processing;
+  /*
+   * Always three rows, with an em dash where the record has no figure.
+   *
+   * Both halves of that matter. A card that dropped its empty rows would sit
+   * a line or two taller than the one beside it — the block is anchored to
+   * the foot of the card — and a row of four would come out ragged for no
+   * reason a reader could see. And the dash is what `programmes.ts` asks for
+   * anyway: an omitted fact reads as "none", which for the UAE's processing
+   * time would be a claim, while a dash says we have not published one. The
+   * UAE's blank "citizenship after" is the honest answer rather than a gap —
+   * the Golden Residence is a permit, and it never becomes a passport.
+   */
+  const facts = [
+    {
+      label: t.compare.rows.minimumInvestment,
+      value: card.from ? formatMoney(locale, card.from) : DASH,
+    },
+    {
+      label: t.compare.rows.processingTime,
+      // An en dash inside the range, matching `figureValue`.
+      value: months
+        ? `${months.max ? `${months.min}–${months.max}` : months.min} ${t.figures.units.months}`
+        : DASH,
+    },
+    {
+      label: t.compare.rows.citizenshipAfter,
+      value:
+        card.citizenshipAfter === undefined
+          ? DASH
+          : `${card.citizenshipAfter} ${t.figures.units.years}`,
+    },
+  ];
+
+  return (
+    <Link
+      href={card.href}
+      style={stagger(index)}
+      className="group animate-menu-rise relative block aspect-[330/300] overflow-hidden"
+    >
+      <CardImage src={card.image} sizes="330px" />
+      {/* The mid stop is 70 rather than 60 because two of these four frames
+          are bright: Santorini's stucco and Lisbon's roofs both sit right
+          under the dimmer of the two label colours. See the foot figures in
+          public/images/cbi/CREDITS.md. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/70 via-55% to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 px-5 py-4">
+        <p className="text-[10px] text-cream/70">{t.menus.goldenVisa.label}</p>
+        <p className="mt-1 font-display text-[22px] leading-tight text-cream">
+          {lookup(t.places, card.place)}
+        </p>
+        <dl className="mt-2.5 border-t border-cream/20 pt-2">
+          {facts.map((fact) => (
+            <div key={fact.label} className="flex justify-between gap-3 py-[3px]">
+              <dt className="text-[10.5px] leading-[15px] text-cream/60">
+                {fact.label}
+              </dt>
+              <dd className="num shrink-0 text-[10.5px] leading-[15px] text-cream/90">
+                {fact.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </Link>
+  );
 }
 
 function Intro({

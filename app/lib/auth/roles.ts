@@ -24,7 +24,7 @@ export const roleLabels: Record<Role, string> = {
 
 export const roleDescriptions: Record<Role, string> = {
   SUPERADMIN: "Full access, and the only role that can create accounts.",
-  EDITOR: "Writes and publishes Knowledge Centre articles.",
+  EDITOR: "Writes and publishes News & Insights articles.",
   LISTER: "Creates and publishes property listings.",
 };
 

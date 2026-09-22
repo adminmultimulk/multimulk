@@ -28,13 +28,16 @@ import clsx from "clsx";
 import { money } from "@/app/lib/admin/money";
 import { CBI_THRESHOLD_USD } from "@/app/lib/properties";
 import { toBlocks } from "@/app/lib/rich-text";
+import { groupDistances, parseDistances } from "@/app/lib/story";
 import { AmenityIcon } from "../amenity-icon";
 import { ArticleBody, RichLine } from "../article-body";
+import { DistanceIcon } from "../distance-icon";
 import {
   Area,
   Bath,
   Bed,
   Building,
+  Foundation,
   MapPin,
   Stairs,
   ViewIcon,
@@ -523,6 +526,8 @@ function PagePreview({
         </section>
       ) : null}
 
+      <StoryPreview property={property} />
+
       {terms.length || property.videoUrl.trim() ? (
         <section className="bg-white px-4 py-4">
           <h3 className="font-display text-[15px] text-ink">Terms</h3>
@@ -571,5 +576,134 @@ function PagePreview({
         </span>
       </section>
     </div>
+  );
+}
+
+/**
+ * The development's story, in the order and the shapes the page gives it —
+ * the architecture with the earthquake panel beside it, the distances as
+ * grouped cards, the district with its collage, the market with its chart.
+ * Each section is absent here exactly when it is absent there.
+ */
+function StoryPreview({ property }: { property: PropertyDraft }) {
+  const architecture = toBlocks(property.architecture);
+  const earthquake = toBlocks(property.earthquake);
+  // Split the way the Server Action splits them, so a row the action would
+  // drop is missing from the preview rather than shown and then lost.
+  const groups = groupDistances(parseDistances(property.distances));
+  const area = toBlocks(property.areaOverview);
+  const areaGallery = property.areaGallery.filter(Boolean);
+  const market = toBlocks(property.marketPerformance);
+  const chart = property.marketChart.trim();
+
+  return (
+    <>
+      {architecture.length || earthquake.length ? (
+        <section className="grid gap-4 bg-white px-4 py-5">
+          {architecture.length ? (
+            <div>
+              <h3 className="font-display text-[17px] leading-[1.28] text-ink">
+                Architectural Concept
+              </h3>
+              <div className="mt-2">
+                <ArticleBody body={architecture} />
+              </div>
+            </div>
+          ) : null}
+          {earthquake.length ? (
+            <div className="rounded-sm border border-forest/15 bg-sand/35 p-4">
+              <div className="flex items-center gap-2">
+                <Foundation className="w-5 shrink-0 text-forest" />
+                <h3 className="font-display text-[15px] leading-[1.28] text-ink">
+                  Earthquake Resistance
+                </h3>
+              </div>
+              <div className="mt-1">
+                <ArticleBody body={earthquake} />
+              </div>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {groups.length ? (
+        <section className="bg-mist px-4 py-4">
+          <h3 className="font-display text-[15px] text-ink">Distances</h3>
+          <ul className="mt-3 grid gap-2">
+            {groups.map(({ group, rows }) => (
+              <li key={group} className="rounded-sm border border-ink/10 bg-white p-3">
+                <div className="flex items-center gap-2">
+                  <DistanceIcon group={group} className="w-4 shrink-0 text-gold" />
+                  <h4 className="font-display text-[13.5px] text-ink">{group}</h4>
+                </div>
+                <ul className="mt-2">
+                  {rows.map((row) => (
+                    <li
+                      key={row.name}
+                      className="flex items-baseline justify-between gap-3 border-t border-ink/10 py-1.5 text-[11.5px]"
+                    >
+                      <span className="text-ink">{row.name}</span>
+                      <span className="num shrink-0 text-ink/60">
+                        {[row.distance, row.time].filter(Boolean).join(" · ")}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {area.length || areaGallery.length ? (
+        <section className="bg-white px-4 py-5">
+          <h3 className="font-display text-[17px] leading-[1.28] text-ink">
+            About the Location
+          </h3>
+          {areaGallery.length ? (
+            <div className="mt-3 grid grid-cols-2 gap-1.5">
+              {areaGallery.slice(0, 4).map((src, index) => (
+                <Shot
+                  key={`${src}-${index}`}
+                  src={src}
+                  alt="Area"
+                  className="aspect-[4/3] w-full"
+                />
+              ))}
+            </div>
+          ) : null}
+          {area.length ? (
+            <div className="mt-3">
+              <ArticleBody body={area} />
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
+      {market.length || chart ? (
+        <section className="bg-mist px-4 py-5">
+          <h3 className="font-display text-[17px] leading-[1.28] text-ink">
+            Residential Market Performance
+          </h3>
+          {chart ? (
+            <div className="mt-3 rounded-sm border border-ink/10 bg-white p-1.5">
+              <div className="relative aspect-[4/3] w-full">
+                <ListingImage
+                  src={chart}
+                  alt="Market chart"
+                  sizes="360px"
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          ) : null}
+          {market.length ? (
+            <div className="mt-3">
+              <ArticleBody body={market} />
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+    </>
   );
 }

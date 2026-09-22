@@ -154,7 +154,7 @@ export default async function RootLayout({
       dir={dirFor(lang)}
       className={`${theSeasons.variable} ${manrope.variable} ${vazirmatn.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         {/* Stated once for the whole site; every page's own nodes point back
             at these two by `@id` rather than repeating them. */}
         <JsonLd graph={[organization(lang), webSite(lang)]} />

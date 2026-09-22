@@ -41,6 +41,21 @@ const ar: Dictionary = {
       description:
         "تغطيات صحفية وإعلانات وأدلة من Multi Mulk — الجنسية التركية عن طريق الاستثمار، مشاريع إسطنبول والساحل، ومحفظتنا في الكاريبي.",
     },
+    publications: {
+      title: "إصداراتنا",
+      description:
+        "أدلة Multi Mulk وتقاريرها — الجنسية التركية عن طريق الاستثمار، وبرامج الكاريبي، والإقامة عبر التأشيرة الذهبية، مكتوبة لمن يوازن بينها.",
+    },
+    marketInsights: {
+      title: "رؤى السوق",
+      description:
+        "ما تفعله أسواق تركيا والكاريبي فعليًا — الأسعار والموافقات والحدود الدنيا والمُدد، مقروءة من السجل ومؤرّخة.",
+    },
+    events: {
+      title: "الفعاليات",
+      description:
+        "أين تلتقي بـ Multi Mulk — معارض وندوات ولقاءات خاصة في الخليج وتركيا وخارجهما.",
+    },
     search: {
       title: "البحث عن عقار",
       description:
@@ -98,7 +113,7 @@ const ar: Dictionary = {
     goldenVisa: "التأشيرة الذهبية",
     realEstate: "العقارات",
     protection: "حماية المستثمر",
-    knowledge: "المعرفة",
+    knowledge: "الأخبار والرؤى",
     about: "من نحن",
   },
 
@@ -121,6 +136,15 @@ const ar: Dictionary = {
         "يُحتفظ به لمدة {holding}",
         "يشمل الزوج/الزوجة والأبناء دون 18 عامًا",
       ],
+    },
+    /**
+     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * names come from `places`, and every figure on a card is read from the
+     * programme record and labelled with the comparison table's own row
+     * names, so the menu has nothing else of its own to translate.
+     */
+    goldenVisa: {
+      label: "التأشيرة الذهبية والإقامة",
     },
     detail: {
       "bosphorus-heights": "165 شقة",
@@ -267,6 +291,9 @@ const ar: Dictionary = {
       All: "الكل",
       "Press Media": "صحافة",
       Blog: "مدوّنة",
+      Publication: "إصدار",
+      "Market Insight": "رؤية سوقية",
+      Event: "فعالية",
     },
     topics: {
       citizenship: "الجنسية",
@@ -278,6 +305,7 @@ const ar: Dictionary = {
     sort: { Newest: "الأحدث", Oldest: "الأقدم" },
     sortLabel: "ترتيب المقالات",
     empty: "لا يوجد شيء ضمن «{filter}» حتى الآن.",
+    emptyHere: "لم يُنشر هنا شيء بعد.",
     copy: staged<ArticleCopy>({
       "levent-residences-tops-out": {
         title: "Levent Residences يبلغ ارتفاعه الكامل ليصبح أحدث عنوان بارز في شيشلي",
@@ -803,11 +831,8 @@ const ar: Dictionary = {
   },
 
   media: {
-    heroEyebrow: "المركز الإعلامي",
+    heroEyebrow: "الأخبار والرؤى",
     showArticle: "عرض «{title}»",
-    indexHeading: "كل المقالات",
-    indexBody:
-      "تابع هنا كل المستجدات والرؤى والمصادر المفيدة. يجمع هذا المركز المقالات والبيانات الصحفية والأدلة التفصيلية لتبقى على اطّلاع بمشاريعنا.",
     newsletter: {
       heading: "تعمّق أكثر، وابقَ على اطّلاع",
       body: "لا تفوّت أي جديد — تابع كل مستجد معنا.",
@@ -826,6 +851,37 @@ const ar: Dictionary = {
         many: "قراءة {count} دقيقة",
         other: "قراءة {count} دقيقة",
       }),
+    },
+  },
+
+  insights: {
+    menuHeading: "الأخبار والرؤى",
+    menuBody: "كل ما تنشره Multi Mulk — التغطية الصحفية، والأدلة التي نكتبها، وما تفعله الأسواق فعليًا، وأين تلتقي بنا.",
+    sections: {
+      articles: {
+        label: "المقالات",
+        menuLine: "أخبار ومدوّنات",
+        heading: "أخبار ومدوّنات",
+        body: "تابع هنا كل المستجدات والرؤى والمصادر المفيدة. يجمع هذا المركز المقالات والبيانات الصحفية والأدلة التفصيلية لتبقى على اطّلاع بمشاريعنا.",
+      },
+      publications: {
+        label: "الإصدارات",
+        menuLine: "أدلة وتقارير",
+        heading: "الإصدارات",
+        body: "أدلتنا وتقاريرنا، مكتوبة من أجل القرار لا من أجل النقرة — ماذا يمنح كل برنامج، وماذا يطلب، وكم يكلّف شاملًا.",
+      },
+      marketInsights: {
+        label: "رؤى السوق",
+        menuLine: "بيانات وتحليلات",
+        heading: "رؤى السوق",
+        body: "ما تفعله أسواق تركيا والكاريبي فعليًا — الأسعار والموافقات والحدود الدنيا والمُدد، مقروءة من السجل ومؤرّخة لتعرف عمر القراءة.",
+      },
+      events: {
+        label: "الفعاليات",
+        menuLine: "أين تلتقي بنا",
+        heading: "الفعاليات",
+        body: "معارض وندوات ولقاءات خاصة في الخليج وتركيا وخارجهما. تعال واطرح أسئلتك علينا شخصيًا.",
+      },
     },
   },
 
@@ -958,6 +1014,25 @@ const ar: Dictionary = {
     browseAll: "تصفّح كل المساكن",
     about: "عن المشروع",
     amenities: "المرافق",
+    architecture: "المفهوم المعماري",
+    earthquake: "مقاومة الزلازل",
+    distancesEyebrow: "التنقل في المنطقة",
+    distancesHeading: "المسافات من وإلى {project}",
+    areaEyebrow: "المنطقة",
+    areaOverview: "عن الموقع",
+    marketEyebrow: "نظرة على السوق",
+    marketPerformance: "أداء السوق السكني",
+    distanceGroups: {
+      "Cultural Hubs": "المعالم الثقافية",
+      Airports: "المطارات",
+      Hospitals: "المستشفيات",
+      "Business Hubs": "مراكز الأعمال",
+      Transportation: "المواصلات",
+      Education: "التعليم",
+      Universities: "الجامعات",
+      Schools: "المدارس",
+      "Shopping Centres": "مراكز التسوق",
+    },
     otherDevelopments: "مشاريع أخرى",
     enquireEyebrow: "تحدّث إلى مستشار",
     enquireHeading: "استفسر عن {project}",
@@ -1127,6 +1202,12 @@ const ar: Dictionary = {
       "Smart Home": "منزل ذكي",
       "Pet Friendly": "يسمح بالحيوانات الأليفة",
       "Beach Access": "وصول إلى الشاطئ",
+      "Spa & Wellness": "سبا ومركز عافية",
+      "Green Spaces": "مساحات خضراء",
+      "Walking Paths": "ممرات للمشي",
+      "Dining Areas": "مناطق لتناول الطعام",
+      "Educational Facilities": "مرافق تعليمية",
+      "Private Parking": "مواقف خاصة",
     },
   },
 
@@ -1267,7 +1348,10 @@ const ar: Dictionary = {
     team: "فريقنا",
     contact: "تواصل معنا",
     search: "العقارات",
-    knowledge: "مركز المعرفة",
+    knowledge: "الأخبار والرؤى",
+    publications: "الإصدارات",
+    marketInsights: "رؤى السوق",
+    events: "الفعاليات",
     article: "مقال",
     development: "المشروع",
     citizenshipHub: "الجنسية عن طريق الاستثمار",
@@ -1279,6 +1363,8 @@ const ar: Dictionary = {
     compareIndex: "مقارنة البرامج",
     comparison: "مقارنة",
     investorProtection: "حماية المستثمر",
+    secondPassport: "جواز السفر الثاني",
+    eligibilityReview: "مراجعة الأهلية",
     faqIndex: "اسأل ملتي ملك",
     faq: "سؤال",
     caseStudies: "نتائج العملاء",

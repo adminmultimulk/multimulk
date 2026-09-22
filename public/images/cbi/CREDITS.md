@@ -38,6 +38,8 @@ below exist to prevent recurring.
 | cbi-caribbean-aerial.jpg | 11402368 | 67 | Islands in turquoise water, from the air |
 | cbi-caribbean-bay.webp | supplied | 176 (label band) | A Caribbean bay from a flowering hillside — the region tile, which carries a 65% top gradient for its white label |
 | cbi-istanbul-strait.jpg | 28601284 | 178 | İstanbul cityscape and the Bosphorus |
+| hero-santorini.jpg | 15532995 | 145 | A blue-domed church over the Santorini caldera — the Greece Golden Visa card. Diego F. Parra |
+| hero-lisbon.jpg | 26288655 | 197 | Alfama rooftops, Lisbon, with São Vicente de Fora and the Panteão Nacional — the Portugal Golden Visa card. Guilherme Marques |
 | hero-st-lucia-soufriere.jpg | Commons — see below | 89 | Soufrière and the Pitons at golden hour, St. Lucia |
 | about-hero-earth-night.jpg | Unsplash — NASA | ~20 | Earth at night from orbit — the About hero. Global citizenship, not a resort and not a frame already used on a programme page |
 | hero-passports.jpg | 29402986 | bright (left wash) | Passports on a map — the citizenship hub hero. The frame is the document, not one programme; the page already darkens the left for type |
@@ -67,6 +69,20 @@ only 1024×575 — soft on a full-bleed hero. This replaced it on both counts.
 The four at the top are the hero rotation. The bright ones below are used only
 in sections that set their own ground — a region tile with its own overlay, or
 a block on white — never under white type.
+
+`hero-santorini.jpg` and `hero-lisbon.jpg` are both far over the hero ceiling
+and are programme *card* frames, not heroes. The Golden Visa hub sets their
+type underneath the photograph, and the Golden Visa mega-menu sets it at the
+foot of the frame under a gradient that reaches 95% `forest-deep` at the
+bottom edge — so the figure that matters for them is the foot of the image
+rather than the hero band: 152 and 130 respectively, both comfortably held by
+that gradient. Neither belongs under a hero's 35% wash.
+
+They replaced `cbi-advisory.jpg` (a meeting in an office) and
+`cbi-documents.jpg` (a pen on a desk), which were standing in for Portugal and
+Greece and showed neither country. `cbi-documents.jpg` was doing triple duty
+— Malta, Greece and the Publications card in the News & Insights menu — and is
+now down to two.
 
 `hero-caribbean.jpg` is Cabrits National Park in Dominica, the headland where
 Port Cabrits Marina and InterContinental Dominica Cabrits stand. It is the one

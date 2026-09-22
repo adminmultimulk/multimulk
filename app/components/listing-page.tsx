@@ -11,6 +11,7 @@ import { DistrictMap } from "./district-map";
 import { ListingImage } from "./listing-image";
 import { PropertyEnquire } from "./property-enquire";
 import { PropertyGallery } from "./property-gallery";
+import { PropertyStory } from "./property-story";
 import { SiteFooter } from "./site-footer";
 import { SiteNav } from "./site-nav";
 import { UnitCard } from "./unit-card";
@@ -339,6 +340,29 @@ export async function ListingPage({ listing }: { listing: Listing }) {
             </Container>
           </section>
         ) : null}
+
+        {/* The building, the ground, what is near, the district and its
+            market — the sections the development page carries, here too,
+            because a reader who arrived at the unit from the search page asks
+            the same questions. Its backgrounds pick up from whichever section
+            above was drawn last. */}
+        <PropertyStory
+          story={listing}
+          name={listing.project}
+          t={t}
+          first={
+            // The section drawn last above, and the colour it was drawn on.
+            listing.amenities.length || listing.gallery.length
+              ? listing.amenities.length || !listing.floorPlans.length
+                ? "white"
+                : "mist"
+              : listing.floorPlans.length ||
+                  listing.description ||
+                  listing.highlights.length
+                ? "mist"
+                : "white"
+          }
+        />
 
         {terms.length || listing.videoUrl ? (
           <section className="bg-white py-16 lg:py-20">

@@ -42,12 +42,15 @@ export const amenityGroups: readonly AmenityGroup[] = [
       "Co-working Space",
       "Private Elevator",
       "Retail & Dining",
+      "Dining Areas",
+      "Educational Facilities",
     ],
   },
   {
     label: "Wellness & fitness",
     items: [
       "Spa & Hammam",
+      "Spa & Wellness",
       "Sauna",
       "Fitness Centre",
       "Gym",
@@ -62,6 +65,8 @@ export const amenityGroups: readonly AmenityGroup[] = [
       "Pool Terrace",
       "Landscaped Terrace",
       "Landscaped Gardens",
+      "Green Spaces",
+      "Walking Paths",
       "Children’s Play Area",
       "Jogging Track",
       "Tennis Court",
@@ -73,6 +78,7 @@ export const amenityGroups: readonly AmenityGroup[] = [
     label: "Access & practical",
     items: [
       "Secure Parking",
+      "Private Parking",
       "EV Charging",
       "Smart Home",
       "Pet Friendly",

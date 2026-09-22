@@ -74,7 +74,10 @@ model Article {
   body      String[]
   /// Keys from `app/lib/topics.ts`. Validated on write.
   topics    String[]
-  /// "Press Media" for coverage elsewhere, "Blog" for our own writing.
+  /// Which of the four News & Insights sections lists the piece — one of
+  /// "Blog", "Press Media", "Publication", "Market Insight" or "Event". The
+  /// mapping lives in `app/lib/sections.ts` and is validated on write; a value
+  /// outside the set reads as "Blog", so nothing is ever unlisted.
   category  String        @default("Blog")
   /// The publication a press piece ran in. Absent on our own writing.
   source    String?
@@ -116,6 +119,17 @@ model Article {
 type PropertyHighlight {
   title String
   text  String
+}
+
+/// One row of the "distances to and from" table — "Taksim Square", 4 km,
+/// 10–15 min — under the group it is listed in, "Cultural Hubs". Either the
+/// distance or the time may be blank; a metro station is "7 min walk" and
+/// nobody measures it in kilometres.
+type PropertyDistance {
+  group    String
+  name     String
+  distance String
+  time     String
 }
 
 model Property {
@@ -167,6 +181,32 @@ model Property {
   brochure      String?
   /// Floor plans, in the order they should be read.
   floorPlans    String[]
+
+  // --- The development's story ----------------------------------------------
+  // The long-form sections a developer's project sheet carries and a unit's
+  // specs do not: the building, the ground it stands on, what is near it and
+  // what the district's market is doing. Written once, on whichever unit the
+  // lister fills in first, and read by the development page from any unit
+  // that carries them. All prose is in the article grammar (`rich-text.ts`).
+
+  /// The architectural concept — what the building is like to live in.
+  architecture      String?
+  /// Earthquake resistance and structural facts — concrete grade, foundation
+  /// depth, the magnitude it is designed against.
+  earthquake        String?
+  /// Distances to landmarks, airports, hospitals, offices, schools and shops,
+  /// grouped as the lister grouped them.
+  distances         PropertyDistance[]
+  /// The district — where it sits in the city, its neighbourhoods, transport,
+  /// schools, healthcare and shopping. Headings and lists are expected.
+  areaOverview      String?
+  /// Photography of the district, shown beside the overview.
+  areaGallery       String[]
+  /// The district's residential market — past appreciation, current prices
+  /// and yields, the forecast — with its source linked.
+  marketPerformance String?
+  /// The price chart the market prose refers to, as an image.
+  marketChart       String?
 
   // --- Commercials -----------------------------------------------------------
 

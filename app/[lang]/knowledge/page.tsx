@@ -6,6 +6,7 @@ import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
 import { alternatesFor, getDictionary, getLocale } from "@/app/lib/i18n";
 import { mergedArticles } from "@/app/lib/cms/articles";
+import { inSection } from "@/app/lib/sections";
 import { JsonLd } from "@/app/components/json-ld";
 import { breadcrumbs, collectionPage, routeUrl } from "@/app/lib/seo/jsonld";
 
@@ -17,8 +18,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MediaCentrePage() {
   const locale = await getLocale();
   const t = await getDictionary(locale);
-  // The archive plus whatever the dashboard has published, newest first.
-  const articles = await mergedArticles();
+  /*
+   * The archive plus whatever the dashboard has published, newest first, and
+   * narrowed to the pieces this section lists. /knowledge is the Articles
+   * section — news and blogs — which is what every entry in the static archive
+   * and every legacy redirect is; the publications, market insights and events
+   * written since have indexes of their own beneath it.
+   */
+  const articles = inSection(await mergedArticles(), "articles");
 
   return (
     <>
@@ -42,7 +49,7 @@ export default async function MediaCentrePage() {
       </div>
 
       <main className="flex-1">
-        <MediaArticles articles={articles} />
+        <MediaArticles articles={articles} section="articles" />
         <MediaNewsletter />
       </main>
 

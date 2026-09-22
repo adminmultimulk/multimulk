@@ -8,13 +8,10 @@ import { SiteFooter } from "./site-footer";
 import { SiteNav } from "./site-nav";
 import { getDictionary, getLocale } from "@/app/lib/i18n";
 import type { Dictionary } from "@/app/lib/i18n";
-import { intlLocale, type Locale } from "@/app/lib/i18n/config";
+import { type Locale } from "@/app/lib/i18n/config";
 import { formatNumber, lookup } from "@/app/lib/i18n/format";
-import {
-  cheapestOfferedRoute,
-  type Money,
-  type Programme,
-} from "@/app/lib/programmes";
+import { cheapestOfferedRoute, type Programme } from "@/app/lib/programmes";
+import { formatMoney } from "@/app/lib/format-figure";
 import { pillarCta, pillarHero, pillarPlace, pillarVisual } from "@/app/lib/pillar";
 import { buildPath, type RouteId } from "@/app/lib/routes";
 import { breadcrumbs, collectionPage, routeUrl } from "@/app/lib/seo/jsonld";
@@ -275,16 +272,4 @@ function ProgrammeCard({
       </span>
     </Link>
   );
-}
-
-function formatMoney(
-  locale: Parameters<typeof formatNumber>[0],
-  money: Money,
-): string {
-  return new Intl.NumberFormat(intlLocale[locale], {
-    style: "currency",
-    currency: money.currency,
-    maximumFractionDigits: 0,
-    numberingSystem: "latn",
-  }).format(money.amount);
 }

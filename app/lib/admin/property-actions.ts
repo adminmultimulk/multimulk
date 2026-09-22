@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/app/lib/db";
 import { PROPERTIES_TAG } from "@/app/lib/cms/tags";
 import { isDistrict } from "@/app/lib/districts";
+import { checkDistances, parseDistances } from "@/app/lib/story";
 import { developmentSlug, getDevelopment } from "@/app/lib/cms/developments";
 import {
   CBI_THRESHOLD_USD,
@@ -74,6 +75,14 @@ export async function saveProperty(
   const amenities = lines(field(form, "amenities"));
   const brochure = field(form, "brochure");
   const floorPlans = lines(field(form, "floorPlans"));
+  // The development's story; see `app/lib/story.ts`.
+  const architecture = field(form, "architecture");
+  const earthquake = field(form, "earthquake");
+  const distances = parseDistances(field(form, "distances"));
+  const areaOverview = field(form, "areaOverview");
+  const areaGallery = lines(field(form, "areaGallery"));
+  const marketPerformance = field(form, "marketPerformance");
+  const marketChart = field(form, "marketChart");
   const paymentPlan = field(form, "paymentPlan");
   const handover = field(form, "handover");
   const serviceCharge = field(form, "serviceCharge");
@@ -147,6 +156,18 @@ export async function saveProperty(
     }
   }
 
+  for (const item of areaGallery) {
+    const error = checkImage(item, "Every area photograph");
+    if (error) {
+      fieldErrors.areaGallery = error;
+      break;
+    }
+  }
+  const chartError = checkImage(marketChart, "The market chart");
+  if (chartError) fieldErrors.marketChart = chartError;
+  const distancesError = checkDistances(field(form, "distances"));
+  if (distancesError) fieldErrors.distances = distancesError;
+
   const brochureError = checkFile(brochure, "The brochure");
   if (brochureError) fieldErrors.brochure = brochureError;
 
@@ -216,6 +237,13 @@ export async function saveProperty(
     amenities,
     brochure: brochure || null,
     floorPlans,
+    architecture: architecture || null,
+    earthquake: earthquake || null,
+    distances,
+    areaOverview: areaOverview || null,
+    areaGallery,
+    marketPerformance: marketPerformance || null,
+    marketChart: marketChart || null,
     paymentPlan: paymentPlan || null,
     handover: handover || null,
     serviceCharge: serviceCharge || null,
