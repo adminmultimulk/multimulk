@@ -110,7 +110,7 @@ const ar: Dictionary = {
 
   nav: {
     citizenship: "الجنسية",
-    goldenVisa: "التأشيرة الذهبية",
+    goldenVisa: "الإقامة",
     realEstate: "العقارات",
     protection: "حماية المستثمر",
     knowledge: "الأخبار والرؤى",
@@ -138,13 +138,13 @@ const ar: Dictionary = {
       ],
     },
     /**
-     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * Hangs from Residence. Only the eyebrow over each card: the country
      * names come from `places`, and every figure on a card is read from the
      * programme record and labelled with the comparison table's own row
      * names, so the menu has nothing else of its own to translate.
      */
     goldenVisa: {
-      label: "التأشيرة الذهبية والإقامة",
+      label: "الإقامة",
     },
     detail: {
       "bosphorus-heights": "165 شقة",
@@ -1356,7 +1356,7 @@ const ar: Dictionary = {
     development: "المشروع",
     citizenshipHub: "الجنسية عن طريق الاستثمار",
     citizenshipProgramme: "البرنامج",
-    goldenVisaHub: "التأشيرة الذهبية والإقامة",
+    goldenVisaHub: "الإقامة",
     goldenVisaProgramme: "البرنامج",
     realEstateHub: "العقارات",
     country: "الدولة",
@@ -1408,7 +1408,7 @@ const ar: Dictionary = {
       hubIntro: "كل برنامج أدناه معروض بالحقول نفسها، ليُقرأ في مقابل غيره لا كنشرة منفردة. وكل رقم مقرون بمصدره وبتاريخ آخر مراجعة له.",
     },
     goldenVisa: {
-      eyebrow: "التأشيرة الذهبية والإقامة",
+      eyebrow: "الإقامة",
       heading: "إقامة دون انتقال",
       body: "تصاريح إقامة عبر الاستثمار — موطئ قدم، ووضع ضريبي، وفي حالات عدة مسار إلى الجنسية مع الوقت.",
       hubIntro: "تختلف الإقامة عن الجنسية في أمر حاسم: هي إذن بالبقاء، قابل للتجديد وللإلغاء، وليست جنسية. يوضّح الجدول أدناه ما يمنحه كل برنامج فعليًا.",

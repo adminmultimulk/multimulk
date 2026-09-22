@@ -94,7 +94,7 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
                 className="group animate-menu-rise relative block aspect-[330/300] overflow-hidden"
               >
                 <CardImage src={card.image} sizes="320px" />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/55 via-55% to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/85 via-40% to-transparent to-72%" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
                   <span className="block font-display text-[22px] leading-tight text-cream">
                     {copy.sections[card.key].label}
@@ -143,8 +143,9 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
                   wide ? "aspect-[660/300]" : "aspect-[430/300]"
                 }`}
               >
-                <FlagStrip flags={card.flags} />
-                <div className="absolute inset-x-0 bottom-0 bg-forest-deep/90 px-5 py-4">
+                <CardImage src={card.image} sizes="660px" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/85 via-40% to-transparent to-72%" />
+                <div className="absolute inset-x-0 bottom-0 px-5 py-4">
                   <p className="text-[10px] text-cream/70">{t.menus.citizenship.label}</p>
                   <div className="mt-1 flex items-end justify-between gap-4">
                     <span className="font-display text-[26px] leading-tight text-cream">
@@ -186,7 +187,7 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
 }
 
 /**
- * One Golden Visa card: the country photograph, its name, and the three
+ * One Residence card: the country photograph, its name, and the three
  * figures a reader weighs a residency programme on.
  *
  * Every figure is read from the programme record and every label is one the
@@ -246,11 +247,7 @@ function ResidencyTile({
       className="group animate-menu-rise relative block aspect-[330/300] overflow-hidden"
     >
       <CardImage src={card.image} sizes="330px" />
-      {/* The mid stop is 70 rather than 60 because two of these four frames
-          are bright: Santorini's stucco and Lisbon's roofs both sit right
-          under the dimmer of the two label colours. See the foot figures in
-          public/images/cbi/CREDITS.md. */}
-      <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/70 via-55% to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/95 via-forest-deep/85 via-40% to-transparent to-72%" />
       <div className="absolute inset-x-0 bottom-0 px-5 py-4">
         <p className="text-[10px] text-cream/70">{t.menus.goldenVisa.label}</p>
         <p className="mt-1 font-display text-[22px] leading-tight text-cream">
@@ -353,34 +350,6 @@ function PortfolioCard({
         ) : null}
       </div>
     </Link>
-  );
-}
-
-/**
- * The flags of a programme's countries, side by side and filling the card.
- *
- * Each flag is cropped to its column rather than letterboxed, so the strip
- * reads as one continuous field the way the photograph it replaced did. Every
- * one of these five carries its device in the centre, which is what survives
- * the crop.
- */
-function FlagStrip({ flags }: { flags: string[] }) {
-  return (
-    <div className="absolute inset-0 flex bg-forest-deep transition-transform duration-700 ease-out group-hover:scale-105">
-      {flags.map((flag) => (
-        <div key={flag} className="relative flex-1">
-          <Image
-            src={flag}
-            alt=""
-            fill
-            // The optimizer refuses SVG unless it is told to trust it.
-            unoptimized={flag.endsWith(".svg")}
-            sizes={`${Math.ceil(660 / flags.length)}px`}
-            className="object-cover"
-          />
-        </div>
-      ))}
-    </div>
   );
 }
 

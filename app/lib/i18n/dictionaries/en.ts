@@ -305,7 +305,7 @@ const en = {
         "Each programme below is set out in the same fields, so they can be read against one another rather than one brochure at a time. Figures carry their source and the date they were last checked.",
     },
     goldenVisa: {
-      eyebrow: "Golden Visa & Residency",
+      eyebrow: "Residence",
       heading: "Residency Without Relocation",
       body: "Residence permits obtained through investment — a base, a tax position, and in several cases a route to citizenship over time.",
       hubIntro:
@@ -468,7 +468,7 @@ const en = {
     development: "Development",
     citizenshipHub: "Citizenship by Investment",
     citizenshipProgramme: "Programme",
-    goldenVisaHub: "Golden Visa & Residency",
+    goldenVisaHub: "Residence",
     goldenVisaProgramme: "Programme",
     realEstateHub: "Real Estate",
     country: "Country",
@@ -489,7 +489,7 @@ const en = {
 
   nav: {
     citizenship: "Citizenship",
-    goldenVisa: "Golden Visa",
+    goldenVisa: "Residence",
     realEstate: "Real Estate",
     protection: "Investor Protection",
     knowledge: "News & Insights",
@@ -516,13 +516,13 @@ const en = {
       ],
     },
     /**
-     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * Hangs from Residence. Only the eyebrow over each card: the country
      * names come from `places`, and every figure on a card is read from the
      * programme record and labelled with the comparison table's own row
      * names, so the menu has nothing else of its own to translate.
      */
     goldenVisa: {
-      label: "Golden Visa & Residency",
+      label: "Residence",
     },
     /** Unit counts under each portfolio card, keyed by development slug. */
     detail: {

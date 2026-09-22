@@ -130,7 +130,7 @@ const zh = {
     development: "项目",
     citizenshipHub: "投资入籍",
     citizenshipProgramme: "项目",
-    goldenVisaHub: "黄金签证与居留",
+    goldenVisaHub: "居留",
     goldenVisaProgramme: "项目",
     realEstateHub: "房地产",
     country: "国家",
@@ -174,7 +174,7 @@ const zh = {
 
   nav: {
     citizenship: "入籍",
-    goldenVisa: "黄金签证",
+    goldenVisa: "居留",
     realEstate: "房地产",
     protection: "投资者保护",
     knowledge: "资讯与洞察",
@@ -211,7 +211,7 @@ const zh = {
       hubIntro: "下列每个项目都按相同字段呈现，可以彼此对照阅读，而不是一次翻一本手册。每个数据都附带来源与最近核对日期。",
     },
     goldenVisa: {
-      eyebrow: "黄金签证与居留",
+      eyebrow: "居留",
       heading: "无需搬迁的居留身份",
       body: "通过投资取得的居留许可——一个落脚点、一种税务安排，在若干情形下还是通往公民身份的路径。",
       hubIntro: "居留与入籍有一处决定性差别：它是可续签、也可撤销的居留许可，而不是国籍。下表列出每个项目实际给予的内容。",
@@ -729,13 +729,13 @@ const zh = {
       ],
     },
     /**
-     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * Hangs from Residence. Only the eyebrow over each card: the country
      * names come from `places`, and every figure on a card is read from the
      * programme record and labelled with the comparison table's own row
      * names, so the menu has nothing else of its own to translate.
      */
     goldenVisa: {
-      label: "黄金签证与居留",
+      label: "居留",
     },
     detail: {
       "bosphorus-heights": "165 套公寓",

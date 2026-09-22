@@ -16,8 +16,10 @@ does not merely look wrong; it makes the copy unreadable.
 
 The measure that matters is average luminance across the band from 18% to 62%
 of the image height, which is where the type lands. **Under ~75 is safe, over
-~95 is not.** A 35% `forest-deep` wash sits over every slide, which brings a
-reading of 65 down to about 50.
+~95 is not.** A 24% black wash sits over every slide — 46% on the one marked
+`bright` — which brings a reading of 65 down to about 49. It was 35% and 60%
+until the photographs were judged too dark on the page; `hero.tsx` carries the
+composite figure for each slide against the ceiling.
 
 The first pass at this used flat-lit stock that measured 126 to 178 in that
 band, and the outlined buttons vanished into it. That is what the numbers

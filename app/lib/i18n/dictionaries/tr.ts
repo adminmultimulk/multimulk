@@ -128,7 +128,7 @@ const tr = {
     development: "Proje",
     citizenshipHub: "Yatırım Yoluyla Vatandaşlık",
     citizenshipProgramme: "Program",
-    goldenVisaHub: "Altın Vize ve Oturum",
+    goldenVisaHub: "Oturum İzni",
     goldenVisaProgramme: "Program",
     realEstateHub: "Gayrimenkul",
     country: "Ülke",
@@ -172,7 +172,7 @@ const tr = {
 
   nav: {
     citizenship: "Vatandaşlık",
-    goldenVisa: "Altın Vize",
+    goldenVisa: "Oturum İzni",
     realEstate: "Gayrimenkul",
     protection: "Yatırımcı Koruması",
     knowledge: "Haberler ve Analizler",
@@ -209,7 +209,7 @@ const tr = {
       hubIntro: "Aşağıdaki her program aynı alanlarla veriliyor; böylece tek tek broşür okumak yerine birbirine karşı okunabiliyorlar. Rakamlar kaynağını ve en son ne zaman doğrulandığını taşır.",
     },
     goldenVisa: {
-      eyebrow: "Altın Vize ve Oturum",
+      eyebrow: "Oturum İzni",
       heading: "Taşınmadan Oturum",
       body: "Yatırım yoluyla alınan oturum izinleri — bir üs, bir vergi konumu ve birçok durumda zamanla vatandaşlığa giden bir yol.",
       hubIntro: "Oturum, vatandaşlıktan belirleyici bir noktada ayrılır: yenilenebilir ve iptal edilebilir bir kalma iznidir, bir uyrukluk değil. Aşağıdaki tablo her birinin gerçekte ne verdiğini gösteriyor.",
@@ -728,13 +728,13 @@ const tr = {
       ],
     },
     /**
-     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * Hangs from Residence. Only the eyebrow over each card: the country
      * names come from `places`, and every figure on a card is read from the
      * programme record and labelled with the comparison table's own row
      * names, so the menu has nothing else of its own to translate.
      */
     goldenVisa: {
-      label: "Altın Vize ve Oturum",
+      label: "Oturum İzni",
     },
     detail: {
       "bosphorus-heights": "165 daire",

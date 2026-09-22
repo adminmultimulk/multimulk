@@ -106,7 +106,7 @@ const ur: Dictionary = {
 
   nav: {
     citizenship: "شہریت",
-    goldenVisa: "گولڈن ویزا",
+    goldenVisa: "رہائش",
     realEstate: "جائیداد",
     protection: "سرمایہ کار کا تحفظ",
     knowledge: "خبریں اور تجزیے",
@@ -134,13 +134,13 @@ const ur: Dictionary = {
       ],
     },
     /**
-     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * Hangs from Residence. Only the eyebrow over each card: the country
      * names come from `places`, and every figure on a card is read from the
      * programme record and labelled with the comparison table's own row
      * names, so the menu has nothing else of its own to translate.
      */
     goldenVisa: {
-      label: "گولڈن ویزا اور رہائش",
+      label: "رہائش",
     },
     detail: {
       "bosphorus-heights": "165 اپارٹمنٹس",
@@ -1323,7 +1323,7 @@ const ur: Dictionary = {
     development: "منصوبہ",
     citizenshipHub: "سرمایہ کاری کے ذریعے شہریت",
     citizenshipProgramme: "پروگرام",
-    goldenVisaHub: "گولڈن ویزا اور رہائش",
+    goldenVisaHub: "رہائش",
     goldenVisaProgramme: "پروگرام",
     realEstateHub: "جائیداد",
     country: "ملک",
@@ -1375,7 +1375,7 @@ const ur: Dictionary = {
       hubIntro: "ذیل کا ہر پروگرام انہی خانوں میں پیش کیا گیا ہے تاکہ انہیں ایک دوسرے کے مقابل پڑھا جا سکے۔ ہر عدد کے ساتھ اس کا ذریعہ اور آخری نظرثانی کی تاریخ موجود ہے۔",
     },
     goldenVisa: {
-      eyebrow: "گولڈن ویزا اور رہائش",
+      eyebrow: "رہائش",
       heading: "منتقلی کے بغیر رہائش",
       body: "سرمایہ کاری کے ذریعے حاصل کیے گئے رہائشی اجازت نامے — ایک ٹھکانہ، ایک ٹیکس حیثیت، اور کئی صورتوں میں وقت کے ساتھ شہریت کا راستہ۔",
       hubIntro: "رہائش شہریت سے ایک فیصلہ کن اعتبار سے مختلف ہے: یہ رہنے کی اجازت ہے، قابلِ تجدید اور قابلِ منسوخی، نہ کہ قومیت۔ ذیل کا جدول بتاتا ہے کہ ہر پروگرام دراصل کیا دیتا ہے۔",

@@ -121,7 +121,7 @@ export function SiteNavBar({ portfolio = [] }: { portfolio?: MenuCard[] }) {
   return (
     <header
       className={`absolute inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-300 ${
-        showBg ? "bg-forest/85 backdrop-blur-xl" : "bg-transparent"
+        showBg ? "bg-forest/70 backdrop-blur-xl" : "bg-transparent"
       }`}
       onMouseLeave={scheduleClose}
     >
@@ -219,7 +219,7 @@ export function SiteNavBar({ portfolio = [] }: { portfolio?: MenuCard[] }) {
                  the panel a full width off in Arabic and Urdu. Centring is the
                  same in both directions, so there is nothing to mirror. */
               <div
-                className={`absolute left-1/2 top-full z-10 mt-2 w-[92px] origin-top overflow-hidden bg-forest/85 backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                className={`absolute left-1/2 top-full z-10 mt-2 w-[92px] origin-top overflow-hidden bg-forest/70 backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                   visible
                     ? "-translate-x-1/2 translate-y-0 opacity-100"
                     : "pointer-events-none -translate-x-1/2 -translate-y-1 opacity-0"

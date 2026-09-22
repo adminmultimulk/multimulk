@@ -282,7 +282,7 @@ const fr: Dictionary = {
       hubIntro: "Chaque programme ci-dessous est présenté selon les mêmes champs, afin d’être lu en regard des autres plutôt qu’une brochure à la fois. Chaque chiffre porte sa source et la date de sa dernière vérification.",
     },
     goldenVisa: {
-      eyebrow: "Visa doré et résidence",
+      eyebrow: "Résidence",
       heading: "La résidence sans le déménagement",
       body: "Des titres de séjour obtenus par investissement — une base, une position fiscale et, dans plusieurs cas, une voie vers la citoyenneté avec le temps.",
       hubIntro: "La résidence diffère de la citoyenneté sur un point décisif : c’est une autorisation de séjour, renouvelable et révocable, et non une nationalité. Le tableau ci-dessous expose ce que chaque programme accorde réellement.",
@@ -440,7 +440,7 @@ const fr: Dictionary = {
     development: "Programme immobilier",
     citizenshipHub: "Citoyenneté par investissement",
     citizenshipProgramme: "Programme",
-    goldenVisaHub: "Visa doré et résidence",
+    goldenVisaHub: "Résidence",
     goldenVisaProgramme: "Programme",
     realEstateHub: "Immobilier",
     country: "Pays",
@@ -461,7 +461,7 @@ const fr: Dictionary = {
 
   nav: {
     citizenship: "Citoyenneté",
-    goldenVisa: "Visa doré",
+    goldenVisa: "Résidence",
     realEstate: "Immobilier",
     protection: "Protection",
     knowledge: "Actualités & Analyses",
@@ -488,13 +488,13 @@ const fr: Dictionary = {
       ],
     },
     /**
-     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * Hangs from Residence. Only the eyebrow over each card: the country
      * names come from `places`, and every figure on a card is read from the
      * programme record and labelled with the comparison table's own row
      * names, so the menu has nothing else of its own to translate.
      */
     goldenVisa: {
-      label: "Visa doré et résidence",
+      label: "Résidence",
     },
     detail: {
       "bosphorus-heights": "165 appartements",

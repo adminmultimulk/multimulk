@@ -30,7 +30,7 @@ const flags: Partial<Record<CountryCode, string>> = {
  * All ten are listed. The four below the Caribbean were missing rather than
  * untranslated — `places` has carried them in every language since the
  * comparison pages were written — so the UAE, Portugal and Greece hub cards
- * were rendering with no country over the name, and the Golden Visa menu,
+ * were rendering with no country over the name, and the Residence menu,
  * which drops a programme it cannot name, was a menu of one.
  */
 export const pillarPlace: Partial<Record<CountryCode, string>> = {

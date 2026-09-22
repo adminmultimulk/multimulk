@@ -286,7 +286,7 @@ const ru: Dictionary = {
       hubIntro: "Все программы ниже описаны одними и теми же полями, чтобы их можно было читать одну против другой, а не по буклету за раз. У каждой цифры есть источник и дата последней проверки.",
     },
     goldenVisa: {
-      eyebrow: "Золотая виза и ВНЖ",
+      eyebrow: "ВНЖ",
       heading: "Резидентство без переезда",
       body: "Вид на жительство через инвестиции — база, налоговый статус, а в ряде случаев и путь к гражданству со временем.",
       hubIntro: "Резидентство отличается от гражданства в одном решающем отношении: это разрешение находиться в стране, продлеваемое и отзываемое, а не национальность. Таблица ниже показывает, что именно даёт каждая программа.",
@@ -444,7 +444,7 @@ const ru: Dictionary = {
     development: "Проект",
     citizenshipHub: "Гражданство за инвестиции",
     citizenshipProgramme: "Программа",
-    goldenVisaHub: "Золотая виза и ВНЖ",
+    goldenVisaHub: "ВНЖ",
     goldenVisaProgramme: "Программа",
     realEstateHub: "Недвижимость",
     country: "Страна",
@@ -465,7 +465,7 @@ const ru: Dictionary = {
 
   nav: {
     citizenship: "Гражданство",
-    goldenVisa: "Золотая виза",
+    goldenVisa: "ВНЖ",
     realEstate: "Недвижимость",
     protection: "Защита инвестора",
     knowledge: "Новости и аналитика",
@@ -492,13 +492,13 @@ const ru: Dictionary = {
       ],
     },
     /**
-     * Hangs from Golden Visa. Only the eyebrow over each card: the country
+     * Hangs from Residence. Only the eyebrow over each card: the country
      * names come from `places`, and every figure on a card is read from the
      * programme record and labelled with the comparison table's own row
      * names, so the menu has nothing else of its own to translate.
      */
     goldenVisa: {
-      label: "Золотая виза и ВНЖ",
+      label: "ВНЖ",
     },
     detail: {
       "bosphorus-heights": "165 апартаментов",

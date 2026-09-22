@@ -66,14 +66,29 @@ export function Hero() {
         bright sky or a white paper flat-lay left white type sitting on white.
         The even wash fixes that for every slide at once, and is light enough
         that the photograph still reads as a photograph.
+
+        The wash was 35% (60% on the bright slide) and is now 24% (46%),
+        because at the old strength the photographs were being asked to carry
+        far more darkening than legibility needed. Composite luminance across
+        the type band, against the ~75 ceiling recorded in
+        public/images/cbi/CREDITS.md:
+
+          hero-dubai-night      43 ->  33
+          hero-istanbul-dusk    65 ->  49
+          hero-island-lagoon   113 ->  61   (the bright slide, 46%)
+          cbi-documents         95 ->  73   <- the tight one
+
+        cbi-documents is a white paper flat-lay and sits two points under the
+        ceiling. Mark it `bright` if a slide is ever added that pushes it over,
+        or if the headline starts to look soft on it in daylight.
       */}
       <div
         className={`pointer-events-none absolute inset-0 transition-colors duration-[1200ms] ease-out ${
-          slide.bright ? "bg-black/60" : "bg-black/35"
+          slide.bright ? "bg-black/46" : "bg-black/24"
         }`}
       />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[min(260px,34svh)] bg-gradient-to-b from-black/55 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[min(340px,45svh)] bg-gradient-to-t from-black/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[min(260px,34svh)] bg-gradient-to-b from-black/45 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[min(340px,45svh)] bg-gradient-to-t from-black/60 to-transparent" />
 
       <div className="relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-6 sm:px-10 lg:px-[72px]">
         {/*

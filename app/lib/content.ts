@@ -133,11 +133,16 @@ export type MegaMenu =
       cards: {
         key: "turkiye" | "caribbean";
         /**
-         * The flags of the countries the card covers, filling it as a strip.
-         * Türkiye is one; the Caribbean card stands for five programmes and
-         * carries all five, since the region has no flag of its own.
+         * The photograph filling the card.
+         *
+         * These were the countries' flags, laid side by side as a strip — one
+         * for Türkiye and all five for the Caribbean, which has no flag of its
+         * own. Flat vector flags read as a key to a map rather than as an
+         * invitation, and they sat oddly beside the Residence menu, whose
+         * cards are photographs of the places. The flags themselves are still
+         * used, small, on the hub cards; see `pillar.ts`.
          */
-        flags: string[];
+        image: string;
         /** The programme page the card opens — /citizenship/[programme]. */
         href: string;
         /** Caribbean lists development names; Türkiye lists translated routes. */
@@ -156,7 +161,7 @@ export type MegaMenu =
     }
   | {
       /**
-       * Golden Visa: one card per residency programme, read from the
+       * Residence: one card per residency programme, read from the
        * programme records rather than written out.
        *
        * The Citizenship menu beside it is the `programmes` kind above, and the
@@ -310,7 +315,7 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
   },
 
   /**
-   * Golden Visa & Residency, generated from the programme records. See
+   * Residence, generated from the programme records. See
    * `residencyCards`.
    */
   goldenVisa: {
@@ -323,19 +328,16 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
     cards: [
       {
         key: "turkiye",
-        flags: ["/images/flags/tr-waving.jpg"],
+        // The same frame the hub gives Türkiye citizenship, in `pillar.ts`.
+        image: "/images/cbi/hero-istanbul-dusk.jpg",
         href: buildPath("citizenshipProgramme", { programme: "turkiye" }),
       },
       {
         key: "caribbean",
-        // In the order the programmes are listed in `programmes.ts`.
-        flags: [
-          "/images/flags/gd.svg",
-          "/images/flags/dm.svg",
-          "/images/flags/kn.svg",
-          "/images/flags/lc.svg",
-          "/images/flags/ag.svg",
-        ],
+        // Cabrits National Park, Dominica — the headland Port Cabrits Marina
+        // and InterContinental Dominica stand on. The one Caribbean frame the
+        // site holds that shows a place we actually work in.
+        image: "/images/cbi/hero-caribbean.jpg",
         href: buildPath("citizenshipProgramme", { programme: "caribbean" }),
         projects: [
           "The La Sagesse Collection Residences",
