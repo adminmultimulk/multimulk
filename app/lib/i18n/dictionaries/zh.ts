@@ -497,6 +497,7 @@ const zh = {
     },
     article: {
       categoryLabel: "分类：",
+      authorLabel: "作者：",
       publishedLabel: "发布于：",
       sourceLabel: "来源：",
       relatedHeading: "相关文章",

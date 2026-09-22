@@ -1159,6 +1159,8 @@ const en = {
     },
     article: {
       categoryLabel: "Category:",
+      /** The byline, on a piece written in the dashboard. */
+      authorLabel: "By",
       publishedLabel: "Published on:",
       sourceLabel: "Source:",
       relatedHeading: "Related Articles",

@@ -1197,6 +1197,7 @@ const fr: Dictionary = {
     },
     article: {
       categoryLabel: "Catégorie :",
+      authorLabel: "Par",
       publishedLabel: "Publié le :",
       sourceLabel: "Source :",
       relatedHeading: "Articles liés",

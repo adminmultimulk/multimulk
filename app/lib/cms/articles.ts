@@ -44,6 +44,9 @@ const load = unstable_cache(
       // exactly on it — which is the right trade for a Knowledge Centre.
       where: { status: "PUBLISHED", publishedAt: { lte: new Date() } },
       orderBy: { publishedAt: "desc" },
+      // The byline. `include` rather than a second query: every list this
+      // feeds renders the name, and the row is already being read.
+      include: { author: { select: { name: true } } },
     });
 
     return rows.map((row) => ({
@@ -57,6 +60,7 @@ const load = unstable_cache(
       body: row.body,
       topics: row.topics.filter(isTopic) as Topic[],
       source: row.source ?? undefined,
+      author: row.author.name,
       // A row written before a category existed, or one carrying a value that
       // has since been retired, reads as a blog post — which is where the
       // Articles section lists it, rather than nowhere.

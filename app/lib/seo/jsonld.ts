@@ -160,6 +160,8 @@ export function article(
     hero?: string;
     /** Paragraphs; the first is used as the description. */
     body: readonly string[];
+    /** The byline, where the piece carries one. */
+    author?: string;
   },
   authorName = "Multi Mulk",
 ): ArticleNode {
@@ -178,9 +180,18 @@ export function article(
     inLanguage: hreflangFor[locale],
     mainEntityOfPage: url,
     publisher: { "@id": ORG_ID },
+    /*
+     * Who wrote it, in the order the claim gets weaker. A press piece is the
+     * publication's; a bylined piece is the person's, which is the one search
+     * engines read as authorship on advice about citizenship and tax; and an
+     * unsigned piece from the archive is the company's, which is all it ever
+     * was.
+     */
     author: isPress
       ? { "@type": "Organization", name: item.source! }
-      : { "@type": "Organization", "@id": ORG_ID, name: authorName },
+      : item.author
+        ? { "@type": "Person", name: item.author }
+        : { "@type": "Organization", "@id": ORG_ID, name: authorName },
   };
 }
 

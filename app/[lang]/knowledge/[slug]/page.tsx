@@ -113,6 +113,7 @@ export default async function ArticlePage({
             image: article.image,
             hero: article.hero,
             body: [article.excerpt, ...article.body],
+            author: article.author,
           }),
           breadcrumbs({
             locale,
@@ -165,6 +166,18 @@ export default async function ArticlePage({
                 {/* Meta sits tight under the headline, as one block with the
                     standfirst — the design leaves no gap between them. */}
                 <p className="mt-[14.4px] flex flex-wrap items-center gap-x-[7.2px] text-[14.4px] leading-[21.6px] tracking-[0.02em] text-ink">
+                  {/* The byline leads, ahead of the date: who wrote a piece on
+                      citizenship law is the first thing a reader weighs it by.
+                      Only a piece written in the dashboard carries one. */}
+                  {article.author ? (
+                    <>
+                      <span className="text-ink/60">
+                        {t.media.article.authorLabel}
+                      </span>
+                      <span>{article.author}</span>
+                      <span className="text-ink/60">·</span>
+                    </>
+                  ) : null}
                   <span className="text-ink/60">
                     {t.media.article.publishedLabel}
                   </span>

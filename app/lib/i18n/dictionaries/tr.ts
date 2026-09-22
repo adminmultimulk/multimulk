@@ -495,6 +495,7 @@ const tr = {
     },
     article: {
       categoryLabel: "Kategori:",
+      authorLabel: "Yazan:",
       publishedLabel: "Yayın tarihi:",
       sourceLabel: "Kaynak:",
       relatedHeading: "İlgili Yazılar",

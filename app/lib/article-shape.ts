@@ -40,6 +40,16 @@ export type AnyArticle = {
   topics: Topic[];
   /** Publication a press piece ran in; absent on our own writing. */
   source?: string;
+  /**
+   * The byline: the name on the dashboard account that wrote the piece.
+   *
+   * Only a piece written in the dashboard has one. The static archive is
+   * unsigned — the migrated guides arrived from WordPress without an author
+   * and the originals were written for the site rather than by anybody named
+   * — so the byline is simply omitted there rather than falling back to the
+   * company, which would be a claim about who wrote them.
+   */
+  author?: string;
   /** Press or our own writing. Only the originals are filed this way. */
   category?: ArticleCategory;
   readMore?: string;

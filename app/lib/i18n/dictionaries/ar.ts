@@ -840,6 +840,7 @@ const ar: Dictionary = {
     },
     article: {
       categoryLabel: "التصنيف:",
+      authorLabel: "بقلم",
       publishedLabel: "نُشر في:",
       sourceLabel: "المصدر:",
       relatedHeading: "مقالات ذات صلة",

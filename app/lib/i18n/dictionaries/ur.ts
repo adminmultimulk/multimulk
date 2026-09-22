@@ -837,6 +837,7 @@ const ur: Dictionary = {
     },
     article: {
       categoryLabel: "قسم:",
+      authorLabel: "تحریر:",
       publishedLabel: "شائع ہوا:",
       sourceLabel: "ماخذ:",
       relatedHeading: "متعلقہ مضامین",

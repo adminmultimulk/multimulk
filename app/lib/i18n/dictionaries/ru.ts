@@ -1197,6 +1197,7 @@ const ru: Dictionary = {
     },
     article: {
       categoryLabel: "Категория:",
+      authorLabel: "Автор:",
       publishedLabel: "Опубликовано:",
       sourceLabel: "Источник:",
       relatedHeading: "Похожие материалы",
