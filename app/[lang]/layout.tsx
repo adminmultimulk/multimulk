@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BrochureProvider } from "@/app/components/brochure";
 import { EnquiryProvider } from "@/app/components/enquiry";
 import { WhatsAppButton } from "@/app/components/whatsapp-button";
@@ -180,6 +181,9 @@ export default async function RootLayout({
             nothing. Page views are picked up from the App Router itself, so
             there is nothing to wire per route. */}
         <Analytics />
+        {/* Vercel Speed Insights: Core Web Vitals per route. Same deal as
+            Analytics above — only reports from a Vercel deployment. */}
+        <SpeedInsights />
       </body>
       {analyticsEnabled && <GoogleAnalytics gaId={gaId} />}
     </html>
