@@ -132,6 +132,17 @@ export type Block =
 
 const BULLET = /^[-*]\s+/;
 const NUMBER = /^\d+[.)]\s+/;
+/**
+ * Where a figure may point: a path on this site, or Cloudinary, which is where
+ * the editor's image button uploads to. `next/image` refuses a host that is
+ * not in `images.remotePatterns`, and an editor pasting a URL from elsewhere
+ * would otherwise take the whole page down with it at render. The dashboard's
+ * save check uses the same rule, so the two cannot disagree.
+ */
+export function isFigureSource(src: string): boolean {
+  return src.startsWith("/") || src.startsWith("https://res.cloudinary.com/");
+}
+
 const FIGURE = /^!\[([^\]]*)\]\(([^\s)]+)(?:\s+"([^"]*)")?\)$/;
 const CALLOUT_TONES: readonly CalloutTone[] = ["note", "tip", "warning", "key"];
 
@@ -176,14 +187,7 @@ function parseBlock(raw: string): Block | null {
 
   const figure = FIGURE.exec(first);
   if (figure) {
-    // Site paths and Cloudinary only — the latter is where the editor's image
-    // button uploads to. `next/image` refuses a host that is not in
-    // `images.remotePatterns`, and an editor pasting a URL from elsewhere
-    // would otherwise take the whole page down with it at render.
-    if (
-      figure[2].startsWith("/") ||
-      figure[2].startsWith("https://res.cloudinary.com/")
-    )
+    if (isFigureSource(figure[2]))
       return {
         kind: "figure",
         src: figure[2],

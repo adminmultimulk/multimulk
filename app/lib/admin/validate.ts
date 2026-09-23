@@ -2,6 +2,7 @@ import { allArticles } from "@/app/lib/knowledge";
 import { legacyDevelopments } from "@/app/lib/legacy-developments";
 import { units } from "@/app/lib/properties";
 import { isArticleCategory } from "@/app/lib/sections";
+import { isFigureSource } from "@/app/lib/rich-text";
 import { isTopic } from "@/app/lib/topics";
 
 export { checkSlug, slugify } from "./slug";
@@ -155,11 +156,12 @@ export function commaList(value: string): string[] {
 export function checkBody(blocks: readonly string[]): string | null {
   if (!blocks.length) return "The article has no body copy.";
 
-  const remote = blocks.find((block) =>
-    /^!\[[^\]]*\]\((?!\/)/.test(block.trim()),
-  );
+  const remote = blocks.find((block) => {
+    const src = /^!\[[^\]]*\]\(([^\s)]*)/.exec(block.trim())?.[1];
+    return src !== undefined && !isFigureSource(src);
+  });
   if (remote)
-    return 'An image in the body points somewhere else. Use a path under /public, e.g. "/images/levent-residences.webp".';
+    return 'An image in the body points somewhere else. Upload it with the image button, or use a path under /public, e.g. "/images/levent-residences.webp".';
 
   const empty = blocks.find((block) => /^#{2,3}\s*$/.test(block.trim()));
   if (empty) return "There is a heading with nothing in it.";
