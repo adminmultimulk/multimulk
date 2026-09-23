@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { legacyRedirects } from "./app/lib/legacy-redirects";
+import { removedArticleSlugs } from "./app/lib/removed-articles";
 
 /** The language the legacy site was written in; see `legacy-redirects.ts`. */
 const LEGACY_LOCALE = "en";
@@ -48,6 +49,16 @@ const nextConfig: NextConfig = {
         destination: "/:lang/knowledge?type=:type",
         permanent: true,
       },
+      /*
+       * Articles taken off the site. Written out per locale rather than as
+       * one pattern with a slug alternation, so the list can grow without the
+       * rule turning into a regular expression nobody wants to read.
+       */
+      ...removedArticleSlugs.map((slug) => ({
+        source: `/:lang(en|ar|ru|fr|ur|tr|zh)/knowledge/${slug}`,
+        destination: "/:lang/knowledge",
+        permanent: true,
+      })),
       {
         source: "/media-centre/:slug+",
         destination: `/${LEGACY_LOCALE}/knowledge/:slug+`,

@@ -3,6 +3,7 @@ import { legacyDevelopments } from "@/app/lib/legacy-developments";
 import { units } from "@/app/lib/properties";
 import { isArticleCategory } from "@/app/lib/sections";
 import { isFigureSource } from "@/app/lib/rich-text";
+import { removedArticleSlugs } from "@/app/lib/removed-articles";
 import { isTopic } from "@/app/lib/topics";
 
 export { checkSlug, slugify } from "./slug";
@@ -27,6 +28,8 @@ export const reservedArticleSlugs = new Set([
   "publications",
   "market-insights",
   "events",
+  // And the articles taken off the site, which redirect to /knowledge.
+  ...removedArticleSlugs,
 ]);
 /*
  * A published listing answers at /properties/<slug>, which is the namespace
