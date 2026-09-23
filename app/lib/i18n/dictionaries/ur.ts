@@ -1512,6 +1512,11 @@ const ur: Dictionary = {
     compareBody: "اس صفحے کا ہر ہندسہ اسی جدول میں ہے جس میں وہ پروگرام ہیں جن سے اسے اکثر تولا جاتا ہے — اسی ریکارڈ سے پڑھا گیا، اور نیچے ہماری سفارش۔",
     compareButton: "موازنہ دیکھیں",
     allComparisons: "تمام موازنے",
+    keyFactsHeading: "{name} ایک نظر میں",
+    keyFactsBody:
+      "سب سے زیادہ پوچھے جانے والے اعداد و شمار، اسی ریکارڈ سے جس پر اس سائٹ کا ہر موازنہ مبنی ہے۔",
+    hubFaqHeading: "عام سوالات",
+    hubFaqQuestion: "{name} کے تقاضے کیا ہیں، اور یہ کیا فراہم کرتا ہے؟",
     otherProgrammes: "دیگر پروگرام",
     viewProgramme: "پروگرام دیکھیں",
     ctaHeading: "{name} دریافت کریں",

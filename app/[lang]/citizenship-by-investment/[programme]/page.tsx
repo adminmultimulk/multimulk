@@ -4,6 +4,7 @@ import { CitizenshipProgrammeDetail } from "@/app/components/citizenship-program
 import { ProgrammePage } from "@/app/components/programme-page";
 import { isProgrammeKey } from "@/app/lib/citizenship";
 import { alternatesFor, getDictionary } from "@/app/lib/i18n";
+import { localiseProgramme } from "@/app/lib/programme-pages";
 import { locales } from "@/app/lib/i18n/config";
 import { getProgramme, isPublishable, programmesIn } from "@/app/lib/programmes";
 
@@ -46,7 +47,9 @@ export async function generateMetadata({
 
   return {
     title: programme.officialName,
-    description: t.pillars.citizenship.body,
+    // The programme's own one-line answer, not the pillar's: seven pages
+    // sharing one description read to a search engine as one page.
+    description: localiseProgramme(t, programme).summary,
     alternates,
     ...(isPublishable(programme) ? {} : { robots: { index: false, follow: false } }),
   };

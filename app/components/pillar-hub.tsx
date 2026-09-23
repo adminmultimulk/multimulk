@@ -2,6 +2,7 @@ import Image from "next/image";
 import { AnimatedTitle } from "./animated-title";
 import { Container } from "./container";
 import { JsonLd } from "./json-ld";
+import { programmeQuestion } from "./key-facts";
 import { Link } from "./link";
 import { LastReviewed } from "./figure";
 import { SiteFooter } from "./site-footer";
@@ -14,7 +15,12 @@ import { cheapestOfferedRoute, type Programme } from "@/app/lib/programmes";
 import { formatMoney } from "@/app/lib/format-figure";
 import { pillarCta, pillarHero, pillarPlace, pillarVisual } from "@/app/lib/pillar";
 import { buildPath, type RouteId } from "@/app/lib/routes";
-import { breadcrumbs, collectionPage, routeUrl } from "@/app/lib/seo/jsonld";
+import {
+  breadcrumbs,
+  collectionPage,
+  faqPage,
+  routeUrl,
+} from "@/app/lib/seo/jsonld";
 import type { LegalReview } from "@/app/lib/review";
 
 /**
@@ -43,6 +49,13 @@ export async function PillarHub({
   const t = await getDictionary(locale);
   const category = programmes[0]?.category ?? "citizenship";
 
+  // One question per programme, answered from its record: the hub is where
+  // "what does Grenada require?" is most often asked, and it should be where
+  // it is answered rather than one click away.
+  const questions = programmes
+    .map((programme) => programmeQuestion(locale, t, programme))
+    .filter((entry) => entry !== null);
+
   return (
     <>
       <JsonLd
@@ -57,6 +70,9 @@ export async function PillarHub({
             ),
           }),
           breadcrumbs({ locale, id: routeId, labels: t.routes }),
+          ...(questions.length
+            ? [faqPage(`${routeUrl(locale, routeId)}#faq`, questions)]
+            : []),
         ]}
       />
 
@@ -150,6 +166,34 @@ export async function PillarHub({
             {review ? <LastReviewed review={review} className="mt-10" /> : null}
           </Container>
         </section>
+
+        {questions.length ? (
+          <section
+            aria-labelledby="hub-faq"
+            className="border-t border-ink/12 bg-white py-[72px] lg:py-[96px]"
+          >
+            <Container>
+              <h2
+                id="hub-faq"
+                className="font-display text-[30px] leading-[1.2] text-ink sm:text-[40px]"
+              >
+                {t.programmes.hubFaqHeading}
+              </h2>
+              <dl className="mt-10 max-w-[820px] divide-y divide-ink/12 border-y border-ink/12">
+                {questions.map((entry) => (
+                  <div key={entry.question} className="py-7">
+                    <dt className="font-display text-[19px] leading-[1.35] text-ink sm:text-[21px]">
+                      {entry.question}
+                    </dt>
+                    <dd className="mt-3 text-[14px] leading-[24px] text-ink/75">
+                      {entry.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </Container>
+          </section>
+        ) : null}
 
         <section className="relative overflow-hidden bg-forest py-[86px] lg:py-[120px]">
           <Image

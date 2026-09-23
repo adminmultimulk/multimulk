@@ -446,6 +446,12 @@ const en = {
     compareBody: "Every figure on this page sits in the same table as the programmes it is most often weighed against — read from the same record, with our recommendation beneath it.",
     compareButton: "See the Comparison",
     allComparisons: "All Comparisons",
+    /** The key-facts block near the top of a programme page, and the hub questions built from it. */
+    keyFactsHeading: "{name} at a Glance",
+    keyFactsBody:
+      "The figures most often asked about, read from the same record as every comparison on this site.",
+    hubFaqHeading: "Common Questions",
+    hubFaqQuestion: "What does {name} require, and what does it grant?",
     otherProgrammes: "Other Programmes",
     viewProgramme: "View the Programme",
     ctaHeading: "Discover {name}",

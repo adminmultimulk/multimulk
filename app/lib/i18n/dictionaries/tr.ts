@@ -345,6 +345,11 @@ const tr = {
     compareBody: "Bu sayfadaki her rakam, en sık kıyaslandığı programlarla aynı tabloda yer alır — aynı kayıttan okunur, altında da önerimiz bulunur.",
     compareButton: "Karşılaştırmayı Görün",
     allComparisons: "Tüm Karşılaştırmalar",
+    keyFactsHeading: "Bir Bakışta {name}",
+    keyFactsBody:
+      "En sık sorulan rakamlar; bu sitedeki her karşılaştırmayla aynı kayıttan alınmıştır.",
+    hubFaqHeading: "Sık Sorulan Sorular",
+    hubFaqQuestion: "{name} neler gerektirir ve ne sağlar?",
     otherProgrammes: "Diğer Programlar",
     viewProgramme: "Programı Görüntüleyin",
     ctaHeading: "{name} Programını Keşfedin",

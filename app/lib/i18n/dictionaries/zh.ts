@@ -347,6 +347,11 @@ const zh = {
     compareBody: "本页的每一个数字都与最常被比较的项目同列一表——读自同一份记录，并附有我们的建议。",
     compareButton: "查看对比",
     allComparisons: "全部对比",
+    keyFactsHeading: "{name} 一览",
+    keyFactsBody:
+      "最常被问到的数据，与本站所有对比表取自同一份记录。",
+    hubFaqHeading: "常见问题",
+    hubFaqQuestion: "{name} 有哪些要求，又能带来什么？",
     otherProgrammes: "其他项目",
     viewProgramme: "查看项目",
     ctaHeading: "了解{name}",

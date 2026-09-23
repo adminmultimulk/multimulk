@@ -18,6 +18,7 @@ import type {
   WebSite,
 } from "schema-dts";
 
+import { authors } from "../authors";
 import { contact, socialLinks } from "../content";
 import type { Project } from "../projects";
 import { hreflangFor, type Locale } from "../i18n/config";
@@ -55,6 +56,11 @@ export function organization(locale: Locale): Organization {
     "@id": ORG_ID,
     name: "Multi Mulk",
     url: absoluteUrl(`/${locale}`),
+    // The mark on a white ground, which is how search and answer engines
+    // show a publisher; the light variant is for the dark footer only.
+    logo: absoluteUrl("/logos/multi-mulk.webp"),
+    image: absoluteUrl("/logos/multi-mulk.webp"),
+    founder: authorRef(locale, authors["sajid-ali-haydar"].slug),
     email: contact.email,
     address: { "@type": "PostalAddress", ...contact.headOfficeAddress },
     // One contact point per office, so the number a reader is shown matches
@@ -73,6 +79,24 @@ export function organization(locale: Locale): Organization {
     })),
   };
 }
+
+/**
+ * The `Person` an author page defines, by reference. The page itself carries
+ * the credentials; everything else only has to point at it.
+ */
+export function authorRef(locale: Locale, slug: string) {
+  const url = routeUrl(locale, "author", { slug });
+  return { "@type": "Person" as const, "@id": `${url}#person`, name: authorBySlug(slug)?.name, url };
+}
+
+const authorBySlug = (slug: string) =>
+  Object.values(authors).find((author) => author.slug === slug);
+
+/** The roster entry for a byline, where the name on it is one of ours. */
+const authorByName = (name: string) =>
+  Object.values(authors).find(
+    (author) => author.name.toLowerCase() === name.trim().toLowerCase(),
+  );
 
 /**
  * The site, and the fact that it can be searched. The `q` parameter is the one
@@ -185,14 +209,22 @@ export function article(
      * publication's; a bylined piece is the person's, which is the one search
      * engines read as authorship on advice about citizenship and tax; and an
      * unsigned piece from the archive is the company's, which is all it ever
-     * was.
+     * was. A byline that matches someone on the roster points at their author
+     * page, which is where the credentials behind the advice live.
      */
     author: isPress
       ? { "@type": "Organization", name: item.source! }
       : item.author
-        ? { "@type": "Person", name: item.author }
+        ? byline(locale, item.author)
         : { "@type": "Organization", "@id": ORG_ID, name: authorName },
   };
+}
+
+function byline(locale: Locale, name: string) {
+  const known = authorByName(name);
+  return known
+    ? authorRef(locale, known.slug)
+    : { "@type": "Person" as const, name };
 }
 
 /** A question-and-answer set. */
@@ -214,6 +246,7 @@ export function faqPage(
 /** A citizenship or residency programme, as a service Multi Mulk provides. */
 export function service({
   locale,
+  routeId = "citizenshipProgramme",
   slug,
   name,
   description,
@@ -221,19 +254,24 @@ export function service({
   review,
 }: {
   locale: Locale;
+  /** The pillar the page answers under; a residency programme is not at the citizenship URL. */
+  routeId?: RouteId;
   slug: string;
   name: string;
   description: string;
   areaServed: string;
   review: LegalReview;
 }): Thing {
-  const url = routeUrl(locale, "citizenshipProgramme", { programme: slug });
+  const url = routeUrl(locale, routeId, { programme: slug });
   return {
     "@type": "Service",
     "@id": `${url}#service`,
     name,
     description,
-    serviceType: "Citizenship by investment advisory",
+    serviceType:
+      routeId === "goldenVisaProgramme"
+        ? "Residency by investment advisory"
+        : "Citizenship by investment advisory",
     provider: { "@id": ORG_ID },
     areaServed: { "@type": "Country", name: areaServed },
     url,

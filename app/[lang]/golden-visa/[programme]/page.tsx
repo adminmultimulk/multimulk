@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ProgrammePage } from "@/app/components/programme-page";
 import { alternatesFor, getDictionary } from "@/app/lib/i18n";
+import { localiseProgramme } from "@/app/lib/programme-pages";
 import { locales } from "@/app/lib/i18n/config";
 import { getProgramme, isPublishable, programmesIn } from "@/app/lib/programmes";
 
@@ -26,7 +27,9 @@ export async function generateMetadata({
 
   return {
     title: programme.officialName,
-    description: t.pillars.goldenVisa.body,
+    // The programme's own one-line answer, not the pillar's: seven pages
+    // sharing one description read to a search engine as one page.
+    description: localiseProgramme(t, programme).summary,
     alternates: await alternatesFor(`/golden-visa/${slug}`),
     ...(isPublishable(programme) ? {} : { robots: { index: false, follow: false } }),
   };

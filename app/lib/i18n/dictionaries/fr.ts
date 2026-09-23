@@ -418,6 +418,11 @@ const fr: Dictionary = {
     compareBody: "Chaque chiffre de cette page figure dans le même tableau que les programmes auxquels on le compare le plus souvent — lu dans le même dossier, avec notre recommandation en dessous.",
     compareButton: "Voir la comparaison",
     allComparisons: "Toutes les comparaisons",
+    keyFactsHeading: "{name} en bref",
+    keyFactsBody:
+      "Les chiffres les plus demandés, tirés de la même fiche que chaque comparaison de ce site.",
+    hubFaqHeading: "Questions fréquentes",
+    hubFaqQuestion: "Qu’exige {name}, et qu’offre-t-il ?",
     otherProgrammes: "Autres programmes",
     viewProgramme: "Voir le programme",
     ctaHeading: "Découvrir {name}",

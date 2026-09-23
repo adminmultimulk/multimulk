@@ -1545,6 +1545,11 @@ const ar: Dictionary = {
     compareBody: "كل رقم في هذه الصفحة يقع في الجدول نفسه مع البرامج التي يُوازن بها عادةً — مقروءًا من السجل نفسه، وتحته توصيتنا.",
     compareButton: "اطّلع على المقارنة",
     allComparisons: "كل المقارنات",
+    keyFactsHeading: "{name} في لمحة",
+    keyFactsBody:
+      "الأرقام الأكثر سؤالًا عنها، مأخوذة من السجل نفسه الذي تعتمد عليه كل مقارنة في هذا الموقع.",
+    hubFaqHeading: "أسئلة شائعة",
+    hubFaqQuestion: "ما متطلبات {name} وما الذي يمنحه؟",
     otherProgrammes: "برامج أخرى",
     viewProgramme: "عرض البرنامج",
     ctaHeading: "اكتشف {name}",

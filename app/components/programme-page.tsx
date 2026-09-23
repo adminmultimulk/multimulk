@@ -1,6 +1,6 @@
 import { Container } from "./container";
 import { JsonLd } from "./json-ld";
-import { LastReviewed } from "./figure";
+import { KeyFacts, programmeQuestion } from "./key-facts";
 import { ProgrammeRoutes } from "./programme-table";
 import { PropertyEnquire } from "./property-enquire";
 import { ResortAbout } from "./resort/resort-about";
@@ -30,7 +30,7 @@ import {
   type Programme,
 } from "@/app/lib/programmes";
 import { buildPath, type RouteId } from "@/app/lib/routes";
-import { breadcrumbs, service } from "@/app/lib/seo/jsonld";
+import { breadcrumbs, faqPage, routeUrl, service } from "@/app/lib/seo/jsonld";
 
 /**
  * The two or three figures in the banner: the entry price, how long the
@@ -179,12 +179,16 @@ export async function ProgrammePage({
       href: buildPath(programmeRouteId(other), { programme: other.slug }),
     }));
 
+  const answer = programmeQuestion(locale, t, programme);
+  const url = routeUrl(locale, routeId, { programme: programme.slug });
+
   return (
     <>
       <JsonLd
         graph={[
           service({
             locale,
+            routeId,
             slug: programme.slug,
             name: programme.officialName,
             description: copy.intro,
@@ -198,6 +202,11 @@ export async function ProgrammePage({
             labels: t.routes,
             leafLabel: programme.officialName,
           }),
+          // Only once the figures are signed off: an unreviewed answer is
+          // exactly what should not be quoted back to someone.
+          ...(answer && isPublishable(programme)
+            ? [faqPage(`${url}#faq`, [answer])]
+            : []),
         ]}
       />
 
@@ -228,6 +237,8 @@ export async function ProgrammePage({
           </Container>
         ) : null}
 
+        <KeyFacts locale={locale} t={t} programme={programme} />
+
         <ResortAbout
           eyebrow={t.programmes.aboutEyebrow}
           heading={copy.aboutHeading}
@@ -238,7 +249,8 @@ export async function ProgrammePage({
           name={programme.officialName}
         />
 
-        {/* The routes, and the review date that covers every figure here. */}
+        {/* The routes. The review date covering every figure here is stated
+            once, with the key facts above. */}
         <section className="bg-mist py-16 lg:py-24">
           <Container>
             <div className="max-w-[640px]">
@@ -252,7 +264,6 @@ export async function ProgrammePage({
             <div className="mt-9">
               <ProgrammeRoutes programme={programme} />
             </div>
-            <LastReviewed review={programme.review} className="mt-10" />
           </Container>
         </section>
 

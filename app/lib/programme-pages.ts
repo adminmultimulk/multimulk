@@ -496,6 +496,52 @@ export function localiseProgramme(t: Dictionary, programme: Programme) {
 }
 
 /**
+ * The figures an answer engine is asked about most, in the order a reader
+ * weighs them: what it costs, how long it takes, what it grants, whom it
+ * covers. One list, so the key-facts block, its structured data and the hub's
+ * questions cannot state a programme differently.
+ */
+export const keyFactRows = [
+  "minimumInvestment",
+  "holdingPeriod",
+  "processingTime",
+  "visaFree",
+  "schengen",
+  "residencyRequired",
+  "physicalVisit",
+  "dependentChildren",
+  "parentsIncluded",
+  "citizenshipAfter",
+  "worldwideTax",
+] as const;
+
+/**
+ * A programme's confirmed figures as label/value pairs, in the order given,
+ * skipping any the record has not confirmed — an answer of "Not confirmed" is
+ * not an answer.
+ */
+export function programmeFacts(
+  locale: Locale,
+  t: Dictionary,
+  programme: Programme,
+  keys: readonly string[] = keyFactRows,
+): { key: string; label: string; value: string }[] {
+  const facts: { key: string; label: string; value: string }[] = [];
+  for (const key of keys) {
+    const row = comparisonRows.find((r) => r.key === key);
+    if (!row) continue;
+    const value = row.read(programme);
+    if (value.kind === "unknown") continue;
+    facts.push({
+      key,
+      label: t.compare.rows[key as keyof typeof t.compare.rows],
+      value: comparisonValueText(locale, t, value),
+    });
+  }
+  return facts;
+}
+
+/**
  * Three of a programme's figures as one-line points — "Minimum investment:
  * US$270,000" — taken in the order given and skipping any the record has not
  * confirmed. A point that reads "Not confirmed" is not a highlight, so the
@@ -508,15 +554,7 @@ export function programmePoints(
   keys: readonly string[],
   count = 3,
 ): string[] {
-  const points: string[] = [];
-  for (const key of keys) {
-    const row = comparisonRows.find((r) => r.key === key);
-    if (!row) continue;
-    const value = row.read(programme);
-    if (value.kind === "unknown") continue;
-    const label = t.compare.rows[key as keyof typeof t.compare.rows];
-    points.push(`${label}: ${comparisonValueText(locale, t, value)}`);
-    if (points.length === count) break;
-  }
-  return points;
+  return programmeFacts(locale, t, programme, keys)
+    .slice(0, count)
+    .map((fact) => `${fact.label}: ${fact.value}`);
 }
