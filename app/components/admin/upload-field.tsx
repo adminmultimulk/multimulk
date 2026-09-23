@@ -23,7 +23,7 @@ import { Field, Input, Textarea } from "./ui";
 /** What Cloudinary answers with; only the URL is of any use here. */
 type CloudinaryResponse = { secure_url?: string; error?: { message?: string } };
 
-function useUploader(resourceType: ResourceType, kind: UploadKind) {
+export function useUploader(resourceType: ResourceType, kind: UploadKind) {
   const [progress, setProgress] = useState<number | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
 

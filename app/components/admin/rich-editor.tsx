@@ -7,6 +7,7 @@ import {
   toBlocks,
   wordCount,
 } from "@/app/lib/rich-text";
+import { useUploader } from "./upload-field";
 
 /**
  * The body editor.
@@ -37,8 +38,8 @@ export function RichEditor({
   /**
    * "article" is the full body editor. "prose" is the same grammar and the
    * same preview in a shorter box, without the tools that only make sense in
-   * an article — a figure needs a path under `/public`, and a listing's
-   * description is not where a comparison table belongs.
+   * an article — a listing's description is not where a figure or a
+   * comparison table belongs.
    */
   variant?: "article" | "prose";
   placeholder?: string;
@@ -47,6 +48,8 @@ export function RichEditor({
   const [value, setValue] = useState(defaultValue);
   const [tab, setTab] = useState<"write" | "preview">("write");
   const area = useRef<HTMLTextAreaElement>(null);
+  const picker = useRef<HTMLInputElement>(null);
+  const { upload, progress, failure } = useUploader("image", "article");
 
   const blocks = useMemo(() => toBlocks(value), [value]);
   const words = useMemo(() => wordCount(blocks), [blocks]);
@@ -108,16 +111,40 @@ export function RichEditor({
     apply(value.slice(0, from) + next + value.slice(to), from, from + next.length);
   }
 
-  /** Drops a whole block in below the caret, separated by blank lines. */
+  /**
+   * Drops a whole block in below the caret, separated by blank lines.
+   *
+   * Reads the textarea rather than `value`: the image button calls this after
+   * an upload, and a render's `value` from before it would drop whatever was
+   * typed while the file was on its way.
+   */
   function insertBlock(text: string, caretOffset = text.length) {
     const node = area.current;
     if (!node) return;
+    const current = node.value;
     const at = node.selectionEnd;
-    const before = value.slice(0, at).replace(/\s+$/, "");
-    const after = value.slice(at).replace(/^\s+/, "");
+    const before = current.slice(0, at).replace(/\s+$/, "");
+    const after = current.slice(at).replace(/^\s+/, "");
     const lead = before ? `${before}\n\n` : "";
     const next = lead + text + (after ? `\n\n${after}` : "\n");
     apply(next, lead.length + caretOffset);
+  }
+
+  /**
+   * The image button: pick a file from the device, upload it to Cloudinary,
+   * and drop a figure in below the caret with its description selected, since
+   * that is the part still to write. Where the caret was is read before the
+   * upload, which can take long enough for the textarea to lose focus.
+   */
+  async function insertImage(file: File) {
+    const at = area.current?.selectionEnd ?? value.length;
+    const url = await upload(file);
+    if (!url) return;
+    area.current?.setSelectionRange(at, at);
+    const alt = "Describe the photograph";
+    insertBlock(`![${alt}](${url})`, 2);
+    const node = area.current;
+    if (node) node.setSelectionRange(node.selectionStart, node.selectionStart + alt.length);
   }
 
   function onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -231,12 +258,24 @@ export function RichEditor({
             <Divider />
 
             <Tool
-              label="Image"
-              // Caret lands after `/images/`, which is where the filename goes.
-              onClick={() => insertBlock("![Describe the photograph](/images/)", 35)}
+              label={progress === null ? "Image" : `Uploading… ${progress}%`}
+              onClick={() => picker.current?.click()}
+              disabled={progress !== null}
             >
               <Icon d="M3 4h14v12H3zM3 13l4-4 4 4 3-3 3 3" />
             </Tool>
+            <input
+              ref={picker}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                // Cleared so picking the same file twice still fires a change.
+                event.target.value = "";
+                if (file) void insertImage(file);
+              }}
+            />
             <Tool
               label="Table"
               onClick={() =>
@@ -312,6 +351,16 @@ export function RichEditor({
       ) : null}
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-ink/10 bg-ink/[0.02] px-3 py-1.5 text-[11.5px] text-ink/55">
+        {progress !== null ? (
+          <span className="tabular-nums text-forest">
+            Uploading image… {progress}%
+          </span>
+        ) : null}
+        {failure ? (
+          <span role="alert" className="text-red-700">
+            {failure}
+          </span>
+        ) : null}
         <span className="tabular-nums">
           {words.toLocaleString("en")} {words === 1 ? "word" : "words"}
         </span>
@@ -337,20 +386,23 @@ function Tool({
   label,
   shortcut,
   onClick,
+  disabled,
   children,
 }: {
   label: string;
   shortcut?: string;
   onClick: () => void;
+  disabled?: boolean;
   children: ReactNode;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      disabled={disabled}
       title={shortcut ? `${label} (${shortcut})` : label}
       aria-label={label}
-      className="flex size-7 items-center justify-center rounded-[5px] text-ink/70 transition-colors hover:bg-ink/8 hover:text-ink"
+      className="flex size-7 items-center justify-center rounded-[5px] text-ink/70 transition-colors hover:bg-ink/8 hover:text-ink disabled:cursor-wait disabled:opacity-50"
     >
       {children}
     </button>

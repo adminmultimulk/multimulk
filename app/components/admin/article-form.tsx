@@ -489,7 +489,7 @@ function Syntax() {
     ["- item", "A bulleted list, one item per line. Enter continues it."],
     ["1. item", "A numbered list."],
     ["> Quoted line", "A pull quote. A last line of “> — Name” credits it."],
-    ["![Alt](/images/x.jpg)", "A photograph. Paths under /public only."],
+    ["![Alt](/images/x.jpg)", "A photograph. Use the image button to upload one from your device, or give a path under /public."],
     ["| a | b |", "A table, one row per line."],
     [":::key", "A highlighted box: key, note, tip or warning."],
     ["---", "A break between sections."],

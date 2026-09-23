@@ -22,7 +22,8 @@
  *     1. item                        a numbered list, one item per line
  *     > Quoted line                  a pull quote
  *     > — Attribution                …and who said it, as the last line
- *     ![Alt](/images/x.jpg "Cap")    a figure, with optional caption
+ *     ![Alt](/images/x.jpg "Cap")    a figure, with optional caption; a site
+ *                                    path or a Cloudinary URL
  *     | a | b |                      a table, one row per line
  *     :::note Title                  a callout; note, tip, warning or key
  *     ---                            a rule between sections
@@ -175,10 +176,14 @@ function parseBlock(raw: string): Block | null {
 
   const figure = FIGURE.exec(first);
   if (figure) {
-    // Site paths only. `next/image` refuses a host that is not in
+    // Site paths and Cloudinary only — the latter is where the editor's image
+    // button uploads to. `next/image` refuses a host that is not in
     // `images.remotePatterns`, and an editor pasting a URL from elsewhere
     // would otherwise take the whole page down with it at render.
-    if (figure[2].startsWith("/"))
+    if (
+      figure[2].startsWith("/") ||
+      figure[2].startsWith("https://res.cloudinary.com/")
+    )
       return {
         kind: "figure",
         src: figure[2],
