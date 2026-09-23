@@ -79,15 +79,15 @@ const categoryOptions: Record<
   },
   Publication: {
     label: "Publication — a guide or report",
-    where: "/knowledge/publications",
+    where: "/knowledge?type=publications",
   },
   "Market Insight": {
     label: "Market insight — data and analysis",
-    where: "/knowledge/market-insights",
+    where: "/knowledge?type=market-insights",
   },
   Event: {
     label: "Event — an exhibition, seminar or briefing",
-    where: "/knowledge/events",
+    where: "/knowledge?type=events",
   },
 };
 

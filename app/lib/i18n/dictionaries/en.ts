@@ -700,6 +700,18 @@ const en = {
     /** The same message with no filter applied — a section nobody has filed
      *  anything into yet, which all three new ones are on day one. */
     emptyHere: "Nothing has been published here yet.",
+    filter: "Filter",
+    filterLabel: "Filter articles",
+    filterType: "Type",
+    filterTopic: "Topic",
+    searchLabel: "Search articles",
+    searchPlaceholder: "Search by title or keyword",
+    noMatch: "Nothing matches “{query}”.",
+    pagination: "Pagination",
+    previousPage: "Previous page",
+    nextPage: "Next page",
+    pageN: "Page {n}",
+    clearSearch: "Clear",
     /**
      * Headlines and bodies, keyed by article slug. English is the source, so
      * this stays empty here; the other four fill in whichever pieces have been

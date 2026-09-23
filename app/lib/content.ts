@@ -21,7 +21,7 @@ import {
   type Money,
 } from "./programmes";
 import { buildPath, routes, searchPath, type RouteId } from "./routes";
-import { sectionRoute, sections, type SectionId } from "./sections";
+import { sectionHref, sections, type SectionId } from "./sections";
 
 export { type Article } from "./media";
 
@@ -251,21 +251,22 @@ function residencyCards(): ResidencyCard[] {
 }
 
 /**
- * The photograph behind each News & Insights card.
+ * The photograph behind each News & Insights card, each chosen to show what
+ * the section is: passports for the articles, which are overwhelmingly guides
+ * to citizenship and residence; a report being read for the publications;
+ * charts on a desk for the market insights; and a table of national flags for
+ * the events, which are where we meet people from all of them.
  *
- * Chosen for what the section is rather than for what is in it: documents on a
- * desk for the publications, the skyline under construction for the market,
- * and Dubai after dark for the events, which is where most of them are held.
- *
- * Not the IPS Dubai poster, which was the obvious choice and the wrong one:
- * it carries its own headline set into the artwork, and a card reading "Best
- * Projects of Türkiye 2026" above the word Events is two headlines arguing.
+ * Not the IPS Dubai poster for Events, which was the obvious choice and the
+ * wrong one: it carries its own headline set into the artwork, and a card
+ * reading "Best Projects of Türkiye 2026" above the word Events is two
+ * headlines arguing.
  */
 const sectionImages: Record<SectionId, string> = {
-  articles: "/images/cbi/cbi-istanbul-strait.jpg",
-  publications: "/images/cbi/cbi-documents.jpg",
-  marketInsights: "/images/cbi/protection-cranes-dusk.jpg",
-  events: "/images/cbi/hero-dubai-night.jpg",
+  articles: "/images/cbi/hero-passports.jpg",
+  publications: "/images/case-studies/advisers-reviewing-figures.webp",
+  marketInsights: "/images/case-studies/paperwork-on-laptop.webp",
+  events: "/images/case-studies/flags-at-the-table.webp",
 };
 
 /** Keyed by the nav key the menu hangs from. */
@@ -301,16 +302,17 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
   },
 
   /**
-   * News & Insights. Articles is the section that answers at /knowledge
-   * itself, so the label and its first child open the same page — which is
-   * what a reader expects of a parent that is also a destination.
+   * News & Insights. All four sections are listed on /knowledge, each card
+   * opening it on its own `?type=`. Articles is the default, so the label and
+   * its first child open the same page — which is what a reader expects of a
+   * parent that is also a destination.
    */
   knowledge: {
     kind: "sections",
     cards: sections.map((key) => ({
       key,
       image: sectionImages[key],
-      href: routes[sectionRoute[key]].pattern,
+      href: sectionHref(key),
     })),
   },
 

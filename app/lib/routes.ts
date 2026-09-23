@@ -49,9 +49,6 @@ export type RouteId =
   | "contact"
   | "search"
   | "knowledge"
-  | "publications"
-  | "marketInsights"
-  | "events"
   | "article"
   | "development"
   | "citizenshipHub"
@@ -185,40 +182,6 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     parent: "home",
     labelKey: "knowledge",
     sitemap: { include: true, priority: 0.8, changeFrequency: "weekly" },
-    schema: ["CollectionPage"],
-  },
-  /*
-   * The other three News & Insights sections.
-   *
-   * Static segments under the same parent as `article`, whose pattern is
-   * `/knowledge/:slug` — Next resolves a literal segment ahead of a dynamic
-   * one, so these answer rather than being read as article slugs. The reverse
-   * risk is real and is handled where it can be caught: `reservedArticleSlugs`
-   * refuses "publications", "market-insights" and "events" in the dashboard,
-   * so nobody can write a piece that is shadowed by a section index.
-   */
-  publications: {
-    id: "publications",
-    pattern: "/knowledge/publications",
-    parent: "knowledge",
-    labelKey: "publications",
-    sitemap: { include: true, priority: 0.7, changeFrequency: "weekly" },
-    schema: ["CollectionPage"],
-  },
-  marketInsights: {
-    id: "marketInsights",
-    pattern: "/knowledge/market-insights",
-    parent: "knowledge",
-    labelKey: "marketInsights",
-    sitemap: { include: true, priority: 0.7, changeFrequency: "weekly" },
-    schema: ["CollectionPage"],
-  },
-  events: {
-    id: "events",
-    pattern: "/knowledge/events",
-    parent: "knowledge",
-    labelKey: "events",
-    sitemap: { include: true, priority: 0.7, changeFrequency: "weekly" },
     schema: ["CollectionPage"],
   },
   article: {

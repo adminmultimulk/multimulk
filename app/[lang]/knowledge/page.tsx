@@ -6,7 +6,7 @@ import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
 import { alternatesFor, getDictionary, getLocale } from "@/app/lib/i18n";
 import { mergedArticles } from "@/app/lib/cms/articles";
-import { inSection } from "@/app/lib/sections";
+import { forCards } from "@/app/lib/sections";
 import { JsonLd } from "@/app/components/json-ld";
 import { breadcrumbs, collectionPage, routeUrl } from "@/app/lib/seo/jsonld";
 
@@ -19,13 +19,11 @@ export default async function MediaCentrePage() {
   const locale = await getLocale();
   const t = await getDictionary(locale);
   /*
-   * The archive plus whatever the dashboard has published, newest first, and
-   * narrowed to the pieces this section lists. /knowledge is the Articles
-   * section — news and blogs — which is what every entry in the static archive
-   * and every legacy redirect is; the publications, market insights and events
-   * written since have indexes of their own beneath it.
+   * The archive plus whatever the dashboard has published, newest first. All
+   * four News & Insights sections are listed here, the index narrowing to one
+   * by `?type=`, so the collection is every piece of them.
    */
-  const articles = inSection(await mergedArticles(), "articles");
+  const articles = await mergedArticles();
 
   return (
     <>
@@ -49,7 +47,7 @@ export default async function MediaCentrePage() {
       </div>
 
       <main className="flex-1">
-        <MediaArticles articles={articles} section="articles" />
+        <MediaArticles articles={forCards(articles)} />
         <MediaNewsletter />
       </main>
 

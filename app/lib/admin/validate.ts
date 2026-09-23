@@ -1,8 +1,7 @@
 import { allArticles } from "@/app/lib/knowledge";
 import { legacyDevelopments } from "@/app/lib/legacy-developments";
 import { units } from "@/app/lib/properties";
-import { routes } from "@/app/lib/routes";
-import { isArticleCategory, sectionRoute, sections } from "@/app/lib/sections";
+import { isArticleCategory } from "@/app/lib/sections";
 import { isTopic } from "@/app/lib/topics";
 
 export { checkSlug, slugify } from "./slug";
@@ -19,14 +18,14 @@ export { money } from "./money";
 export const reservedArticleSlugs = new Set([
   ...allArticles.map((a) => a.slug),
   /*
-   * And the three section indexes, which are literal segments under the same
-   * /knowledge prefix as an article. Next resolves a literal ahead of the
-   * dynamic segment, so a piece slugged "events" would be written, published
-   * and permanently unreachable — the section index would answer instead.
+   * And the three URLs the other sections used to answer on beneath
+   * /knowledge. They are permanent redirects to /knowledge?type=… now (see
+   * `next.config.ts`), and redirects run ahead of routing, so a piece slugged
+   * "events" would be written, published and permanently unreachable.
    */
-  ...sections
-    .filter((section) => section !== "articles")
-    .map((section) => routes[sectionRoute[section]].pattern.split("/").pop()!),
+  "publications",
+  "market-insights",
+  "events",
 ]);
 /*
  * A published listing answers at /properties/<slug>, which is the namespace

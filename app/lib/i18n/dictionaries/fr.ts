@@ -664,6 +664,18 @@ const fr: Dictionary = {
     sortLabel: "Trier les articles",
     empty: "Rien de classé sous « {filter} » pour l’instant.",
     emptyHere: "Rien n’a encore été publié ici.",
+    filter: "Filtrer",
+    filterLabel: "Filtrer les articles",
+    filterType: "Type",
+    filterTopic: "Thème",
+    searchLabel: "Rechercher des articles",
+    searchPlaceholder: "Rechercher par titre ou mot-clé",
+    noMatch: "Aucun résultat pour « {query} ».",
+    pagination: "Pagination",
+    previousPage: "Page précédente",
+    nextPage: "Page suivante",
+    pageN: "Page {n}",
+    clearSearch: "Effacer",
     copy: staged<ArticleCopy>({
       "levent-residences-tops-out": {
         title: "Levent Residences atteint sa hauteur définitive et devient la nouvelle adresse phare de Şişli",

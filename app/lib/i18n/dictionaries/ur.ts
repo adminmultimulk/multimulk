@@ -303,6 +303,18 @@ const ur: Dictionary = {
     sortLabel: "مضامین ترتیب دیں",
     empty: "«{filter}» میں فی الحال کچھ نہیں ہے۔",
     emptyHere: "یہاں ابھی کچھ شائع نہیں ہوا۔",
+    filter: "فلٹر",
+    filterLabel: "مضامین فلٹر کریں",
+    filterType: "قسم",
+    filterTopic: "موضوع",
+    searchLabel: "مضامین تلاش کریں",
+    searchPlaceholder: "عنوان یا کلیدی لفظ سے تلاش کریں",
+    noMatch: "“{query}” کے لیے کوئی نتیجہ نہیں ملا۔",
+    pagination: "صفحہ بندی",
+    previousPage: "پچھلا صفحہ",
+    nextPage: "اگلا صفحہ",
+    pageN: "صفحہ {n}",
+    clearSearch: "صاف کریں",
     copy: staged<ArticleCopy>({
       "levent-residences-tops-out": {
         title: "Levent Residences اپنی مکمل بلندی کو پہنچ گیا، شیشلی کا نیا نمایاں پتہ",

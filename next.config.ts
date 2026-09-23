@@ -37,6 +37,17 @@ const nextConfig: NextConfig = {
         destination: "/:lang/knowledge/:slug*",
         permanent: true,
       },
+      /*
+       * Publications, Market Insights and Events had pages of their own
+       * beneath /knowledge; all four sections are listed there now, and these
+       * open it on the section the old URL named.
+       */
+      {
+        source:
+          "/:lang(en|ar|ru|fr|ur|tr|zh)/knowledge/:type(publications|market-insights|events)",
+        destination: "/:lang/knowledge?type=:type",
+        permanent: true,
+      },
       {
         source: "/media-centre/:slug+",
         destination: `/${LEGACY_LOCALE}/knowledge/:slug+`,

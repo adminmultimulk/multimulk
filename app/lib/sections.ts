@@ -19,8 +19,6 @@
  * so renaming one is a URL change and not a rename.
  */
 
-import type { RouteId } from "./routes";
-
 /**
  * How a piece is filed.
  *
@@ -78,18 +76,34 @@ export const sectionCategories: Record<SectionId, ArticleCategory[]> = {
 };
 
 /**
- * The route each section answers on.
+ * How each section is named in the `?type=` parameter on /knowledge.
  *
- * `import type` above rather than a value import on purpose: `routes.ts` reads
- * the article archive to enumerate itself, the archive reaches this module for
- * the category type, and a runtime import here would close that ring.
+ * All four are listed on the one page now; the parameter is what the menu, the
+ * tabs and the filter panel set, and what a shared or bookmarked link carries.
+ * The values are the slugs the sections used to answer on beneath /knowledge,
+ * so the redirects from those URLs in `next.config.ts` map one to one.
  */
-export const sectionRoute: Record<SectionId, RouteId> = {
-  articles: "knowledge",
+export const sectionParam: Record<SectionId, string> = {
+  articles: "articles",
   publications: "publications",
-  marketInsights: "marketInsights",
+  marketInsights: "market-insights",
   events: "events",
 };
+
+/** The section a `?type=` value names; anything else is Articles. */
+export function sectionFromParam(value: string | null): SectionId {
+  return sections.find((id) => sectionParam[id] === value) ?? "articles";
+}
+
+/**
+ * Where a section is listed. Articles is the page's default, so it keeps the
+ * bare /knowledge that every legacy redirect already points at.
+ */
+export function sectionHref(id: SectionId): string {
+  return id === "articles"
+    ? "/knowledge"
+    : `/knowledge?type=${sectionParam[id]}`;
+}
 
 /**
  * Which section a piece belongs to.
@@ -117,4 +131,16 @@ export function inSection<T extends { category?: string }>(
   section: SectionId,
 ): T[] {
   return items.filter((item) => sectionOf(item.category) === section);
+}
+
+/**
+ * A list as the index cards need it: everything but the bodies and tables,
+ * which a card never shows and which are most of the archive's weight. The
+ * index is handed every section at once so it can switch between them in
+ * place, and this is what keeps that from shipping the whole corpus's prose.
+ */
+export function forCards<T extends { body: string[]; tables?: unknown }>(
+  items: T[],
+): T[] {
+  return items.map((item) => ({ ...item, body: [], tables: undefined }));
 }

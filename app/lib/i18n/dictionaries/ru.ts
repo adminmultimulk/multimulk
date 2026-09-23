@@ -667,6 +667,18 @@ const ru: Dictionary = {
     sortLabel: "Сортировать материалы",
     empty: "В разделе «{filter}» пока ничего нет.",
     emptyHere: "Здесь пока ничего не опубликовано.",
+    filter: "Фильтр",
+    filterLabel: "Фильтровать материалы",
+    filterType: "Тип",
+    filterTopic: "Тема",
+    searchLabel: "Поиск по материалам",
+    searchPlaceholder: "Поиск по заголовку или ключевому слову",
+    noMatch: "По запросу «{query}» ничего не найдено.",
+    pagination: "Пагинация",
+    previousPage: "Предыдущая страница",
+    nextPage: "Следующая страница",
+    pageN: "Страница {n}",
+    clearSearch: "Очистить",
     copy: staged<ArticleCopy>({
       "levent-residences-tops-out": {
         title: "Levent Residences достиг проектной высоты и стал новой доминантой Шишли",

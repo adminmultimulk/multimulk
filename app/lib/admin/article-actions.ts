@@ -31,12 +31,6 @@ import {
 function publishedArticlesChanged() {
   updateTag(ARTICLES_TAG);
   revalidatePath("/[lang]/knowledge", "page");
-  // The other three section indexes. Each is its own prerendered page, and a
-  // publication published into a stale /knowledge/publications is a row in the
-  // database that nothing renders.
-  revalidatePath("/[lang]/knowledge/publications", "page");
-  revalidatePath("/[lang]/knowledge/market-insights", "page");
-  revalidatePath("/[lang]/knowledge/events", "page");
   revalidatePath("/[lang]/knowledge/[slug]", "page");
   revalidatePath("/[lang]", "page");
 }

@@ -306,6 +306,18 @@ const ar: Dictionary = {
     sortLabel: "ترتيب المقالات",
     empty: "لا يوجد شيء ضمن «{filter}» حتى الآن.",
     emptyHere: "لم يُنشر هنا شيء بعد.",
+    filter: "تصفية",
+    filterLabel: "تصفية المقالات",
+    filterType: "النوع",
+    filterTopic: "الموضوع",
+    searchLabel: "البحث في المقالات",
+    searchPlaceholder: "ابحث بالعنوان أو بكلمة مفتاحية",
+    noMatch: "لا توجد نتائج لـ «{query}».",
+    pagination: "ترقيم الصفحات",
+    previousPage: "الصفحة السابقة",
+    nextPage: "الصفحة التالية",
+    pageN: "الصفحة {n}",
+    clearSearch: "مسح",
     copy: staged<ArticleCopy>({
       "levent-residences-tops-out": {
         title: "Levent Residences يبلغ ارتفاعه الكامل ليصبح أحدث عنوان بارز في شيشلي",
