@@ -701,15 +701,6 @@ const fr: Dictionary = {
           "L’ensemble comprend un beach club, un appontement pour annexes, deux restaurants et un spa creusé dans la roche au bord de l’eau. Les aménagements paysagers reprennent le maquis existant — olivier, caroubier et lentisque — plutôt que des plantations rapportées, ce qui laisse le site se lire depuis la mer comme un coteau et non comme un complexe hôtelier.",
         ],
       },
-      "bodrum-or-antalya": {
-        title: "Bodrum ou Antalya ? Choisir sa portion de côte turque",
-        body: [
-          "Les deux noms reviennent dans presque chaque demande côtière que nous recevons, et ce sont réellement deux propositions différentes. En résumé : Bodrum est une saison, Antalya est une année.",
-          "La péninsule de Bodrum est compacte, tournée vers la voile et intensément mondaine de juin à septembre, avec un marché locatif concentré sur ces semaines et une culture de marina qui donne le ton à tout ce qui l’entoure. Les prix au mètre carré y dépassent ceux d’Antalya, et les meilleurs terrains — les baies exposées au nord, ombragées l’après-midi — sont de fait en nombre fini.",
-          "Antalya est le marché le plus vaste et le plus régulier. L’aéroport fonctionne toute l’année, la vieille ville abrite une population résidente et non saisonnière, et les montagnes qui ferment la ville gardent des hivers assez doux pour que le taux d’occupation tienne en mi-saison. Pour un acheteur qui met en balance rendement locatif et usage personnel, cet étalement compte davantage que le tarif estival affiché.",
-          "Si l’achat est avant tout une résidence de vacances que vous occuperez en août, Bodrum. Si c’est un actif que vous voulez voir travailler douze mois sur douze, Antalya.",
-        ],
-      },
       "caribbean-routes-for-gulf-investors": {
         title: "Multi Mulk ouvre les voies caribéennes de citoyenneté aux investisseurs du Golfe",
         body: [
@@ -725,49 +716,6 @@ const fr: Dictionary = {
           "D’abord, la ville n’est pas un marché mais des dizaines. Un prix au mètre carré à Şişli ne vous apprend rien sur Beykoz, et les rives européenne et asiatique suivent des cycles différents. Ensuite, c’est le rapport d’expertise officiel — et non le prix demandé — qui gouverne à la fois le seuil de citoyenneté et les droits de mutation : obtenez-le tôt.",
           "Troisièmement, vérifiez l’iskan, le permis d’occupation. Un immeuble qui en est dépourvu ne peut être légalement occupé et peut se révéler difficile à revendre, aussi fini qu’il paraisse. Quatrièmement, budgétez les frais annexes au prix : droits de mutation, frais de notaire et de traduction, et l’assurance obligatoire contre les séismes.",
           "Cinquièmement, et c’est le moins séduisant : lisez le règlement de copropriété. Les charges des tours dotées de vastes étages d’équipements varient fortement, et c’est le coût récurrent qui surprend le plus souvent les propriétaires étrangers la deuxième année.",
-        ],
-      },
-      "port-cabrits-marina": {
-        title: "Port Cabrits Marina impose un nouveau standard au yachting caribéen",
-        body: [
-          "Port Cabrits, sur la côte nord-ouest de la Dominique, a été décrit comme le projet de marina le plus important des Caraïbes orientales depuis dix ans. Les postes en eau profonde accueillent des navires jusqu’à 90 mètres, et le port se tient à l’abri du promontoire des Cabrits, ce qui le rend praticable malgré la houle d’hiver.",
-          "Au-dessus du front de mer, l’InterContinental Dominica Cabrits Resort & Spa fournit les infrastructures à terre — village de marina, avitaillement, dédouanement et logement des équipages — qui manquaient historiquement à la région hors d’Antigua et de Saint-Martin.",
-        ],
-      },
-      "christophe-harbour-rising": {
-        title: "Le Park Hyatt St. Kitts et l’essor de Christophe Harbour",
-        body: [
-          "Christophe Harbour occupe la péninsule sud-est de Saint-Christophe, une étendue de salines et de collines sèches pratiquement vide il y a dix ans, qui accueille aujourd’hui une marina pour superyachts, un beach club et le Park Hyatt St. Kitts.",
-          "L’hôtel se tient sur Banana Bay, Niévès en face du détroit, et ses résidences figurent parmi les biens éligibles au programme de citoyenneté de Saint-Christophe-et-Niévès — le plus ancien au monde, en vigueur depuis 1984.",
-        ],
-      },
-      "six-senses-la-sagesse-michelin-key": {
-        title: "Un paradis à découvrir : pourquoi Six Senses La Sagesse, à Grenade, est une escapade distinguée d’une Clé MICHELIN",
-        body: [
-          "Six Senses La Sagesse a reçu une Clé MICHELIN, la distinction du guide pour les hôtels offrant un séjour exceptionnel. C’est la première adresse de la marque dans les Caraïbes, déployée sur deux plages de la côte sud-est de Grenade.",
-          "Le complexe est bâti autour des ruines d’une ancienne maison de maître, avec 56 suites et 15 villas résidentielles disposées le long du rivage de la baie de La Sagesse et de Chemin Bay. Le programme de bien-être Six Senses se déploie depuis un spa et un earth lab installés en retrait sous les palmiers, et la cuisine s’approvisionne auprès des producteurs de l’île et des bateaux de pêche de la baie.",
-          "Les villas sont éligibles au programme grenadien de citoyenneté par investissement, qui ouvre l’accès au visa E-2 des États-Unis au titre du traité bilatéral.",
-        ],
-      },
-      "marmara-vista-presentation-istanbul": {
-        title: "Présentation du complexe résidentiel Marmara Vista à İstanbul",
-        body: [
-          "Multi Mulk a présenté Marmara Vista à des invités, partenaires et journalistes à İstanbul, dévoilant le plan-masse et la première tranche de résidences sur le rivage de la mer de Marmara.",
-          "La présentation a exposé les trois phases du programme, l’offre d’équipements et le calendrier de livraison, ainsi que la voie de citoyenneté par investissement ouverte aux acquéreurs étrangers. Les participants ont visité l’appartement témoin et découvert la palette de matériaux retenue pour la première phase.",
-        ],
-      },
-      "marmara-vista-launch": {
-        title: "Lancement prestigieux de Marmara Vista, İstanbul",
-        body: [
-          "Marmara Vista est lancé sur la mer de Marmara avec 240 résidences réparties en trois bâtiments bas, chacun orienté pour offrir une vue sur la mer depuis les pièces principales. C’est la plus importante mise sur le marché de Multi Mulk à İstanbul à ce jour.",
-          "Le programme est livré avec une plage privée, une allocation d’anneaux de port pour les résidents, un spa et une école inscrite au plan-masse. Toutes les résidences sont proposées au-dessus du seuil de la citoyenneté par investissement.",
-        ],
-      },
-      "istanbul-portfolio-expansion": {
-        title: "Multi Mulk étoffe son portefeuille à İstanbul",
-        body: [
-          "Multi Mulk a ajouté trois programmes à son portefeuille stambouliote, portant à huit le nombre de projets en cours dans la ville et étendant sa couverture du corridor du Bosphore au rivage de la mer de Marmara.",
-          "Cette expansion fait suite à une demande soutenue des acheteurs du Golfe et d’Asie centrale, pour qui İstanbul continue d’associer une voie vers la citoyenneté à un marché locatif domestique qui fonctionne — une combinaison que peu de programmes offrent.",
         ],
       },
     }),
