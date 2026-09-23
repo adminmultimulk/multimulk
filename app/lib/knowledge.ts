@@ -5016,7 +5016,11 @@ export const knowledgeArticles: KnowledgeArticle[] = [
     modified: "2026-05-04",
     topics: ["turkiye"],
     excerpt: "Why the Headline Price Is Just the Beginning Turkey\u2019s Citizenship by Investment (CBI) program continues to attract thousands of global investors in 2026. The program promises a straightforward path: invest at least $400,000 in qualifying real estate (or $500,000 in other approved assets) and receive a Turkish passport \u2014 often within 3\u20136 months \u2014 for [\u2026]",
-    image: "/images/legacy/Img-1.jpg.jpeg",
+    // The migrated cover was the "Turkey CBI vs Caribbean CBI" banner, and
+    // under a lowercase name the file does not have — so it rendered nothing
+    // on the case-sensitive production host. Money under a magnifying glass is
+    // what the piece is about.
+    image: "/images/case-studies/world-map-and-capital.webp",
     body: [
       "## Why the Headline Price Is Just the Beginning",
       "Turkey\u2019s Citizenship by Investment (CBI) program continues to attract thousands of global investors in 2026. The program promises a straightforward path: invest at least $400,000 in qualifying real estate (or $500,000 in other approved assets) and receive a Turkish passport \u2014 often within 3\u20136 months \u2014 for you and your immediate family. No residency requirement. No language test. Dual citizenship permitted.",
