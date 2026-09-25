@@ -14,7 +14,7 @@ import { useI18n } from "@/app/lib/i18n/context";
 import { lookup } from "@/app/lib/i18n/format";
 import { LanguageSwitcher } from "./language-switcher";
 import { Link } from "./link";
-import { MegaMenuPanel } from "./mega-menu";
+import { featureLabel, MegaMenuPanel } from "./mega-menu";
 import { Chevron, Close, Menu } from "./icons";
 
 /** Grace period so the panel survives the cursor crossing the gap below the bar. */
@@ -400,7 +400,7 @@ function mobileItems(
   switch (menu.kind) {
     case "feature":
       return menu.cards.map((card) => ({
-        label: t.menus.about[card.key],
+        label: featureLabel(card.key, t),
         href: card.href,
       }));
     case "portfolio":

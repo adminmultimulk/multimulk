@@ -17,6 +17,19 @@ const stagger = (i: number) => ({ animationDelay: `${60 + i * 55}ms` });
 /** A figure the programme record does not carry. See `ResidencyTile`. */
 const DASH = "—";
 
+type FeatureKey = Extract<MegaMenu, { kind: "feature" }>["cards"][number]["key"];
+
+/**
+ * A feature card's label. Investor Protection is named from `dictionary.routes`,
+ * which already carries the page's title in all seven languages, rather than
+ * from a third About-menu string that would translate the same name again.
+ */
+export function featureLabel(key: FeatureKey, t: Dictionary): string {
+  return key === "investorProtection"
+    ? t.routes.investorProtection
+    : t.menus.about[key];
+}
+
 export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
   const { t, locale, fill } = useI18n();
 
@@ -26,7 +39,7 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
       return (
         <div className="grid grid-cols-[300px_1fr] gap-12">
           <Intro heading={copy.heading} body={copy.body} />
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {menu.cards.map((card, i) => (
               <Link
                 key={card.key}
@@ -36,8 +49,8 @@ export function MegaMenuPanel({ menu }: { menu: MegaMenu }) {
               >
                 <CardImage src={card.image} sizes="480px" />
                 <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-forest-deep/85 to-transparent" />
-                <span className="absolute inset-x-0 bottom-7 text-center font-display text-[26px] text-cream">
-                  {copy[card.key]}
+                <span className="absolute inset-x-0 bottom-6 px-4 text-center font-display text-[22px] leading-tight text-cream">
+                  {featureLabel(card.key, t)}
                 </span>
               </Link>
             ))}

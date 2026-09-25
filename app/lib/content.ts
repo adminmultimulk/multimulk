@@ -68,7 +68,6 @@ export type NavKey =
   | "citizenship"
   | "goldenVisa"
   | "realEstate"
-  | "protection"
   | "knowledge"
   | "about";
 
@@ -87,11 +86,6 @@ export const navLinks: NavLink[] = [
   },
   { key: "goldenVisa", hasMenu: true, href: routes.goldenVisaHub.pattern },
   { key: "realEstate", hasMenu: true, href: routes.realEstateHub.pattern },
-  {
-    key: "protection",
-    hasMenu: false,
-    href: routes.investorProtection.pattern,
-  },
   { key: "knowledge", hasMenu: true, href: routes.knowledge.pattern },
   { key: "about", hasMenu: true, href: routes.about.pattern },
 ];
@@ -121,7 +115,11 @@ export type MenuCard = {
 export type MegaMenu =
   | {
       kind: "feature";
-      cards: { key: "ourStory" | "ourTeam"; image: string; href?: string }[];
+      cards: {
+        key: "ourStory" | "ourTeam" | "investorProtection";
+        image: string;
+        href?: string;
+      }[];
     }
   | {
       kind: "portfolio";
@@ -283,6 +281,15 @@ export const menus: Partial<Record<NavKey, MegaMenu>> = {
         key: "ourTeam",
         href: routes.team.pattern,
         image: "/images/cbi/cbi-advisory.jpg",
+      },
+      // Moved here from the top bar, which had grown to seven items. It
+      // belongs beside the story and the team: all three answer "why trust
+      // this firm", and the page is still listed under Services in the footer.
+      // The frame is the page's own hero, so the card previews what it opens.
+      {
+        key: "investorProtection",
+        href: routes.investorProtection.pattern,
+        image: "/images/cbi/cbi-documents.jpg",
       },
     ],
   },
