@@ -118,6 +118,7 @@ const zh = {
   },
 
   routes: {
+    documents: "资料库",
     home: "首页",
     about: "关于我们",
     contact: "联系我们",

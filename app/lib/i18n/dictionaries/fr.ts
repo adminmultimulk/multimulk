@@ -432,6 +432,7 @@ const fr: Dictionary = {
   },
 
   routes: {
+    documents: "Bibliothèque de documents",
     home: "Accueil",
     about: "À propos",
     team: "Notre équipe",
@@ -1574,6 +1575,76 @@ const fr: Dictionary = {
     cta: {
       heading: "Parlez à celles et ceux qui feront le travail",
       body: "Dites-nous ce que vous cherchez à obtenir. Vous saurez si c’est réalisable, ce que cela coûtera au-delà du montant affiché et combien de temps cela devrait prendre — avant qu’on ne vous demande de vous engager à quoi que ce soit.",
+    },
+  },
+
+  /** /document-library */
+  documents: {
+    meta: {
+      title: "Bibliothèque de documents",
+      description:
+        "Téléchargez les guides, listes de contrôle et présentations de Multi Mulk sur la citoyenneté turque par investissement, les programmes de résidence et nos partenariats.",
+    },
+    eyebrow: "Ressources",
+    heading: "Bibliothèque de documents",
+    body: "Nos guides, listes de contrôle et présentations, en téléchargement libre : le fonctionnement de la citoyenneté turque par investissement, les pièces exigées pour une demande et la comparaison des programmes dans le monde.",
+    listHeading: "Tous les documents",
+    searchLabel: "Rechercher un document",
+    searchPlaceholder: "Rechercher par titre ou mot-clé",
+    filter: "Filtrer",
+    filterLabel: "Filtrer les documents",
+    filterCategory: "Catégorie",
+    categories: {
+      citizenship: "Citoyenneté turque",
+      applications: "Pièces de dossier",
+      programmes: "Programmes internationaux",
+      company: "Société et partenaires",
+    },
+    pages: plural({ one: "{count} page", other: "{count} pages" }),
+    size: "PDF · {size} Mo",
+    view: "Consulter",
+    download: "Télécharger",
+    viewLabel: "Consulter {title} (PDF, nouvel onglet)",
+    downloadLabel: "Télécharger {title} (PDF, {size} Mo)",
+    noMatch: "Aucun document ne correspond à « {query} ».",
+    empty: "Rien n’est encore classé sous {filter}.",
+    items: {
+      "turkiye-citizenship-guide": {
+        title: "La citoyenneté turque par l’investissement immobilier",
+        summary: "Le fonctionnement de la citoyenneté par l’achat d’un bien, et ce que l’investissement peut rapporter en loyers et en plus-value.",
+      },
+      "step-by-step-process-timeline-guide": {
+        title: "Guide des étapes et des délais",
+        summary: "Chaque étape de la citoyenneté turque par investissement immobilier, de l’achat au passeport, et la durée de chacune.",
+      },
+      "turkish-citizenship-application-stages": {
+        title: "Les étapes de la demande de citoyenneté turque",
+        summary: "Les étapes de la demande dans un tableau récapitulatif : ce qui se passe à chacune et leur durée approximative.",
+      },
+      "cbi-bank-deposit": {
+        title: "La citoyenneté turque par dépôt bancaire",
+        summary: "La voie approuvée par l’État : un dépôt de 500 000 USD dans une banque turque, famille incluse.",
+      },
+      "turkey-visa-document-checklist": {
+        title: "Liste des pièces pour un visa turc",
+        summary: "Ce qu’il faut fournir pour une demande de visa turc : formulaire, passeport, photographies et justificatifs.",
+      },
+      "turkish-citizenship-application-documents": {
+        title: "Pièces de la demande de citoyenneté pour les ressortissants pakistanais",
+        summary: "Les documents personnels et familiaux qu’un demandeur pakistanais doit fournir, et comment chacun est légalisé, traduit et certifié.",
+      },
+      "global-citizenship-and-residency-programs": {
+        title: "Programmes de citoyenneté et de résidence dans le monde",
+        summary: "La citoyenneté et la résidence par investissement comparées dans l’UE, les Caraïbes, l’Océanie et le Moyen-Orient.",
+      },
+      "multi-mulk-company-profile": {
+        title: "Présentation de Multi Mulk",
+        summary: "Qui nous sommes et ce que nous faisons en immobilier, résidence et citoyenneté, pour des investisseurs du monde entier.",
+      },
+      "multi-mulk-b2b": {
+        title: "Programme partenaires B2B de Multi Mulk",
+        summary: "La citoyenneté turque par investissement et notre programme destiné aux agents et conseillers.",
+      },
     },
   },
 

@@ -676,6 +676,7 @@ export const footerResourceItems: FooterRouteItem[] = [
   { route: "faqIndex", href: routes.faqIndex.pattern },
   { route: "caseStudies", href: routes.caseStudies.pattern },
   { route: "tools", href: routes.tools.pattern },
+  { route: "documents", href: routes.documents.pattern },
   { route: "partners", href: routes.partners.pattern },
   { route: "contact", href: routes.contact.pattern },
 ];

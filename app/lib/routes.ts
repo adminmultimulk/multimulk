@@ -67,6 +67,7 @@ export type RouteId =
   | "caseStudies"
   | "caseStudy"
   | "tools"
+  | "documents"
   | "authors"
   | "author"
   | "team"
@@ -158,6 +159,14 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     labelKey: "team",
     sitemap: { include: true, priority: 0.5, changeFrequency: "yearly" },
     schema: ["AboutPage"],
+  },
+  documents: {
+    id: "documents",
+    pattern: "/document-library",
+    parent: "home",
+    labelKey: "documents",
+    sitemap: { include: true, priority: 0.6, changeFrequency: "monthly" },
+    schema: ["CollectionPage"],
   },
   partners: {
     id: "partners",

@@ -116,6 +116,7 @@ const tr = {
   },
 
   routes: {
+    documents: "Belge Kütüphanesi",
     home: "Ana Sayfa",
     about: "Hakkımızda",
     contact: "İletişim",

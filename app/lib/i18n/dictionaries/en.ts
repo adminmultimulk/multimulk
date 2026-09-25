@@ -461,6 +461,7 @@ const en = {
   },
 
   routes: {
+    documents: "Document Library",
     home: "Home",
     about: "About Us",
     team: "Our Team",
@@ -752,6 +753,79 @@ const en = {
     copyright: "© 2026 Multi Mulk. All Rights Reserved.",
     /** Office labels beside each phone number. */
     offices: { UAE: "UAE", Türkiye: "Türkiye", Pakistan: "Pakistan" },
+  },
+
+  /**
+   * /document-library — the PDFs a reader can take away. Titles and summaries
+   * are keyed by the slugs in `app/lib/documents.ts`.
+   */
+  documents: {
+    meta: {
+      title: "Document Library",
+      description:
+        "Download Multi Mulk's guides, checklists and presentations on Turkish citizenship by investment, residency programmes and working with us.",
+    },
+    eyebrow: "Resources",
+    heading: "Document Library",
+    body: "Our guides, checklists and presentations, free to download: how Turkish citizenship by investment works, what an application asks for, and how the world's programmes compare.",
+    listHeading: "All Documents",
+    searchLabel: "Search documents",
+    searchPlaceholder: "Search by title or keyword",
+    filter: "Filter",
+    filterLabel: "Filter documents",
+    filterCategory: "Category",
+    categories: {
+      citizenship: "Turkish Citizenship",
+      applications: "Application Documents",
+      programmes: "Global Programmes",
+      company: "Company & Partners",
+    },
+    pages: plural({ one: "{count} page", other: "{count} pages" }),
+    size: "PDF · {size} MB",
+    view: "View",
+    download: "Download",
+    viewLabel: "View {title} (PDF, opens in a new tab)",
+    downloadLabel: "Download {title} (PDF, {size} MB)",
+    noMatch: "No document matches “{query}”.",
+    empty: "Nothing filed under {filter} yet.",
+    items: {
+      "turkiye-citizenship-guide": {
+        title: "Turkish Citizenship Through Real Estate Investment",
+        summary: "How citizenship through a property purchase works, and how the investment can pay back in rental income and growth.",
+      },
+      "step-by-step-process-timeline-guide": {
+        title: "Step-by-Step Process & Timeline Guide",
+        summary: "Every stage of Turkish citizenship by real estate investment, from purchase to passport, and how long each one takes.",
+      },
+      "turkish-citizenship-application-stages": {
+        title: "Turkish Citizenship Application Stages",
+        summary: "The application's stages in one overview table: what happens at each, and roughly how long it takes.",
+      },
+      "cbi-bank-deposit": {
+        title: "Turkish Citizenship Through a Bank Deposit",
+        summary: "The government-approved route through a USD 500,000 deposit in a Turkish bank, with your family included.",
+      },
+      "turkey-visa-document-checklist": {
+        title: "Turkey Visa Document Checklist",
+        summary: "What to bring to a Turkish visa application: the form, passport, photographs and supporting papers.",
+      },
+      "turkish-citizenship-application-documents": {
+        title: "Citizenship Application Documents for Pakistani Nationals",
+        summary: "The personal and family documents a Pakistani applicant needs, and how each is attested, translated and notarised.",
+      },
+      "global-citizenship-and-residency-programs": {
+        title: "Global Citizenship and Residency Programmes",
+        summary: "Citizenship and residency by investment compared across the EU, the Caribbean, Oceania and the Middle East.",
+      },
+      "multi-mulk-company-profile": {
+        title: "Multi Mulk Company Profile",
+        summary: "Who we are and what we do across real estate, residency and citizenship, for investors worldwide.",
+      },
+      "multi-mulk-b2b": {
+        title: "Multi Mulk B2B Partner Programme",
+        summary: "Turkish citizenship by investment and our partner programme for brokers and advisers.",
+      },
+    },
   },
 
   /**
