@@ -18,10 +18,18 @@ export const enquiryTypes = [
   "general",
 ] as const;
 
-export type EnquiryType = (typeof enquiryTypes)[number];
+/**
+ * Every kind of lead the site raises: the options above, plus the ones a
+ * dedicated form sets for itself. A partner registration is not something a
+ * client would pick from the contact form's list, so it is kept out of
+ * `enquiryTypes` and only `/partner-with-us` ever sends it.
+ */
+export const leadKinds = [...enquiryTypes, "partnership"] as const;
+
+export type EnquiryType = (typeof leadKinds)[number];
 
 export function isEnquiryType(value: unknown): value is EnquiryType {
-  return (enquiryTypes as readonly unknown[]).includes(value);
+  return (leadKinds as readonly unknown[]).includes(value);
 }
 
 export const leadFields = [

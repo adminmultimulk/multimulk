@@ -26,8 +26,28 @@ import {
 } from "@/app/lib/leads/phone";
 import { SelectMenu } from "./select-menu";
 
-const inputClassName =
-  "w-full rounded-sm border border-ink/15 bg-white px-4 py-3 text-[13.5px] text-ink outline-none placeholder:text-ink/35 focus:border-gold aria-invalid:border-red-700";
+/**
+ * `boxed` is the contact form's bordered field; `underline` is a single rule
+ * beneath the value, for a form set on a tinted panel (/partner-with-us).
+ */
+const styles = {
+  boxed: {
+    input:
+      "w-full rounded-sm border border-ink/15 bg-white px-4 py-3 text-[13.5px] text-ink outline-none placeholder:text-ink/35 focus:border-gold aria-invalid:border-red-700",
+    trigger: "h-full rounded-sm border bg-white px-3 py-3",
+    ok: "border-ink/15",
+    label: "mb-1.5 block text-[12.5px] text-ink/70",
+    star: "text-gold",
+  },
+  underline: {
+    input:
+      "w-full border-b border-ink/30 bg-transparent px-0 py-2.5 text-[13.5px] text-ink outline-none placeholder:text-ink/40 focus:border-ink aria-invalid:border-red-700",
+    trigger: "h-full border-b bg-transparent px-0 py-2.5",
+    ok: "border-ink/30",
+    label: "block text-[13px] text-ink",
+    star: "",
+  },
+};
 
 /**
  * The region in the browser's own language tag — `en-AE` says more about
@@ -54,6 +74,7 @@ export function PhoneField({
   placeholder,
   error,
   className = "",
+  variant = "boxed",
 }: {
   label: string;
   /** Accessible name for the country picker, which shows only a code. */
@@ -61,7 +82,9 @@ export function PhoneField({
   placeholder?: string;
   error?: string;
   className?: string;
+  variant?: keyof typeof styles;
 }) {
+  const style = styles[variant];
   const { locale } = useI18n();
   const id = useId();
   // The reader's own choice beats the browser's region, which beats the
@@ -104,9 +127,9 @@ export function PhoneField({
     <div className={className}>
       <label
         htmlFor={id}
-        className="mb-1.5 block text-[12.5px] text-ink/70"
+        className={style.label}
       >
-        {label} <span className="text-gold">*</span>
+        {label} <span className={style.star}>*</span>
       </label>
 
       {/* A number reads left to right whatever the page does. */}
@@ -125,8 +148,8 @@ export function PhoneField({
           }
           formatSelected={(code) => dialCodeFor(code as CountryCode)}
           className="w-[108px] shrink-0"
-          triggerClassName={`h-full rounded-sm border bg-white px-3 py-3 text-[13.5px] text-ink focus-visible:border-gold ${
-            error ? "border-red-700" : "border-ink/15"
+          triggerClassName={`${style.trigger} text-[13.5px] text-ink focus-visible:border-gold ${
+            error ? "border-red-700" : style.ok
           }`}
           panelClassName="w-[280px] max-w-[calc(100vw-2rem)]"
         />
@@ -139,7 +162,7 @@ export function PhoneField({
           placeholder={placeholder}
           required
           aria-invalid={error ? true : undefined}
-          className={inputClassName}
+          className={style.input}
         />
       </div>
 

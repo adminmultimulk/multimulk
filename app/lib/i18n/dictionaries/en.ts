@@ -488,6 +488,7 @@ const en = {
     caseStudies: "Client Outcomes",
     caseStudy: "Case Study",
     tools: "Tools",
+    partners: "Partner With Us",
     authors: "Our Team",
     author: "Profile",
     legal: "Legal",
@@ -751,6 +752,77 @@ const en = {
     copyright: "© 2026 Multi Mulk. All Rights Reserved.",
     /** Office labels beside each phone number. */
     offices: { UAE: "UAE", Türkiye: "Türkiye", Pakistan: "Pakistan" },
+  },
+
+  /**
+   * /partner-with-us — brokers and advisers registering to work with us. Laid
+   * out section for section like a developer's "Be an Agent" page: hero,
+   * tracks, registration, what to expect.
+   */
+  partners: {
+    meta: {
+      title: "Partner With Us",
+      description:
+        "Register as a Multi Mulk partner to represent Türkiye property and government-approved Caribbean Citizenship-by-Investment real estate, with dedicated sales support.",
+    },
+    heading: "Partner With Us",
+    body: "Expand your portfolio by representing our Türkiye developments or join our network as a trusted agent for government-approved Citizenship-by-Investment real estate across the Caribbean.",
+    introHeading: "Unlock Exclusive Global Opportunities",
+    introBody:
+      "Join a network of leading real estate brokers and investment advisors representing vetted projects across Türkiye and the Caribbean. Multi Mulk has built its name on carefully selected developments and trusted citizenship pathways, giving your clients opportunities that stand out in the global market.",
+    register: "Register for Partnership",
+    tracksLabel: "Our Partnership Tracks",
+    tracks: {
+      turkiye: {
+        title: "Türkiye Projects Agent",
+        /** The same track as it reads in the form's picker. */
+        option: "I'm a Türkiye Property Broker",
+        body: "Represent our Türkiye projects in İstanbul and along the coast and access up-to-date inventories, marketing materials, and dedicated sales support.",
+      },
+      caribbean: {
+        title: "CBI Caribbean Service Partner",
+        option: "I'm a Caribbean CBI Agent",
+        body: "Offer clients government-approved CBI opportunities backed by established Caribbean developments.",
+      },
+    },
+    formHeading: "Register Your Interest",
+    formBody:
+      "Select your partnership type and complete the form. Our team will review your submission and contact you for the next steps.",
+    form: {
+      track: "Select your partnership type",
+      firstName: "First Name",
+      firstNamePlaceholder: "Insert your first name",
+      lastName: "Last Name",
+      lastNamePlaceholder: "Insert your last name",
+      messagePlaceholder: "Type your message..",
+      consentRequired: "Please confirm that we may contact you.",
+      submit: "Send Message",
+      sentHeading: "Thank You for Registering",
+      sentBody:
+        "Our partnerships team will review your details and contact you for the next steps.",
+    },
+    generalHeading: "General Enquiries",
+    getInTouchHeading: "Get in Touch",
+    getInTouchBody: "Reach out to explore more opportunities with our team.",
+    expectHeading: "What to Expect",
+    includesLabel: "This includes:",
+    expect: {
+      turkiye: {
+        title: "Türkiye Real Estate Partnership",
+        body: "Partner with us to represent our Türkiye real estate developments and access key sales tools designed to truly support your client engagements.",
+        includes: [
+          "Project briefs and core specifications",
+          "Updated pricing and availability",
+          "Approved sales and marketing assets",
+          "Direct communication with our partnerships team",
+        ],
+      },
+      caribbean: {
+        title: "CBI Caribbean Partnership",
+        body: "We at Multi Mulk help educate people about the opportunities provided by the Caribbean’s Citizenship by Investment programmes, offering articles and informational resources to help people secure their goals by becoming citizens in the nation that best fits their aims.",
+        includes: [] as string[],
+      },
+    },
   },
 
   whatsapp: {
@@ -1606,6 +1678,7 @@ const en = {
         turkiyeProperty: "Türkiye property enquiry",
         caribbeanCbi: "Caribbean CBI enquiry",
         general: "General enquiry",
+        partnership: "Partner registration",
       },
       /**
        * The acknowledgement emailed back to the enquirer, in their own

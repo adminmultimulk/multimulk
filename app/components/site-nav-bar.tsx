@@ -233,6 +233,12 @@ export function SiteNavBar({ portfolio = [] }: { portfolio?: MenuCard[] }) {
 
         <div className="hidden items-center gap-3 lg:flex">
           <Link
+            href="/partner-with-us"
+            className="cursor-pointer whitespace-nowrap rounded-full border border-white/80 px-5 py-2 text-[13px] text-white transition-colors hover:bg-white hover:text-ink"
+          >
+            {t.routes.partners}
+          </Link>
+          <Link
             href="/contact-us"
             className="cursor-pointer rounded-full border border-white/80 px-5 py-2 text-[13px] text-white transition-colors hover:bg-white hover:text-ink"
           >
@@ -365,6 +371,12 @@ export function SiteNavBar({ portfolio = [] }: { portfolio?: MenuCard[] }) {
             </div>
 
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/partner-with-us"
+                className="cursor-pointer rounded-full border border-cream/70 px-6 py-3 text-center text-[13px] text-cream"
+              >
+                {t.routes.partners}
+              </Link>
               <Link
                 href="/contact-us"
                 className="cursor-pointer rounded-full border border-cream/70 px-6 py-3 text-center text-[13px] text-cream"

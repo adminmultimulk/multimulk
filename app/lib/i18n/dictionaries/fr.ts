@@ -459,6 +459,7 @@ const fr: Dictionary = {
     caseStudies: "Résultats clients",
     caseStudy: "Étude de cas",
     tools: "Outils",
+    partners: "Devenir partenaire",
     authors: "Notre équipe",
     author: "Profil",
     legal: "Mentions légales",
@@ -1576,6 +1577,72 @@ const fr: Dictionary = {
     },
   },
 
+  /** /partner-with-us */
+  partners: {
+    meta: {
+      title: "Devenir partenaire",
+      description:
+        "Inscrivez-vous comme partenaire Multi Mulk pour représenter des biens en Türkiye et de l’immobilier de citoyenneté par investissement agréé par les gouvernements des Caraïbes, avec un accompagnement commercial dédié.",
+    },
+    heading: "Devenez partenaire",
+    body: "Élargissez votre portefeuille en représentant nos programmes en Türkiye, ou rejoignez notre réseau comme agent de confiance pour l’immobilier de citoyenneté par investissement agréé par les gouvernements des Caraïbes.",
+    introHeading: "Accédez à des opportunités mondiales exclusives",
+    introBody:
+      "Rejoignez un réseau d’agents immobiliers et de conseillers en investissement de premier plan qui représentent des projets sélectionnés en Türkiye et dans les Caraïbes. Multi Mulk s’est fait un nom grâce à des programmes rigoureusement choisis et des parcours de citoyenneté fiables, pour offrir à vos clients des opportunités qui se démarquent sur le marché mondial.",
+    register: "S’inscrire comme partenaire",
+    tracksLabel: "Nos formules de partenariat",
+    tracks: {
+      turkiye: {
+        title: "Agent Projets Türkiye",
+        option: "Je suis agent immobilier en Türkiye",
+        body: "Représentez nos projets à İstanbul et sur la côte, avec accès aux stocks à jour, aux supports marketing et à un accompagnement commercial dédié.",
+      },
+      caribbean: {
+        title: "Partenaire CBI Caraïbes",
+        option: "Je suis agent CBI pour les Caraïbes",
+        body: "Proposez à vos clients des opportunités CBI agréées par les gouvernements, adossées à des programmes établis dans les Caraïbes.",
+      },
+    },
+    formHeading: "Manifestez votre intérêt",
+    formBody:
+      "Choisissez votre type de partenariat et remplissez le formulaire. Notre équipe examinera votre demande et vous contactera pour la suite.",
+    form: {
+      track: "Choisissez votre type de partenariat",
+      firstName: "Prénom",
+      firstNamePlaceholder: "Saisissez votre prénom",
+      lastName: "Nom",
+      lastNamePlaceholder: "Saisissez votre nom",
+      messagePlaceholder: "Saisissez votre message…",
+      consentRequired: "Veuillez confirmer que nous pouvons vous contacter.",
+      submit: "Envoyer le message",
+      sentHeading: "Merci pour votre inscription",
+      sentBody:
+        "Notre équipe partenariats examinera vos informations et vous contactera pour la suite.",
+    },
+    generalHeading: "Renseignements généraux",
+    getInTouchHeading: "Nous contacter",
+    getInTouchBody: "Contactez notre équipe pour découvrir d’autres opportunités.",
+    expectHeading: "À quoi vous attendre",
+    includesLabel: "Cela comprend :",
+    expect: {
+      turkiye: {
+        title: "Partenariat immobilier en Türkiye",
+        body: "Devenez notre partenaire pour représenter nos programmes immobiliers en Türkiye et accédez à des outils de vente conçus pour soutenir réellement vos échanges avec vos clients.",
+        includes: [
+          "Fiches projet et caractéristiques principales",
+          "Prix et disponibilités à jour",
+          "Supports commerciaux et marketing validés",
+          "Contact direct avec notre équipe partenariats",
+        ],
+      },
+      caribbean: {
+        title: "Partenariat CBI Caraïbes",
+        body: "Chez Multi Mulk, nous aidons chacun à comprendre les opportunités offertes par les programmes de citoyenneté par investissement des Caraïbes, avec des articles et des ressources pour atteindre ses objectifs en devenant citoyen du pays qui lui correspond le mieux.",
+        includes: [],
+      },
+    },
+  },
+
   contact: {
     heading: "Nous contacter",
     leadHeading:
@@ -1609,6 +1676,7 @@ const fr: Dictionary = {
         turkiyeProperty: "Bien immobilier en Türkiye",
         caribbeanCbi: "Programme caribéen",
         general: "Demande générale",
+        partnership: "Inscription partenaire",
       },
       ack: {
         subject: "Nous avons bien reçu votre demande",

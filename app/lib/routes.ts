@@ -70,6 +70,7 @@ export type RouteId =
   | "authors"
   | "author"
   | "team"
+  | "partners"
   | "legal";
 
 export type ChangeFrequency =
@@ -157,6 +158,14 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     labelKey: "team",
     sitemap: { include: true, priority: 0.5, changeFrequency: "yearly" },
     schema: ["AboutPage"],
+  },
+  partners: {
+    id: "partners",
+    pattern: "/partner-with-us",
+    parent: "about",
+    labelKey: "partners",
+    sitemap: { include: true, priority: 0.5, changeFrequency: "yearly" },
+    schema: ["ContactPage"],
   },
   contact: {
     id: "contact",

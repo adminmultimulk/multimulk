@@ -17,7 +17,14 @@ import { headers } from "next/headers";
 import { after } from "next/server";
 
 import { resolveBrochure } from "../brochures";
-import { validateLead, type LeadErrors, type Lead } from "./schema";
+import en from "../i18n/dictionaries/en";
+import { isPartnerTrack } from "../partners";
+import {
+  validateLead,
+  type Lead,
+  type LeadErrorKey,
+  type LeadErrors,
+} from "./schema";
 import { acknowledgeLead } from "./ack";
 import { sendBrochure } from "./brochure";
 import { deliverLead } from "./sink";
@@ -184,6 +191,109 @@ export async function requestBrochure(
     results.forEach((result, index) => {
       if (result.status === "rejected") {
         console.error(`[brochure] ${names[index]} failed`, result.reason);
+      }
+    });
+  });
+
+  return { status: "sent" };
+}
+
+/**
+ * A registration's states. The form asks for a first and a last name and a
+ * consent box where an enquiry has one name field, so those three carry their
+ * own errors; everything else is reported against the lead's fields as usual.
+ */
+export type PartnerErrors = Omit<LeadErrors, "name"> & {
+  firstName?: LeadErrorKey;
+  lastName?: LeadErrorKey;
+  consent?: "required";
+};
+
+export type PartnerState =
+  | { status: "idle" }
+  | { status: "invalid"; errors: PartnerErrors }
+  | { status: "failed"; reason: "rate" | "server" }
+  | { status: "sent" };
+
+/**
+ * A broker or adviser registering to work with Multi Mulk, from
+ * /partner-with-us.
+ *
+ * Delivered as an ordinary lead of kind `partnership`, so it lands in the same
+ * inbox and CRM as every other enquiry rather than in a pipeline of its own
+ * that someone has to remember to check. The track is folded into the subject
+ * and the message, which is where the salesperson reading it looks — worded in
+ * English whatever the page's language, like the rest of what the team
+ * receives.
+ */
+export async function registerPartner(
+  _previous: PartnerState,
+  form: FormData,
+): Promise<PartnerState> {
+  if (String(form.get("company") ?? "")) return { status: "sent" };
+
+  const verdict = verifyFormToken(form.get("t"));
+  if (verdict === "too-fast" || verdict === "bad") return { status: "sent" };
+  if (verdict === "stale") return { status: "failed", reason: "server" };
+
+  if (!withinRateLimit(`partner:${await clientKey()}`)) {
+    return { status: "failed", reason: "rate" };
+  }
+
+  // The track is a picker with a value always selected, so anything outside
+  // the list was not sent by the page.
+  const track = form.get("track");
+  if (!isPartnerTrack(track)) return { status: "failed", reason: "server" };
+
+  const firstName = String(form.get("firstName") ?? "").trim();
+  const lastName = String(form.get("lastName") ?? "").trim();
+  const message = String(form.get("message") ?? "").trim();
+  const trackName = en.partners.tracks[track].title;
+
+  const result = validateLead({
+    ...Object.fromEntries(form.entries()),
+    name: `${firstName} ${lastName}`.trim(),
+    enquiryType: "partnership",
+    subject: `Partner registration: ${trackName}`,
+    // Composed, so it is never empty; a blank message is caught below.
+    message: message ? `Track: ${trackName}\n\n${message}` : "",
+  });
+
+  const errors: PartnerErrors = {};
+  if (!result.ok) {
+    const { name, ...rest } = result.errors;
+    Object.assign(errors, rest);
+    if (name === "tooLong") errors.firstName = "tooLong";
+  }
+  if (!firstName) errors.firstName = "required";
+  if (!lastName) errors.lastName = "required";
+  if (form.get("consent") !== "on") errors.consent = "required";
+
+  if (!result.ok || Object.keys(errors).length > 0) {
+    return { status: "invalid", errors };
+  }
+
+  const lead: Lead = {
+    ...result.lead,
+    submittedAt: new Date().toISOString(),
+  };
+
+  try {
+    await deliverLead(lead);
+  } catch (error) {
+    console.error("[partner] delivery failed", error);
+    return { status: "failed", reason: "server" };
+  }
+
+  after(async () => {
+    const names = ["notification", "acknowledgement"];
+    const results = await Promise.allSettled([
+      notifyTeam(lead),
+      acknowledgeLead(lead),
+    ]);
+    results.forEach((result, index) => {
+      if (result.status === "rejected") {
+        console.error(`[partner] ${names[index]} failed`, result.reason);
       }
     });
   });
