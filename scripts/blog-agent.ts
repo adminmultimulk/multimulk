@@ -19,6 +19,7 @@ const flags = new Set(process.argv.slice(2));
 
 async function main() {
   const result = await runDailyPost({
+    trigger: "MANUAL",
     now: flags.has("--now"),
     force: flags.has("--force"),
     dryRun: flags.has("--dry-run"),

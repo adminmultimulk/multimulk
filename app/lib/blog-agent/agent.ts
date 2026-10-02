@@ -28,18 +28,11 @@ import { AGENT_CATEGORIES, SYSTEM, brief, type RecentPiece } from "./prompt";
 
 /**
  * Sonnet rather than Opus: a daily post is a cost that recurs, and the budget
- * below is what the business set for it. Per million tokens: input, a cache
+ * set at /admin/blog-agent is what the business allows for it. Per million tokens: input, a cache
  * write, a cache read, output — used for the running estimate.
  */
 const MODEL = "claude-sonnet-5-5";
 const PRICE = { input: 2, cacheWrite: 2.5, cacheRead: 0.2, output: 10, perSearch: 0.01 };
-
-/**
- * What one post may cost, in US dollars. At half of it the model is told to
- * stop researching and submit; at all of it the run is abandoned rather than
- * allowed to keep spending.
- */
-const BUDGET_USD = Number(process.env.BLOG_AGENT_BUDGET_USD) || 0.5;
 
 /** Sources the agent may not read or cite. Subdomains are covered. */
 const BLOCKED_DOMAINS = ["wikipedia.org", "wikiwand.com"];
@@ -319,11 +312,21 @@ export async function runBlogAgent({
   recent,
   internalPaths,
   linkable,
+  budgetUsd,
+  focus,
   deadline,
   log = console.log,
 }: {
   publishAt: Date;
   recent: RecentPiece[];
+  /**
+   * What the post may cost, in US dollars. At half of it the model is told to
+   * stop researching and submit; at all of it the run is abandoned rather than
+   * allowed to keep spending.
+   */
+  budgetUsd: number;
+  /** What to write about, in place of the weekday rotation. */
+  focus?: string | null;
   /** The paths offered to the model. */
   internalPaths: string[];
   /** Every path a link may point at, which is wider: any article, too. */
@@ -350,7 +353,7 @@ export async function runBlogAgent({
   };
 
   const messages: Anthropic.Beta.BetaMessageParam[] = [
-    { role: "user", content: brief({ publishAt, recent, internalPaths }) },
+    { role: "user", content: brief({ publishAt, recent, internalPaths, focus }) },
   ];
 
   while (stats.turns < MAX_TURNS) {
@@ -404,12 +407,12 @@ export async function runBlogAgent({
     // carries on where it stopped.
     if (response.stop_reason === "pause_turn") continue;
 
-    if (stats.estimatedUsd >= BUDGET_USD)
-      throw new Error(`Stopped at ~$${stats.estimatedUsd.toFixed(2)}, over the $${BUDGET_USD} budget, with nothing accepted.`);
+    if (stats.estimatedUsd >= budgetUsd)
+      throw new Error(`Stopped at ~$${stats.estimatedUsd.toFixed(2)}, over the $${budgetUsd} budget, with nothing accepted.`);
     const left = deadline ? deadline - Date.now() : Infinity;
     if (left < 20_000) throw new Error("Out of time with nothing accepted.");
     const wrapUp =
-      stats.estimatedUsd >= BUDGET_USD / 2 || left < 90_000
+      stats.estimatedUsd >= budgetUsd / 2 || left < 90_000
         ? "Budget note: the research budget is spent. Do not search or fetch anything more; write with what you have and call submit_article now."
         : null;
 

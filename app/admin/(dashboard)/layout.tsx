@@ -58,6 +58,11 @@ export default async function DashboardLayout({
       label: "Event visitors",
       hint: "IPS 2026 list and reminders",
     });
+    items.push({
+      href: "/admin/blog-agent",
+      label: "Blog agent",
+      hint: "Daily posts, settings and costs",
+    });
     items.push({ href: "/admin/users", label: "People", hint: "Accounts and access" });
   }
   items.push({ href: "/admin/account", label: "Account", hint: "Your password" });

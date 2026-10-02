@@ -66,16 +66,23 @@ export function brief({
   publishAt,
   recent,
   internalPaths,
+  focus,
 }: {
   publishAt: Date;
   recent: RecentPiece[];
   internalPaths: string[];
+  /** Set by the superadmin; replaces the weekday rotation. */
+  focus?: string | null;
 }): string {
   const day = publishAt.toISOString().slice(0, 10);
 
   return `Today is ${day}. Write today's post.
 
-Suggested focus for today: ${FOCUS[publishAt.getUTCDay()]}
+${
+    focus
+      ? `The editor has asked for posts on this subject; write within it: ${focus}`
+      : `Suggested focus for today: ${FOCUS[publishAt.getUTCDay()]}`
+  }
 
 Recently published on the site — do not repeat these subjects unless there is genuinely new information, and vary the angle:
 ${recent.map((piece) => `- ${piece.date}: ${piece.title} (${piece.path})`).join("\n")}

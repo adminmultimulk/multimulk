@@ -428,3 +428,63 @@ model EventReminder {
   @@index([createdAt])
   @@map("event_reminders")
 }
+
+/// How the daily blog agent behaves. A single row, keyed "default", edited at
+/// /admin/blog-agent by the superadmin. Absent, the agent runs on the defaults
+/// in `app/lib/blog-agent/settings.ts`.
+model BlogAgentSettings {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  key         String   @unique @default("default")
+  /// Off pauses the daily cron. "Write a post now" still works.
+  enabled     Boolean  @default(true)
+  /// "HH:MM" in Istanbul time, when the day's post goes live.
+  publishTime String   @default("09:00")
+  /// The most one post may cost, in US dollars.
+  budgetUsd   Float    @default(0.5)
+  /// What to write about. Empty means the agent's weekday rotation.
+  focus       String?
+  updatedById String?  @db.ObjectId
+  updatedAt   DateTime @updatedAt
+
+  @@map("blog_agent_settings")
+}
+
+enum BlogAgentTrigger {
+  CRON
+  MANUAL
+}
+
+enum BlogAgentRunStatus {
+  RUNNING
+  PUBLISHED
+  SKIPPED
+  FAILED
+}
+
+/// One run of the blog agent, kept whatever happened. A day with no post
+/// should be explained by a row here, not by an absence.
+model BlogAgentRun {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  trigger     BlogAgentTrigger
+  status      BlogAgentRunStatus @default(RUNNING)
+  /// Who pressed "Write a post now". Absent for the cron.
+  startedById String?            @db.ObjectId
+  startedAt   DateTime           @default(now())
+  finishedAt  DateTime?
+  /// What it published, while the article still exists.
+  articleId   String?            @db.ObjectId
+  slug        String?
+  title       String?
+  publishAt   DateTime?
+  /// Estimated at list prices from token counts, not read from the invoice.
+  costUsd     Float?
+  searches    Int?
+  fetches     Int?
+  /// Why it failed or was skipped.
+  detail      String?
+  /// What it searched and fetched, line by line, as it went.
+  log         String[]
+
+  @@index([startedAt])
+  @@map("blog_agent_runs")
+}

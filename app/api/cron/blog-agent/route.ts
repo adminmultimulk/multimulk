@@ -1,5 +1,4 @@
-import { revalidatePath, revalidateTag } from "next/cache";
-import { ARTICLES_TAG } from "@/app/lib/cms/tags";
+import { release } from "@/app/lib/blog-agent/release";
 import { runDailyPost } from "@/app/lib/blog-agent/run";
 
 /**
@@ -13,8 +12,9 @@ import { runDailyPost } from "@/app/lib/blog-agent/run";
  * Hobby function is allowed. The agent is handed a deadline inside that, and
  * submits with what it has rather than being cut off with nothing saved.
  *
- * Vercel Cron does not retry. A failed day is in the runtime logs, and
- * `npm run blog:agent -- --now` writes it by hand.
+ * Vercel Cron does not retry. A failed day is listed with its error at
+ * /admin/blog-agent, where "Write a post now" makes it up. Paused there, the
+ * run is recorded as skipped and writes nothing.
  */
 
 export const maxDuration = 300;
@@ -38,19 +38,11 @@ export async function GET(request: Request) {
 
   const started = Date.now();
   try {
-    const result = await runDailyPost({ deadline: started + 250_000 });
+    const result = await runDailyPost({ trigger: "CRON", deadline: started + 250_000 });
 
-    if (result.status === "skipped") return Response.json({ ok: true, skipped: result.slug });
+    if (result.status === "skipped") return Response.json({ ok: true, skipped: result.reason });
     if (result.status !== "published") return Response.json({ ok: false }, { status: 500 });
-
-    // A post scheduled for later is released by the five-minute revalidation
-    // the Knowledge Centre already runs on. One that went up immediately — a
-    // late run — is pushed out now, as the dashboard does on publish.
-    if (result.publishAt.getTime() <= Date.now()) {
-      revalidateTag(ARTICLES_TAG, "max");
-      revalidatePath("/[lang]/knowledge", "page");
-      revalidatePath("/[lang]", "page");
-    }
+    release(result);
 
     return Response.json({
       ok: true,
