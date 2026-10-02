@@ -204,10 +204,14 @@ function comments(lead: Lead): string {
     // The number itself is on the card's PHONE field; this names the country
     // it belongs to, which the code alone does not always say — `+1` and `+7`
     // are each shared — and which decides who on the team places the call.
-    [
-      "Phone country",
-      `${countryNameFor(lead.phoneCountry)} (${lead.phoneCode})`,
-    ],
+    ...(lead.phoneCountry
+      ? ([
+          [
+            "Phone country",
+            `${countryNameFor(lead.phoneCountry)} (${lead.phoneCode})`,
+          ],
+        ] as [string, string][])
+      : []),
     // Which language they wrote in decides who picks the enquiry up, so it is
     // stated rather than left to be inferred from the message.
     ["Language", localeNames[lead.locale].english],
@@ -257,13 +261,19 @@ export async function createBitrixLead(lead: Lead): Promise<void> {
       // Visible to the whole team rather than only to the assignee — an
       // enquiry nobody else can see is an enquiry nobody covers on a day off.
       OPENED: "Y",
-      EMAIL: [{ VALUE: lead.email, VALUE_TYPE: "WORK" }],
-      PHONE: [{ VALUE: lead.phone, VALUE_TYPE: "WORK" }],
+      // A partner registration may carry only one of the two; an empty
+      // entry would show on the card as a blank address.
+      ...(lead.email ? { EMAIL: [{ VALUE: lead.email, VALUE_TYPE: "WORK" }] } : {}),
+      ...(lead.phone ? { PHONE: [{ VALUE: lead.phone, VALUE_TYPE: "WORK" }] } : {}),
       // The country the number belongs to, which is the best the form knows
       // about where the reader is. Nobody typed an address, so the other
       // ADDRESS_* fields stay empty for sales to fill in.
-      ADDRESS_COUNTRY: countryNameFor(lead.phoneCountry),
-      ADDRESS_COUNTRY_CODE: lead.phoneCountry,
+      ...(lead.phoneCountry
+        ? {
+            ADDRESS_COUNTRY: countryNameFor(lead.phoneCountry),
+            ADDRESS_COUNTRY_CODE: lead.phoneCountry,
+          }
+        : {}),
       ...(assignedTo ? { ASSIGNED_BY_ID: assignedTo } : {}),
     },
     params: { REGISTER_SONET_EVENT: "Y" },

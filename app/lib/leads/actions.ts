@@ -18,8 +18,11 @@ import { after } from "next/server";
 
 import { resolveBrochure } from "../brochures";
 import en from "../i18n/dictionaries/en";
-import { isPartnerTrack } from "../partners";
+import { isLocale } from "../i18n/config";
+import { isPartnerType } from "../partners";
+import { composePhone, type ComposedPhone } from "./phone";
 import {
+  isEmail,
   validateLead,
   type Lead,
   type LeadErrorKey,
@@ -199,14 +202,18 @@ export async function requestBrochure(
 }
 
 /**
- * A registration's states. The form asks for a first and a last name and a
- * consent box where an enquiry has one name field, so those three carry their
- * own errors; everything else is reported against the lead's fields as usual.
+ * A registration's states. The form has fields of its own — one for name and
+ * company, one contact field taking an email or a WhatsApp number, the
+ * partnership type and the markets served — so it reports against those
+ * rather than the lead's.
  */
-export type PartnerErrors = Omit<LeadErrors, "name"> & {
-  firstName?: LeadErrorKey;
-  lastName?: LeadErrorKey;
-  consent?: "required";
+export type PartnerErrors = {
+  name?: LeadErrorKey;
+  /** `contact`: neither an email address nor an international number. */
+  contact?: "required" | "contact" | "tooLong";
+  type?: "required";
+  markets?: LeadErrorKey;
+  message?: LeadErrorKey;
 };
 
 export type PartnerState =
@@ -215,16 +222,24 @@ export type PartnerState =
   | { status: "failed"; reason: "rate" | "server" }
   | { status: "sent" };
 
+/** Ceilings for the fields only this form has; see `limits` in `./schema`. */
+const partnerLimits = { name: 160, contact: 254, markets: 500, message: 5000 };
+
 /**
  * A broker or adviser registering to work with Multi Mulk, from
  * /partner-with-us.
  *
  * Delivered as an ordinary lead of kind `partnership`, so it lands in the same
  * inbox and CRM as every other enquiry rather than in a pipeline of its own
- * that someone has to remember to check. The track is folded into the subject
- * and the message, which is where the salesperson reading it looks — worded in
- * English whatever the page's language, like the rest of what the team
- * receives.
+ * that someone has to remember to check. The partnership type is folded into
+ * the subject, and it and the markets into the message, which is where the
+ * salesperson reading it looks — worded in English whatever the page's
+ * language, like the rest of what the team receives.
+ *
+ * The contact field takes an email address or a phone number. A number has to
+ * carry its country code: there is no country picker beside it, and guessing
+ * one from the page's language would file a Lahore broker's number under
+ * Türkiye.
  */
 export async function registerPartner(
   _previous: PartnerState,
@@ -240,41 +255,61 @@ export async function registerPartner(
     return { status: "failed", reason: "rate" };
   }
 
-  // The track is a picker with a value always selected, so anything outside
-  // the list was not sent by the page.
-  const track = form.get("track");
-  if (!isPartnerTrack(track)) return { status: "failed", reason: "server" };
-
-  const firstName = String(form.get("firstName") ?? "").trim();
-  const lastName = String(form.get("lastName") ?? "").trim();
-  const message = String(form.get("message") ?? "").trim();
-  const trackName = en.partners.tracks[track].title;
-
-  const result = validateLead({
-    ...Object.fromEntries(form.entries()),
-    name: `${firstName} ${lastName}`.trim(),
-    enquiryType: "partnership",
-    subject: `Partner registration: ${trackName}`,
-    // Composed, so it is never empty; a blank message is caught below.
-    message: message ? `Track: ${trackName}\n\n${message}` : "",
-  });
+  const field = (key: string) => String(form.get(key) ?? "").trim();
+  const name = field("name");
+  const contact = field("contact");
+  const type = form.get("type");
+  const markets = field("markets");
+  const message = field("message");
 
   const errors: PartnerErrors = {};
-  if (!result.ok) {
-    const { name, ...rest } = result.errors;
-    Object.assign(errors, rest);
-    if (name === "tooLong") errors.firstName = "tooLong";
-  }
-  if (!firstName) errors.firstName = "required";
-  if (!lastName) errors.lastName = "required";
-  if (form.get("consent") !== "on") errors.consent = "required";
 
-  if (!result.ok || Object.keys(errors).length > 0) {
+  if (!name) errors.name = "required";
+  else if (name.length > partnerLimits.name) errors.name = "tooLong";
+
+  let email = "";
+  let phone: ComposedPhone | null = null;
+  if (!contact) errors.contact = "required";
+  else if (contact.length > partnerLimits.contact) errors.contact = "tooLong";
+  else if (contact.includes("@")) {
+    if (isEmail(contact)) email = contact;
+    else errors.contact = "contact";
+  } else {
+    // The `+` (or `00`) is what makes the country explicit; `composePhone`
+    // then reads it off the number and the country passed here is ignored.
+    phone = /^\s*(\+|00)/.test(contact) ? composePhone("TR", contact) : null;
+    if (!phone) errors.contact = "contact";
+  }
+
+  if (!isPartnerType(type)) errors.type = "required";
+
+  if (!markets) errors.markets = "required";
+  else if (markets.length > partnerLimits.markets) errors.markets = "tooLong";
+
+  if (message.length > partnerLimits.message) errors.message = "tooLong";
+
+  if (Object.keys(errors).length > 0 || !isPartnerType(type)) {
     return { status: "invalid", errors };
   }
 
+  const submitted = field("locale");
+  const typeName = en.partners.form.types[type];
+
   const lead: Lead = {
-    ...result.lead,
+    name,
+    email,
+    phone: phone?.phone ?? "",
+    ...(phone ? { phoneCountry: phone.country, phoneCode: phone.code } : {}),
+    enquiryType: "partnership",
+    subject: `Partnership enquiry: ${typeName}`,
+    message: [
+      `Partnership type: ${typeName}`,
+      `Markets / client groups: ${markets}`,
+      "",
+      message || "(No message.)",
+    ].join("\n"),
+    locale: isLocale(submitted) ? submitted : "en",
+    source: { path: field("path") || "/" },
     submittedAt: new Date().toISOString(),
   };
 

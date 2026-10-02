@@ -829,73 +829,330 @@ const en = {
   },
 
   /**
-   * /partner-with-us — brokers and advisers registering to work with us. Laid
-   * out section for section like a developer's "Be an Agent" page: hero,
-   * tracks, registration, what to expect.
+   * /partner-with-us — brokers, advisers and firms registering to work with
+   * us. Copy from the marketing team's "Partner With Multi Mulk" deck
+   * (2 Oct 2026), in the order the brief set.
+   *
+   * A link inside a sentence is written `[anchor](key)`; the page maps each
+   * key to a route, so a translation moves the brackets and never a URL. See
+   * `LinkedCopy`.
    */
   partners: {
     meta: {
-      title: "Partner With Us",
+      /** The whole title tag: the site suffix is not added to this one. */
+      title: "Partner With Multi Mulk | Turkey Real Estate & Citizenship",
       description:
-        "Register as a Multi Mulk partner to represent Türkiye property and government-approved Caribbean Citizenship-by-Investment real estate, with dedicated sales support.",
+        "Partner with Multi Mulk to offer clients Turkey real estate investment and Turkish citizenship by investment, supported by a dedicated partnership team.",
     },
-    heading: "Partner With Us",
-    body: "Expand your portfolio by representing our Türkiye developments or join our network as a trusted agent for government-approved Citizenship-by-Investment real estate across the Caribbean.",
-    introHeading: "Unlock Exclusive Global Opportunities",
-    introBody:
-      "Join a network of leading real estate brokers and investment advisors representing vetted projects across Türkiye and the Caribbean. Multi Mulk has built its name on carefully selected developments and trusted citizenship pathways, giving your clients opportunities that stand out in the global market.",
-    register: "Register for Partnership",
-    tracksLabel: "Our Partnership Tracks",
-    tracks: {
-      turkiye: {
-        title: "Türkiye Projects Agent",
-        /** The same track as it reads in the form's picker. */
-        option: "I'm a Türkiye Property Broker",
-        body: "Represent our Türkiye projects in İstanbul and along the coast and access up-to-date inventories, marketing materials, and dedicated sales support.",
+    /** Prefilled into WhatsApp by "Speak With Our Partnership Team". */
+    whatsappMessage: "Hello Multi Mulk, I'd like to discuss a partnership.",
+    hero: {
+      eyebrow: "Partner With Multi Mulk",
+      heading: "Offer More to the Clients You Already Serve",
+      subheading:
+        "Add Türkiye real estate, Turkish citizenship by investment and international residency solutions to your services, without building a Türkiye operation of your own.",
+      body: "You bring the client relationship. Multi Mulk provides the market access, selected investment opportunities, current project information and specialist support needed to serve that client professionally. Multi Mulk partnerships are built for long-term collaboration, not one-off transactions.",
+      primary: "Become a Partner",
+      secondary: "Speak With Our Partnership Team",
+      audience:
+        "For real estate agencies, investment-migration consultants, wealth advisers, law firms and international business networks.",
+    },
+    why: {
+      heading: "Why Partner With Multi Mulk?",
+      intro:
+        "Multi Mulk gives brokers, consultants and advisers a specialist partner for Turkey real estate investment and Turkish citizenship by investment. Partners get the access, information and support needed to serve international clients well.",
+      items: [
+        {
+          title: "Access to Selected Investment Opportunities",
+          body: "Offer clients Türkiye real estate that has already passed Multi Mulk's [eligibility, value and exit checks](protection), alongside relevant international investment solutions.",
+        },
+        {
+          title: "Current Project Information",
+          body: "Work from current project briefs, pricing, availability and sales materials, not outdated price lists.",
+        },
+        {
+          title: "Investment & Citizenship Expertise",
+          body: "When a client's goals include Turkish citizenship, residency or a wider investment plan, Multi Mulk's [property specialists, citizenship advisers and legal counsel](team) support the conversation.",
+        },
+        {
+          title: "Dedicated Partnership Support",
+          body: "Enquiries and introductions go straight to Multi Mulk's partnership team, so you are not passed between unrelated departments.",
+        },
+        {
+          title: "Client Journey Support",
+          body: "Multi Mulk supports each introduction from initial enquiry and opportunity evaluation through property selection, purchase and the relevant advisory stages.",
+        },
+        {
+          title: "International Market Reach",
+          body: "With [offices in İstanbul, Dubai and Lahore](contact), Multi Mulk understands both the Turkish property market and the international investors it attracts.",
+        },
+      ],
+    },
+    who: {
+      heading: "Who Can Partner With Multi Mulk?",
+      intro:
+        "Multi Mulk partners with professional firms and independent advisers whose clients are interested in Turkey property investment, Turkish citizenship or international residency. Partners can be based in Türkiye or abroad.",
+      items: [
+        {
+          title: "Real Estate Agencies & Brokers",
+          body: "Expand your international portfolio by introducing suitable clients to selected Türkiye investment opportunities.",
+        },
+        {
+          title: "International Property Consultants",
+          body: "Add Türkiye to the markets you cover, with current project information and a direct line to Multi Mulk's partnership team.",
+        },
+        {
+          title: "Immigration & Citizenship Consultants",
+          body: "Complement your immigration or mobility services with property-linked routes to Turkish citizenship.",
+        },
+        {
+          title: "Wealth Managers, Family Offices & Financial Advisers",
+          body: "Introduce real estate and international mobility options where they fit a client's broader wealth strategy.",
+        },
+        {
+          title: "Law Firms & Corporate-Service Providers",
+          body: "Collaborate where clients need coordinated property, investment, residency or citizenship support alongside your own services.",
+        },
+        {
+          title: "Relocation & Education Consultants",
+          body: "Give internationally mobile clients and families access to relevant property and residency solutions in Türkiye.",
+        },
+        {
+          title: "Business Consultants & International Networks",
+          body: "Connect clients and members exploring investment in Türkiye with a specialist partner on the ground.",
+        },
+        {
+          title: "Referral Partners & Independent Advisers",
+          body: "Introduce qualified investors while Multi Mulk manages the relevant advisory and transaction process.",
+        },
+      ],
+      note: "Partners work within the scope of their own licences and professional obligations. Regulated legal, financial or immigration advice should only be given by appropriately authorised professionals.",
+    },
+    models: {
+      eyebrow: "Partnership Opportunities",
+      heading: "Four Ways to Partner With Multi Mulk",
+      intro:
+        "Multi Mulk offers four partnership models: Türkiye real estate, Turkish citizenship and investment referral, international citizenship and residency, and strategic or institutional partnerships.",
+      bestForLabel: "Best for:",
+      /**
+       * Keyed by `partnerModels`. `body` opens the card, `points` follow it as
+       * a list and `after` closes it; a card without a list leaves both empty.
+       */
+      items: {
+        "real-estate": {
+          title: "Türkiye Real Estate Partnership",
+          bestFor:
+            "Real estate agencies, brokers, property consultants and international advisers.",
+          body: "For partners whose clients want to:",
+          points: [
+            "[Buy property in Turkey](realEstate) for investment, relocation or a second home",
+            "Pursue [property investment in İstanbul, Bodrum or Antalya](search)",
+            "Build a Turkey real estate investment portfolio",
+            "Explore [qualifying property for Turkish citizenship](citizenshipGuide)",
+          ],
+          after:
+            "Multi Mulk provides access to selected projects, current availability and pricing, project briefs and investment information, plus support through the transaction.",
+          link: "Register as a real estate partner",
+        },
+        "citizenship-referral": {
+          title: "Turkish Citizenship & Investment Referral Partnership",
+          bestFor:
+            "Immigration and investment-migration consultants, citizenship advisers and wealth professionals.",
+          body: "For advisers and organisations whose international clients are interested in [Turkish citizenship by investment](turkiye). Multi Mulk helps coordinate the relevant real estate and citizenship-related processes through its advisory network, from choosing qualifying property to the citizenship application. The introducing partner is kept informed throughout.",
+          points: [] as string[],
+          after: "",
+          link: "Discuss a referral partnership",
+        },
+        "citizenship-residency": {
+          title: "International Citizenship & Residency Partnership",
+          bestFor:
+            "Selected professional partners whose clients are looking beyond Türkiye.",
+          body: "For partners whose clients are considering citizenship or [residency options](goldenVisa) outside Türkiye, including eligible [Caribbean Citizenship by Investment programmes](caribbean) offered through Multi Mulk. Multi Mulk works with government-approved developments in Grenada, Dominica and St Kitts & Nevis. Programme suitability depends on each client's circumstances and the rules in force at the time.",
+          points: [] as string[],
+          after: "",
+          link: "Ask about citizenship and residency partnerships",
+        },
+        strategic: {
+          title: "Strategic & Institutional Partnership",
+          bestFor:
+            "Property developers, investment firms, family offices, international agencies, professional-service firms and corporate networks.",
+          body: "For organisations that want a broader, structured collaboration with Multi Mulk. Depending on the fit, cooperation may include:",
+          points: [
+            "Referral arrangements and strategic distribution",
+            "Market-entry cooperation",
+            "Co-marketing and co-branded educational content",
+            "Webinars, investor events and roadshows, such as Multi Mulk's Türkiye Property Roadshow in Pakistan",
+            "Research collaboration",
+          ],
+          after: "",
+          link: "Propose a strategic partnership",
+        },
       },
-      caribbean: {
-        title: "CBI Caribbean Service Partner",
-        option: "I'm a Caribbean CBI Agent",
-        body: "Offer clients government-approved CBI opportunities backed by established Caribbean developments.",
+      note: "Specific commercial terms depend on the partnership model and are agreed individually with each partner before any client introductions.",
+    },
+    provides: {
+      eyebrow: "What Multi Mulk Provides",
+      heading: "Built to Help You Serve Your Clients Better",
+      intro:
+        "Multi Mulk provides partners with project access, current inventory and pricing, sales materials, investment information, citizenship and residency coordination, and client meeting support, all through one partnership team.",
+      items: [
+        {
+          title: "Project Access",
+          body: "Selected Turkey investment property for international buyers, from central İstanbul residences to developments on the Aegean and Mediterranean coasts.",
+        },
+        {
+          title: "Updated Inventory & Pricing",
+          body: "Up-to-date availability, current pricing and project updates when applicable.",
+        },
+        {
+          title: "Partner Sales Materials",
+          body: "Project briefs, core specifications, presentations, brochures and approved visuals, where available.",
+        },
+        {
+          title: "Investment Information",
+          body: "Property, market and investment information, including Multi Mulk's published Investment Score framework, to help you explain each opportunity clearly.",
+        },
+        {
+          title: "Citizenship & Residency Coordination",
+          body: "Coordinated support for clients whose objectives include Turkish citizenship, residency or another international mobility programme.",
+        },
+        {
+          title: "Client Meeting Support",
+          body: "Where appropriate, help with consultations, project presentations, online meetings and property visits.",
+        },
+      ],
+      strip: {
+        title: "One Partnership Contact. An Ongoing Relationship.",
+        body: "Each partner works with a central contact in Multi Mulk's partnership team for coordination, enquiries and client introductions. The relationship is designed to continue well beyond a single referral.",
       },
     },
-    formHeading: "Register Your Interest",
-    formBody:
-      "Select your partnership type and complete the form. Our team will review your submission and contact you for the next steps.",
+    process: {
+      heading: "How Does a Multi Mulk Partnership Work?",
+      intro:
+        "A Multi Mulk partnership follows four steps, from your first enquiry to working together on each client introduction.",
+      steps: [
+        {
+          title: "Register Your Interest",
+          body: "Complete the partnership form and tell Multi Mulk about your organisation, your clients and the markets you serve.",
+        },
+        {
+          title: "Partnership Discussion",
+          body: "Multi Mulk's partnership team reviews your submission and discusses the most suitable collaboration structure and commercial terms with you.",
+        },
+        {
+          title: "Introduce Opportunities",
+          body: "Once the partnership is in place, you introduce relevant opportunities to suitable clients using the agreed materials and process.",
+        },
+        {
+          title: "Work Together on the Client Journey",
+          body: "Multi Mulk coordinates with you and supports the client through the relevant property, investment, residency or citizenship process.",
+        },
+      ],
+      cta: "Register Your Interest",
+    },
+    whyUs: {
+      heading: "Why Multi Mulk?",
+      subheading: "Advice before inventory.",
+      body: "Multi Mulk is an international property and citizenship advisory with offices in Türkiye, the UAE and Pakistan. Its work starts with what the investor wants to achieve, and it says plainly when a project or programme is the wrong fit. For partners, that honesty protects the client relationship you have built.",
+      principles: [
+        {
+          lead: "Advisory first.",
+          body: "Opportunities are matched to the client's objectives, not the other way round.",
+        },
+        {
+          lead: "Built for international investors.",
+          body: "Turkey property for foreigners is Multi Mulk's core business, so the team knows the questions overseas buyers ask, from title deeds to holding periods.",
+        },
+        {
+          lead: "Property and citizenship together.",
+          body: "Property specialists, citizenship advisers and legal counsel work as one team, so a purchase and a citizenship application are handled as one decision.",
+        },
+        {
+          lead: "Transparent selection.",
+          body: "Multi Mulk publishes how it assesses property, including a 20-question due-diligence review and a weighted Investment Score.",
+        },
+        {
+          lead: "Structured communication.",
+          body: "Each file is led by the team closest to the client, so partners know who is handling each introduction.",
+        },
+        {
+          lead: "Long-term relationships.",
+          body: "Citizenship files take months and qualifying property is held for years, so Multi Mulk plans client relationships and partnerships for the long term.",
+        },
+      ],
+      link: "See how Multi Mulk assesses property",
+    },
     form: {
-      track: "Select your partnership type",
-      firstName: "First Name",
-      firstNamePlaceholder: "Insert your first name",
-      lastName: "Last Name",
-      lastNamePlaceholder: "Insert your last name",
-      messagePlaceholder: "Type your message..",
-      consentRequired: "Please confirm that we may contact you.",
-      submit: "Send Message",
-      sentHeading: "Thank You for Registering",
+      heading: "Explore a Partnership With Multi Mulk",
+      body: "Tell us a little about your business and the clients you serve. Our partnership team will review your submission and contact you to discuss the most suitable way to work together.",
+      name: "Your Name & Company",
+      namePlaceholder: "Your full name and company name",
+      contact: "Business Email / WhatsApp",
+      contactPlaceholder: "How should our partnership team contact you?",
+      type: "What type of partnership are you interested in?",
+      typePlaceholder: "Select a partnership type",
+      /** Keyed by `partnerTypes`, in the order the picker lists them. */
+      types: {
+        "real-estate": "Türkiye Real Estate Partnership",
+        "citizenship-referral": "Turkish Citizenship / Investment Referral",
+        "citizenship-residency": "International Citizenship & Residency",
+        developer: "Developer / Project Partnership",
+        strategic: "Strategic / Institutional Partnership",
+        referral: "Referral Partnership",
+        "not-sure": "Not sure — I would like to discuss",
+      },
+      markets: "Which markets or client groups do you currently serve?",
+      marketsPlaceholder:
+        "For example: Pakistan, UAE, GCC, Europe, Asia, HNW investors, property buyers, relocation clients, etc.",
+      message: "Tell us briefly how you would like to work with Multi Mulk.",
+      messagePlaceholder:
+        "Tell us about your business, your clients and the type of cooperation you are looking for.",
+      submit: "Submit Partnership Enquiry",
+      privacy:
+        "By submitting this form, you agree that Multi Mulk may contact you about your partnership enquiry. For details of how your information is handled, see the [Privacy Policy](privacy).",
+      sentHeading: "Thank you.",
       sentBody:
-        "Our partnerships team will review your details and contact you for the next steps.",
+        "Your enquiry has reached the Multi Mulk partnership team, who will contact you to discuss next steps.",
+      errors: {
+        contact:
+          "Enter an email address, or a WhatsApp number with its country code (e.g. +92 300 1234567).",
+        type: "Please choose a partnership type.",
+      },
     },
-    generalHeading: "General Enquiries",
-    getInTouchHeading: "Get in Touch",
-    getInTouchBody: "Reach out to explore more opportunities with our team.",
-    expectHeading: "What to Expect",
-    includesLabel: "This includes:",
-    expect: {
-      turkiye: {
-        title: "Türkiye Real Estate Partnership",
-        body: "Partner with us to represent our Türkiye real estate developments and access key sales tools designed to truly support your client engagements.",
-        includes: [
-          "Project briefs and core specifications",
-          "Updated pricing and availability",
-          "Approved sales and marketing assets",
-          "Direct communication with our partnerships team",
-        ],
-      },
-      caribbean: {
-        title: "CBI Caribbean Partnership",
-        body: "We at Multi Mulk help educate people about the opportunities provided by the Caribbean’s Citizenship by Investment programmes, offering articles and informational resources to help people secure their goals by becoming citizens in the nation that best fits their aims.",
-        includes: [] as string[],
-      },
+    cta: {
+      heading: "Be Ready When Your Clients Ask About Türkiye",
+      body: "Whether you advise international investors, represent property buyers or work in investment migration, Multi Mulk is open to structured partnerships that create value for your organisation and your clients. A short conversation with the partnership team is enough to see whether there is a fit.",
+      button: "Start a Partnership Conversation",
+    },
+    faq: {
+      heading: "Partnership FAQs",
+      items: [
+        {
+          question: "Who can become a Multi Mulk partner?",
+          answer:
+            "Multi Mulk partners with professional firms and independent advisers whose clients are interested in real estate investment in Turkey, Turkish citizenship by investment or international residency. This includes real estate agencies and brokers, immigration and citizenship consultants, law firms, wealth managers, family offices, relocation companies, corporate-service providers and referral partners. Each enquiry is reviewed individually to agree the most suitable partnership model.",
+        },
+        {
+          question: "Can real estate agents outside Türkiye partner with Multi Mulk?",
+          answer:
+            "Yes. Multi Mulk welcomes partnerships with real estate agents, brokers and property consultants outside Türkiye whose clients want to buy property in Turkey. Overseas partners receive project briefs, current pricing and availability, and approved sales materials, while Multi Mulk's İstanbul team supports the local stages of each purchase. Multi Mulk coordinates with the introducing partner throughout.",
+        },
+        {
+          question: "Can I refer clients interested in Turkish citizenship by investment?",
+          answer:
+            "Yes. Immigration consultants, citizenship advisers and other professionals can refer clients interested in Turkey citizenship by investment, including Turkish citizenship through property. Multi Mulk helps coordinate the relevant real estate and citizenship-related processes through its advisory network. Eligibility depends on each client's circumstances and the programme rules in force at the time of application, so every case is assessed individually.",
+        },
+        {
+          question: "What support does Multi Mulk provide to its partners?",
+          answer:
+            "Multi Mulk provides partners with access to selected Türkiye real estate projects, up-to-date availability and pricing, project briefs, approved sales materials and investment information. Partners also receive coordination for clients pursuing Turkish citizenship or residency, help with client meetings and property visits where appropriate, and a central contact in the partnership team for enquiries and introductions.",
+        },
+        {
+          question: "How do I start a partnership with Multi Mulk?",
+          answer:
+            "Complete the partnership form on this page. It asks for your name and company, your contact details, the partnership type you are interested in, the markets you serve and how you would like to work together. Multi Mulk's partnership team reviews each enquiry and contacts you to discuss the most suitable model. Commercial terms depend on the model and are agreed individually.",
+        },
+      ],
     },
   },
 

@@ -55,14 +55,23 @@ export type LeadErrorKey = "required" | "email" | "phone" | "tooLong";
 
 export type LeadErrors = Partial<Record<LeadField, LeadErrorKey>>;
 
+/**
+ * A validated enquiry.
+ *
+ * Every form asks for both a phone and an email except the partner
+ * registration, which takes one contact field and accepts either. So `phone`
+ * or `email` may be empty, and `phoneCountry` and `phoneCode` absent with the
+ * number; anything that reads them checks first.
+ */
 export type Lead = {
   name: string;
-  /** E.164, country code included: `+905321234567`. */
+  /** E.164, country code included: `+905321234567`. Empty if none was given. */
   phone: string;
   /** ISO 3166-1 alpha-2 of the number's country. */
-  phoneCountry: CountryCode;
+  phoneCountry?: CountryCode;
   /** The dialling prefix on its own — `+90` — for anything that wants it apart. */
-  phoneCode: string;
+  phoneCode?: string;
+  /** Empty if none was given. */
   email: string;
   enquiryType: EnquiryType;
   subject: string;
@@ -89,6 +98,10 @@ const limits: Record<LeadField, number> = {
  * sending to it — so this catches typos, not exotica.
  */
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export function isEmail(value: string): boolean {
+  return value.length <= limits.email && emailPattern.test(value);
+}
 
 function text(raw: unknown): string {
   return typeof raw === "string" ? raw.trim() : "";

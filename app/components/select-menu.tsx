@@ -52,6 +52,11 @@ export type SelectMenuProps = {
    * to `format`.
    */
   formatSelected?: (value: string) => string;
+  /**
+   * Shown while `value` is none of the options, so a required choice can open
+   * unmade instead of defaulting to the first entry.
+   */
+  placeholder?: string;
   /** Renders a hidden input so the value posts with a native form. */
   name?: string;
   required?: boolean;
@@ -72,6 +77,7 @@ export function SelectMenu({
   options,
   format,
   formatSelected,
+  placeholder,
   name,
   required,
   className = "",
@@ -89,7 +95,8 @@ export function SelectMenu({
   const typed = useRef({ text: "", at: 0 });
 
   const id = useId();
-  const selected = Math.max(0, options.indexOf(value));
+  const current = options.indexOf(value);
+  const selected = Math.max(0, current);
   const text = (option: string) => (format ? format(option) : option);
 
   const close = useCallback((refocus = true) => {
@@ -212,9 +219,13 @@ export function SelectMenu({
         }}
         className={`flex w-full cursor-pointer items-center justify-between gap-3 text-start outline-none ${triggerClassName}`}
       >
-        <span className="truncate">
-          {formatSelected ? formatSelected(value) : text(value)}
-        </span>
+        {current === -1 && placeholder ? (
+          <span className="truncate opacity-50">{placeholder}</span>
+        ) : (
+          <span className="truncate">
+            {formatSelected ? formatSelected(value) : text(value)}
+          </span>
+        )}
         <Chevron
           className={`w-2 shrink-0 transition-transform duration-300 ${
             open ? "-scale-y-100" : ""
@@ -242,7 +253,7 @@ export function SelectMenu({
           } ${panelClassName}`}
         >
           {options.map((option, index) => {
-            const isSelected = index === selected;
+            const isSelected = index === current;
             return (
               <li
                 key={option}

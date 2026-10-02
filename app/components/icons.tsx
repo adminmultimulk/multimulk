@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 type IconProps = { className?: string };
 
 export function Chevron({ className }: IconProps) {
@@ -911,5 +913,252 @@ export function Foundation({ className }: IconProps) {
       <path d="M6.5 11.5v5M10 11.5v5.5M13.5 11.5v5" />
       <path d="M1.5 14.5c1 0 1 .8 2 .8s1-.8 2-.8M14.5 14.5c1 0 1 .8 2 .8s1-.8 2-.8" />
     </svg>
+  );
+}
+
+// --- Partnership page ---------------------------------------------------------
+//
+// Drawn on the same 20-unit grid and 1.2 stroke as the amenity icons above, so
+// they sit beside them without a second visual language. One wrapper rather
+// than the full <svg> each time; the paths are all that differ.
+
+function Line20({
+  className,
+  children,
+}: IconProps & { children: ReactNode }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      {children}
+    </svg>
+  );
+}
+
+export function Globe({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <circle cx="10" cy="10" r="7.5" />
+      <path d="M2.5 10h15M10 2.5c2 2.1 3 4.6 3 7.5s-1 5.4-3 7.5c-2-2.1-3-4.6-3-7.5s1-5.4 3-7.5Z" />
+    </Line20>
+  );
+}
+
+/** A brief on a clipboard — current project information. */
+export function Clipboard({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <rect x="4" y="3.5" width="12" height="14" rx="1.5" />
+      <path d="M7.5 3.5v-.7c0-.5.4-.8.8-.8h3.4c.4 0 .8.3.8.8v.7M7.5 8.5h5M7.5 11.5h5M7.5 14.5h3" />
+    </Line20>
+  );
+}
+
+export function Passport({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <rect x="4.5" y="2.5" width="11" height="15" rx="1.5" />
+      <circle cx="10" cy="8.8" r="2.8" />
+      <path d="M7.2 8.8h5.6M10 6c.8.8 1.2 1.7 1.2 2.8s-.4 2-1.2 2.8c-.8-.8-1.2-1.7-1.2-2.8S9.2 6.8 10 6ZM7.5 14.5h5" />
+    </Line20>
+  );
+}
+
+export function Headset({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M4 11V9.5a6 6 0 0 1 12 0V11" />
+      <rect x="2.8" y="10.5" width="3.2" height="4.8" rx="1.1" />
+      <rect x="14" y="10.5" width="3.2" height="4.8" rx="1.1" />
+      <path d="M15.6 15.3v.4a1.8 1.8 0 0 1-1.8 1.8H11" />
+    </Line20>
+  );
+}
+
+/** A winding path between two points — a client's journey. */
+export function Route({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <circle cx="5" cy="4.8" r="1.8" />
+      <circle cx="15" cy="15.2" r="1.8" />
+      <path d="M6.8 4.8h6.4a2.6 2.6 0 0 1 0 5.2H6.8a2.6 2.6 0 0 0 0 5.2h6.4" />
+    </Line20>
+  );
+}
+
+/** A balance — law and professional services. */
+export function Scales({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M10 2.8v14.4M6.5 17.2h7M4.5 5.2h11" />
+      <path d="M4.5 5.2 2.4 10.4a2.1 2.1 0 0 0 4.2 0L4.5 5.2ZM15.5 5.2l-2.1 5.2a2.1 2.1 0 0 0 4.2 0l-2.1-5.2Z" />
+    </Line20>
+  );
+}
+
+/** A rising line — wealth and investment. */
+export function ChartUp({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M2.8 16.8h14.4M3.5 13.2 8 8.7l3 3 5.2-5.2M12.8 6.5h3.4v3.4" />
+    </Line20>
+  );
+}
+
+/** Three linked nodes — networks and introductions. */
+export function Network({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <circle cx="10" cy="4.5" r="1.9" />
+      <circle cx="4.5" cy="15" r="1.9" />
+      <circle cx="15.5" cy="15" r="1.9" />
+      <path d="M9.1 6.2 5.4 13.3M10.9 6.2l3.7 7.1M6.4 15h7.2" />
+    </Line20>
+  );
+}
+
+/** A person with a plus — a referral. */
+export function UserPlus({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <circle cx="8" cy="6.5" r="3" />
+      <path d="M2.5 17c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8M15.5 6v5M13 8.5h5" />
+    </Line20>
+  );
+}
+
+export function Users({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <circle cx="7.5" cy="6.5" r="2.7" />
+      <path d="M2.5 16.5c.5-2.8 2.5-4.4 5-4.4s4.5 1.6 5 4.4" />
+      <circle cx="14" cy="7.5" r="2.1" />
+      <path d="M13.6 12.2c2 .1 3.5 1.6 3.9 4" />
+    </Line20>
+  );
+}
+
+export function Key({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <circle cx="6.8" cy="13.2" r="3.6" />
+      <path d="M9.4 10.6 16.5 3.5M14 6l2.2 2.2M11.9 8.1l1.6 1.6" />
+    </Line20>
+  );
+}
+
+export function PriceTag({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M10.6 2.8H16a1.2 1.2 0 0 1 1.2 1.2v5.4L9.6 17a1.4 1.4 0 0 1-2 0L3 12.4a1.4 1.4 0 0 1 0-2l7.6-7.6Z" />
+      <circle cx="13.6" cy="6.4" r="1.2" />
+    </Line20>
+  );
+}
+
+/** A board on a stand — presentations and sales material. */
+export function Presentation({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <rect x="2.5" y="3" width="15" height="10.5" rx="1" />
+      <path d="M10 13.5v3M7 17h6M6 10.3l2.5-2.5 2 2 3.5-3.5" />
+    </Line20>
+  );
+}
+
+export function ChartBar({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M2.8 17h14.4M5.5 14v-3.5M9 14V6.5M12.5 14V9M16 14V4" />
+    </Line20>
+  );
+}
+
+export function Calendar({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <rect x="3" y="4.5" width="14" height="12.5" rx="1.5" />
+      <path d="M3 8.5h14M7 2.8v3.4M13 2.8v3.4M6.8 12h1.6M11.6 12h1.6M6.8 14.6h1.6" />
+    </Line20>
+  );
+}
+
+/** A page with a pen — filling in a form. */
+export function FormPen({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M11 3.5H5a1.5 1.5 0 0 0-1.5 1.5v11A1.5 1.5 0 0 0 5 17.5h10a1.5 1.5 0 0 0 1.5-1.5V10" />
+      <path d="M15 2.9a1.4 1.4 0 0 1 2 2l-6.6 6.6-2.6.6.6-2.6L15 2.9Z" />
+    </Line20>
+  );
+}
+
+export function Chat({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M3 5.5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2V12a2 2 0 0 1-2 2H9.2L5.5 17v-3H5a2 2 0 0 1-2-2V5.5Z" />
+      <path d="M7 7.5h6M7 10.3h4" />
+    </Line20>
+  );
+}
+
+/** A paper plane — sending an introduction on. */
+export function Send({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M17.2 2.8 8.6 11.4M17.2 2.8l-5.4 14.4-3.2-5.8-5.8-3.2 14.4-5.4Z" />
+    </Line20>
+  );
+}
+
+export function Compass({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <circle cx="10" cy="10" r="7.5" />
+      <path d="m12.9 7.1-1.7 4.1-4.1 1.7 1.7-4.1 4.1-1.7Z" />
+    </Line20>
+  );
+}
+
+/** Two joined links — property and citizenship handled together. */
+export function LinkChain({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M8.5 11.5a3 3 0 0 0 4.2 0l2.6-2.6a3 3 0 0 0-4.2-4.2l-1 1M11.5 8.5a3 3 0 0 0-4.2 0l-2.6 2.6a3 3 0 0 0 4.2 4.2l1-1" />
+    </Line20>
+  );
+}
+
+export function Eye({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M2 10s3-5.5 8-5.5 8 5.5 8 5.5-3 5.5-8 5.5S2 10 2 10Z" />
+      <circle cx="10" cy="10" r="2.3" />
+    </Line20>
+  );
+}
+
+export function Hourglass({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <path d="M5.5 2.5h9M5.5 17.5h9M6.5 2.5c0 3.5 3.5 4.5 3.5 7.5s-3.5 4-3.5 7.5M13.5 2.5c0 3.5-3.5 4.5-3.5 7.5s3.5 4 3.5 7.5" />
+    </Line20>
+  );
+}
+
+export function Question({ className }: IconProps) {
+  return (
+    <Line20 className={className}>
+      <circle cx="10" cy="10" r="7.5" />
+      <path d="M7.8 7.9a2.3 2.3 0 0 1 4.5.7c0 1.6-2.3 2-2.3 3.4" />
+      <circle cx="10" cy="14.2" r=".4" fill="currentColor" />
+    </Line20>
   );
 }

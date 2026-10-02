@@ -59,7 +59,8 @@ export class LeadEmailError extends Error {
  */
 export async function sendEmail(message: {
   to: string[];
-  replyTo: string;
+  /** Absent where the enquirer left no address to answer at. */
+  replyTo?: string;
   subject: string;
   text: string;
   html: string;
@@ -93,7 +94,7 @@ export async function sendEmail(message: {
  */
 export function idempotencyKey(lead: Lead, kind: string): string {
   const digest = createHash("sha256")
-    .update(`${lead.email}\u0000${lead.submittedAt}`)
+    .update(`${lead.email || lead.phone}\u0000${lead.submittedAt}`)
     .digest("hex");
   return `${kind}/${digest}`;
 }
@@ -111,18 +112,23 @@ export function escape(value: string): string {
 function rows(lead: Lead): { label: string; value: string; href?: string }[] {
   const page = absoluteUrl(lead.source.path);
 
+  // A partner registration carries an email or a number, not always both.
   return [
     { label: "Name", value: lead.name },
-    { label: "Email", value: lead.email, href: `mailto:${lead.email}` },
-    {
-      label: "Phone",
-      value: lead.phone,
-      href: `tel:${lead.phone}`,
-    },
-    {
-      label: "Phone country",
-      value: `${countryNameFor(lead.phoneCountry)} (${lead.phoneCode})`,
-    },
+    ...(lead.email
+      ? [{ label: "Email", value: lead.email, href: `mailto:${lead.email}` }]
+      : []),
+    ...(lead.phone
+      ? [{ label: "Phone", value: lead.phone, href: `tel:${lead.phone}` }]
+      : []),
+    ...(lead.phoneCountry
+      ? [
+          {
+            label: "Phone country",
+            value: `${countryNameFor(lead.phoneCountry)} (${lead.phoneCode})`,
+          },
+        ]
+      : []),
     { label: "Enquiry about", value: en.contact.form.types[lead.enquiryType] },
     { label: "Subject", value: lead.subject },
     { label: "Language", value: localeNames[lead.locale].english },
@@ -178,7 +184,11 @@ function htmlBody(lead: Lead): string {
       <p style="margin:24px 0 8px;color:#6b7280">Message</p>
       <div style="white-space:pre-wrap;color:#222a2c;border-left:2px solid #b38a1e;padding-left:14px">${escape(lead.message)}</div>
       <p style="margin:28px 0 0;color:#6b7280;font-size:12px">
-        Reply to this email to answer ${escape(lead.name)} directly.
+        ${
+          lead.email
+            ? `Reply to this email to answer ${escape(lead.name)} directly.`
+            : `${escape(lead.name)} left a phone number only — answer by WhatsApp or a call.`
+        }
       </p>
     </div>
   </body>
@@ -189,8 +199,9 @@ function htmlBody(lead: Lead): string {
 export async function emailLead(lead: Lead): Promise<void> {
   await sendEmail({
     to: teamInbox,
-    // Hitting Reply answers the enquirer rather than the sending domain.
-    replyTo: lead.email,
+    // Hitting Reply answers the enquirer rather than the sending domain —
+    // when they left an address to answer at.
+    ...(lead.email ? { replyTo: lead.email } : {}),
     subject: subjectLine(lead),
     text: textBody(lead),
     html: htmlBody(lead),

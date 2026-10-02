@@ -32,6 +32,8 @@ import type { Lead } from "./schema";
 export async function acknowledgeLead(lead: Lead): Promise<void> {
   // Not configured is not a failure; the team simply never offered to send it.
   if (!emailConfigured) return;
+  // A partner who left only a WhatsApp number has nowhere to send it.
+  if (!lead.email) return;
 
   const t = await getDictionary(lead.locale);
   const form = t.contact.form;

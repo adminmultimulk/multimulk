@@ -1,39 +1,54 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
-import { usePathname } from "next/navigation";
+import {
+  Suspense,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useI18n } from "@/app/lib/i18n/context";
 import { trackEvent } from "@/app/lib/analytics";
 import { registerPartner, type PartnerState } from "@/app/lib/leads/actions";
-import { partnerTracks, type PartnerTrack } from "@/app/lib/partners";
-import { PhoneField } from "./phone-field";
+import { isPartnerType, partnerTypes, type PartnerType } from "@/app/lib/partners";
 import { SelectMenu } from "./select-menu";
 
 const initialState: PartnerState = { status: "idle" };
 
 const inputStyle =
   "w-full border-b border-ink/30 bg-transparent px-0 py-2.5 text-[13.5px] text-ink outline-none placeholder:text-ink/40 focus:border-ink aria-invalid:border-red-700";
-const labelStyle = "block text-[13px] text-ink";
+const labelStyle = "block text-[13px] leading-[20px] text-ink";
 
 /**
- * The /partner-with-us registration form: partnership type, first and last
- * name, phone, email, message and a consent box, each an underlined field on
- * the tinted panel.
+ * The /partner-with-us registration form: name and company, one contact field
+ * that takes an email or a WhatsApp number, the partnership type, the markets
+ * served and an optional message, each an underlined field on the tinted
+ * panel.
  *
- * Name, phone, email and error wording are the contact form's, so the two read
- * alike. The track and the split name are folded into an ordinary lead by
- * `registerPartner`.
+ * The type opens unchosen, unless the reader arrived from one of the
+ * partnership cards, whose links carry `?type=` — see `TypeFromQuery`.
+ * Error wording for the shared cases is the contact form's, so the two read
+ * alike.
  *
  * `token` is minted by the Server Component that renders this form; see
- * `app/lib/leads/token.ts`.
+ * `app/lib/leads/token.ts`. `privacy` is the line under the button, rendered
+ * there because it links into the route table.
  */
-export function PartnerForm({ token }: { token: string }) {
+export function PartnerForm({
+  token,
+  privacy,
+}: {
+  token: string;
+  privacy: ReactNode;
+}) {
   const { t, locale } = useI18n();
-  const form = t.contact.form;
-  const copy = t.partners;
+  const shared = t.contact.form;
+  const copy = t.partners.form;
   const path = usePathname();
   const [state, action, pending] = useActionState(registerPartner, initialState);
-  const [track, setTrack] = useState<PartnerTrack>(partnerTracks[0]);
+  const [type, setType] = useState<PartnerType | "">("");
   const started = useRef(false);
 
   const errors = state.status === "invalid" ? state.errors : undefined;
@@ -56,12 +71,13 @@ export function PartnerForm({ token }: { token: string }) {
 
   if (state.status === "sent") {
     return (
-      <div className="flex min-h-[420px] flex-col items-center justify-center px-8 text-center">
-        <h3 className="font-display text-[28px] text-ink">
-          {copy.form.sentHeading}
-        </h3>
-        <p className="mt-3 max-w-[360px] text-[13.5px] leading-[22px] text-ink/70">
-          {copy.form.sentBody}
+      <div
+        role="status"
+        className="flex min-h-[420px] flex-col items-center justify-center px-8 text-center"
+      >
+        <h3 className="font-display text-[28px] text-ink">{copy.sentHeading}</h3>
+        <p className="mt-3 max-w-[380px] text-[13.5px] leading-[22px] text-ink/70">
+          {copy.sentBody}
         </p>
       </div>
     );
@@ -71,7 +87,7 @@ export function PartnerForm({ token }: { token: string }) {
     <form
       action={action}
       onInput={onFirstInput}
-      className="grid w-full content-start gap-x-4 gap-y-7 sm:grid-cols-2"
+      className="grid w-full content-start gap-y-7"
       noValidate
     >
       <input type="hidden" name="locale" value={locale} />
@@ -86,105 +102,122 @@ export function PartnerForm({ token }: { token: string }) {
         </label>
       </div>
 
-      <div className="sm:col-span-2">
-        <span className={labelStyle}>{copy.form.track} *</span>
+      <Suspense fallback={null}>
+        <TypeFromQuery onType={setType} />
+      </Suspense>
+
+      <Field
+        label={copy.name}
+        name="name"
+        autoComplete="organization"
+        placeholder={copy.namePlaceholder}
+        error={errors?.name && shared.errors[errors.name]}
+      />
+      <Field
+        label={copy.contact}
+        name="contact"
+        autoComplete="email"
+        placeholder={copy.contactPlaceholder}
+        error={
+          errors?.contact &&
+          (errors.contact === "contact"
+            ? copy.errors.contact
+            : shared.errors[errors.contact])
+        }
+      />
+
+      <div>
+        <span className={labelStyle}>{copy.type} *</span>
         <SelectMenu
-          label={copy.form.track}
-          name="track"
+          label={copy.type}
+          name="type"
           required
-          value={track}
-          onChange={(v) => setTrack(v as PartnerTrack)}
-          options={[...partnerTracks]}
-          format={(v) => copy.tracks[v as PartnerTrack].option}
-          triggerClassName="border-b border-ink/30 bg-transparent py-2.5 text-[13.5px] text-ink focus-visible:border-ink"
+          value={type}
+          onChange={(v) => setType(v as PartnerType)}
+          options={partnerTypes}
+          format={(v) => copy.types[v as PartnerType]}
+          placeholder={copy.typePlaceholder}
+          triggerClassName={`border-b bg-transparent py-2.5 text-[13.5px] text-ink focus-visible:border-ink ${
+            errors?.type ? "border-red-700" : "border-ink/30"
+          }`}
         />
+        {errors?.type ? <FieldError>{copy.errors.type}</FieldError> : null}
       </div>
 
-      <Field
-        label={copy.form.firstName}
-        name="firstName"
-        autoComplete="given-name"
-        placeholder={copy.form.firstNamePlaceholder}
-        error={errors?.firstName && form.errors[errors.firstName]}
-      />
-      <Field
-        label={copy.form.lastName}
-        name="lastName"
-        autoComplete="family-name"
-        placeholder={copy.form.lastNamePlaceholder}
-        error={errors?.lastName && form.errors[errors.lastName]}
-      />
+      {/* Two lines rather than one: the placeholder's example list is the
+          prompt, and a single line cuts it off. */}
+      <label>
+        <span className={labelStyle}>{copy.markets} *</span>
+        <textarea
+          name="markets"
+          required
+          rows={2}
+          placeholder={copy.marketsPlaceholder}
+          aria-invalid={errors?.markets ? true : undefined}
+          className={`resize-none ${inputStyle}`}
+        />
+        {errors?.markets ? (
+          <FieldError>{shared.errors[errors.markets]}</FieldError>
+        ) : null}
+      </label>
 
-      <PhoneField
-        variant="underline"
-        label={form.phone}
-        codeLabel={form.countryCode}
-        placeholder={form.phonePlaceholder}
-        error={errors?.phone && form.errors[errors.phone]}
-      />
-      <Field
-        label={form.email}
-        name="email"
-        type="email"
-        autoComplete="email"
-        placeholder={form.emailPlaceholder}
-        error={errors?.email && form.errors[errors.email]}
-      />
-
-      <label className="sm:col-span-2">
-        <span className={labelStyle}>{form.message} *</span>
+      <label>
+        <span className={labelStyle}>{copy.message}</span>
         <textarea
           name="message"
-          required
           rows={4}
-          placeholder={copy.form.messagePlaceholder}
+          placeholder={copy.messagePlaceholder}
           aria-invalid={errors?.message ? true : undefined}
           className={`resize-y ${inputStyle}`}
         />
         {errors?.message ? (
-          <FieldError>{form.errors[errors.message]}</FieldError>
+          <FieldError>{shared.errors[errors.message]}</FieldError>
         ) : null}
-      </label>
-
-      <label className="flex items-start gap-3 sm:col-span-2">
-        <input
-          type="checkbox"
-          name="consent"
-          required
-          aria-invalid={errors?.consent ? true : undefined}
-          className="mt-[3px] size-4 shrink-0 cursor-pointer appearance-none rounded-full border border-ink/50 bg-transparent checked:border-[5px] checked:border-forest aria-invalid:border-red-700"
-        />
-        <span className="text-[13px] leading-[21px] text-ink">
-          {form.consent}
-          {errors?.consent ? (
-            <FieldError>{copy.form.consentRequired}</FieldError>
-          ) : null}
-        </span>
       </label>
 
       {state.status === "failed" ? (
         <p
           role="alert"
-          className="rounded-sm border border-red-800/30 bg-red-50 px-4 py-3 text-[12.5px] leading-[19px] text-red-900 sm:col-span-2"
+          className="rounded-sm border border-red-800/30 bg-red-50 px-4 py-3 text-[12.5px] leading-[19px] text-red-900"
         >
-          {state.reason === "rate" ? form.errors.rate : form.errors.server}
+          {state.reason === "rate" ? shared.errors.rate : shared.errors.server}
         </p>
       ) : null}
 
-      <div className="sm:col-span-2">
+      <div>
         <button
           type="submit"
           disabled={pending}
           className="rounded-full border border-ink/70 px-8 py-3 font-display text-[15px] text-ink transition-colors hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {pending ? form.submitting : copy.form.submit}
+          {pending ? shared.submitting : copy.submit}
         </button>
+        <p className="mt-5 max-w-[520px] text-[12px] leading-[19px] text-ink/65">
+          {privacy}
+        </p>
       </div>
     </form>
   );
 }
 
-function FieldError({ children }: { children: React.ReactNode }) {
+/**
+ * Chooses the partnership type a card linked with, as `?type=real-estate`.
+ *
+ * Its own component behind a Suspense boundary because reading the query
+ * string opts whatever sits above the nearest boundary out of prerendering;
+ * kept this small, only this renders client-side and the form itself stays in
+ * the HTML. Re-runs when a card on the same page is clicked, since that
+ * changes the query without a reload.
+ */
+function TypeFromQuery({ onType }: { onType: (type: PartnerType) => void }) {
+  const requested = useSearchParams().get("type");
+  useEffect(() => {
+    if (isPartnerType(requested)) onType(requested);
+  }, [requested, onType]);
+  return null;
+}
+
+function FieldError({ children }: { children: ReactNode }) {
   return (
     <span className="mt-1.5 block text-[11.5px] leading-[17px] text-red-800">
       {children}
@@ -195,14 +228,12 @@ function FieldError({ children }: { children: React.ReactNode }) {
 function Field({
   label,
   name,
-  type = "text",
   placeholder,
   autoComplete,
   error,
 }: {
   label: string;
   name: string;
-  type?: string;
   placeholder?: string;
   autoComplete?: string;
   error?: string;
@@ -211,7 +242,7 @@ function Field({
     <label>
       <span className={labelStyle}>{label} *</span>
       <input
-        type={type}
+        type="text"
         name={name}
         required
         autoComplete={autoComplete}

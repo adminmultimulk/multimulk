@@ -25,6 +25,13 @@ type Align = "left" | "center";
  * Arabic, and backwards for the Latin headlines that sit among them, since
  * development names and any copy still awaiting translation stay in English.
  * Letting the browser infer direction from the text keeps both in order.
+ *
+ * That holds across the whole title, not within it: on an Arabic or Urdu page
+ * the words of a Latin name are separate flex items laid out right to left,
+ * so "Multi Mulk" mid-sentence would read "Mulk Multi". Consecutive Latin
+ * words are therefore joined with a no-break space first — SlideUpText splits
+ * on plain spaces only — so each name animates as one item and the browser's
+ * bidi ordering applies inside it.
  */
 export function AnimatedTitle({
   children,
@@ -44,6 +51,9 @@ export function AnimatedTitle({
   const cursive = locale === "ar" || locale === "ur";
   const isBanner = variant === "banner";
   const byCharacter = isBanner && !cursive;
+  const text = cursive
+    ? children.replace(/(?<=[A-Za-z0-9.&'’-]) (?=[A-Za-z0-9])/g, "\u00A0")
+    : children;
 
   return (
     <SlideUpText
@@ -80,7 +90,7 @@ export function AnimatedTitle({
           : "pb-[0.18em] -mb-[0.18em]"
       }
     >
-      {children}
+      {text}
     </SlideUpText>
   );
 }

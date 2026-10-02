@@ -1651,66 +1651,313 @@ const fr: Dictionary = {
   /** /partner-with-us */
   partners: {
     meta: {
-      title: "Devenir partenaire",
+      title: "Devenir partenaire de Multi Mulk | Immobilier et citoyenneté en Turquie",
       description:
-        "Inscrivez-vous comme partenaire Multi Mulk pour représenter des biens en Türkiye et de l’immobilier de citoyenneté par investissement agréé par les gouvernements des Caraïbes, avec un accompagnement commercial dédié.",
+        "Devenez partenaire de Multi Mulk pour proposer à vos clients l’investissement immobilier en Turquie et la citoyenneté turque par investissement, avec une équipe partenariats dédiée.",
     },
-    heading: "Devenez partenaire",
-    body: "Élargissez votre portefeuille en représentant nos programmes en Türkiye, ou rejoignez notre réseau comme agent de confiance pour l’immobilier de citoyenneté par investissement agréé par les gouvernements des Caraïbes.",
-    introHeading: "Accédez à des opportunités mondiales exclusives",
-    introBody:
-      "Rejoignez un réseau d’agents immobiliers et de conseillers en investissement de premier plan qui représentent des projets sélectionnés en Türkiye et dans les Caraïbes. Multi Mulk s’est fait un nom grâce à des programmes rigoureusement choisis et des parcours de citoyenneté fiables, pour offrir à vos clients des opportunités qui se démarquent sur le marché mondial.",
-    register: "S’inscrire comme partenaire",
-    tracksLabel: "Nos formules de partenariat",
-    tracks: {
-      turkiye: {
-        title: "Agent Projets Türkiye",
-        option: "Je suis agent immobilier en Türkiye",
-        body: "Représentez nos projets à İstanbul et sur la côte, avec accès aux stocks à jour, aux supports marketing et à un accompagnement commercial dédié.",
+    whatsappMessage: "Bonjour Multi Mulk, je souhaite discuter d’un partenariat.",
+    hero: {
+      eyebrow: "Devenir partenaire de Multi Mulk",
+      heading: "Offrez davantage aux clients que vous accompagnez déjà",
+      subheading:
+        "Ajoutez l’immobilier en Türkiye, la citoyenneté turque par investissement et des solutions de résidence internationale à vos services, sans bâtir votre propre structure en Türkiye.",
+      body: "Vous apportez la relation client. Multi Mulk apporte l’accès au marché, des opportunités d’investissement sélectionnées, des informations à jour sur les projets et l’appui spécialisé nécessaire pour servir ce client avec professionnalisme. Les partenariats Multi Mulk se construisent dans la durée, pas autour d’une transaction ponctuelle.",
+      primary: "Devenir partenaire",
+      secondary: "Parler à notre équipe partenariats",
+      audience:
+        "Pour les agences immobilières, les consultants en migration d’investissement, les conseillers en gestion de patrimoine, les cabinets d’avocats et les réseaux d’affaires internationaux.",
+    },
+    why: {
+      heading: "Pourquoi devenir partenaire de Multi Mulk ?",
+      intro:
+        "Multi Mulk offre aux agents, consultants et conseillers un partenaire spécialisé dans l’investissement immobilier en Turquie et la citoyenneté turque par investissement. Les partenaires disposent de l’accès, des informations et de l’accompagnement nécessaires pour bien servir une clientèle internationale.",
+      items: [
+        {
+          title: "Accès à des opportunités d’investissement sélectionnées",
+          body: "Proposez à vos clients des biens en Türkiye qui ont déjà passé les [contrôles d’éligibilité, de valeur et de sortie](protection) de Multi Mulk, aux côtés de solutions d’investissement internationales adaptées.",
+        },
+        {
+          title: "Des informations projets à jour",
+          body: "Travaillez à partir de fiches projets, de prix, de disponibilités et de supports de vente actuels, et non de grilles tarifaires dépassées.",
+        },
+        {
+          title: "Expertise investissement et citoyenneté",
+          body: "Lorsque les objectifs d’un client incluent la citoyenneté turque, la résidence ou un projet d’investissement plus large, les [spécialistes immobiliers, conseillers en citoyenneté et juristes](team) de Multi Mulk vous épaulent.",
+        },
+        {
+          title: "Un accompagnement partenaires dédié",
+          body: "Les demandes et les mises en relation arrivent directement à l’équipe partenariats de Multi Mulk : vous n’êtes pas renvoyé d’un service à l’autre.",
+        },
+        {
+          title: "Un suivi tout au long du parcours client",
+          body: "Multi Mulk accompagne chaque mise en relation, de la première demande et de l’évaluation de l’opportunité jusqu’au choix du bien, à l’achat et aux étapes de conseil concernées.",
+        },
+        {
+          title: "Une présence internationale",
+          body: "Avec des [bureaux à İstanbul, Dubaï et Lahore](contact), Multi Mulk connaît à la fois le marché immobilier turc et les investisseurs internationaux qu’il attire.",
+        },
+      ],
+    },
+    who: {
+      heading: "Qui peut devenir partenaire de Multi Mulk ?",
+      intro:
+        "Multi Mulk s’associe à des cabinets et à des conseillers indépendants dont les clients s’intéressent à l’investissement immobilier en Turquie, à la citoyenneté turque ou à la résidence internationale. Les partenaires peuvent être établis en Türkiye ou à l’étranger.",
+      items: [
+        {
+          title: "Agences immobilières et agents",
+          body: "Élargissez votre portefeuille international en présentant à vos clients des opportunités d’investissement sélectionnées en Türkiye.",
+        },
+        {
+          title: "Consultants immobiliers internationaux",
+          body: "Ajoutez la Türkiye aux marchés que vous couvrez, avec des informations projets à jour et un accès direct à l’équipe partenariats de Multi Mulk.",
+        },
+        {
+          title: "Consultants en immigration et en citoyenneté",
+          body: "Complétez vos services d’immigration ou de mobilité par des parcours vers la citoyenneté turque adossés à l’immobilier.",
+        },
+        {
+          title: "Gestionnaires de patrimoine, family offices et conseillers financiers",
+          body: "Présentez des options immobilières et de mobilité internationale lorsqu’elles s’inscrivent dans la stratégie patrimoniale globale d’un client.",
+        },
+        {
+          title: "Cabinets d’avocats et prestataires de services aux entreprises",
+          body: "Collaborez lorsque vos clients ont besoin d’un accompagnement coordonné en immobilier, investissement, résidence ou citoyenneté en complément de vos propres services.",
+        },
+        {
+          title: "Consultants en relocation et en éducation",
+          body: "Donnez aux clients et aux familles en mobilité internationale accès à des solutions immobilières et de résidence adaptées en Türkiye.",
+        },
+        {
+          title: "Consultants d’affaires et réseaux internationaux",
+          body: "Mettez les clients et membres qui envisagent d’investir en Türkiye en relation avec un partenaire spécialisé sur place.",
+        },
+        {
+          title: "Apporteurs d’affaires et conseillers indépendants",
+          body: "Présentez des investisseurs qualifiés pendant que Multi Mulk gère le conseil et le processus de transaction.",
+        },
+      ],
+      note: "Les partenaires agissent dans le cadre de leurs propres agréments et obligations professionnelles. Un conseil juridique, financier ou en immigration réglementé ne doit être donné que par des professionnels dûment habilités.",
+    },
+    models: {
+      eyebrow: "Formules de partenariat",
+      heading: "Quatre façons de devenir partenaire de Multi Mulk",
+      intro:
+        "Multi Mulk propose quatre formules de partenariat : l’immobilier en Türkiye, l’apport d’affaires en citoyenneté turque et investissement, la citoyenneté et la résidence internationales, et les partenariats stratégiques ou institutionnels.",
+      bestForLabel: "Idéal pour :",
+      items: {
+        "real-estate": {
+          title: "Partenariat immobilier en Türkiye",
+          bestFor:
+            "Agences immobilières, agents, consultants immobiliers et conseillers internationaux.",
+          body: "Pour les partenaires dont les clients souhaitent :",
+          points: [
+            "[Acheter un bien en Turquie](realEstate) pour investir, s’installer ou disposer d’une résidence secondaire",
+            "Réaliser un [investissement immobilier à İstanbul, Bodrum ou Antalya](search)",
+            "Constituer un portefeuille d’investissement immobilier en Turquie",
+            "Étudier les [biens éligibles à la citoyenneté turque](citizenshipGuide)",
+          ],
+          after:
+            "Multi Mulk donne accès à des projets sélectionnés, aux disponibilités et prix à jour, aux fiches projets et aux informations d’investissement, et accompagne la transaction.",
+          link: "S’inscrire comme partenaire immobilier",
+        },
+        "citizenship-referral": {
+          title: "Partenariat d’apport d’affaires – citoyenneté turque et investissement",
+          bestFor:
+            "Consultants en immigration et en migration d’investissement, conseillers en citoyenneté et professionnels de la gestion de patrimoine.",
+          body: "Pour les conseillers et organisations dont les clients internationaux s’intéressent à la [citoyenneté turque par investissement](turkiye). Multi Mulk aide à coordonner les démarches immobilières et liées à la citoyenneté au sein de son réseau de conseil, du choix d’un bien éligible jusqu’à la demande de citoyenneté. Le partenaire apporteur est tenu informé à chaque étape.",
+          points: [],
+          after: "",
+          link: "Discuter d’un partenariat d’apport d’affaires",
+        },
+        "citizenship-residency": {
+          title: "Partenariat citoyenneté et résidence internationales",
+          bestFor:
+            "Des partenaires professionnels sélectionnés dont les clients regardent au-delà de la Türkiye.",
+          body: "Pour les partenaires dont les clients envisagent une citoyenneté ou des [options de résidence](goldenVisa) hors de Türkiye, notamment les [programmes de citoyenneté par investissement des Caraïbes](caribbean) éligibles proposés par Multi Mulk. Multi Mulk travaille avec des projets agréés par les gouvernements de la Grenade, de la Dominique et de Saint-Kitts-et-Nevis. L’adéquation d’un programme dépend de la situation de chaque client et des règles en vigueur au moment de la demande.",
+          points: [],
+          after: "",
+          link: "Se renseigner sur les partenariats citoyenneté et résidence",
+        },
+        strategic: {
+          title: "Partenariat stratégique et institutionnel",
+          bestFor:
+            "Promoteurs immobiliers, sociétés d’investissement, family offices, agences internationales, cabinets de services professionnels et réseaux d’entreprises.",
+          body: "Pour les organisations qui souhaitent une collaboration plus large et structurée avec Multi Mulk. Selon les cas, la coopération peut inclure :",
+          points: [
+            "Accords d’apport d’affaires et distribution stratégique",
+            "Coopération pour l’entrée sur un marché",
+            "Co-marketing et contenus pédagogiques co-signés",
+            "Webinaires, événements investisseurs et roadshows, comme le Türkiye Property Roadshow de Multi Mulk au Pakistan",
+            "Collaboration en matière d’études",
+          ],
+          after: "",
+          link: "Proposer un partenariat stratégique",
+        },
       },
-      caribbean: {
-        title: "Partenaire CBI Caraïbes",
-        option: "Je suis agent CBI pour les Caraïbes",
-        body: "Proposez à vos clients des opportunités CBI agréées par les gouvernements, adossées à des programmes établis dans les Caraïbes.",
+      note: "Les conditions commerciales dépendent de la formule de partenariat et sont convenues individuellement avec chaque partenaire avant toute mise en relation avec des clients.",
+    },
+    provides: {
+      eyebrow: "Ce que Multi Mulk apporte",
+      heading: "Conçu pour vous aider à mieux servir vos clients",
+      intro:
+        "Multi Mulk fournit à ses partenaires l’accès aux projets, l’inventaire et les prix à jour, des supports de vente, des informations d’investissement, la coordination citoyenneté et résidence et un appui pour les rendez-vous clients, le tout via une seule équipe partenariats.",
+      items: [
+        {
+          title: "Accès aux projets",
+          body: "Des biens d’investissement sélectionnés en Turquie pour les acheteurs internationaux, des résidences du centre d’İstanbul aux programmes des côtes égéenne et méditerranéenne.",
+        },
+        {
+          title: "Inventaire et prix à jour",
+          body: "Disponibilités actualisées, prix en vigueur et nouvelles des projets le cas échéant.",
+        },
+        {
+          title: "Supports de vente partenaires",
+          body: "Fiches projets, caractéristiques principales, présentations, brochures et visuels validés, lorsqu’ils sont disponibles.",
+        },
+        {
+          title: "Informations d’investissement",
+          body: "Des informations sur les biens, le marché et l’investissement, dont la grille Investment Score publiée par Multi Mulk, pour présenter clairement chaque opportunité.",
+        },
+        {
+          title: "Coordination citoyenneté et résidence",
+          body: "Un accompagnement coordonné pour les clients dont les objectifs incluent la citoyenneté turque, la résidence ou un autre programme de mobilité internationale.",
+        },
+        {
+          title: "Appui aux rendez-vous clients",
+          body: "Le cas échéant, une aide pour les consultations, les présentations de projets, les rendez-vous en ligne et les visites de biens.",
+        },
+      ],
+      strip: {
+        title: "Un seul interlocuteur. Une relation dans la durée.",
+        body: "Chaque partenaire travaille avec un interlocuteur central au sein de l’équipe partenariats de Multi Mulk pour la coordination, les demandes et les mises en relation. La relation est pensée pour durer bien au-delà d’une première recommandation.",
       },
     },
-    formHeading: "Manifestez votre intérêt",
-    formBody:
-      "Choisissez votre type de partenariat et remplissez le formulaire. Notre équipe examinera votre demande et vous contactera pour la suite.",
+    process: {
+      heading: "Comment fonctionne un partenariat avec Multi Mulk ?",
+      intro:
+        "Un partenariat avec Multi Mulk se déroule en quatre étapes, de votre première demande au travail commun sur chaque mise en relation.",
+      steps: [
+        {
+          title: "Manifestez votre intérêt",
+          body: "Remplissez le formulaire de partenariat et présentez à Multi Mulk votre structure, vos clients et les marchés que vous servez.",
+        },
+        {
+          title: "Échange sur le partenariat",
+          body: "L’équipe partenariats de Multi Mulk étudie votre demande et définit avec vous la structure de collaboration et les conditions commerciales les plus adaptées.",
+        },
+        {
+          title: "Présentez des opportunités",
+          body: "Une fois le partenariat en place, vous présentez les opportunités pertinentes aux clients concernés, avec les supports et le processus convenus.",
+        },
+        {
+          title: "Accompagnez ensemble le parcours client",
+          body: "Multi Mulk se coordonne avec vous et accompagne le client tout au long des démarches immobilières, d’investissement, de résidence ou de citoyenneté.",
+        },
+      ],
+      cta: "Manifester votre intérêt",
+    },
+    whyUs: {
+      heading: "Pourquoi Multi Mulk ?",
+      subheading: "Le conseil avant le catalogue.",
+      body: "Multi Mulk est un cabinet international de conseil en immobilier et en citoyenneté, avec des bureaux en Türkiye, aux Émirats arabes unis et au Pakistan. Son travail part de ce que l’investisseur veut accomplir, et il dit clairement quand un projet ou un programme ne convient pas. Pour un partenaire, cette franchise protège la relation client que vous avez construite.",
+      principles: [
+        {
+          lead: "Le conseil d’abord.",
+          body: "Les opportunités s’adaptent aux objectifs du client, et non l’inverse.",
+        },
+        {
+          lead: "Pensé pour les investisseurs internationaux.",
+          body: "L’immobilier en Turquie pour les étrangers est le cœur de métier de Multi Mulk : l’équipe connaît les questions des acheteurs étrangers, du titre de propriété aux durées de détention.",
+        },
+        {
+          lead: "Immobilier et citoyenneté ensemble.",
+          body: "Spécialistes immobiliers, conseillers en citoyenneté et juristes travaillent comme une seule équipe : l’achat et la demande de citoyenneté sont traités comme une seule décision.",
+        },
+        {
+          lead: "Une sélection transparente.",
+          body: "Multi Mulk publie sa méthode d’évaluation des biens, dont un audit de due diligence en 20 questions et un Investment Score pondéré.",
+        },
+        {
+          lead: "Une communication structurée.",
+          body: "Chaque dossier est piloté par l’équipe la plus proche du client : les partenaires savent qui gère chaque mise en relation.",
+        },
+        {
+          lead: "Des relations dans la durée.",
+          body: "Un dossier de citoyenneté prend des mois et un bien éligible se conserve des années : Multi Mulk pense ses relations clients et ses partenariats sur le long terme.",
+        },
+      ],
+      link: "Découvrir comment Multi Mulk évalue les biens",
+    },
     form: {
-      track: "Choisissez votre type de partenariat",
-      firstName: "Prénom",
-      firstNamePlaceholder: "Saisissez votre prénom",
-      lastName: "Nom",
-      lastNamePlaceholder: "Saisissez votre nom",
-      messagePlaceholder: "Saisissez votre message…",
-      consentRequired: "Veuillez confirmer que nous pouvons vous contacter.",
-      submit: "Envoyer le message",
-      sentHeading: "Merci pour votre inscription",
+      heading: "Étudions un partenariat avec Multi Mulk",
+      body: "Présentez-nous en quelques mots votre activité et les clients que vous accompagnez. Notre équipe partenariats étudiera votre demande et vous contactera pour définir la meilleure façon de travailler ensemble.",
+      name: "Votre nom et société",
+      namePlaceholder: "Votre nom complet et le nom de votre société",
+      contact: "E-mail professionnel / WhatsApp",
+      contactPlaceholder: "Comment notre équipe partenariats peut-elle vous joindre ?",
+      type: "Quel type de partenariat vous intéresse ?",
+      typePlaceholder: "Choisissez un type de partenariat",
+      types: {
+        "real-estate": "Partenariat immobilier en Türkiye",
+        "citizenship-referral": "Citoyenneté turque / apport d’affaires investissement",
+        "citizenship-residency": "Citoyenneté et résidence internationales",
+        developer: "Partenariat promoteur / projet",
+        strategic: "Partenariat stratégique / institutionnel",
+        referral: "Partenariat d’apport d’affaires",
+        "not-sure": "Je ne sais pas encore — j’aimerais en discuter",
+      },
+      markets: "Quels marchés ou quelles clientèles servez-vous actuellement ?",
+      marketsPlaceholder:
+        "Par exemple : Pakistan, Émirats, CCG, Europe, Asie, investisseurs fortunés, acquéreurs immobiliers, clients en relocation, etc.",
+      message: "Dites-nous brièvement comment vous souhaitez travailler avec Multi Mulk.",
+      messagePlaceholder:
+        "Parlez-nous de votre activité, de vos clients et du type de coopération que vous recherchez.",
+      submit: "Envoyer la demande de partenariat",
+      privacy:
+        "En envoyant ce formulaire, vous acceptez que Multi Mulk vous contacte au sujet de votre demande de partenariat. Pour savoir comment vos informations sont traitées, consultez la [politique de confidentialité](privacy).",
+      sentHeading: "Merci.",
       sentBody:
-        "Notre équipe partenariats examinera vos informations et vous contactera pour la suite.",
+        "Votre demande est bien parvenue à l’équipe partenariats de Multi Mulk, qui vous contactera pour convenir de la suite.",
+      errors: {
+        contact:
+          "Indiquez une adresse e-mail, ou un numéro WhatsApp avec son indicatif pays (ex. +33 6 12 34 56 78).",
+        type: "Veuillez choisir un type de partenariat.",
+      },
     },
-    generalHeading: "Renseignements généraux",
-    getInTouchHeading: "Nous contacter",
-    getInTouchBody: "Contactez notre équipe pour découvrir d’autres opportunités.",
-    expectHeading: "À quoi vous attendre",
-    includesLabel: "Cela comprend :",
-    expect: {
-      turkiye: {
-        title: "Partenariat immobilier en Türkiye",
-        body: "Devenez notre partenaire pour représenter nos programmes immobiliers en Türkiye et accédez à des outils de vente conçus pour soutenir réellement vos échanges avec vos clients.",
-        includes: [
-          "Fiches projet et caractéristiques principales",
-          "Prix et disponibilités à jour",
-          "Supports commerciaux et marketing validés",
-          "Contact direct avec notre équipe partenariats",
-        ],
-      },
-      caribbean: {
-        title: "Partenariat CBI Caraïbes",
-        body: "Chez Multi Mulk, nous aidons chacun à comprendre les opportunités offertes par les programmes de citoyenneté par investissement des Caraïbes, avec des articles et des ressources pour atteindre ses objectifs en devenant citoyen du pays qui lui correspond le mieux.",
-        includes: [],
-      },
+    cta: {
+      heading: "Soyez prêt quand vos clients vous parlent de la Türkiye",
+      body: "Que vous conseilliez des investisseurs internationaux, représentiez des acquéreurs ou travailliez dans la migration d’investissement, Multi Mulk est ouvert aux partenariats structurés qui créent de la valeur pour votre organisation et vos clients. Un court échange avec l’équipe partenariats suffit pour voir si nous sommes faits pour travailler ensemble.",
+      button: "Engager la conversation",
+    },
+    faq: {
+      heading: "Questions fréquentes sur les partenariats",
+      items: [
+        {
+          question: "Qui peut devenir partenaire de Multi Mulk ?",
+          answer:
+            "Multi Mulk s’associe à des cabinets et à des conseillers indépendants dont les clients s’intéressent à l’investissement immobilier en Turquie, à la citoyenneté turque par investissement ou à la résidence internationale : agences immobilières et agents, consultants en immigration et en citoyenneté, cabinets d’avocats, gestionnaires de patrimoine, family offices, sociétés de relocation, prestataires de services aux entreprises et apporteurs d’affaires. Chaque demande est étudiée individuellement afin de convenir de la formule de partenariat la plus adaptée.",
+        },
+        {
+          question: "Un agent immobilier établi hors de Türkiye peut-il devenir partenaire de Multi Mulk ?",
+          answer:
+            "Oui. Multi Mulk accueille volontiers des agents, mandataires et consultants immobiliers établis hors de Türkiye dont les clients souhaitent acheter un bien en Turquie. Les partenaires à l’étranger reçoivent les fiches projets, les prix et disponibilités à jour et des supports de vente validés, tandis que l’équipe d’İstanbul de Multi Mulk prend en charge les étapes locales de chaque achat. Multi Mulk se coordonne avec le partenaire apporteur tout au long du processus.",
+        },
+        {
+          question: "Puis-je recommander des clients intéressés par la citoyenneté turque par investissement ?",
+          answer:
+            "Oui. Les consultants en immigration, conseillers en citoyenneté et autres professionnels peuvent recommander des clients intéressés par la citoyenneté turque par investissement, y compris par l’acquisition d’un bien immobilier. Multi Mulk aide à coordonner les démarches immobilières et liées à la citoyenneté au sein de son réseau de conseil. L’éligibilité dépend de la situation de chaque client et des règles du programme en vigueur au moment de la demande : chaque dossier est donc étudié individuellement.",
+        },
+        {
+          question: "Quel accompagnement Multi Mulk offre-t-il à ses partenaires ?",
+          answer:
+            "Multi Mulk donne à ses partenaires accès à des projets immobiliers sélectionnés en Türkiye, aux disponibilités et prix à jour, aux fiches projets, à des supports de vente validés et à des informations d’investissement. Les partenaires bénéficient aussi d’une coordination pour les clients qui visent la citoyenneté ou la résidence turque, d’une aide pour les rendez-vous clients et les visites lorsque c’est utile, et d’un interlocuteur central au sein de l’équipe partenariats.",
+        },
+        {
+          question: "Comment démarrer un partenariat avec Multi Mulk ?",
+          answer:
+            "Remplissez le formulaire de partenariat sur cette page. Il vous demande votre nom et votre société, vos coordonnées, le type de partenariat qui vous intéresse, les marchés que vous servez et la manière dont vous souhaitez travailler ensemble. L’équipe partenariats de Multi Mulk étudie chaque demande et vous contacte pour définir la formule la plus adaptée. Les conditions commerciales dépendent de la formule et sont convenues individuellement.",
+        },
+      ],
     },
   },
 
