@@ -8,6 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BrochureProvider } from "@/app/components/brochure";
 import { EnquiryProvider } from "@/app/components/enquiry";
 import { WhatsAppButton } from "@/app/components/whatsapp-button";
+import { TawkChat } from "@/app/components/tawk-chat";
 import { ImageProtection } from "@/app/components/image-protection";
 import { analyticsEnabled, gaId } from "@/app/lib/analytics";
 import {
@@ -168,6 +169,8 @@ export default async function RootLayout({
             <BrochureProvider>
               {children}
               <WhatsAppButton />
+              {/* Live chat, in the corner opposite the WhatsApp pill. */}
+              <TawkChat dir={dirFor(lang)} />
               {/* Cancels the browser image menu on the site's photography.
                   Friction against a casual reverse-image search, nothing
                   stronger — see the note in the component. */}
