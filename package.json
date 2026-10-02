@@ -15,6 +15,7 @@
     "check": "npm run typecheck && npm run lint && npm run check:i18n && npm run check:figures && npm run check:tables && npm run check:review && npm run check:redirects",
     "check:redirects": "node scripts/check-redirects.mjs --check",
     "check:bitrix": "node --env-file=.env.local scripts/check-bitrix.mjs",
+    "blog:agent": "node --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/blog-agent.ts",
     "check:tables": "node scripts/check-tables.mjs",
     "db:generate": "prisma generate",
     "db:push": "node --env-file=.env.local node_modules/prisma/build/index.js db push",
@@ -22,6 +23,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
     "@auth/prisma-adapter": "^2.11.3",
     "@next/third-parties": "^16.3.4",
     "@prisma/client": "^6.19.3",
@@ -47,6 +49,7 @@
     "prisma": "^6.19.3",
     "schema-dts": "^2.0.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

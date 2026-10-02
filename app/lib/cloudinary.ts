@@ -105,3 +105,65 @@ export function signUpload(
     folder,
   };
 }
+
+/**
+ * Copies an image Cloudinary can fetch for itself into the article folder.
+ *
+ * The server-side counterpart of `signUpload`, for the one caller with no
+ * browser in the loop: the blog agent, which picks stock photography by URL.
+ * Cloudinary pulls the file from `source` directly, so the bytes never pass
+ * through this process either. Same signing scheme as above, with `public_id`
+ * among the signed parameters so a re-run of the same day lands on the same
+ * asset instead of a second copy.
+ */
+export async function uploadFromUrl(
+  source: string,
+  publicId: string,
+  kind: UploadKind = "article",
+): Promise<string> {
+  if (!cloudinaryConfigured) {
+    throw new CloudinaryError(
+      "Cloudinary is not configured — set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET.",
+    );
+  }
+
+  const params = {
+    folder: folders[kind],
+    overwrite: "true",
+    public_id: publicId,
+    timestamp: String(Math.floor(Date.now() / 1000)),
+  };
+  const payload = Object.entries(params)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
+
+  const form = new FormData();
+  for (const [key, value] of Object.entries(params)) form.set(key, value);
+  form.set("file", source);
+  form.set("api_key", apiKey!);
+  form.set("signature", createHash("sha1").update(payload + apiSecret).digest("hex"));
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+    { method: "POST", body: form },
+  );
+  const result = (await response.json()) as {
+    secure_url?: string;
+    error?: { message: string };
+  };
+  if (!response.ok || !result.secure_url) {
+    throw new CloudinaryError(
+      `Cloudinary refused ${source}: ${result.error?.message ?? response.status}`,
+    );
+  }
+  return result.secure_url;
+}
+
+/**
+ * A delivery URL with a transformation applied, e.g. `c_fill,ar_3:2,w_1200`.
+ * Cloudinary derives it on first request; nothing is stored twice.
+ */
+export function transformed(url: string, transformation: string): string {
+  return url.replace("/image/upload/", `/image/upload/${transformation}/`);
+}
