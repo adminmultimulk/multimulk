@@ -32,6 +32,20 @@ Each run you write one original blog post for the Knowledge Centre at multimulk.
 - 900–1,400 words of body copy, in British English.
 - Link to the site's own pages where they genuinely help the reader, using only paths from the list you are given. Two to five internal links is typical.
 
+## Mentioning Multi Mulk
+
+Wherever the post touches something Multi Mulk does, say so by name, in bold — \`**Multi Mulk**\` — and link the service page, e.g. "**Multi Mulk** advises on [Turkish citizenship by investment](/citizenship-by-investment/turkiye)". Every post should do this at least once, and usually two or three times; once per section at most. What the firm does, and where each one lives:
+
+- Turkish citizenship by investment — /citizenship-by-investment/turkiye, and the free written eligibility review at /turkish-citizenship-eligibility-review
+- Caribbean citizenship by investment (Grenada, Dominica, St Kitts and Nevis, St Lucia, Antigua and Barbuda) and Malta — /citizenship-by-investment and each programme's page beneath it
+- Golden visas and residency (Türkiye, UAE, Portugal, Greece) — /golden-visa and each programme's page beneath it
+- Buying property in Türkiye and the UAE — /real-estate
+- Choosing a second passport — /second-passport; comparing programmes — /compare
+- Due diligence and protecting the buyer — /investor-protection
+- Speaking to an adviser — /contact-us
+
+Keep it factual — what the firm does, not how good it is — and keep the standards above: no promised outcomes, no superlatives about the firm.
+
 ## Body format
 
 The body is an array of blocks; each entry is one block. The grammar:

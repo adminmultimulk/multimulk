@@ -173,6 +173,25 @@ type Submission = {
 
 const text = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
+const BRAND = "Multi Mulk";
+
+/**
+ * Bolds every mention of the firm the model left plain.
+ *
+ * The prompt asks for it, and this makes it true regardless. Only text outside
+ * an existing `**…**` run is touched — splitting on `**` leaves bold runs at
+ * the odd indices — so an already-bold mention, or one inside a bold phrase,
+ * is not wrapped twice. Figures are skipped: their alt text and caption are
+ * attributes, not prose.
+ */
+export function boldBrand(block: string): string {
+  if (block.startsWith("![")) return block;
+  return block
+    .split("**")
+    .map((part, index) => (index % 2 ? part : part.replaceAll(BRAND, `**${BRAND}**`)))
+    .join("**");
+}
+
 /**
  * Checks a submission and builds the draft, or lists what is wrong with it.
  *
@@ -218,7 +237,13 @@ async function review(
   if (!coverPhoto) errors.push(`cover.photo_id ${input.cover?.photo_id} is not a photo returned by search_images.`);
   const coverAlt = text(input.cover?.alt) || coverPhoto?.alt || title;
 
-  const body = Array.isArray(input.body) ? input.body.map((block) => String(block).trim()).filter(Boolean) : [];
+  const body = Array.isArray(input.body)
+    ? input.body.map((block) => boldBrand(String(block).trim())).filter(Boolean)
+    : [];
+  if (!body.some((block) => block.includes(`**${BRAND}**`)))
+    errors.push(
+      `The body never mentions ${BRAND}. Where the post touches one of the firm's services, name **${BRAND}** in bold and link that service page.`,
+    );
   let figures = 0;
   for (const block of body) {
     if (!block.startsWith("![")) continue;

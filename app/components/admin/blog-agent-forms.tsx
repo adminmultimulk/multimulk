@@ -78,6 +78,7 @@ export function BlogAgentSettingsForm({
           name="focus"
           rows={3}
           defaultValue={settings.focus ?? ""}
+          placeholder="Empty: the agent picks the day's topic itself"
           error={errors.focus}
           className="min-h-[80px]"
         />

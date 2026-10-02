@@ -138,7 +138,9 @@ export default async function BlogAgentPage() {
 
       <h2 className="mb-3 text-[15px] font-semibold text-ink">History</h2>
       {runs.length === 0 ? (
-        <Empty>No runs yet. The first one happens at the next scheduled time, or press “Write a post now”.</Empty>
+        <Empty>
+          No runs recorded yet. Runs are listed from the day this page went live; the first one appears after the next scheduled post, or press “Write a post now”.
+        </Empty>
       ) : (
         <div className="grid gap-3">
           {runs.map((run) => {
