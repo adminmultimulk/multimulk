@@ -96,6 +96,7 @@ const ar: Dictionary = {
     enquireNow: "استفسر الآن",
     loadMore: "عرض المزيد",
     startingFrom: "تبدأ من",
+    priceOnRequest: "السعر عند الطلب",
     any: "الكل",
     sortBy: "ترتيب حسب",
     resetAll: "إعادة تعيين الكل",
@@ -2095,7 +2096,7 @@ const ar: Dictionary = {
 
   listing: {
     specs: "لمحة سريعة",
-    about: "عن هذه الوحدة",
+    about: "عن المشروع",
     gallery: "معرض الصور",
     galleryViewAll: plural({
       one: "عرض الصورة",
@@ -2123,6 +2124,13 @@ const ar: Dictionary = {
     moreAt: "المزيد في {project}",
     ctaHeading: "اسألنا عن أي تفصيل يخص هذه الوحدة.",
     viewDevelopment: "عرض المشروع",
+    pricingHeading: "تواصلوا مع فريقنا لمعرفة الأسعار والباقات المتاحة",
+    pricingBody:
+      "للاطلاع على الأسعار الحالية والوحدات المتاحة وباقات الاستثمار، يُرجى التواصل مع فريقنا.",
+    pricingRequest: "اطلب التفاصيل",
+    pricingWhatsApp: "راسلنا عبر واتساب",
+    pricingWhatsAppMessage:
+      "مرحبًا Multi Mulk، أود معرفة الأسعار الحالية والباقات المتاحة في {project}.",
   },
 };
 

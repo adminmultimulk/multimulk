@@ -1,6 +1,7 @@
 import { Container } from "./container";
 import { PinnedMap, mapAvailable } from "./pinned-map";
 import { districtCentre } from "@/app/lib/districts";
+import { blunt, place as onPicture } from "@/app/lib/mercator";
 
 /**
  * Where a development sits, at the resolution of its district.
@@ -91,8 +92,11 @@ export function DistrictMap({
   //
   // The picture is preferred wherever it can answer at all: it frames the whole
   // city identically on every listing and cannot be zoomed into the building,
-  // which an embed can. `PinnedMap` returns null for a point outside İstanbul,
-  // so a Caribbean listing falls through to the embed on its own.
+  // which an embed can. A point the picture does not cover — a Caribbean
+  // listing, Silivri, Şile — is checked for here rather than left to
+  // `PinnedMap`: its null comes back inside an element, which is never null
+  // itself, so the embed below would never be reached and the section would
+  // be a heading over nothing.
   // What the lister chose in the dashboard wins, then whatever `location`
   // names, then the listing's own coordinates.
   const centre =
@@ -101,7 +105,7 @@ export function DistrictMap({
     (typeof lat === "number" && typeof lng === "number" ? { lat, lng } : null);
 
   const pinned =
-    mapAvailable && centre ? (
+    mapAvailable && centre && onPicture(blunt(centre.lat), blunt(centre.lng)) ? (
       <PinnedMap
         lat={centre.lat}
         lng={centre.lng}

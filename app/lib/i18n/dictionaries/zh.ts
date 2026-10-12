@@ -72,6 +72,7 @@ const zh = {
     enquireNow: "立即咨询",
     loadMore: "加载更多",
     startingFrom: "起价",
+    priceOnRequest: "价格请咨询",
     any: "不限",
     sortBy: "排序方式",
     resetAll: "重置全部",
@@ -1006,7 +1007,7 @@ const zh = {
 
   listing: {
     specs: "概览",
-    about: "关于这套住宅",
+    about: "关于项目",
     gallery: "图库",
     floorPlans: "户型图",
     terms: "交易条件",
@@ -1023,6 +1024,13 @@ const zh = {
     moreAt: "{project} 的更多房源",
     ctaHeading: "关于这套住宅，欢迎向我们咨询。",
     viewDevelopment: "查看该项目",
+    pricingHeading: "联系我们的团队，了解价格及可选方案",
+    pricingBody:
+      "如需了解最新价格、在售房源及投资方案，请联系我们的团队。",
+    pricingRequest: "索取详情",
+    pricingWhatsApp: "WhatsApp 联系我们",
+    pricingWhatsAppMessage:
+      "您好 Multi Mulk，我想了解 {project} 的最新价格及可选方案。",
   },
 } satisfies PartialDictionary;
 

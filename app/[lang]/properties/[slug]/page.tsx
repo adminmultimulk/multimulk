@@ -26,6 +26,7 @@ import {
 } from "@/app/lib/legacy-developments";
 import { LegacyDevelopmentPage } from "@/app/components/legacy-development";
 import { ListingPage } from "@/app/components/listing-page";
+import { PricingNotice } from "@/app/components/pricing-notice";
 import { PropertyEnquire } from "@/app/components/property-enquire";
 import { PropertyGallery } from "@/app/components/property-gallery";
 import { PropertyStory } from "@/app/components/property-story";
@@ -207,6 +208,12 @@ export default async function PropertyPage({
   // development, so the first that names one speaks for all of them.
   const district =
     residences.find((unit) => unit.mapDistrict)?.mapDistrict ?? null;
+  // A development is in one country, and the country decides what the
+  // enquiry is actually about: a Caribbean scheme is bought for the passport,
+  // an İstanbul one as property.
+  const enquiryType = project.country.includes("Caribbean")
+    ? ("caribbeanCbi" as const)
+    : ("turkiyeProperty" as const);
   const others = (await developments()).filter(
     (other) => other.slug !== project.slug,
   );
@@ -419,6 +426,21 @@ export default async function PropertyPage({
           </Container>
         </section>
 
+        {/* In place of a price — a development's residences no longer
+            carry one. The overview above ends in its own padding, so this
+            only needs room below. */}
+        <PricingNotice
+          project={project.name}
+          enquiry={{
+            eyebrow: project.name,
+            subject: interpolate(t.property.enquireSubject, {
+              project: project.name,
+            }),
+            enquiryType,
+          }}
+          className="bg-white pb-16 lg:pb-24"
+        />
+
         {/* Amenities */}
         {project.amenities.items.length ? (
         <section className="bg-mist py-16 lg:py-24">
@@ -472,14 +494,7 @@ export default async function PropertyPage({
           subject={interpolate(t.property.enquireSubject, {
             project: project.name,
           })}
-          // A development is in one country, and the country decides what the
-          // enquiry is actually about: a Caribbean scheme is bought for the
-          // passport, an İstanbul one as property.
-          enquiryType={
-            project.country.includes("Caribbean")
-              ? "caribbeanCbi"
-              : "turkiyeProperty"
-          }
+          enquiryType={enquiryType}
         />
 
         {/* Residences */}
@@ -496,7 +511,7 @@ export default async function PropertyPage({
             {residences.length ? (
               <div className="mt-14 grid gap-x-[43px] gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
                 {residences.map((unit) => (
-                  <UnitCard key={unit.slug} unit={unit} currency="USD" />
+                  <UnitCard key={unit.slug} unit={unit} />
                 ))}
               </div>
             ) : (

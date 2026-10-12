@@ -97,6 +97,7 @@ const en = {
     enquireNow: "Enquire Now",
     loadMore: "Load More",
     startingFrom: "Starting From",
+    priceOnRequest: "Price on request",
     any: "Any",
     sortBy: "Sort by",
     resetAll: "Reset All",
@@ -2101,7 +2102,7 @@ const en = {
 
   listing: {
     specs: "At a Glance",
-    about: "About This Residence",
+    about: "About the Development",
     gallery: "Gallery",
     galleryViewAll: plural({
       one: "View the photo",
@@ -2126,6 +2127,14 @@ const en = {
     moreAt: "More at {project}",
     ctaHeading: "Ask us anything about this residence.",
     viewDevelopment: "View the Development",
+    /** In place of a price — see `PricingNotice`. */
+    pricingHeading: "Contact Our Team for Pricing & Available Packages",
+    pricingBody:
+      "For current pricing, available units, and investment packages, please contact our team.",
+    pricingRequest: "Request Details",
+    pricingWhatsApp: "WhatsApp Us",
+    pricingWhatsAppMessage:
+      "Hello Multi Mulk, I'd like current pricing and available packages for {project}.",
   },
 } as const;
 

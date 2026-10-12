@@ -316,10 +316,15 @@ export function apartmentComplex(
  * One listed residence.
  *
  * `Apartment` rather than `ApartmentComplex`: this is a unit, and the offer
- * attached to it is a price somebody can act on. The development it sits in,
+ * attached to it is one somebody can act on. The development it sits in,
  * where the site knows it as one, has its own node on its own page — they are
  * two things, and conflating them would tell a search engine there is a
- * building for sale at a one-bedroom price.
+ * building for sale as if it were one flat.
+ *
+ * The offer carries no price. The page does not print one — the team quotes
+ * the current figure, see `PricingNotice` — and a price in the structured
+ * data would put the stale number back in front of a reader, in a search
+ * result, where it cannot be corrected.
  */
 export function residence(
   locale: Locale,
@@ -328,7 +333,6 @@ export function residence(
     project: string;
     location: string;
     country: string;
-    prices: { USD: number };
     image: string;
     description: string | null;
     amenities: readonly string[];
@@ -358,8 +362,6 @@ export function residence(
     })),
     offers: {
       "@type": "Offer",
-      price: listing.prices.USD,
-      priceCurrency: "USD",
       availability: listing.soldOut
         ? "https://schema.org/SoldOut"
         : "https://schema.org/InStock",

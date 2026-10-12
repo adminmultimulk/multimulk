@@ -70,6 +70,7 @@ const tr = {
     enquireNow: "Hemen Başvurun",
     loadMore: "Daha Fazla Yükle",
     startingFrom: "Başlangıç Fiyatı",
+    priceOnRequest: "Fiyat için iletişime geçin",
     any: "Farketmez",
     sortBy: "Sırala",
     resetAll: "Tümünü Sıfırla",
@@ -1006,7 +1007,7 @@ const tr = {
 
   listing: {
     specs: "Bir Bakışta",
-    about: "Bu Rezidans Hakkında",
+    about: "Proje Hakkında",
     gallery: "Galeri",
     floorPlans: "Kat Planları",
     terms: "Koşullar",
@@ -1023,6 +1024,13 @@ const tr = {
     moreAt: "{project} projesinde daha fazlası",
     ctaHeading: "Bu rezidansla ilgili her şeyi bize sorun.",
     viewDevelopment: "Projeyi Görüntüleyin",
+    pricingHeading: "Fiyatlar ve Mevcut Paketler için Ekibimizle İletişime Geçin",
+    pricingBody:
+      "Güncel fiyatlar, mevcut daireler ve yatırım paketleri için lütfen ekibimizle iletişime geçin.",
+    pricingRequest: "Detayları İsteyin",
+    pricingWhatsApp: "WhatsApp’tan Yazın",
+    pricingWhatsAppMessage:
+      "Merhaba Multi Mulk, {project} için güncel fiyatları ve mevcut paketleri öğrenmek istiyorum.",
   },
 } satisfies PartialDictionary;
 

@@ -90,6 +90,7 @@ const fr: Dictionary = {
     enquireNow: "Nous consulter",
     loadMore: "Voir plus",
     startingFrom: "À partir de",
+    priceOnRequest: "Prix sur demande",
     any: "Indifférent",
     sortBy: "Trier par",
     resetAll: "Tout réinitialiser",
@@ -2062,7 +2063,7 @@ const fr: Dictionary = {
 
   listing: {
     specs: "En bref",
-    about: "À propos de cette résidence",
+    about: "À propos du programme",
     gallery: "Galerie",
     galleryViewAll: plural({
       one: "Voir la photo",
@@ -2087,6 +2088,13 @@ const fr: Dictionary = {
     moreAt: "Plus à {project}",
     ctaHeading: "Posez-nous toutes vos questions sur cette résidence.",
     viewDevelopment: "Voir le programme",
+    pricingHeading: "Contactez notre équipe pour les prix et les offres disponibles",
+    pricingBody:
+      "Pour connaître les prix actuels, les unités disponibles et les offres d’investissement, veuillez contacter notre équipe.",
+    pricingRequest: "Demander les détails",
+    pricingWhatsApp: "Écrivez-nous sur WhatsApp",
+    pricingWhatsAppMessage:
+      "Bonjour Multi Mulk, je souhaite connaître les prix actuels et les offres disponibles pour {project}.",
   },
 };
 

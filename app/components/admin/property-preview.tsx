@@ -48,11 +48,10 @@ import type { PropertyDraft } from "./property-form";
 const SPEC_ICONS = [Building, Bath, Bed, Area, Stairs, ViewIcon];
 
 /**
- * A price as the page will print it — or nothing, where the Server Action
- * would reject what is in the box. The parser is the action's own, so the
- * preview cannot show a price that will not save, or read "450.000" as four
- * hundred and fifty while the server reads it as four hundred and fifty
- * thousand.
+ * A price as the server will read it — or nothing, where the Server Action
+ * would reject what is in the box. The page no longer prints a price; this
+ * only decides whether the form has been started. The parser is the action's
+ * own, so "450.000" counts here exactly as it counts there.
  */
 function price(value: string): string | null {
   const parsed = money(value);
@@ -199,7 +198,6 @@ export function PropertyPreview({ property }: { property: PropertyDraft }) {
         <CardPreview
           property={property}
           title={title}
-          usd={usd}
           cbi={cbi}
           specs={specs}
         />
@@ -208,7 +206,6 @@ export function PropertyPreview({ property }: { property: PropertyDraft }) {
           property={property}
           title={title}
           place={place}
-          usd={usd}
           cbi={cbi}
           specs={specs}
           highlights={highlights}
@@ -231,13 +228,11 @@ type Spec = { Icon: (props: { className?: string }) => React.ReactElement; value
 function CardPreview({
   property,
   title,
-  usd,
   cbi,
   specs,
 }: {
   property: PropertyDraft;
   title: string;
-  usd: string | null;
   cbi: boolean;
   specs: Spec[];
 }) {
@@ -276,12 +271,9 @@ function CardPreview({
         <h3 className="font-display text-[17px] leading-[23px] text-ink">
           {title || <span className="text-ink/35">Untitled listing</span>}
         </h3>
-        <div className="shrink-0 text-end">
-          <p className="text-[10px] text-ink/60">Starting From</p>
-          <p className="num mt-0.5 whitespace-nowrap text-[14px] text-gold">
-            <span className="text-ink/70">USD</span> {usd ?? "—"}
-          </p>
-        </div>
+        <p className="mt-1 shrink-0 whitespace-nowrap text-end text-[10.5px] text-gold">
+          Price on request
+        </p>
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5">
@@ -312,7 +304,6 @@ function PagePreview({
   property,
   title,
   place,
-  usd,
   cbi,
   specs,
   highlights,
@@ -322,7 +313,6 @@ function PagePreview({
   property: PropertyDraft;
   title: string;
   place: string;
-  usd: string | null;
   cbi: boolean;
   specs: Spec[];
   highlights: { title: string; text: string }[];
@@ -381,11 +371,8 @@ function PagePreview({
             {title || <span className="text-white/45">Untitled listing</span>}
           </h2>
 
-          <p className="mt-2 text-[10px] uppercase tracking-[0.1em] text-cream/70">
-            Starting From{" "}
-            <span className="num text-[14px] normal-case tracking-normal text-gold-light">
-              USD {usd ?? "—"}
-            </span>
+          <p className="mt-2 text-[10px] uppercase tracking-[0.1em] text-gold-light">
+            Price on request
           </p>
 
           <div className="mt-3 flex flex-wrap gap-2">
@@ -427,12 +414,33 @@ function PagePreview({
         )}
       </section>
 
+      {/* The pricing notice the page carries where the price used to be. */}
+      <section className="bg-white px-4 pt-5">
+        <div className="flex flex-col items-center border border-gold/40 bg-mist px-3 py-5 text-center">
+          <h3 className="font-display text-[15px] leading-[1.28] text-ink">
+            Contact Our Team for Pricing &amp; Available Packages
+          </h3>
+          <p className="mt-2 text-[11px] leading-[17px] text-ink/80">
+            For current pricing, available units, and investment packages,
+            please contact our team.
+          </p>
+          <div className="mt-3 flex flex-wrap justify-center gap-2">
+            <span className="rounded-full bg-forest px-4 py-1.5 text-[11px] text-cream">
+              Request Details
+            </span>
+            <span className="rounded-full border border-forest/30 px-4 py-1.5 text-[11px] text-forest">
+              WhatsApp Us
+            </span>
+          </div>
+        </div>
+      </section>
+
       {blocks.length || highlights.length ? (
         <section className="grid gap-5 bg-white px-4 py-5">
           {blocks.length ? (
             <div>
               <h3 className="font-display text-[17px] leading-[1.28] text-ink">
-                About This Residence
+                About the Development
               </h3>
               {/* The published renderer, so bold, a list and a link look here
                   exactly as they will there. */}

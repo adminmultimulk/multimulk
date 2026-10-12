@@ -239,7 +239,7 @@ export function PropertySearch({
         {results.length ? (
           <div className="grid gap-x-[43px] gap-y-14 sm:grid-cols-2">
             {results.map((unit) => (
-              <UnitCard key={unit.slug} unit={unit} currency={currency} />
+              <UnitCard key={unit.slug} unit={unit} />
             ))}
           </div>
         ) : (

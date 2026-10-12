@@ -112,15 +112,19 @@ function BlockView({ block }: { block: Block }) {
     case "figure":
       return (
         <figure className="my-[7.2px]">
-          <div className="relative aspect-[16/9] w-full overflow-hidden bg-ink/5">
-            <Image
-              src={block.src}
-              alt={block.alt}
-              fill
-              sizes="(max-width: 1024px) 100vw, 843px"
-              className="object-cover"
-            />
-          </div>
+          {/* At its own proportions, not cut to a frame. An image placed
+              between paragraphs is a plan, a chart or a portrait as often as
+              a landscape, and a 16:9 crop took the top and bottom off all of
+              them. The width and height are only a placeholder ratio until
+              the file loads; `h-auto` lets the image's own take over. */}
+          <Image
+            src={block.src}
+            alt={block.alt}
+            width={1600}
+            height={900}
+            sizes="(max-width: 1024px) 100vw, 843px"
+            className="h-auto w-full bg-ink/5"
+          />
           {block.caption ? (
             <figcaption className="mt-[10.8px] text-[12.5px] leading-[18px] text-ink/55">
               {block.caption}

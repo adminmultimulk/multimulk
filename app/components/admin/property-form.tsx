@@ -1436,7 +1436,7 @@ const PropertyFields = memo(function PropertyFields({
       >
         <Card
           title="Price"
-          note="Whole numbers. 450000, 450,000 and 450.000 are all read the same."
+          note="Not shown on the site — visitors see “Contact our team for pricing” instead. Kept for the search page's budget filter, the order of residences, and the citizenship tick. Whole numbers; 450000, 450,000 and 450.000 are all read the same."
         >
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="USD" name="priceUSD" error={errors.priceUSD} required>

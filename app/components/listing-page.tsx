@@ -10,6 +10,7 @@ import { Link } from "./link";
 import { DistrictMap } from "./district-map";
 import { ListingImage } from "./listing-image";
 import { PropertyEnquire } from "./property-enquire";
+import { PricingNotice } from "./pricing-notice";
 import { PropertyGallery } from "./property-gallery";
 import { PropertyStory } from "./property-story";
 import { SiteFooter } from "./site-footer";
@@ -41,7 +42,7 @@ import { plainText, toBlocks } from "@/app/lib/rich-text";
  * this page is built the other way round: every section below is omitted
  * rather than empty when the field behind it was left blank. A lister who
  * fills in nothing but the required fields still gets a page that reads as
- * finished — specs, price, and the two things a reader came to do.
+ * finished — specs, the pricing notice, and the two things a reader came to do.
  *
  * `/properties/<slug>`, the same namespace the developments use. A unit and
  * the scheme it sits in are the same kind of thing to a buyer, and two URL
@@ -192,11 +193,9 @@ export async function ListingPage({ listing }: { listing: Listing }) {
               <AnimatedTitle>{title}</AnimatedTitle>
             </h1>
 
-            <p className="mt-4 text-[13px] uppercase tracking-[0.1em] text-cream/70">
-              {t.common.startingFrom}{" "}
-              <span className="num text-[19px] normal-case tracking-normal text-gold-light">
-                USD {formatNumber(locale, listing.prices.USD)}
-              </span>
+            {/* No figure: see `PricingNotice`, below the specs. */}
+            <p className="mt-4 text-[13px] uppercase tracking-[0.1em] text-gold-light">
+              {t.common.priceOnRequest}
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -244,6 +243,18 @@ export async function ListingPage({ listing }: { listing: Listing }) {
             </dl>
           </Container>
         </section>
+
+        {/* Where the price was. Flush with the section under it when that
+            section is white too, so the two read as one band. */}
+        <PricingNotice
+          project={listing.project}
+          enquiry={enquiry}
+          className={
+            listing.description || listing.highlights.length
+              ? "bg-white pt-16 lg:pt-20"
+              : "bg-white py-16 lg:py-20"
+          }
+        />
 
         {listing.description || listing.highlights.length ? (
           <section className="bg-white py-16 lg:py-24">
@@ -352,15 +363,13 @@ export async function ListingPage({ listing }: { listing: Listing }) {
           t={t}
           first={
             // The section drawn last above, and the colour it was drawn on.
+            // Without amenities or a gallery that is a white one — the floor
+            // plans, the description, or at the least the pricing notice.
             listing.amenities.length || listing.gallery.length
               ? listing.amenities.length || !listing.floorPlans.length
                 ? "white"
                 : "mist"
-              : listing.floorPlans.length ||
-                  listing.description ||
-                  listing.highlights.length
-                ? "mist"
-                : "white"
+              : "mist"
           }
         />
 
@@ -446,7 +455,7 @@ export async function ListingPage({ listing }: { listing: Listing }) {
               />
               <div className="mt-14 grid gap-x-[43px] gap-y-14 sm:grid-cols-2 xl:grid-cols-3">
                 {siblings.map((unit) => (
-                  <UnitCard key={unit.slug} unit={unit} currency="USD" />
+                  <UnitCard key={unit.slug} unit={unit} />
                 ))}
               </div>
             </Container>

@@ -92,6 +92,7 @@ const ur: Dictionary = {
     enquireNow: "ابھی رابطہ کریں",
     loadMore: "مزید دکھائیں",
     startingFrom: "قیمت شروع",
+    priceOnRequest: "قیمت درخواست پر",
     any: "کوئی بھی",
     sortBy: "ترتیب دیں",
     resetAll: "سب ری سیٹ کریں",
@@ -2057,7 +2058,7 @@ const ur: Dictionary = {
 
   listing: {
     specs: "ایک نظر میں",
-    about: "اس رہائش گاہ کے بارے میں",
+    about: "منصوبے کے بارے میں",
     gallery: "تصویری گیلری",
     galleryViewAll: plural({
       one: "تصویر دیکھیں",
@@ -2082,6 +2083,13 @@ const ur: Dictionary = {
     moreAt: "{project} میں مزید",
     ctaHeading: "اس رہائش گاہ کے بارے میں ہم سے کچھ بھی پوچھیے۔",
     viewDevelopment: "منصوبہ دیکھیں",
+    pricingHeading: "قیمتوں اور دستیاب پیکجز کے لیے ہماری ٹیم سے رابطہ کریں",
+    pricingBody:
+      "موجودہ قیمتوں، دستیاب یونٹس اور سرمایہ کاری پیکجز کے لیے براہِ کرم ہماری ٹیم سے رابطہ کریں۔",
+    pricingRequest: "تفصیلات طلب کریں",
+    pricingWhatsApp: "واٹس ایپ پر رابطہ کریں",
+    pricingWhatsAppMessage:
+      "ہیلو Multi Mulk، میں {project} کی موجودہ قیمتیں اور دستیاب پیکجز جاننا چاہتا ہوں۔",
   },
 };
 

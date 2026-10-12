@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { watermarked } from "@/app/lib/watermark";
-import type { Currency, Unit } from "@/app/lib/properties";
+import type { Unit } from "@/app/lib/properties";
 import { slugify } from "@/app/lib/admin/slug";
 import { useI18n } from "@/app/lib/i18n/context";
 import { interpolate } from "@/app/lib/i18n/format";
@@ -14,16 +14,9 @@ import { Area, Bath, Bed, Building, MapPin, Stairs, ViewIcon } from "./icons";
 
 const SPEC_ICONS = [Building, Bath, Bed, Area, Stairs, ViewIcon];
 
-export function UnitCard({
-  unit,
-  currency,
-}: {
-  unit: Unit;
-  currency: Currency;
-}) {
-  const { t, locale, num } = useI18n();
+export function UnitCard({ unit }: { unit: Unit }) {
+  const { t, locale } = useI18n();
   const openEnquiry = useEnquiry();
-  const price = unit.prices[currency];
   const title = unitTitle(locale, t, unit);
   // A listing from the dashboard has a page of its own; anything else is shown
   // on its development's page, which answers at the development's name slugged
@@ -82,12 +75,10 @@ export function UnitCard({
             <bdi>{title}</bdi>
           )}
         </h3>
-        <div className="shrink-0 text-end">
-          <p className="text-[11px] text-ink/60">{t.common.startingFrom}</p>
-          <p className="num mt-1 whitespace-nowrap text-[17px] text-gold">
-            <span className="text-ink/70">{currency}</span> {num(price)}
-          </p>
-        </div>
+        {/* No figure — the team quotes the current one; see `PricingNotice`. */}
+        <p className="mt-1.5 shrink-0 whitespace-nowrap text-end text-[12px] text-gold">
+          {t.common.priceOnRequest}
+        </p>
       </div>
 
       <dl className="mb-6 mt-5 grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3">

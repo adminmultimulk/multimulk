@@ -32,7 +32,7 @@ export type Box = {
  * city. Wide enough to hold the districts Multi Mulk actually lists in —
  * Beylikdüzü and Büyükçekmece in the west, Kartal, Pendik and Tuzla in the
  * east, Sarıyer at the top of the Bosphorus. Silivri and Şile fall outside it
- * and fall back to the embed; see `app/lib/districts.ts`.
+ * and fall back to the embed; see `app/components/district-map.tsx`.
  */
 export const ISTANBUL: Box = {
   west: 28.4,

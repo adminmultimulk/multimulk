@@ -94,6 +94,7 @@ const ru: Dictionary = {
     enquireNow: "Оставить заявку",
     loadMore: "Показать ещё",
     startingFrom: "Цена от",
+    priceOnRequest: "Цена по запросу",
     any: "Любой",
     sortBy: "Сортировка",
     resetAll: "Сбросить всё",
@@ -2080,7 +2081,7 @@ const ru: Dictionary = {
 
   listing: {
     specs: "Кратко",
-    about: "Об этой резиденции",
+    about: "О проекте",
     gallery: "Галерея",
     galleryViewAll: plural({
       one: "Смотреть фото",
@@ -2107,6 +2108,13 @@ const ru: Dictionary = {
     moreAt: "Ещё в проекте {project}",
     ctaHeading: "Спросите нас о чём угодно по этой резиденции.",
     viewDevelopment: "Перейти к проекту",
+    pricingHeading: "Свяжитесь с нашей командой, чтобы узнать цены и доступные пакеты",
+    pricingBody:
+      "Чтобы узнать актуальные цены, доступные квартиры и инвестиционные пакеты, свяжитесь с нашей командой.",
+    pricingRequest: "Запросить подробности",
+    pricingWhatsApp: "Написать в WhatsApp",
+    pricingWhatsAppMessage:
+      "Здравствуйте, Multi Mulk! Хочу узнать актуальные цены и доступные пакеты в {project}.",
   },
 };
 

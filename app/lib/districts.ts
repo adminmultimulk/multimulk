@@ -55,17 +55,19 @@ const DISTRICTS: Record<string, Point> = {
   pendik: { lat: 40.876, lng: 29.234 },
   sancaktepe: { lat: 41.001, lng: 29.231 },
   sariyer: { lat: 41.167, lng: 29.057 },
+  silivri: { lat: 41.074, lng: 28.247 },
   sultanbeyli: { lat: 40.964, lng: 29.267 },
   sultangazi: { lat: 41.106, lng: 28.867 },
+  sile: { lat: 41.176, lng: 29.613 },
   sisli: { lat: 41.06, lng: 28.988 },
   tuzla: { lat: 40.816, lng: 29.303 },
   umraniye: { lat: 41.016, lng: 29.121 },
   uskudar: { lat: 41.023, lng: 29.015 },
   zeytinburnu: { lat: 40.994, lng: 28.909 },
-  // Silivri (28.25E) and Şile (29.61E) are real districts that fall outside
-  // the rectangle the picture covers. They are deliberately absent: an unknown
-  // name falls back to the interactive embed, which is the right answer for a
-  // place the picture cannot show.
+  // Silivri (28.25E) and Şile (29.61E) fall outside the rectangle the picture
+  // covers. They are listed all the same — a lister with a scheme there has to
+  // be able to pick it — and `DistrictMap` sees that the centre does not place
+  // on the picture and shows the interactive embed instead.
 };
 
 /**
@@ -145,8 +147,10 @@ export const DISTRICT_NAMES = [
   "Pendik",
   "Sancaktepe",
   "Sarıyer",
+  "Silivri",
   "Sultanbeyli",
   "Sultangazi",
+  "Şile",
   "Şişli",
   "Tuzla",
   "Ümraniye",
