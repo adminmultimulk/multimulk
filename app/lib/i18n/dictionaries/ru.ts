@@ -750,7 +750,7 @@ const ru: Dictionary = {
     addresses: {
       UAE: "Grosvenor Business Tower, офис 1909, Аль-Танья Ферст, Барша Хайтс, Дубай",
       "Türkiye": "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J, этаж 5, офис 48-49, Бейкент / Стамбул",
-      Pakistan: "13 Sher Shah Block, Гарден Таун, Лахор, Пакистан",
+      Pakistan: "192-B, 3-й этаж, Broadway Commercial, DHA Phase VIII, Лахор, Пакистан",
     },
     copyright: "© 2026 Multi Mulk. Все права защищены.",
     offices: { UAE: "ОАЭ", Türkiye: "Türkiye", Pakistan: "Пакистан" },

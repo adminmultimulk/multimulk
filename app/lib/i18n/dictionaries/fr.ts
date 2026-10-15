@@ -747,7 +747,7 @@ const fr: Dictionary = {
     addresses: {
       UAE: "Grosvenor Business Tower, Bureau 1909, Al Thanyah First, Barsha Heights, Dubaï",
       "Türkiye": "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J, Kat:5, Bureau 48-49, Beykent / Istanbul",
-      Pakistan: "13 Sher Shah Block, Garden Town, Lahore, Pakistan",
+      Pakistan: "192-B, 3rd Floor, Broadway Commercial, DHA Phase VIII, Lahore, Pakistan",
     },
     copyright: "© 2026 Multi Mulk. Tous droits réservés.",
     offices: { UAE: "Émirats", Türkiye: "Türkiye", Pakistan: "Pakistan" },
