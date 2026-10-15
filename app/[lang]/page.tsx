@@ -34,9 +34,11 @@ export default async function Home() {
   // The Türkiye section pages through the developments published there. Same
   // reasoning as the articles above: what the portfolio holds is known at
   // request time, and a list written into the source freezes on the day it
-  // was typed.
+  // was typed. Only the four newest: each one adds a screen of pinned scroll,
+  // and the full list lives on the search page.
   const turkiye: PortfolioItem[] = (await developments())
     .filter((development) => development.country.includes("Türkiye"))
+    .slice(0, 4)
     .map((development) => ({
       key: development.slug,
       name: development.name,
