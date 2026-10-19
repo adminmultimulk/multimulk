@@ -203,6 +203,11 @@ const fa = {
       privacy: "سیاست حریم خصوصی",
     },
     contactTitle: "با ما در تماس باشید",
+    reviewsTitle: "نظر بگذارید",
+    reviews: {
+      trustpilot: "Trustpilot",
+      google: "Google",
+    },
     copyright: "© ۲۰۲۶ Multi Mulk. تمامی حقوق محفوظ است.",
     offices: { UAE: "امارات", Türkiye: "ترکیه", Pakistan: "پاکستان" },
   },
@@ -796,6 +801,11 @@ const fa = {
     addressLabel: "آدرس",
     mapTitle: "نقشه دفتر Multi Mulk — {office}",
     mapLink: "باز کردن در Google Maps",
+    reviewsHeading: "تجربه‌تان را به اشتراک بگذارید",
+    reviewsBody:
+      "اگر کمکتان کرده‌ایم، یک نظر کوتاه در Trustpilot یا Google به دیگران کمک می‌کند Multi Mulk را با اطمینان پیدا کنند.",
+    reviewsTrustpilot: "در Trustpilot نظر بدهید",
+    reviewsGoogle: "در Google نظر بدهید",
     form: {
       name: "نام و نام خانوادگی",
       namePlaceholder: "نام خود را بنویسید",

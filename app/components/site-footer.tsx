@@ -15,6 +15,7 @@ import { buildPath } from "@/app/lib/routes";
 import { getDictionary } from "@/app/lib/i18n";
 import { interpolate } from "@/app/lib/i18n/format";
 import { Link } from "./link";
+import { ReviewLinks } from "./review-links";
 import {
   Facebook,
   Instagram,
@@ -163,6 +164,11 @@ export async function SiteFooter() {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                <div className="mt-6">
+                  <p className={headingStyle}>{t.footer.reviewsTitle}</p>
+                  <ReviewLinks variant="footer" />
                 </div>
 
                 <div className="mt-6 hidden lg:block">{copyright}</div>

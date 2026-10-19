@@ -780,6 +780,23 @@ export const socialLinks = [
 ];
 
 /**
+ * Where a client leaves a public review. Linked from the footer and the
+ * contact page so satisfied clients can review without hunting for the URLs.
+ */
+export const reviewLinks = [
+  {
+    key: "trustpilot" as const,
+    name: "Trustpilot",
+    href: "https://www.trustpilot.com/review/multimulk.com",
+  },
+  {
+    key: "google" as const,
+    name: "Google",
+    href: "https://share.google/3rjXkFYWGg6nIZY4X",
+  },
+];
+
+/**
  * Hand-written footer names whose page exists are routed here; the rest render
  * as text. Empty, now that the columns are filled from what is published — a
  * development assembled from listings brings its own href.

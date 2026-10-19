@@ -200,6 +200,11 @@ const tr = {
       privacy: "Gizlilik Politikası",
     },
     contactTitle: "Bize Ulaşın",
+    reviewsTitle: "Değerlendirme Yazın",
+    reviews: {
+      trustpilot: "Trustpilot",
+      google: "Google",
+    },
     copyright: "© 2026 Multi Mulk. Tüm hakları saklıdır.",
     offices: { UAE: "BAE", Türkiye: "Türkiye", Pakistan: "Pakistan" },
   },
@@ -793,6 +798,11 @@ const tr = {
     addressLabel: "Adres",
     mapTitle: "Multi Mulk ofisinin haritası — {office}",
     mapLink: "Google Haritalar'da aç",
+    reviewsHeading: "Deneyiminizi paylaşın",
+    reviewsBody:
+      "Size yardımcı olduysak, Trustpilot veya Google’da kısa bir değerlendirme başkalarının Multi Mulk’u güvenle bulmasına yardımcı olur.",
+    reviewsTrustpilot: "Trustpilot’ta değerlendirin",
+    reviewsGoogle: "Google’da değerlendirin",
     form: {
       name: "Ad Soyad",
       namePlaceholder: "Adınızı yazın",

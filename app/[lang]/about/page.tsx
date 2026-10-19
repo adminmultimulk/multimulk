@@ -9,6 +9,7 @@ import { AboutPrinciples } from "@/app/components/about-principles";
 import { AboutRegions } from "@/app/components/about-regions";
 import { AnimatedTitle } from "@/app/components/animated-title";
 import { Container } from "@/app/components/container";
+import { ReviewInvite } from "@/app/components/review-invite";
 import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
 import { aboutHero } from "@/app/lib/about";
@@ -61,6 +62,7 @@ export default async function AboutPage() {
         <AboutLeadership />
         <AboutMap />
         <AboutPlaces />
+        <ReviewInvite />
       </main>
 
       <SiteFooter />

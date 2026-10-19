@@ -3,6 +3,7 @@ import { Container } from "@/app/components/container";
 import { JsonLd } from "@/app/components/json-ld";
 import { Link } from "@/app/components/link";
 import { PageHero } from "@/app/components/page-hero";
+import { ReviewInvite } from "@/app/components/review-invite";
 import { SiteFooter } from "@/app/components/site-footer";
 import { publishedCaseStudies } from "@/app/lib/case-studies";
 import { getProgramme } from "@/app/lib/programmes";
@@ -97,6 +98,8 @@ export default async function CaseStudiesPage() {
             )}
           </Container>
         </section>
+
+        <ReviewInvite />
       </main>
 
       <SiteFooter />

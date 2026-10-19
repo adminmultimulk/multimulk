@@ -747,6 +747,11 @@ const ru: Dictionary = {
       imageCredits: "Авторы изображений",
     },
     contactTitle: "Контакты",
+    reviewsTitle: "Оставить отзыв",
+    reviews: {
+      trustpilot: "Trustpilot",
+      google: "Google",
+    },
     addresses: {
       UAE: "Grosvenor Business Tower, офис 1909, Аль-Танья Ферст, Барша Хайтс, Дубай",
       "Türkiye": "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J, этаж 5, офис 48-49, Бейкент / Стамбул",
@@ -1991,6 +1996,11 @@ const ru: Dictionary = {
     addressLabel: "Адрес",
     mapTitle: "Карта офиса Multi Mulk — {office}",
     mapLink: "Открыть в Google Картах",
+    reviewsHeading: "Поделитесь впечатлением",
+    reviewsBody:
+      "Если мы вам помогли, короткий отзыв на Trustpilot или Google поможет другим с уверенностью найти Multi Mulk.",
+    reviewsTrustpilot: "Оставить отзыв на Trustpilot",
+    reviewsGoogle: "Оставить отзыв в Google",
     form: {
       name: "Имя",
       namePlaceholder: "Введите ваше имя",

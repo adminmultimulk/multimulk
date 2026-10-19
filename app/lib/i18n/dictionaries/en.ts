@@ -745,6 +745,12 @@ const en = {
       imageCredits: "Image Credits",
     },
     contactTitle: "Contact Us",
+    /** Invite under the social icons — clients leave a public review. */
+    reviewsTitle: "Leave a Review",
+    reviews: {
+      trustpilot: "Trustpilot",
+      google: "Google",
+    },
     /** One entry per office in `contact.offices`, head office first. */
     addresses: {
       UAE: "Grosvenor Business Tower, Office 1909, Al Thanyah First, Barsha Heights, Dubai",
@@ -1988,6 +1994,12 @@ const en = {
     addressLabel: "Address",
     mapTitle: "Map of the Multi Mulk office — {office}",
     mapLink: "Open in Google Maps",
+    /** CTA under the office maps — collect public Trustpilot and Google reviews. */
+    reviewsHeading: "Share your experience",
+    reviewsBody:
+      "If we have helped you, a short review on Trustpilot or Google helps others find Multi Mulk with confidence.",
+    reviewsTrustpilot: "Review us on Trustpilot",
+    reviewsGoogle: "Review us on Google",
     form: {
       name: "Name",
       namePlaceholder: "Insert your name",

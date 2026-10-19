@@ -11,6 +11,7 @@ import { CaseSlides, type CaseSlide } from "@/app/components/case-study/case-sli
 import type { EnquiryContext } from "@/app/components/enquiry";
 import { JsonLd } from "@/app/components/json-ld";
 import { programmeRouteId } from "@/app/components/programme-page";
+import { ReviewInvite } from "@/app/components/review-invite";
 import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
 import {
@@ -177,6 +178,8 @@ export default async function CaseStudyPage({
           body={copy.ctaBody}
           enquiry={enquiry}
         />
+
+        <ReviewInvite />
       </main>
 
       <SiteFooter />

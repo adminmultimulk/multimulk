@@ -202,6 +202,11 @@ const zh = {
       privacy: "隐私政策",
     },
     contactTitle: "联系我们",
+    reviewsTitle: "留下评价",
+    reviews: {
+      trustpilot: "Trustpilot",
+      google: "Google",
+    },
     copyright: "© 2026 Multi Mulk. 版权所有。",
     offices: { UAE: "阿联酋", Türkiye: "土耳其", Pakistan: "巴基斯坦" },
   },
@@ -794,6 +799,11 @@ const zh = {
     addressLabel: "地址",
     mapTitle: "Multi Mulk 办公室地图 — {office}",
     mapLink: "在 Google 地图中打开",
+    reviewsHeading: "分享您的体验",
+    reviewsBody:
+      "如果我们对您有所帮助，请在 Trustpilot 或 Google 上留下简短评价，帮助他人放心找到 Multi Mulk。",
+    reviewsTrustpilot: "在 Trustpilot 上评价我们",
+    reviewsGoogle: "在 Google 上评价我们",
     form: {
       name: "姓名",
       namePlaceholder: "请输入您的姓名",

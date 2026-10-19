@@ -384,6 +384,11 @@ const ar: Dictionary = {
       imageCredits: "حقوق الصور",
     },
     contactTitle: "تواصل معنا",
+    reviewsTitle: "اترك تقييمًا",
+    reviews: {
+      trustpilot: "Trustpilot",
+      google: "Google",
+    },
     addresses: {
       UAE: "برج غروسفنور التجاري، مكتب 1909، الثنية الأولى، برشا هايتس، دبي",
       "Türkiye": "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J، الطابق 5، مكتب 48-49، بيكنت / إسطنبول",
@@ -1645,6 +1650,11 @@ const ar: Dictionary = {
     addressLabel: "العنوان",
     mapTitle: "خريطة مكتب Multi Mulk — {office}",
     mapLink: "افتح في خرائط جوجل",
+    reviewsHeading: "شاركنا تجربتك",
+    reviewsBody:
+      "إذا ساعدناك، فإن تقييمًا قصيرًا على Trustpilot أو Google يساعد الآخرين على العثور على Multi Mulk بثقة.",
+    reviewsTrustpilot: "قيّمنا على Trustpilot",
+    reviewsGoogle: "قيّمنا على Google",
     form: {
       name: "الاسم",
       namePlaceholder: "اكتب اسمك",

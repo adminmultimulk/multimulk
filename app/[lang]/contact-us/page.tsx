@@ -6,6 +6,7 @@ import { ContactForm } from "@/app/components/contact-form";
 import { Mail, MapPin, Phone } from "@/app/components/icons";
 import { SiteFooter } from "@/app/components/site-footer";
 import { SiteNav } from "@/app/components/site-nav";
+import { ReviewLinks } from "@/app/components/review-links";
 import { contact, officeMap } from "@/app/lib/content";
 import { alternatesFor, getDictionary, getI18n } from "@/app/lib/i18n";
 import { interpolate } from "@/app/lib/i18n/format";
@@ -160,6 +161,18 @@ export default async function ContactPage() {
                 );
               })}
             </ul>
+
+            <div className="mt-12 border-t border-ink/10 pt-12 lg:mt-16 lg:pt-16">
+              <h2 className="max-w-[420px] font-display text-[26px] leading-[1.24] text-ink sm:text-[32px]">
+                {t.contact.reviewsHeading}
+              </h2>
+              <p className="mt-4 max-w-[520px] text-[13.5px] leading-[23px] text-ink/80">
+                {t.contact.reviewsBody}
+              </p>
+              {/* Same buttons as About / Client Outcomes; kept inline so this
+                  block stays inside the mist panel rather than a full section. */}
+              <ReviewLinks variant="contact" />
+            </div>
           </div>
         </Container>
       </main>

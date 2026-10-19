@@ -19,7 +19,7 @@ import type {
 } from "schema-dts";
 
 import { authors } from "../authors";
-import { contact, socialLinks } from "../content";
+import { contact, reviewLinks, socialLinks } from "../content";
 import type { Project } from "../projects";
 import { hreflangFor, type Locale } from "../i18n/config";
 import { absoluteUrl } from "../site";
@@ -72,7 +72,14 @@ export function organization(locale: Locale): Organization {
       areaServed: phone.key === "Türkiye" ? "TR" : phone.key === "UAE" ? "AE" : "PK",
       availableLanguage: ["en", "ar", "tr", "ru", "ur", "fr", "zh", "fa"],
     })),
-    sameAs: socialLinks.map((link) => link.href),
+    // Trustpilot is a public company profile; the Google share link is a
+    // review invite, not a stable profile URL, so it stays off `sameAs`.
+    sameAs: [
+      ...socialLinks.map((link) => link.href),
+      ...reviewLinks
+        .filter((link) => link.key === "trustpilot")
+        .map((link) => link.href),
+    ],
     areaServed: ["AE", "TR", "PK", "GD", "DM", "KN"].map((code) => ({
       "@type": "Country" as const,
       name: code,

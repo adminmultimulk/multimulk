@@ -381,6 +381,11 @@ const ur: Dictionary = {
       imageCredits: "تصاویر کے کریڈٹس",
     },
     contactTitle: "ہم سے رابطہ",
+    reviewsTitle: "جائزہ دیجئے",
+    reviews: {
+      trustpilot: "Trustpilot",
+      google: "Google",
+    },
     addresses: {
       UAE: "گروسوینر بزنس ٹاور، دفتر 1909، الثنیہ فرسٹ، برشا ہائٹس، دبئی",
       "Türkiye": "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J، پانچویں منزل، دفتر 48-49، بے کینٹ / استنبول",
@@ -1607,6 +1612,11 @@ const ur: Dictionary = {
     addressLabel: "پتہ",
     mapTitle: "Multi Mulk کے دفتر کا نقشہ — {office}",
     mapLink: "گوگل میپس میں کھولیے",
+    reviewsHeading: "اپنا تجربہ شیئر کریں",
+    reviewsBody:
+      "اگر ہم نے آپ کی مدد کی ہے تو Trustpilot یا Google پر مختصر جائزہ دوسروں کو اعتماد کے ساتھ Multi Mulk تلاش کرنے میں مدد دیتا ہے۔",
+    reviewsTrustpilot: "Trustpilot پر جائزہ دیجئے",
+    reviewsGoogle: "Google پر جائزہ دیجئے",
     form: {
       name: "نام",
       namePlaceholder: "اپنا نام لکھیے",
