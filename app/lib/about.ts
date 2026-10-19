@@ -61,6 +61,7 @@ export const aboutRegions: AboutRegion[] = [
       ur: "ترکیہ",
       tr: "TÜRKİYE",
       zh: "土耳其",
+      fa: "ترکیه",
     },
     href: searchPath({ currency: "USD", location: "Türkiye" }),
     image: "/images/bosphorus-heights.webp",
@@ -75,6 +76,7 @@ export const aboutRegions: AboutRegion[] = [
       ur: "کیریبیئن",
       tr: "KARAYİPLER",
       zh: "加勒比",
+      fa: "کارائیب",
     },
     // The Caribbean is sold as resort shares under the programme, not as
     // units in the search, so the region opens the qualifying developments.

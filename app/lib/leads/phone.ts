@@ -304,6 +304,8 @@ export function defaultCountryFor(locale: Locale): CountryCode {
       return "RU";
     case "fr":
       return "FR";
+    case "fa":
+      return "IR";
     default:
       return "TR";
   }

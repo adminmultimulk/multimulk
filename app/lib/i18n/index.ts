@@ -136,6 +136,7 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   // Still filling in; English shows through wherever they are silent.
   tr: () => overlaid(() => import("./dictionaries/tr").then((m) => m.default)),
   zh: () => overlaid(() => import("./dictionaries/zh").then((m) => m.default)),
+  fa: () => overlaid(() => import("./dictionaries/fa").then((m) => m.default)),
 };
 
 /**

@@ -261,62 +261,74 @@ export default async function PropertyPage({
 
           {/* The nav above is absolutely positioned, so the banner leaves it
               room: a development whose copy runs long grows upward off the
-              bottom of the section and would otherwise run underneath it. */}
+              bottom of the section and would otherwise run underneath it.
+
+              The copy column uses physical `ml-auto` only on RTL so it sits
+              under the flipped scrim on the right; LTR keeps the natural
+              left edge. */}
           <Container className="relative pb-16 pt-28 lg:pt-32">
-            <div className="flex items-center gap-2 text-cream/85">
-              <MapPin className="w-3" />
-              {/* "Şişli, İstanbul, Türkiye" — each part looked up on its own,
-                  since `country` carries the city as well as the country. */}
-              <span className="text-[11px] uppercase tracking-[0.11em]">
-                {[project.location, ...project.country.split(",")]
-                  .map((part) => part.trim())
-                  .filter(Boolean)
-                  .map((part) => placeLine(t, [part]))
-                  .join(", ")}
-              </span>
-            </div>
-            {/* The development name is the same in every language. */}
-            <h1 className="mt-5 max-w-[760px] font-display text-[38px] leading-[1.14] text-white sm:text-[52px]">
-              <AnimatedTitle>{project.name}</AnimatedTitle>
-            </h1>
-            {copy.tagline ? (
-              <p className="mt-4 max-w-[620px] font-display text-[20px] leading-[1.35] text-gold-light sm:text-[24px]">
-                <AnimatedTitle delay={0.25}>{copy.tagline}</AnimatedTitle>
-              </p>
-            ) : null}
-            {copy.description ? (
-              <p className="mt-6 max-w-[620px] text-[13px] leading-[22px] text-cream/85">
-                {excerpt(copy.description)}
-              </p>
-            ) : null}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#residences"
-                className="rounded-full bg-cream px-8 py-3.5 text-[13px] text-forest transition-colors hover:bg-white"
-              >
-                {t.property.viewResidences}
-              </a>
-              {/* Only where the development has a brochure to send; see
-                  `Project.brochure`. */}
-              {project.brochure ? (
-                <BrochureButton
-                  slug={project.slug}
-                  project={project.name}
-                  brochure={project.brochure}
-                  eyebrow={project.name}
-                  className="inline-flex items-center gap-2 rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
-                />
+            <div className="max-w-[760px] rtl:ml-auto">
+              <div className="flex items-center gap-2 text-cream/85">
+                <MapPin className="w-3" />
+                {/* "Şişli, İstanbul, Türkiye" — each part looked up on its own,
+                    since `country` carries the city as well as the country. */}
+                <span className="text-[11px] uppercase tracking-[0.11em]">
+                  {[project.location, ...project.country.split(",")]
+                    .map((part) => part.trim())
+                    .filter(Boolean)
+                    .map((part) => placeLine(t, [part]))
+                    .join(", ")}
+                </span>
+              </div>
+              {/* The development name is the same in every language. */}
+              <h1 className="mt-5 font-display text-[38px] leading-[1.14] text-white sm:text-[52px]">
+                <AnimatedTitle>{project.name}</AnimatedTitle>
+              </h1>
+              {copy.tagline ? (
+                <p className="mt-4 max-w-[620px] font-display text-[20px] leading-[1.35] text-gold-light sm:text-[24px] rtl:ml-auto">
+                  <AnimatedTitle delay={0.25}>{copy.tagline}</AnimatedTitle>
+                </p>
               ) : null}
-              {/* The page's one destination for "I want to talk to someone" —
-                  see `PropertyEnquire`. A construction-progress page was
-                  designed here, but the dashboard has no progress field to
-                  fill one from, and a button to nowhere is worse than none. */}
-              <a
-                href="#enquire"
-                className="rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
-              >
-                {t.common.enquireNow}
-              </a>
+              {copy.description ? (
+                // `dir="auto"` keeps English punctuation on the correct edge;
+                // `rtl:ml-auto rtl:text-right` hugs the right under the scrim
+                // when the excerpt is still Latin on an RTL page.
+                <p
+                  dir="auto"
+                  className="mt-6 max-w-[620px] text-[13px] leading-[22px] text-cream/85 rtl:ml-auto rtl:text-right"
+                >
+                  {excerpt(copy.description)}
+                </p>
+              ) : null}
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href="#residences"
+                  className="rounded-full bg-cream px-8 py-3.5 text-[13px] text-forest transition-colors hover:bg-white"
+                >
+                  {t.property.viewResidences}
+                </a>
+                {/* Only where the development has a brochure to send; see
+                    `Project.brochure`. */}
+                {project.brochure ? (
+                  <BrochureButton
+                    slug={project.slug}
+                    project={project.name}
+                    brochure={project.brochure}
+                    eyebrow={project.name}
+                    className="inline-flex items-center gap-2 rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
+                  />
+                ) : null}
+                {/* The page's one destination for "I want to talk to someone" —
+                    see `PropertyEnquire`. A construction-progress page was
+                    designed here, but the dashboard has no progress field to
+                    fill one from, and a button to nowhere is worse than none. */}
+                <a
+                  href="#enquire"
+                  className="rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
+                >
+                  {t.common.enquireNow}
+                </a>
+              </div>
             </div>
           </Container>
         </section>

@@ -46,9 +46,9 @@ function ScatteredWord({ word }: { word: string }) {
 function RegionPanel({ region }: { region: AboutRegion }) {
   const { t, locale } = useI18n();
   const copy = t.about.regions[region.key];
-  // Arabic and Urdu are cursive: pulling a word apart letter by letter breaks
-  // the joins, so those two render the wordmark whole.
-  const scatter = locale !== "ar" && locale !== "ur";
+  // Arabic, Urdu and Farsi are cursive: pulling a word apart letter by letter
+  // breaks the joins, so those scripts render the wordmark whole.
+  const scatter = locale !== "ar" && locale !== "ur" && locale !== "fa";
   const word = region.word[locale];
 
   return (

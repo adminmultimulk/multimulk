@@ -51,10 +51,11 @@ export function selectPlural(
 }
 
 /**
- * Prices and counts stay in Western digits in every language. Arabic and Urdu
- * default to Arabic-Indic numerals under `Intl`, which is correct for prose but
- * not for how these markets quote property prices — buyers, brochures and the
- * portals they compare against all use `400,000`.
+ * Prices and counts stay in Western digits in every language. Arabic, Urdu and
+ * Farsi default to Arabic-Indic / Extended Arabic-Indic numerals under `Intl`,
+ * which is correct for prose but not for how these markets quote property
+ * prices — buyers, brochures and the portals they compare against all use
+ * `400,000`.
  */
 export function formatNumber(locale: Locale, value: number): string {
   return new Intl.NumberFormat(intlLocale[locale], {

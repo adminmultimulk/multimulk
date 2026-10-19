@@ -9,14 +9,14 @@
  * params at all.
  */
 
-export const locales = ["en", "ar", "ru", "fr", "ur", "tr", "zh"] as const;
+export const locales = ["en", "ar", "ru", "fr", "ur", "tr", "zh", "fa"] as const;
 
 export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "en";
 
-/** Arabic and Urdu are written right to left; the other three are not. */
-const rtl = new Set<Locale>(["ar", "ur"]);
+/** Arabic, Urdu and Farsi are written right to left; the others are not. */
+const rtl = new Set<Locale>(["ar", "ur", "fa"]);
 
 export type Direction = "ltr" | "rtl";
 
@@ -45,6 +45,7 @@ export const localeNames: Record<Locale, { native: string; short: string; englis
   ur: { native: "اردو", short: "UR", english: "Urdu" },
   tr: { native: "Türkçe", short: "TR", english: "Turkish" },
   zh: { native: "简体中文", short: "中文", english: "Chinese (Simplified)" },
+  fa: { native: "فارسی", short: "FA", english: "Persian" },
 };
 
 /**
@@ -60,6 +61,7 @@ export const intlLocale: Record<Locale, string> = {
   ur: "ur-PK",
   tr: "tr-TR",
   zh: "zh-Hans-CN",
+  fa: "fa-IR",
 };
 
 /**
@@ -79,6 +81,7 @@ export const hreflangFor: Record<Locale, string> = {
   ur: "ur",
   tr: "tr",
   zh: "zh-Hans",
+  fa: "fa",
 };
 
 /**
@@ -106,6 +109,7 @@ export const localeStatus: Record<Locale, LocaleStatus> = {
   ur: "published",
   tr: "partial",
   zh: "partial",
+  fa: "partial",
 };
 
 /**

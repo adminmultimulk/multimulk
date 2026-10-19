@@ -70,7 +70,7 @@ export function organization(locale: Locale): Organization {
       telephone: phone.number,
       contactType: "sales",
       areaServed: phone.key === "Türkiye" ? "TR" : phone.key === "UAE" ? "AE" : "PK",
-      availableLanguage: ["en", "ar", "tr", "ru", "ur", "fr", "zh"],
+      availableLanguage: ["en", "ar", "tr", "ru", "ur", "fr", "zh", "fa"],
     })),
     sameAs: socialLinks.map((link) => link.href),
     areaServed: ["AE", "TR", "PK", "GD", "DM", "KN"].map((code) => ({

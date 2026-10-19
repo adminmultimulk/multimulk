@@ -75,9 +75,10 @@ const manrope = Manrope({
 });
 
 /**
- * Arabic and Urdu, for both the display and body roles. Neither The Seasons
- * nor Manrope carries a single Arabic glyph, so without this the page falls to
- * whatever the device happens to have.
+ * Arabic, Urdu and Farsi, for both the display and body roles. Neither The
+ * Seasons nor Manrope carries a single Arabic-script glyph, so without this
+ * the page falls to whatever the device happens to have. Vazirmatn was designed
+ * for Persian and covers the shared Arabic script well for all three.
  *
  * Vazirmatn is a variable face, so the whole 100–900 range comes down in one
  * file — which matters because the display role sets 300 and the body 400.
@@ -87,12 +88,11 @@ const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
   display: "swap",
   // It sits in every page's font stack — fallback resolves per glyph, so it
-  // only ever paints Arabic — but three of the five languages never reach it.
+  // only ever paints Arabic-script — but most languages never reach it.
   // Preloading is therefore left off: the face is still declared in the
-  // critical CSS, so an Arabic page starts fetching it at first paint.
+  // critical CSS, so an RTL page starts fetching it at first paint.
   preload: false,
 });
-
 /** Pre-renders all five languages at build time. */
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));

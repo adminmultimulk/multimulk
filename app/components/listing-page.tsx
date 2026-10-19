@@ -167,59 +167,63 @@ export async function ListingPage({ listing }: { listing: Listing }) {
           <div className="absolute inset-x-0 top-0 h-[200px] bg-gradient-to-b from-black/45 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
 
+          {/* On RTL the copy column is pinned to the physical right under the
+              flipped scrim; LTR keeps the natural left edge. */}
           <Container className="relative pb-16">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="flex items-center gap-2 text-cream/85">
-                <MapPin className="w-3" />
-                <span className="text-[11px] uppercase tracking-[0.11em]">
-                  {place} · {country}
+            <div className="max-w-[760px] rtl:ml-auto">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="flex items-center gap-2 text-cream/85">
+                  <MapPin className="w-3" />
+                  <span className="text-[11px] uppercase tracking-[0.11em]">
+                    {place} · {country}
+                  </span>
                 </span>
-              </span>
-              {listing.cbiEligible && !listing.soldOut ? (
-                <span className="rounded-full bg-gold/95 px-3 py-1 text-[10px] uppercase tracking-[0.08em] text-white">
-                  {t.unit.citizenshipEligible}
-                </span>
-              ) : null}
-              {listing.soldOut ? (
-                <span className="rounded-full bg-forest-deep/85 px-3 py-1 text-[10px] uppercase tracking-[0.1em] text-cream">
-                  {t.unit.soldOut}
-                </span>
-              ) : null}
-            </div>
+                {listing.cbiEligible && !listing.soldOut ? (
+                  <span className="rounded-full bg-gold/95 px-3 py-1 text-[10px] uppercase tracking-[0.08em] text-white">
+                    {t.unit.citizenshipEligible}
+                  </span>
+                ) : null}
+                {listing.soldOut ? (
+                  <span className="rounded-full bg-forest-deep/85 px-3 py-1 text-[10px] uppercase tracking-[0.1em] text-cream">
+                    {t.unit.soldOut}
+                  </span>
+                ) : null}
+              </div>
 
-            {/* The unit's name carries its development's, which is the same in
-                every language; only the layout half is translated. */}
-            <h1 className="mt-5 max-w-[760px] font-display text-[34px] leading-[1.14] text-white sm:text-[48px]">
-              <AnimatedTitle>{title}</AnimatedTitle>
-            </h1>
+              {/* The unit's name carries its development's, which is the same in
+                  every language; only the layout half is translated. */}
+              <h1 className="mt-5 font-display text-[34px] leading-[1.14] text-white sm:text-[48px]">
+                <AnimatedTitle>{title}</AnimatedTitle>
+              </h1>
 
-            {/* No figure: see `PricingNotice`, below the specs. */}
-            <p className="mt-4 text-[13px] uppercase tracking-[0.1em] text-gold-light">
-              {t.common.priceOnRequest}
-            </p>
+              {/* No figure: see `PricingNotice`, below the specs. */}
+              <p className="mt-4 text-[13px] uppercase tracking-[0.1em] text-gold-light rtl:text-right">
+                {t.common.priceOnRequest}
+              </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <EnquireButton
-                context={enquiry}
-                className="rounded-full bg-cream px-8 py-3.5 text-[13px] text-forest transition-colors hover:bg-white"
-              />
-              {listing.brochure ? (
-                <BrochureButton
-                  slug={listing.slug}
-                  project={listing.project}
-                  brochure={listing.brochure}
-                  eyebrow={`${title} · ${place}`}
-                  className="inline-flex items-center gap-2 rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
+              <div className="mt-8 flex flex-wrap gap-3">
+                <EnquireButton
+                  context={enquiry}
+                  className="rounded-full bg-cream px-8 py-3.5 text-[13px] text-forest transition-colors hover:bg-white"
                 />
-              ) : null}
-              {listing.project ? (
-                <Link
-                  href={developmentHref}
-                  className="rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
-                >
-                  {copy.viewDevelopment}
-                </Link>
-              ) : null}
+                {listing.brochure ? (
+                  <BrochureButton
+                    slug={listing.slug}
+                    project={listing.project}
+                    brochure={listing.brochure}
+                    eyebrow={`${title} · ${place}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
+                  />
+                ) : null}
+                {listing.project ? (
+                  <Link
+                    href={developmentHref}
+                    className="rounded-full border border-cream/70 px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-cream hover:text-forest"
+                  >
+                    {copy.viewDevelopment}
+                  </Link>
+                ) : null}
+              </div>
             </div>
           </Container>
         </section>

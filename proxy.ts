@@ -44,7 +44,7 @@ export function proxy(request: NextRequest) {
   // Theme demos and page-builder scratch pages from the site this one
   // replaces. Answered here rather than by a rewrite because the proxy runs
   // first, so a rewrite never sees them — and giving them a locale prefix
-  // would turn a dead URL into a dead URL in seven languages.
+  // would turn a dead URL into a dead URL in every language.
   const bare = pathname.replace(/\/$/, "");
   if (gone.has(bare)) {
     return new NextResponse("Gone", {

@@ -2,9 +2,13 @@
 
 import { SlideUpText } from "@/components/ui/slide-up-text";
 import { useI18n } from "@/app/lib/i18n/context";
+import { isRtl } from "@/app/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 type Align = "left" | "center";
+
+/** Hebrew / Arabic-script range — enough to tell a title’s writing direction. */
+const RTL_SCRIPT = /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF]/;
 
 /**
  * Site-wide title treatment built on SlideUpText.
@@ -16,9 +20,9 @@ type Align = "left" | "center";
  * 2. Each word sits in an `overflow-hidden` box to mask the slide, which clips
  *    descenders (g, y, p) once the text settles. The negative-margin padding
  *    below gives them room without changing layout height.
- * 3. Arabic and Urdu are cursive: splitting a word into per-character boxes
- *    breaks the joins and every letter falls back to its isolated form. Those
- *    two animate by word instead, which leaves shaping intact.
+ * 3. Arabic, Urdu and Farsi are cursive: splitting a word into per-character
+ *    boxes breaks the joins and every letter falls back to its isolated form.
+ *    Those animate by word instead, which leaves shaping intact.
  *
  * The `dir="auto"` matters more than it looks. Words are flex items, so on an
  * Arabic page a flex container would lay them out right to left — correct for
@@ -32,6 +36,11 @@ type Align = "left" | "center";
  * words are therefore joined with a no-break space first — SlideUpText splits
  * on plain spaces only — so each name animates as one item and the browser's
  * bidi ordering applies inside it.
+ *
+ * Alignment follows the *page* edge, not the title’s own direction: a Latin
+ * name on an RTL page still has `dir="auto"` → LTR flex, so `justify-start`
+ * would pin "MM-024" to the left of its box and leave it floating mid-banner.
+ * Those titles use `justify-end` instead, hugging the right under the scrim.
  */
 export function AnimatedTitle({
   children,
@@ -48,12 +57,15 @@ export function AnimatedTitle({
   delay?: number;
 }) {
   const { locale } = useI18n();
-  const cursive = locale === "ar" || locale === "ur";
+  const cursive = locale === "ar" || locale === "ur" || locale === "fa";
   const isBanner = variant === "banner";
   const byCharacter = isBanner && !cursive;
   const text = cursive
     ? children.replace(/(?<=[A-Za-z0-9.&'’-]) (?=[A-Za-z0-9])/g, "\u00A0")
     : children;
+  // Latin (or other LTR) title on an RTL page: keep letter order via dir=auto,
+  // but pin the flex group to the page’s start edge (the right).
+  const pinToPageStart = align !== "center" && isRtl(locale) && !RTL_SCRIPT.test(children);
 
   return (
     <SlideUpText
@@ -64,7 +76,11 @@ export function AnimatedTitle({
       once
       dir="auto"
       className={cn(
-        align === "center" ? "justify-center" : "justify-start",
+        align === "center"
+          ? "justify-center"
+          : pinToPageStart
+            ? "justify-end"
+            : "justify-start",
         className,
       )}
       /*
