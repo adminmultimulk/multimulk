@@ -582,6 +582,28 @@ export function getProgramme(
   return programmes.find((p) => p.category === category && p.slug === slug);
 }
 
+/**
+ * Stable id for a programme in a list that mixes pillars — Türkiye citizenship
+ * and Türkiye residence both use the slug `turkiye`, so the slug alone is not
+ * enough for a `<select>` option or a query parameter.
+ */
+export function programmeKey(programme: Programme): string {
+  return `${programme.category}:${programme.slug}`;
+}
+
+export function parseProgrammeKey(
+  value: string,
+): { category: ProgrammeCategory; slug: string } | null {
+  const [category, slug] = value.split(":");
+  if (
+    (category === "citizenship" || category === "residency") &&
+    slug
+  ) {
+    return { category, slug };
+  }
+  return null;
+}
+
 export function programmesIn(category: ProgrammeCategory): readonly Programme[] {
   return programmes.filter((p) => p.category === category);
 }

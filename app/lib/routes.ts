@@ -67,6 +67,8 @@ export type RouteId =
   | "caseStudies"
   | "caseStudy"
   | "tools"
+  | "freeGuide"
+  | "calculatorResult"
   | "documents"
   | "authors"
   | "author"
@@ -421,6 +423,27 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     labelKey: "tools",
     sitemap: { include: true, priority: 0.8, changeFrequency: "monthly" },
     schema: ["CollectionPage"],
+  },
+  /**
+   * Campaign lead magnets. The free guide is indexable; the calculator-result
+   * page is kept out of the sitemap because it is a gated landing whose query
+   * variants should not invent doorway URLs.
+   */
+  freeGuide: {
+    id: "freeGuide",
+    pattern: "/free-guide",
+    parent: "documents",
+    labelKey: "freeGuide",
+    sitemap: { include: true, priority: 0.7, changeFrequency: "monthly" },
+    schema: ["ContactPage"],
+  },
+  calculatorResult: {
+    id: "calculatorResult",
+    pattern: "/calculator-result",
+    parent: "tools",
+    labelKey: "calculatorResult",
+    sitemap: { include: false, priority: 0.4, changeFrequency: "monthly" },
+    schema: ["ContactPage"],
   },
   authors: {
     id: "authors",

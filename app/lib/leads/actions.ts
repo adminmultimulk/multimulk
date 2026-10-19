@@ -17,9 +17,25 @@ import { headers } from "next/headers";
 import { after } from "next/server";
 
 import { resolveBrochure } from "../brochures";
+import {
+  documentFile,
+  libraryDocuments,
+} from "../documents";
 import en from "../i18n/dictionaries/en";
 import { isLocale } from "../i18n/config";
 import { isPartnerType } from "../partners";
+import {
+  cheapestOfferedRoute,
+  getProgramme,
+  isPublishable,
+  parseProgrammeKey,
+} from "../programmes";
+import { absoluteUrl } from "../site";
+import {
+  costAssumptions,
+  costLines,
+  costTotal,
+} from "../tools/cost";
 import { composePhone, type ComposedPhone } from "./phone";
 import {
   isEmail,
@@ -30,10 +46,16 @@ import {
 } from "./schema";
 import { acknowledgeLead } from "./ack";
 import { sendBrochure } from "./brochure";
+import { sendCalculatorReport } from "./calculator-report";
+import { sendGuide } from "./guide";
 import { deliverLead } from "./sink";
 import { notifyTeam } from "./notify";
 import { withinRateLimit } from "./rate-limit";
 import { mintFormToken, verifyFormToken } from "./token";
+
+/** The guide `/free-guide` always delivers. Kept here so the action cannot
+ *  be pointed at an arbitrary PDF by rewriting the form. */
+const FREE_GUIDE_SLUG = "turkiye-citizenship-guide";
 
 export type LeadState =
   | { status: "idle" }
@@ -199,6 +221,169 @@ export async function requestBrochure(
   });
 
   return { status: "sent" };
+}
+
+/** Same states as a brochure request: the asset arrives by email. */
+export type MagnetState =
+  | { status: "idle" }
+  | { status: "invalid"; errors: LeadErrors }
+  | { status: "failed"; reason: "rate" | "server" }
+  | { status: "sent" };
+
+/**
+ * A free-guide request from `/free-guide`: three fields on screen, a lead in
+ * the inbox, and the guide PDF in the reader's email.
+ */
+export async function requestGuide(
+  _previous: MagnetState,
+  form: FormData,
+): Promise<MagnetState> {
+  const doc = libraryDocuments.find((item) => item.slug === FREE_GUIDE_SLUG);
+  if (!doc) return { status: "failed", reason: "server" };
+
+  if (String(form.get("company") ?? "")) return { status: "sent" };
+
+  const verdict = verifyFormToken(form.get("t"));
+  if (verdict === "too-fast" || verdict === "bad") return { status: "sent" };
+  if (verdict === "stale") return { status: "failed", reason: "server" };
+
+  if (!withinRateLimit(`guide:${await clientKey()}`)) {
+    return { status: "failed", reason: "rate" };
+  }
+
+  const title =
+    en.documents.items[FREE_GUIDE_SLUG as keyof typeof en.documents.items]
+      ?.title ?? FREE_GUIDE_SLUG;
+
+  const result = validateLead({
+    ...Object.fromEntries(form.entries()),
+    enquiryType: "guide",
+    subject: `Free guide request: ${title}`,
+    message: `Requested the free guide “${title}”.`,
+  });
+  if (!result.ok) return { status: "invalid", errors: result.errors };
+
+  const lead: Lead = {
+    ...result.lead,
+    submittedAt: new Date().toISOString(),
+  };
+
+  try {
+    await deliverLead(lead);
+  } catch (error) {
+    console.error("[guide] delivery failed", error);
+    return { status: "failed", reason: "server" };
+  }
+
+  after(async () => {
+    const names = ["notification", "guide"];
+    const results = await Promise.allSettled([
+      notifyTeam(lead),
+      sendGuide(lead, {
+        title,
+        url: absoluteUrl(documentFile(FREE_GUIDE_SLUG)),
+      }),
+    ]);
+    results.forEach((result, index) => {
+      if (result.status === "rejected") {
+        console.error(`[guide] ${names[index]} failed`, result.reason);
+      }
+    });
+  });
+
+  return { status: "sent" };
+}
+
+/**
+ * A calculator-result request from `/calculator-result`: the all-in estimate
+ * is recomputed server-side from the programme slug and family size, so the
+ * emailed numbers cannot be forged from the form.
+ */
+export async function requestCalculatorReport(
+  _previous: MagnetState,
+  form: FormData,
+): Promise<MagnetState> {
+  if (String(form.get("company") ?? "")) return { status: "sent" };
+
+  const verdict = verifyFormToken(form.get("t"));
+  if (verdict === "too-fast" || verdict === "bad") return { status: "sent" };
+  if (verdict === "stale") return { status: "failed", reason: "server" };
+
+  if (!withinRateLimit(`calculator:${await clientKey()}`)) {
+    return { status: "failed", reason: "rate" };
+  }
+
+  const key = parseProgrammeKey(String(form.get("programme") ?? "").trim());
+  const adults = clampInt(form.get("adults"), 1, 2, 2);
+  const children = clampInt(form.get("children"), 0, 4, 0);
+  const programme = key ? getProgramme(key.category, key.slug) : undefined;
+  const route =
+    programme && isPublishable(programme)
+      ? cheapestOfferedRoute(programme)
+      : undefined;
+  if (!programme || !route) return { status: "failed", reason: "server" };
+
+  const people = adults + children;
+  const lines = costLines(route.minimum.amount, people);
+  const total = costTotal(lines);
+
+  const result = validateLead({
+    ...Object.fromEntries(form.entries()),
+    enquiryType: "calculator",
+    subject: `Calculator report: ${programme.officialName}`,
+    message: [
+      `Requested the all-in cost estimate for ${programme.officialName}.`,
+      `Adults: ${adults}. Children under 18: ${children}.`,
+      `Estimated total: ${route.minimum.currency} ${Math.round(total).toLocaleString("en-GB")}.`,
+      `Assumes ${costAssumptions.transferTaxRate * 100}% transfer tax, ${costAssumptions.legalFees} legal, ${costAssumptions.documentation} documentation, ${costAssumptions.governmentFeePerPerson} government fee per person.`,
+    ].join("\n"),
+  });
+  if (!result.ok) return { status: "invalid", errors: result.errors };
+
+  const lead: Lead = {
+    ...result.lead,
+    submittedAt: new Date().toISOString(),
+  };
+
+  try {
+    await deliverLead(lead);
+  } catch (error) {
+    console.error("[calculator] delivery failed", error);
+    return { status: "failed", reason: "server" };
+  }
+
+  after(async () => {
+    const names = ["notification", "report"];
+    const results = await Promise.allSettled([
+      notifyTeam(lead),
+      sendCalculatorReport(lead, {
+        programmeName: programme.officialName,
+        adults,
+        children,
+        currency: route.minimum.currency,
+        lines,
+        total,
+      }),
+    ]);
+    results.forEach((result, index) => {
+      if (result.status === "rejected") {
+        console.error(`[calculator] ${names[index]} failed`, result.reason);
+      }
+    });
+  });
+
+  return { status: "sent" };
+}
+
+function clampInt(
+  raw: FormDataEntryValue | null,
+  min: number,
+  max: number,
+  fallback: number,
+): number {
+  const value = Number(String(raw ?? ""));
+  if (!Number.isFinite(value)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(value)));
 }
 
 /**

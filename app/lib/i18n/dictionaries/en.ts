@@ -490,6 +490,8 @@ const en = {
     caseStudies: "Client Outcomes",
     caseStudy: "Case Study",
     tools: "Tools",
+    freeGuide: "Free Guide",
+    calculatorResult: "Calculator Result",
     partners: "Partner With Us",
     authors: "Our Team",
     author: "Profile",
@@ -2023,6 +2025,8 @@ const en = {
         caribbeanCbi: "Caribbean CBI enquiry",
         general: "General enquiry",
         partnership: "Partner registration",
+        guide: "Free guide request",
+        calculator: "Calculator report request",
       },
       /**
        * The acknowledgement emailed back to the enquirer, in their own
@@ -2051,6 +2055,83 @@ const en = {
         rate: "You have sent several enquiries recently. Please try again later, or email info@multimulk.com.",
         server: "We could not send your enquiry. Please try again, or email info@multimulk.com.",
       },
+    },
+  },
+
+  /**
+   * /free-guide — a gated download of the Turkish citizenship guide. Field
+   * labels and error wording come from the contact form; only the offer and
+   * the email are particular here.
+   */
+  freeGuide: {
+    meta: {
+      title: "Free Guide | Turkish Citizenship by Investment | Multi Mulk",
+      description:
+        "Download Multi Mulk's free guide to Turkish citizenship through real estate: how the property route works, what it costs, and what the process asks of you.",
+    },
+    eyebrow: "Free Guide",
+    heading: "Turkish Citizenship Through Real Estate",
+    body: "How the property route works, what it costs all in, and what an application asks of you — written for the decision, not the click.",
+    leadHeading: "What is inside the guide",
+    leadBody:
+      "Twenty-four pages on the investment threshold, the holding period, family inclusion, and how a purchase can pay back in rental income and growth.",
+    includes: [
+      "How the real-estate citizenship route works, step by step",
+      "What the government asks for, and what it does not",
+      "How to read a development against eligibility, value and exit",
+      "Timelines from purchase through to passport",
+    ],
+    formHeading: "Send me the guide",
+    formBody:
+      "Tell us where to send it. The PDF arrives in your inbox in a moment, and an adviser will follow up only if you want one.",
+    consent:
+      "By requesting the guide you consent to us contacting you about Turkish citizenship by investment. See our Privacy Policy for details on how we handle your data.",
+    submit: "Send Me the Guide",
+    submitting: "Sending…",
+    sentHeading: "On Its Way",
+    sentBody:
+      "We have emailed the guide to you. If it has not arrived within a few minutes, check your spam folder.",
+    email: {
+      subject: "Your free guide: {title}",
+      greeting: "Dear {name},",
+      body: "Thank you for requesting {title}. Your guide is ready — download it below.",
+      button: "Download the guide",
+      closing:
+        "A member of the Multi Mulk team will follow up shortly. To ask about a particular development or timeline, simply reply to this email.",
+    },
+  },
+
+  /**
+   * /calculator-result — gated all-in cost estimate. The total is shown; the
+   * line items and the emailed report unlock after the three contact fields.
+   */
+  calculatorResult: {
+    meta: {
+      title: "Your Cost Estimate | Multi Mulk",
+      description:
+        "See what a citizenship or residency programme costs all in — investment, fees and government charges — and email yourself the full breakdown.",
+    },
+    eyebrow: "Calculator Result",
+    heading: "Your All-In Cost Estimate",
+    body: "The threshold is the investment, not the cost. Adjust the programme and family size, then unlock the full breakdown.",
+    formHeading: "Email me the breakdown",
+    formBody:
+      "Leave your details and we will send the line-by-line estimate to your inbox, and unlock it on this page.",
+    unlockHint: "Enter your details opposite to unlock the line items.",
+    cta: "Email Me This Estimate",
+    consent:
+      "By requesting the estimate you consent to us contacting you about the programme you selected. See our Privacy Policy for details on how we handle your data.",
+    submit: "Email Me the Breakdown",
+    submitting: "Sending…",
+    sentHeading: "Breakdown Unlocked",
+    sentBody:
+      "The line items are open above, and the same estimate is on its way to your email. If it has not arrived within a few minutes, check your spam folder.",
+    email: {
+      subject: "Your cost estimate: {programme}",
+      greeting: "Dear {name},",
+      body: "Here is the all-in cost estimate you requested for {programme}.",
+      closing:
+        "These figures are for planning, not a quotation. A member of the Multi Mulk team will follow up shortly — reply to this email with any questions.",
     },
   },
 

@@ -20,11 +20,17 @@ export const enquiryTypes = [
 
 /**
  * Every kind of lead the site raises: the options above, plus the ones a
- * dedicated form sets for itself. A partner registration is not something a
- * client would pick from the contact form's list, so it is kept out of
- * `enquiryTypes` and only `/partner-with-us` ever sends it.
+ * dedicated form sets for itself. A partner registration, a free-guide
+ * request and a calculator-report request are not options a client would pick
+ * from the contact form's list, so they stay out of `enquiryTypes` and only
+ * their own pages ever send them.
  */
-export const leadKinds = [...enquiryTypes, "partnership"] as const;
+export const leadKinds = [
+  ...enquiryTypes,
+  "partnership",
+  "guide",
+  "calculator",
+] as const;
 
 export type EnquiryType = (typeof leadKinds)[number];
 

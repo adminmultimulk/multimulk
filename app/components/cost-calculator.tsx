@@ -3,7 +3,17 @@
 import { useMemo, useState } from "react";
 import { useI18n } from "@/app/lib/i18n/context";
 import { trackEvent } from "@/app/lib/analytics";
-import type { Programme } from "@/app/lib/programmes";
+import {
+  programmeKey,
+  type Programme,
+} from "@/app/lib/programmes";
+import { buildPath } from "@/app/lib/routes";
+import {
+  costAssumptions,
+  costLines,
+  costTotal,
+} from "@/app/lib/tools/cost";
+import { Link } from "./link";
 import { SelectMenu } from "./select-menu";
 
 /**
@@ -19,30 +29,20 @@ import { SelectMenu } from "./select-menu";
  * the programme's own page contradicts.
  */
 
-/** Transaction assumptions, shown to the reader and applied to the total. */
-const assumptions = {
-  /** Title transfer tax, as a share of the declared value. */
-  transferTaxRate: 0.04,
-  /** Legal and advisory fees, flat. */
-  legalFees: 3_500,
-  /** Valuation, translation, apostille and notary, flat. */
-  documentation: 1_500,
-  /** Government application fee, per person included. */
-  governmentFeePerPerson: 800,
-};
-
 export function CostCalculator({
   programmes,
 }: {
   programmes: readonly Programme[];
 }) {
   const { t, locale, num } = useI18n();
-  const [slug, setSlug] = useState(programmes[0]?.slug ?? "");
+  const [selected, setSelected] = useState(
+    programmes[0] ? programmeKey(programmes[0]) : "",
+  );
   const [adults, setAdults] = useState("2");
   const [children, setChildren] = useState("2");
 
   const programme =
-    programmes.find((p) => p.slug === slug) ?? programmes[0];
+    programmes.find((p) => programmeKey(p) === selected) ?? programmes[0];
 
   const route = useMemo(
     () =>
@@ -57,20 +57,10 @@ export function CostCalculator({
 
   const lines = useMemo(() => {
     if (!route) return [];
-    const investment = route.minimum.amount;
-    return [
-      { key: "investment", value: investment },
-      { key: "transferTax", value: investment * assumptions.transferTaxRate },
-      { key: "legal", value: assumptions.legalFees },
-      { key: "documentation", value: assumptions.documentation },
-      {
-        key: "government",
-        value: assumptions.governmentFeePerPerson * people,
-      },
-    ];
+    return [...costLines(route.minimum.amount, people)];
   }, [route, people]);
 
-  const total = lines.reduce((sum, line) => sum + line.value, 0);
+  const total = costTotal(lines);
   const currency = route?.minimum.currency ?? "USD";
 
   const money = (value: number) =>
@@ -94,14 +84,18 @@ export function CostCalculator({
         <Field label={t.tools.calculator.programme}>
           <SelectMenu
             label={t.tools.calculator.programme}
-            value={slug}
+            value={selected}
             onChange={(value) => {
-              setSlug(value);
-              trackEvent("programme_enquiry", { tool: "cost", programme: value });
+              setSelected(value);
+              trackEvent("programme_enquiry", {
+                tool: "cost",
+                programme: value,
+              });
             }}
-            options={programmes.map((p) => p.slug)}
+            options={programmes.map(programmeKey)}
             format={(value) =>
-              programmes.find((p) => p.slug === value)?.officialName ?? value
+              programmes.find((p) => programmeKey(p) === value)?.officialName ??
+              value
             }
             triggerClassName="rounded-sm border border-ink/15 bg-white px-4 py-3 text-[13.5px] text-ink"
           />
@@ -151,15 +145,22 @@ export function CostCalculator({
       {/* The assumptions are the output as much as the number is. */}
       <p className="mt-2 text-[11.5px] leading-[18px] text-ink/55">
         {t.tools.calculator.assumptions
-          .replace("{tax}", `${assumptions.transferTaxRate * 100}%`)
-          .replace("{legal}", money(assumptions.legalFees))
-          .replace("{docs}", money(assumptions.documentation))
-          .replace("{gov}", money(assumptions.governmentFeePerPerson))
+          .replace("{tax}", `${costAssumptions.transferTaxRate * 100}%`)
+          .replace("{legal}", money(costAssumptions.legalFees))
+          .replace("{docs}", money(costAssumptions.documentation))
+          .replace("{gov}", money(costAssumptions.governmentFeePerPerson))
           .replace("{people}", num(people))}
       </p>
       <p className="mt-3 text-[11.5px] leading-[18px] text-ink/55">
         {t.tools.calculator.caveat}
       </p>
+
+      <Link
+        href={`${buildPath("calculatorResult")}?programme=${encodeURIComponent(selected)}&adults=${adults}&children=${children}`}
+        className="mt-7 inline-flex rounded-full bg-forest px-8 py-3.5 text-[13px] text-cream transition-colors hover:bg-forest-deep"
+      >
+        {t.calculatorResult.cta}
+      </Link>
     </div>
   );
 }
@@ -171,12 +172,15 @@ function Field({
   label: string;
   children: React.ReactNode;
 }) {
+  // A `<div>`, not a `<label>`: SelectMenu's options sit in this wrapper, and
+  // a label would re-activate the trigger after a pick — so the menu closes
+  // and immediately opens again.
   return (
-    <label className="block">
+    <div className="block">
       <span className="mb-2 block text-[11px] uppercase tracking-[0.1em] text-ink/55">
         {label}
       </span>
       {children}
-    </label>
+    </div>
   );
 }

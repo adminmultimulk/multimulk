@@ -461,6 +461,8 @@ const fr: Dictionary = {
     caseStudies: "Résultats clients",
     caseStudy: "Étude de cas",
     tools: "Outils",
+    freeGuide: "Guide gratuit",
+    calculatorResult: "Résultat du calculateur",
     partners: "Devenir partenaire",
     authors: "Notre équipe",
     author: "Profil",
@@ -2006,6 +2008,8 @@ const fr: Dictionary = {
         caribbeanCbi: "Programme caribéen",
         general: "Demande générale",
         partnership: "Inscription partenaire",
+        guide: "Demande de guide gratuit",
+        calculator: "Demande de rapport calculateur",
       },
       ack: {
         subject: "Nous avons bien reçu votre demande",
@@ -2030,6 +2034,74 @@ const fr: Dictionary = {
       },
     },
   },
+  freeGuide: {
+    meta: {
+      title: "Guide gratuit | Citoyenneté turque par investissement | Multi Mulk",
+      description:
+        "Téléchargez le guide gratuit Multi Mulk sur la citoyenneté turque par l’immobilier : comment fonctionne la voie immobilière, ce qu’elle coûte et ce que le processus demande.",
+    },
+    eyebrow: "Guide gratuit",
+    heading: "Citoyenneté turque par l’immobilier",
+    body: "Comment fonctionne la voie immobilière, ce qu’elle coûte au total, et ce qu’une demande exige de vous — écrit pour la décision, pas pour le clic.",
+    leadHeading: "Ce que contient le guide",
+    leadBody:
+      "Vingt-quatre pages sur le seuil d’investissement, la période de détention, l’inclusion familiale, et comment un achat peut se rembourser en loyers et en plus-value.",
+    includes: [
+      "Comment fonctionne la voie de citoyenneté par l’immobilier, étape par étape",
+      "Ce que l’État demande — et ce qu’il ne demande pas",
+      "Comment lire un projet selon l’éligibilité, la valeur et la sortie",
+      "Les délais de l’achat jusqu’au passeport",
+    ],
+    formHeading: "Envoyez-moi le guide",
+    formBody:
+      "Indiquez où l’envoyer. Le PDF arrive dans votre boîte en un instant, et un conseiller ne vous relance que si vous le souhaitez.",
+    consent:
+      "En demandant le guide, vous acceptez que nous vous contactions au sujet de la citoyenneté turque par investissement. Consultez notre Politique de confidentialité pour savoir comment nous traitons vos données.",
+    submit: "Envoyez-moi le guide",
+    submitting: "Envoi en cours…",
+    sentHeading: "En route",
+    sentBody:
+      "Nous avons envoyé le guide à votre adresse e-mail. S’il n’arrive pas d’ici quelques minutes, vérifiez vos courriers indésirables.",
+    email: {
+      subject: "Votre guide gratuit : {title}",
+      greeting: "Bonjour {name},",
+      body: "Merci d’avoir demandé {title}. Votre guide est prêt — téléchargez-le ci-dessous.",
+      button: "Télécharger le guide",
+      closing:
+        "Un membre de l’équipe Multi Mulk vous recontactera sous peu. Pour poser une question sur un projet ou un délai, il vous suffit de répondre à cet e-mail.",
+    },
+  },
+
+  calculatorResult: {
+    meta: {
+      title: "Votre estimation de coût | Multi Mulk",
+      description:
+        "Voyez ce qu’un programme de citoyenneté ou de résidence coûte au total — investissement, frais et charges gouvernementales — et recevez le détail par e-mail.",
+    },
+    eyebrow: "Résultat du calculateur",
+    heading: "Votre estimation tous frais compris",
+    body: "Le seuil est l’investissement, pas le coût. Ajustez le programme et la taille de la famille, puis débloquez le détail complet.",
+    formHeading: "Envoyez-moi le détail",
+    formBody:
+      "Laissez vos coordonnées : nous enverrons l’estimation ligne par ligne dans votre boîte, et la débloquerons sur cette page.",
+    unlockHint: "Saisissez vos coordonnées en face pour débloquer les lignes.",
+    cta: "Envoyez-moi cette estimation",
+    consent:
+      "En demandant l’estimation, vous acceptez que nous vous contactions au sujet du programme choisi. Consultez notre Politique de confidentialité pour savoir comment nous traitons vos données.",
+    submit: "Envoyez-moi le détail",
+    submitting: "Envoi en cours…",
+    sentHeading: "Détail débloqué",
+    sentBody:
+      "Les lignes sont ouvertes ci-dessus, et la même estimation est en route vers votre e-mail. Si elle n’arrive pas d’ici quelques minutes, vérifiez vos courriers indésirables.",
+    email: {
+      subject: "Votre estimation de coût : {programme}",
+      greeting: "Bonjour {name},",
+      body: "Voici l’estimation tous frais compris que vous avez demandée pour {programme}.",
+      closing:
+        "Ces chiffres servent à planifier, ce n’est pas un devis. Un membre de l’équipe Multi Mulk vous recontactera sous peu — pour toute question, répondez simplement à cet e-mail.",
+    },
+  },
+
   /** « Télécharger la brochure » — le bouton, le formulaire et l’e-mail. */
   brochure: {
     cta: "Télécharger la brochure",
