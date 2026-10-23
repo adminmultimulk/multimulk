@@ -29,11 +29,11 @@
 
 import "server-only";
 import en from "../i18n/dictionaries/en";
-import { localeNames } from "../i18n/config";
+import { localeNames, type Locale } from "../i18n/config";
 import { absoluteUrl } from "../site";
 import { escape } from "./email";
 import { countryNameFor } from "./phone";
-import type { Lead } from "./schema";
+import type { EnquiryType, Lead } from "./schema";
 
 /**
  * The inbound webhook, from Developer resources → Other → Inbound webhook, with
@@ -180,10 +180,55 @@ async function callBitrix(
   return (body as { result: unknown }).result;
 }
 
+/**
+ * The portal's own custom fields on a lead card — ids from `crm.lead.fields`
+ * on multimulk.bitrix24.com. A field deleted and re-created in Bitrix gets a
+ * new id, and a write to the old one is silently ignored rather than refused,
+ * so a field that stops filling in is worth checking here first.
+ */
+const customFields = {
+  leadName: "UF_CRM_1776058600790",
+  fullName: "UF_CRM_1775901951192",
+  language: "UF_CRM_1775898986653",
+  serviceCountry: "UF_CRM_1775898865298",
+  leadFormName: "UF_CRM_MM_LEAD_FORM_NAME",
+} as const;
+
+/** The Language list's item ids, one per site language. */
+const languageItems: Record<Locale, string> = {
+  en: "194",
+  tr: "196",
+  ar: "198",
+  ur: "200",
+  fa: "248",
+  fr: "384",
+  ru: "402",
+  zh: "404",
+};
+
+/**
+ * The Service Country list's item ids, for the enquiries that name one. The
+ * rest — a general question, a partner, a guide — leave it for sales to set.
+ */
+const serviceCountryItems: Partial<Record<EnquiryType, string>> = {
+  turkishCitizenship: "186",
+  turkiyeProperty: "186",
+  roadshow: "186",
+  caribbeanCbi: "190",
+};
+
+/**
+ * The name a lead kind goes by in the CRM, where the dictionary's wording is
+ * longer than a card title wants.
+ */
+const kindNames: Partial<Record<EnquiryType, string>> = {
+  roadshow: "Pakistan Roadshow",
+};
+
 /** What the salesperson sees in the list before opening anything. */
 function title(lead: Lead): string {
-  const kind = en.contact.form.types[lead.enquiryType];
-  const line = `${kind} — ${lead.name}`;
+  const kind = kindNames[lead.enquiryType] ?? en.contact.form.types[lead.enquiryType];
+  const line = `${kind} - ${lead.name}`;
   // Bitrix stores 255; a reader's own subject can already run to 200 and the
   // list view truncates long titles into uselessness well before that.
   return line.length > 120 ? `${line.slice(0, 119)}…` : line;
@@ -275,6 +320,13 @@ export async function createBitrixLead(lead: Lead): Promise<void> {
           }
         : {}),
       ...(assignedTo ? { ASSIGNED_BY_ID: assignedTo } : {}),
+      [customFields.leadName]: lead.name,
+      [customFields.fullName]: lead.name,
+      [customFields.language]: languageItems[lead.locale],
+      [customFields.leadFormName]: kindNames[lead.enquiryType] ?? en.contact.form.types[lead.enquiryType],
+      ...(serviceCountryItems[lead.enquiryType]
+        ? { [customFields.serviceCountry]: serviceCountryItems[lead.enquiryType] }
+        : {}),
     },
     params: { REGISTER_SONET_EVENT: "Y" },
   });
