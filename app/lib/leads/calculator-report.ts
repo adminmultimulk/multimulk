@@ -6,14 +6,19 @@
  */
 
 import "server-only";
-import { company, contact } from "../content";
+import { contact } from "../content";
 import { resendConfigured, sendResendEmail } from "../email/resend";
 import { dirFor, type Locale } from "../i18n/config";
 import { getDictionary } from "../i18n";
 import { interpolate } from "../i18n/format";
-import { absoluteUrl } from "../site";
 import type { CostLine } from "../tools/cost";
-import { escape, idempotencyKey, teamInbox } from "./email";
+import {
+  escape,
+  idempotencyKey,
+  signatureHtml,
+  signatureText,
+  teamInbox,
+} from "./email";
 import type { Lead } from "./schema";
 
 export type CalculatorReport = {
@@ -83,9 +88,7 @@ export async function sendCalculatorReport(
       "",
       copy.closing,
       "",
-      company.name,
-      replyTo,
-      absoluteUrl("/"),
+      ...signatureText(replyTo),
     ].join("\n"),
     html: html({
       greeting: isolate(copy.greeting, "name"),
@@ -130,8 +133,6 @@ function html({
   locale: string;
   dir: "ltr" | "rtl";
 }): string {
-  const home = absoluteUrl("/");
-
   return `<!doctype html>
 <html dir="${dir}" lang="${locale}">
   <body style="margin:0;padding:24px;background:#f5f4f2;font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;font-size:14px;line-height:24px">
@@ -149,11 +150,7 @@ function html({
 
       <p style="margin:24px 0 0;color:#222a2c">${escape(closing)}</p>
 
-      <p dir="ltr" style="margin:28px 0 0;padding-top:20px;border-top:1px solid #edf2ee;color:#6b7280;font-size:12px">
-        <strong style="color:#12402a">${escape(company.name)}</strong><br />
-        <a href="mailto:${escape(contact.email)}" style="color:#6b7280">${escape(contact.email)}</a><br />
-        <a href="${escape(home)}" style="color:#6b7280">${escape(home)}</a>
-      </p>
+      ${signatureHtml()}
     </div>
   </body>
 </html>`;

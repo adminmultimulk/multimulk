@@ -12,6 +12,7 @@ import "server-only";
 import { bitrixConfigured, createBitrixLead } from "./bitrix24";
 import { emailConfigured, emailLead } from "./email";
 import type { Lead } from "./schema";
+import { linkBitrix, saveLead } from "./store";
 
 /**
  * An HTTPS endpoint that accepts a JSON lead — a CRM intake, a Zapier or Make
@@ -39,10 +40,9 @@ export class LeadDeliveryError extends Error {
 /**
  * Persists the lead. Resolves only once it is somewhere it can be read back.
  *
- * With no destination configured this throws in production and logs in
- * development, which is the important asymmetry: a missing environment
- * variable must never become a silent data loss on the live site, but it also
- * must not stop anyone working on the form locally.
+ * The database is always one of the destinations, so there is no longer an
+ * unconfigured case to guard: a lead with no CRM and no inbox set up still
+ * lands on the dashboard's Leads page.
  *
  * Where more than one destination is configured they are attempted together
  * and one success is enough. A lead sitting in the team's inbox *is* readable
@@ -52,9 +52,27 @@ export class LeadDeliveryError extends Error {
  * reconcile them by hand.
  */
 export async function deliverLead(lead: Lead): Promise<void> {
-  const destinations: { name: string; send: () => Promise<void> }[] = [];
+  // Held so the dashboard's row can link to the Bitrix card once both exist.
+  let rowId: string | undefined;
+  let bitrixId: string | undefined;
+
+  const destinations: { name: string; send: () => Promise<void> }[] = [
+    // The dashboard's own copy, always: it needs no configuration beyond the
+    // database the dashboard already runs on.
+    {
+      name: "database",
+      send: async () => {
+        rowId = await saveLead(lead);
+      },
+    },
+  ];
   if (bitrixConfigured) {
-    destinations.push({ name: "bitrix24", send: () => createBitrixLead(lead) });
+    destinations.push({
+      name: "bitrix24",
+      send: async () => {
+        bitrixId = await createBitrixLead(lead);
+      },
+    });
   }
   if (emailConfigured) {
     destinations.push({ name: "resend", send: () => emailLead(lead) });
@@ -62,16 +80,6 @@ export async function deliverLead(lead: Lead): Promise<void> {
   if (webhook) {
     const url = webhook;
     destinations.push({ name: "webhook", send: () => postWebhook(lead, url) });
-  }
-
-  if (destinations.length === 0) {
-    if (process.env.NODE_ENV === "production") {
-      throw new LeadDeliveryError(
-        "No lead destination configured — refusing to accept a lead with nowhere to put it. Set BITRIX24_WEBHOOK_URL, or RESEND_API_KEY with LEAD_EMAIL_FROM and LEAD_EMAIL_TO, or LEAD_WEBHOOK_URL.",
-      );
-    }
-    console.info("[lead] no destination configured; logging instead:", lead);
-    return;
   }
 
   const results = await Promise.allSettled(
@@ -86,6 +94,12 @@ export async function deliverLead(lead: Lead): Promise<void> {
       );
     }
   });
+
+  if (rowId && bitrixId) {
+    await linkBitrix(rowId, bitrixId).catch((error: unknown) => {
+      console.error("[lead] could not link the stored lead to Bitrix24", error);
+    });
+  }
 
   if (results.every((result) => result.status === "rejected")) {
     throw new LeadDeliveryError(

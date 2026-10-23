@@ -24,6 +24,7 @@ import {
   resendConfigured,
   sendResendEmail,
 } from "../email/resend";
+import { company, contact, whatsapp } from "../content";
 import en from "../i18n/dictionaries/en";
 import { localeNames } from "../i18n/config";
 import { absoluteUrl } from "../site";
@@ -106,6 +107,29 @@ export function escape(value: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+/** `wa.me` wants the number as bare digits, country code first. */
+const whatsappHref = `https://wa.me/${whatsapp.number.replace(/\D/g, "")}`;
+
+/**
+ * The sign-off every email to a client ends on, so a reader who would rather
+ * message than write back finds the WhatsApp line in all of them. `replyTo`
+ * is where a reply actually lands, which is not always `contact.email`.
+ */
+export function signatureText(replyTo: string): string[] {
+  return [company.name, replyTo, `WhatsApp: ${whatsapp.number}`, absoluteUrl("/")];
+}
+
+/** The same, as markup. Always Latin, so pinned left-to-right outright. */
+export function signatureHtml(): string {
+  const home = absoluteUrl("/");
+  return `<p dir="ltr" style="margin:28px 0 0;padding-top:20px;border-top:1px solid #edf2ee;color:#6b7280;font-size:12px">
+        <strong style="color:#12402a">${escape(company.name)}</strong><br />
+        <a href="mailto:${escape(contact.email)}" style="color:#6b7280">${escape(contact.email)}</a><br />
+        WhatsApp: <a href="${escape(whatsappHref)}" style="color:#6b7280">${escape(whatsapp.number)}</a><br />
+        <a href="${escape(home)}" style="color:#6b7280">${escape(home)}</a>
+      </p>`;
 }
 
 /** The fields, in the order somebody triaging an enquiry wants them. */

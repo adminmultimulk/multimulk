@@ -275,7 +275,7 @@ function comments(lead: Lead): string {
 }
 
 /**
- * Creates the lead. Resolves only once Bitrix has given it an id.
+ * Creates the lead and resolves with the id Bitrix gave it.
  *
  * `EMAIL` and `PHONE` are multi-value on a Bitrix lead, so they go as arrays
  * of typed entries rather than plain strings — a string is silently dropped,
@@ -289,8 +289,8 @@ function comments(lead: Lead): string {
  * the portal's own notifications, which is what makes an assignee actually
  * find out. It is off by default in the REST API.
  */
-export async function createBitrixLead(lead: Lead): Promise<void> {
-  await callBitrix("crm.lead.add", {
+export async function createBitrixLead(lead: Lead): Promise<string> {
+  const id = await callBitrix("crm.lead.add", {
     fields: {
       TITLE: title(lead),
       // The whole name in NAME rather than split across NAME and LAST_NAME.
@@ -330,4 +330,19 @@ export async function createBitrixLead(lead: Lead): Promise<void> {
     },
     params: { REGISTER_SONET_EVENT: "Y" },
   });
+  return String(id);
+}
+
+/**
+ * The lead's card in the portal, for the dashboard to link to. Built from the
+ * webhook's origin, which is the portal's own; the token in its path never
+ * leaves this module.
+ */
+export function bitrixLeadUrl(id: string): string | null {
+  if (!webhookUrl) return null;
+  try {
+    return `${new URL(webhookUrl).origin}/crm/lead/details/${encodeURIComponent(id)}/`;
+  } catch {
+    return null;
+  }
 }

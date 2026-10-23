@@ -525,3 +525,32 @@ model BlogAgentRun {
   @@index([startedAt])
   @@map("blog_agent_runs")
 }
+
+/// Every enquiry the site's forms raise, kept so the dashboard can list them
+/// whatever happens to the CRM. Written by `deliverLead` alongside Bitrix24 and
+/// the team inbox — see `app/lib/leads/store.ts` — and never edited after:
+/// following a lead up happens in Bitrix, which `bitrixId` links to.
+model Lead {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  /// A lead kind from `app/lib/leads/schema.ts`: "roadshow", "guide", …
+  kind         String
+  name         String
+  /// E.164, or empty when the form took only an email.
+  phone        String   @default("")
+  phoneCountry String?
+  email        String   @default("")
+  subject      String   @default("")
+  message      String   @default("")
+  locale       String
+  /// The page the form was on, `/en/events/pakistan-roadshow-2026`.
+  path         String
+  programme    String?
+  /// The lead's id in Bitrix24, once Bitrix has accepted it.
+  bitrixId     String?
+  submittedAt  DateTime
+  createdAt    DateTime @default(now())
+
+  @@index([submittedAt])
+  @@index([kind, submittedAt])
+  @@map("leads")
+}

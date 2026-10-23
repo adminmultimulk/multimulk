@@ -7,7 +7,7 @@
  */
 
 import "server-only";
-import { company, contact } from "../content";
+import { contact } from "../content";
 import { resendConfigured, sendResendEmail } from "../email/resend";
 import { dirFor } from "../i18n/config";
 import { getDictionary } from "../i18n";
@@ -19,8 +19,13 @@ import {
   type RoadshowCity,
   type RoadshowSlot,
 } from "../roadshow";
-import { absoluteUrl } from "../site";
-import { escape, idempotencyKey, teamInbox } from "./email";
+import {
+  escape,
+  idempotencyKey,
+  signatureHtml,
+  signatureText,
+  teamInbox,
+} from "./email";
 import type { Lead } from "./schema";
 
 export async function sendRoadshowConfirmation(
@@ -50,8 +55,6 @@ export async function sendRoadshowConfirmation(
   ).replace("\u0000", `<bdi>${escape(lead.name)}</bdi>`);
 
   const replyTo = teamInbox[0] ?? contact.email;
-  const home = absoluteUrl("/");
-
   await sendResendEmail({
     to: [lead.email],
     replyTo,
@@ -67,9 +70,7 @@ export async function sendRoadshowConfirmation(
       "",
       copy.email.closing,
       "",
-      company.name,
-      replyTo,
-      home,
+      ...signatureText(replyTo),
     ].join("\n"),
     html: `<!doctype html>
 <html dir="${dir}" lang="${lead.locale}">
@@ -92,11 +93,7 @@ export async function sendRoadshowConfirmation(
       <p style="margin:0 0 16px;color:#222a2c">${escape(copy.email.next)}</p>
       <p style="margin:0;color:#222a2c">${escape(copy.email.closing)}</p>
 
-      <p dir="ltr" style="margin:28px 0 0;padding-top:20px;border-top:1px solid #edf2ee;color:#6b7280;font-size:12px">
-        <strong style="color:#12402a">${escape(company.name)}</strong><br />
-        <a href="mailto:${escape(contact.email)}" style="color:#6b7280">${escape(contact.email)}</a><br />
-        <a href="${escape(home)}" style="color:#6b7280">${escape(home)}</a>
-      </p>
+      ${signatureHtml()}
     </div>
   </body>
 </html>`,

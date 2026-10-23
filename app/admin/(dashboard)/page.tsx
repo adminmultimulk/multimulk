@@ -51,6 +51,7 @@ export default async function OverviewPage() {
     recent,
     visitors,
     remindersDue,
+    leadsThisWeek,
   ] = await Promise.all([
     articles ? prisma.article.count({ where: { status: "PUBLISHED" } }) : 0,
     articles ? prisma.article.count({ where: { status: "DRAFT" } }) : 0,
@@ -74,6 +75,11 @@ export default async function OverviewPage() {
             remindAt: { not: null, lte: now },
             status: { notIn: ["CANCELLED", "NO_SHOW"] },
           },
+        })
+      : 0,
+    superadmin
+      ? prisma.lead.count({
+          where: { submittedAt: { gte: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000) } },
         })
       : 0,
   ]);
@@ -107,7 +113,12 @@ export default async function OverviewPage() {
           </>
         ) : null}
         {superadmin ? (
-          <Stat label="Accounts enabled" value={people} />
+          <>
+            <Link href="/admin/leads" className="block">
+              <Stat label="Leads this week" value={leadsThisWeek} note="Last 7 days, every form" />
+            </Link>
+            <Stat label="Accounts enabled" value={people} />
+          </>
         ) : null}
       </div>
 

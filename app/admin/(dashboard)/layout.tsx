@@ -54,6 +54,11 @@ export default async function DashboardLayout({
     });
   if (canManageUsers(user.role)) {
     items.push({
+      href: "/admin/leads",
+      label: "Leads",
+      hint: "Every enquiry from the site",
+    });
+    items.push({
       href: "/admin/events",
       label: "Event visitors",
       hint: "IPS 2026 list and reminders",
