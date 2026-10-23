@@ -528,8 +528,8 @@ model BlogAgentRun {
 
 /// Every enquiry the site's forms raise, kept so the dashboard can list them
 /// whatever happens to the CRM. Written by `deliverLead` alongside Bitrix24 and
-/// the team inbox — see `app/lib/leads/store.ts` — and never edited after:
-/// following a lead up happens in Bitrix, which `bitrixId` links to.
+/// the team inbox — see `app/lib/leads/store.ts`. Corrected or deleted from
+/// /admin/leads; neither reaches Bitrix, which `bitrixId` links to.
 model Lead {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   /// A lead kind from `app/lib/leads/schema.ts`: "roadshow", "guide", …
@@ -547,8 +547,12 @@ model Lead {
   programme    String?
   /// The lead's id in Bitrix24, once Bitrix has accepted it.
   bitrixId     String?
+  /// The team's own remarks, added from the dashboard.
+  notes        String?
   submittedAt  DateTime
   createdAt    DateTime @default(now())
+  /// Optional because rows saved before editing existed have none.
+  updatedAt    DateTime? @updatedAt
 
   @@index([submittedAt])
   @@index([kind, submittedAt])

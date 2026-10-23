@@ -1,6 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ActionButton } from "@/app/components/admin/action-button";
+import { EditLeadForm } from "@/app/components/admin/lead-forms";
 import { Button, Empty, PageHeading } from "@/app/components/admin/ui";
+import { deleteLead } from "@/app/lib/admin/lead-actions";
 import { requireSuperadmin } from "@/app/lib/admin/guard";
 import {
   kindLabel,
@@ -209,6 +212,22 @@ export default async function LeadsPage({ searchParams }: PageProps<"/admin/lead
                     {lead.message || "—"}
                   </p>
                 </details>
+
+                {lead.notes ? (
+                  <p className="mt-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] leading-[19px] whitespace-pre-wrap text-amber-900">
+                    <strong>Notes:</strong> {lead.notes}
+                  </p>
+                ) : null}
+
+                <div className="mt-3 flex flex-wrap items-start gap-2 border-t border-ink/10 pt-3">
+                  <EditLeadForm lead={lead} kinds={kindOptions} />
+                  <ActionButton
+                    action={deleteLead.bind(null, lead.id)}
+                    label="Delete"
+                    busyLabel="Deleting…"
+                    confirmLabel="Delete from the dashboard"
+                  />
+                </div>
               </article>
             );
           })}
