@@ -17,6 +17,7 @@
     "check:bitrix": "node --env-file=.env.local scripts/check-bitrix.mjs",
     "blog:agent": "node --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/blog-agent.ts",
     "check:tables": "node scripts/check-tables.mjs",
+    "translations": "node --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/translations.ts",
     "db:generate": "prisma generate",
     "db:push": "node --env-file=.env.local node_modules/prisma/build/index.js db push",
     "db:studio": "node --env-file=.env.local node_modules/prisma/build/index.js studio",

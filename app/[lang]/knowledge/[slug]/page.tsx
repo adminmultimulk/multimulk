@@ -12,11 +12,15 @@ import { SiteNav } from "@/app/components/site-nav";
 import { alternatesFor, getDictionary, getLocale } from "@/app/lib/i18n";
 import { formatDate, selectPlural } from "@/app/lib/i18n/format";
 import { readingMinutes } from "@/app/lib/rich-text";
-import { locales } from "@/app/lib/i18n/config";
+import { dirFor, locales, type Locale } from "@/app/lib/i18n/config";
 import { localise, type AnyArticle } from "@/app/lib/article-shape";
 import { ogImage } from "@/app/lib/content";
 import { allArticles } from "@/app/lib/knowledge";
-import { findMergedArticle, relatedMerged } from "@/app/lib/cms/articles";
+import {
+  articleLocales,
+  findMergedArticle,
+  relatedMerged,
+} from "@/app/lib/cms/articles";
 import { article as articleSchema, breadcrumbs } from "@/app/lib/seo/jsonld";
 import type { Dictionary } from "@/app/lib/i18n";
 
@@ -36,27 +40,36 @@ export function generateStaticParams() {
 }
 
 /**
- * Resolves a slug against the merged list, in this language.
+ * Resolves a slug against the merged list, in this language, and the languages
+ * the piece exists in.
  *
- * `localise` swaps in staged copy for the pieces written for this site and
- * leaves a migrated or dashboard-written one as it stands — those are
- * English-only for now.
+ * A translation in the store comes first; `localise` then swaps in the copy
+ * staged in the dictionaries for the five pieces written for this site. A
+ * piece in neither renders in English, and `available` is what lets the page
+ * say so in its canonical rather than pass the English off as a translation.
  */
 async function resolve(
   slug: string,
+  locale: Locale,
   t: Dictionary,
-): Promise<AnyArticle | undefined> {
-  const article = await findMergedArticle(slug);
-  return article ? localise(article, t.articles.copy[slug]) : undefined;
+): Promise<{ article: AnyArticle; available: Locale[] } | undefined> {
+  const article = await findMergedArticle(slug, locale);
+  if (!article) return undefined;
+  return {
+    article: localise(article, t.articles.copy[slug]),
+    available: await articleLocales(article),
+  };
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/[lang]/knowledge/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const t = await getDictionary();
-  const article = await resolve(slug, t);
-  if (!article) return { title: t.meta.articleFallback };
+  const locale = await getLocale();
+  const t = await getDictionary(locale);
+  const resolved = await resolve(slug, locale, t);
+  if (!resolved) return { title: t.meta.articleFallback };
+  const { article, available } = resolved;
 
   // A headline is written for the page and a title tag is written for a result
   // listing, so the dashboard can set the second one separately. Both fall
@@ -64,7 +77,7 @@ export async function generateMetadata({
   // the fields existed and the whole static archive.
   const title = article.seoTitle || article.title;
   const description = article.seoDescription || article.excerpt;
-  const alternates = await alternatesFor(`/knowledge/${slug}`);
+  const alternates = await alternatesFor(`/knowledge/${slug}`, available);
 
   return {
     title,
@@ -93,10 +106,13 @@ export default async function ArticlePage({
   const { slug } = await params;
   const locale = await getLocale();
   const t = await getDictionary(locale);
-  const article = await resolve(slug, t);
-  if (!article) notFound();
+  const resolved = await resolve(slug, locale, t);
+  if (!resolved) notFound();
+  const { article, available } = resolved;
+  /** The language the text is in, which is English where it is untranslated. */
+  const language = available.includes(locale) ? locale : "en";
 
-  const related = await relatedMerged(slug);
+  const related = await relatedMerged(slug, 3, locale);
 
   const banner = article.hero ?? article.image;
 
@@ -114,6 +130,7 @@ export default async function ArticlePage({
             hero: article.hero,
             body: [article.excerpt, ...article.body],
             author: article.author,
+            language,
           }),
           breadcrumbs({
             locale,
@@ -158,7 +175,13 @@ export default async function ArticlePage({
           <Container>
             {/* 1296 canvas: 842.4 article + 129.6 gutter + 324 rail. */}
             <div className="grid gap-[57.6px] lg:grid-cols-[1fr_324px] lg:gap-[129.6px]">
-              <article>
+              {/* English under another language's URL is marked as English, so
+                  a screen reader pronounces it as such and an RTL page sets
+                  it left to right. */}
+              <article
+                lang={language === locale ? undefined : language}
+                dir={language === locale ? undefined : dirFor(language)}
+              >
                 <h1 className="font-display text-[30px] leading-[1.36] text-ink sm:text-[38px] lg:text-[48px]">
                   <AnimatedTitle variant="banner">{article.title}</AnimatedTitle>
                 </h1>

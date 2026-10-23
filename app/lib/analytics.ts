@@ -6,10 +6,9 @@
  * site only and are not mixed with the PHP site this one replaces.
  *
  * That older site reports to a separate property, `G-LGSZXW6R4B`, reached
- * through the Google tag `GT-PJRRXFW2`; its Google Ads tag `AW-18069897933`
- * sits in the GTM container `GTM-TVKT5RV2`. None of those are loaded here, so
- * anything still needed from them — Ads conversions in particular — has to be
- * carried over separately rather than arriving with this tag.
+ * through the Google tag `GT-PJRRXFW2`, in the GTM container `GTM-TVKT5RV2`.
+ * Neither is loaded here. The Google Ads account that container also carried
+ * is configured directly instead; see `adsId` below.
  *
  * The measurement ID is a public identifier — gtag.js carries it in the page
  * source on every request — so it sits in the repo rather than in an env var,
@@ -17,6 +16,28 @@
  * if a second property is ever needed for staging.
  */
 export const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-3S661QGTBG";
+
+/**
+ * Google Ads, configured on the same gtag.js load as GA4 so a click from an ad
+ * is attributed wherever on the site the visitor goes next.
+ */
+export const adsId = "AW-18069897933";
+
+/**
+ * Conversion labels, from Google Ads → Goals → Conversions → the action →
+ * Tag setup → "Use Google tag" — the part after the slash in
+ * `send_to: 'AW-18069897933/<label>'`.
+ *
+ * Empty means "not created yet": the conversion is skipped, and the GA4
+ * `generate_lead` event that fires beside it can be imported into Ads as the
+ * conversion in the meantime.
+ */
+export const adsConversions = {
+  /** A registration for the November 2026 Pakistan roadshow. */
+  roadshowRegistration: "",
+} as const;
+
+export type AdsConversion = keyof typeof adsConversions;
 
 /**
  * Development page views would land in the same reports as real traffic, with
@@ -63,4 +84,20 @@ export function trackEvent(
     .gtag;
   if (!gtag) return;
   gtag("event", name, params ?? {});
+}
+
+/**
+ * Reports a Google Ads conversion, if the tag is loaded and the action has a
+ * label. Same no-op rules as `trackEvent`.
+ */
+export function trackAdsConversion(
+  name: AdsConversion,
+  params?: Record<string, string | number>,
+): void {
+  const label = adsConversions[name];
+  if (typeof window === "undefined" || !label) return;
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void })
+    .gtag;
+  if (!gtag) return;
+  gtag("event", "conversion", { send_to: `${adsId}/${label}`, ...params });
 }

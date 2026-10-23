@@ -193,6 +193,11 @@ export function article(
     body: readonly string[];
     /** The byline, where the piece carries one. */
     author?: string;
+    /**
+     * The language the text is actually in, where it differs from the URL's —
+     * an untranslated piece served in English under `/ar/`.
+     */
+    language?: Locale;
   },
   authorName = "Multi Mulk",
 ): ArticleNode {
@@ -208,7 +213,7 @@ export function article(
     image: image ? absoluteUrl(image) : undefined,
     datePublished: item.date,
     dateModified: item.modified ?? item.date,
-    inLanguage: hreflangFor[locale],
+    inLanguage: hreflangFor[item.language ?? locale],
     mainEntityOfPage: url,
     publisher: { "@id": ORG_ID },
     /*

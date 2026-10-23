@@ -40,7 +40,7 @@ export async function ServicePage({ page }: { page: Page }) {
 
   // The reading rail is whatever the Knowledge Centre currently has under
   // those slugs — a piece not yet published is simply not shown.
-  const articles = await mergedArticles();
+  const articles = await mergedArticles(locale);
   const reading = page.reading.slugs
     .map((slug) => articles.find((article) => article.slug === slug))
     .filter((article) => article !== undefined);

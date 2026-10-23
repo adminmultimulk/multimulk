@@ -75,6 +75,7 @@ export function PhoneField({
   error,
   className = "",
   variant = "boxed",
+  defaultCountry,
 }: {
   label: string;
   /** Accessible name for the country picker, which shows only a code. */
@@ -83,15 +84,21 @@ export function PhoneField({
   error?: string;
   className?: string;
   variant?: keyof typeof styles;
+  /**
+   * For a page aimed at one country — the Pakistan roadshow — where that is a
+   * better guess than the browser's region, which is `US` on most phones set
+   * to plain English.
+   */
+  defaultCountry?: CountryCode;
 }) {
   const style = styles[variant];
   const { locale } = useI18n();
   const id = useId();
-  // The reader's own choice beats the browser's region, which beats the
-  // guess made from the page's language.
+  // The reader's own choice beats the page's own default, then the browser's
+  // region, then the guess made from the page's language.
   const [chosen, setChosen] = useState<CountryCode | null>(null);
   const region = useSyncExternalStore(never, browserRegion, unknownOnServer);
-  const country = chosen ?? region ?? defaultCountryFor(locale);
+  const country = chosen ?? defaultCountry ?? region ?? defaultCountryFor(locale);
 
   // Country names in the reader's language, with the English list as the
   // fallback for anything the runtime cannot name. Sorted by that name, so

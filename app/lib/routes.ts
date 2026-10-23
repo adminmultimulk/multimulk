@@ -69,6 +69,8 @@ export type RouteId =
   | "tools"
   | "freeGuide"
   | "calculatorResult"
+  | "roadshow"
+  | "roadshowThanks"
   | "documents"
   | "authors"
   | "author"
@@ -444,6 +446,26 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     labelKey: "calculatorResult",
     sitemap: { include: false, priority: 0.4, changeFrequency: "monthly" },
     schema: ["ContactPage"],
+  },
+  /*
+   * The Google Ads landing page for the November 2026 Pakistan roadshow, and
+   * where its form lands. Out of the sitemap and noindexed: it is a paid
+   * destination with a three-week life, not a page to rank.
+   */
+  roadshow: {
+    id: "roadshow",
+    pattern: "/events/pakistan-roadshow-2026",
+    labelKey: "roadshow",
+    sitemap: { include: false, priority: 0.5, changeFrequency: "weekly" },
+    schema: [],
+  },
+  roadshowThanks: {
+    id: "roadshowThanks",
+    pattern: "/events/pakistan-roadshow-2026/thank-you",
+    parent: "roadshow",
+    labelKey: "roadshowThanks",
+    sitemap: { include: false, priority: 0.1, changeFrequency: "never" },
+    schema: [],
   },
   authors: {
     id: "authors",

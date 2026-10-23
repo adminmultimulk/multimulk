@@ -115,6 +115,11 @@ function resolveDictionary<T>(base: T, overlay: unknown): T {
 const english = () =>
   import("./dictionaries/en").then((m) => m.default as Dictionary);
 
+/**
+ * How a new language enters the loader below while it is being written. No
+ * language needs it today — tr, zh and fa graduated — but the next one will.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function overlaid(
   load: () => Promise<PartialDictionary>,
 ): Promise<Dictionary> {
@@ -133,10 +138,9 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
   ru: () => import("./dictionaries/ru").then((m) => m.default),
   fr: () => import("./dictionaries/fr").then((m) => m.default),
   ur: () => import("./dictionaries/ur").then((m) => m.default),
-  // Still filling in; English shows through wherever they are silent.
-  tr: () => overlaid(() => import("./dictionaries/tr").then((m) => m.default)),
-  zh: () => overlaid(() => import("./dictionaries/zh").then((m) => m.default)),
-  fa: () => overlaid(() => import("./dictionaries/fa").then((m) => m.default)),
+  tr: () => import("./dictionaries/tr").then((m) => m.default),
+  zh: () => import("./dictionaries/zh").then((m) => m.default),
+  fa: () => import("./dictionaries/fa").then((m) => m.default),
 };
 
 /**
@@ -178,11 +182,20 @@ export async function getI18n(): Promise<{
  * `x-default` points at the English URL rather than the bare path. The bare
  * path is a 307 from the proxy that varies on `Accept-Language` and a cookie,
  * and a conditional redirect is a poor thing to nominate as the default.
+ *
+ * `available` narrows the cluster for a page whose content exists in fewer
+ * languages than its chrome — an article translated into three of the seven.
+ * Omitted, every published language is in it, which is right for any page
+ * that is all dictionary.
  */
-export function hreflangCluster(path: string): Record<string, string> {
+export function hreflangCluster(
+  path: string,
+  available?: readonly Locale[],
+): Record<string, string> {
   const suffix = path === "/" ? "" : path;
   const cluster: Record<string, string> = {};
   for (const locale of publishedLocales) {
+    if (available && !available.includes(locale)) continue;
     cluster[hreflangFor[locale]] = absoluteUrl(`/${locale}${suffix}`);
   }
   cluster["x-default"] = absoluteUrl(`/${defaultLocale}${suffix}`);
@@ -195,12 +208,20 @@ export function hreflangCluster(path: string): Record<string, string> {
  *
  * The canonical is the current locale's own URL, and it is included in the
  * cluster above — Google requires every page in a set to reference itself.
+ *
+ * With `available`, a language outside it is a page in English under another
+ * language's URL: its canonical is the English URL, so search engines index
+ * the one copy rather than seven duplicates of it.
  */
-export async function alternatesFor(path: string) {
+export async function alternatesFor(
+  path: string,
+  available?: readonly Locale[],
+) {
   const locale = await getLocale();
   const suffix = path === "/" ? "" : path;
+  const own = !available || available.includes(locale);
   return {
-    canonical: absoluteUrl(`/${locale}${suffix}`),
-    languages: hreflangCluster(path),
+    canonical: absoluteUrl(`/${own ? locale : defaultLocale}${suffix}`),
+    languages: hreflangCluster(path, available),
   };
 }

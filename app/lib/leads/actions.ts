@@ -30,6 +30,18 @@ import {
   isPublishable,
   parseProgrammeKey,
 } from "../programmes";
+import {
+  budgetLabels,
+  cityNames,
+  cityOpen,
+  isRoadshowBudget,
+  isRoadshowCity,
+  isRoadshowSlot,
+  roadshowDates,
+  slotRange,
+  type RoadshowCity,
+  type RoadshowSlot,
+} from "../roadshow";
 import { absoluteUrl } from "../site";
 import {
   costAssumptions,
@@ -48,6 +60,7 @@ import { acknowledgeLead } from "./ack";
 import { sendBrochure } from "./brochure";
 import { sendCalculatorReport } from "./calculator-report";
 import { sendGuide } from "./guide";
+import { sendRoadshowConfirmation } from "./roadshow";
 import { deliverLead } from "./sink";
 import { notifyTeam } from "./notify";
 import { withinRateLimit } from "./rate-limit";
@@ -373,6 +386,117 @@ export async function requestCalculatorReport(
   });
 
   return { status: "sent" };
+}
+
+/**
+ * A roadshow registration's states. The three choices are reported apart from
+ * the lead's own fields, and a sent registration carries what was booked so the
+ * form can hand it to the thank-you page.
+ */
+export type RoadshowErrors = LeadErrors & {
+  city?: "required" | "closed";
+  slot?: "required";
+  budget?: "required";
+};
+
+export type RoadshowState =
+  | { status: "idle" }
+  | { status: "invalid"; errors: RoadshowErrors }
+  | { status: "failed"; reason: "rate" | "server" }
+  | { status: "sent"; city: RoadshowCity; slot: RoadshowSlot };
+
+/**
+ * A request for a private meeting at the Pakistan roadshow, from
+ * `/events/pakistan-roadshow-2026`.
+ *
+ * Delivered as an ordinary lead of kind `roadshow`, with the city and date in
+ * the subject — what a salesperson scanning the CRM sorts by — and the slot
+ * and budget in the message. The exact time and venue are confirmed by the
+ * team afterwards, so nothing here books a slot or checks capacity.
+ */
+export async function registerRoadshow(
+  _previous: RoadshowState,
+  form: FormData,
+): Promise<RoadshowState> {
+  const city = form.get("city");
+  const slot = form.get("slot");
+  const budget = form.get("budget");
+
+  // A bot is thanked with a plausible booking rather than told what gave it
+  // away; nothing is stored or sent.
+  const decoy = { status: "sent", city: "lahore", slot: "morning" } as const;
+  if (String(form.get("company") ?? "")) return decoy;
+
+  const verdict = verifyFormToken(form.get("t"));
+  if (verdict === "too-fast" || verdict === "bad") return decoy;
+  if (verdict === "stale") return { status: "failed", reason: "server" };
+
+  if (!withinRateLimit(`roadshow:${await clientKey()}`)) {
+    return { status: "failed", reason: "rate" };
+  }
+
+  const choiceErrors: RoadshowErrors = {};
+  if (!isRoadshowCity(city)) choiceErrors.city = "required";
+  // Checked here as well as in the form: the page is regenerated every few
+  // minutes, so a tab left open overnight can still offer yesterday's city.
+  else if (!cityOpen(city)) choiceErrors.city = "closed";
+  if (!isRoadshowSlot(slot)) choiceErrors.slot = "required";
+  if (!isRoadshowBudget(budget)) choiceErrors.budget = "required";
+
+  const cityName = isRoadshowCity(city) ? cityNames[city] : "";
+  const result = validateLead({
+    ...Object.fromEntries(form.entries()),
+    enquiryType: "roadshow",
+    subject: isRoadshowCity(city)
+      ? `Pakistan Roadshow: ${cityName}, ${roadshowDates[city]}`
+      : "Pakistan Roadshow",
+    message: [
+      isRoadshowCity(city) ? `City: ${cityName} — ${roadshowDates[city]}` : "",
+      isRoadshowSlot(slot) ? `Preferred time: ${slot} (${slotRange(slot)} PKT)` : "",
+      isRoadshowBudget(budget) ? `Budget: ${budgetLabels[budget]}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n") || "Pakistan Roadshow registration",
+  });
+
+  if (
+    !result.ok ||
+    Object.keys(choiceErrors).length > 0 ||
+    !isRoadshowCity(city) ||
+    !isRoadshowSlot(slot)
+  ) {
+    return {
+      status: "invalid",
+      errors: { ...(result.ok ? {} : result.errors), ...choiceErrors },
+    };
+  }
+
+  const lead: Lead = {
+    ...result.lead,
+    submittedAt: new Date().toISOString(),
+  };
+
+  try {
+    await deliverLead(lead);
+  } catch (error) {
+    console.error("[roadshow] delivery failed", error);
+    return { status: "failed", reason: "server" };
+  }
+
+  after(async () => {
+    const names = ["notification", "confirmation"];
+    const results = await Promise.allSettled([
+      notifyTeam(lead),
+      sendRoadshowConfirmation(lead, { city, slot }),
+    ]);
+    results.forEach((result, index) => {
+      if (result.status === "rejected") {
+        console.error(`[roadshow] ${names[index]} failed`, result.reason);
+      }
+    });
+  });
+
+  return { status: "sent", city, slot };
 }
 
 function clampInt(

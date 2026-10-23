@@ -1,10 +1,9 @@
 /**
  * 简体中文.
  *
- * A `preview` locale (see `localeStatus` in `../config`): it renders and can be
- * linked, but it is kept out of `hreflang`, out of the sitemap and out of the
- * language switcher until it is complete. Everything absent here shows through
- * from English.
+ * A `partial` locale (see `localeStatus` in `../config`): complete, and typed
+ * as a full `Dictionary` so a missing key fails the build, but kept out of
+ * `hreflang` and the sitemap until a native speaker has reviewed it.
  *
  * The routing segment is `zh`; the tag published in `hreflang` and `<html lang>`
  * is `zh-Hans`, because a bare `zh` says nothing about script. See
@@ -14,15 +13,29 @@
  * 投资入籍 for citizenship by investment, 黄金签证 for golden visas. Development
  * and operator names stay in Latin script, as they appear in listings.
  *
- * When every key is present, change the annotation below to
- * `const zh: Dictionary = { ... }`, move it out of the overlaid branch of the
- * loader in `../index.ts`, and set `localeStatus.zh = "published"`.
+ * Once that review is done, set `localeStatus.zh = "published"`.
  */
 
-import type { PartialDictionary } from "../index";
+import type { Dictionary } from "../index";
 
-const zh = {
+const zh: Dictionary = {
   meta: {
+    articleFallback: "文章",
+    propertyFallback: "房产",
+    citizenship: {
+      turkiye: {
+        title: "土耳其投资入籍",
+        description: "通过购买 400,000 美元房产获得土耳其国籍——门槛、时间线，以及符合条件的伊斯坦布尔与沿海住宅。",
+      },
+      caribbean: {
+        title: "加勒比投资入籍",
+        description: "通过政府批准的度假村投资，获得格林纳达、多米尼克及圣基茨和尼维斯的第二国籍——门槛、时间线与获批项目。",
+      },
+    },
+    team: {
+      title: "我们的团队",
+      description: "Multi Mulk 背后的团队——管理层，以及迪拜、伊斯坦布尔和拉合尔三处办公室，全程负责土耳其入籍、加勒比投资入籍和房产案件。",
+    },
     home: {
       title: "Multi Mulk | 为全球公民提供全球方案",
       description:
@@ -111,6 +124,13 @@ const zh = {
   },
 
   authors: {
+    reviewedContent: "审阅内容",
+    noCredentials: "资质待确认。",
+    knowsAbout: "专业领域",
+    credentials: "资质",
+    body: "移民与投资建议的价值，取决于提供建议的人。以下就是本站内容背后的团队成员。",
+    heading: "谁在为您提供建议",
+    eyebrow: "我们的团队",
     roles: {
       founder: "创始人兼首席执行官",
       advisory: "顾问总监",
@@ -119,6 +139,12 @@ const zh = {
   },
 
   routes: {
+    roadshow: "2026巴基斯坦路演",
+    roadshowThanks: "谢谢",
+    partners: "与我们合作",
+    calculatorResult: "计算结果",
+    freeGuide: "免费指南",
+    team: "我们的团队",
     documents: "资料库",
     home: "首页",
     about: "关于我们",
@@ -184,6 +210,11 @@ const zh = {
   },
 
   footer: {
+    addresses: {
+      UAE: "迪拜 Barsha Heights，Al Thanyah First，Grosvenor Business Tower 1909 室",
+      "Türkiye": "Burc Plaza, Gökevler Mah. 2312 Sk. Blok No:18J, Kat:5, Ofis No:48-49, Beykent / 伊斯坦布尔",
+      Pakistan: "巴基斯坦拉合尔 DHA Phase VIII，Broadway Commercial，192-B 三楼",
+    },
     columns: {
       turkiye: "土耳其",
       caribbean: "加勒比",
@@ -192,6 +223,7 @@ const zh = {
       about: "关于我们",
     },
     aboutItems: {
+      imageCredits: "图片来源",
       ourStory: "我们的故事",
       ourTeam: "我们的团队",
       turkishCitizenship: "土耳其入籍",
@@ -320,6 +352,7 @@ const zh = {
   },
 
   programmes: {
+    copy: {},
     routes: {
       "real-estate": "房地产",
       donation: "政府基金捐赠",
@@ -471,7 +504,14 @@ const zh = {
     heading: "卓越获得认可",
     // Empty: `awardItems` in content.ts is empty, and the badges it
     // used to hold belonged to the reference site's resorts.
-    captions: {},
+    captions: {
+      luxuryHotels: "今年全球开业的 31 家非凡奢华酒店",
+      newHotels: "北美及加勒比地区最佳新酒店",
+      travel: "2025 年最佳旅行目的地",
+      eco: "年度最佳生态友好度假村——2025",
+      michelin: "米其林一钥——非常特别的住宿体验",
+      beachfront: "年度最佳海滨物业",
+    },
   },
 
   articlesSection: {
@@ -481,6 +521,13 @@ const zh = {
   },
 
   articles: {
+    topics: {
+      citizenship: "入籍",
+      residency: "居留",
+      "real-estate": "房地产",
+      turkiye: "土耳其",
+      news: "新闻",
+    },
     categories: {
       All: "全部",
       "Press Media": "媒体报道",
@@ -821,6 +868,10 @@ const zh = {
       consent: "提交本表单即表示您同意我们就您的咨询与您联系。有关我们如何处理您的数据，请参阅隐私政策。",
       submit: "发送咨询",
       types: {
+        calculator: "计算报告申请",
+        roadshow: "巴基斯坦路演登记",
+        guide: "免费指南申请",
+        partnership: "合作伙伴登记",
         turkishCitizenship: "土耳其入籍咨询",
         turkiyeProperty: "土耳其房产咨询",
         caribbeanCbi: "加勒比入籍咨询",
@@ -941,6 +992,256 @@ const zh = {
     },
   },
   citizenship: {
+    caribbean: {
+      hero: {
+        heading: "加勒比投资入籍",
+        body: "格林纳达、多米尼克及圣基茨和尼维斯运营着全球历史最悠久的三个项目——每个项目都可通过我们代理的度假村，走政府批准的途径入籍。",
+      },
+      intro: {
+        eyebrow: "简介",
+        heading: "三个项目，一个获批组合",
+        paragraphs: [
+          "投资入籍发源于加勒比。圣基茨和尼维斯于 1984 年推出首个项目，多米尼克于 1993 年紧随其后，这也是这些护照在边境和银行受到认可、而新兴项目难以企及的原因。每个岛国都有各自的立法、门槛和获批项目清单。",
+          "Multi Mulk 只与政府批准的项目合作——包括 Six Senses La Sagesse 和 InterContinental Grenada – La Sagesse、InterContinental Dominica Cabrits Resort & Spa，以及 Park Hyatt St. Kitts。一笔投资，既能获得品牌度假村资产的份额，又能为家人带来第二本护照。格林纳达尤其值得一提：它是唯一与美国签有条约的加勒比项目。",
+        ],
+      },
+      stats: {
+        investment: "最低房地产投资额",
+        timeline: "办理时间",
+        visaFree: "免签目的地",
+        holding: "持有期",
+      },
+      benefits: {
+        eyebrow: "项目优势",
+        heading: "传承，更上一层",
+        body: "加勒比护照既是对冲工具，也是一项资产——出行自由不依赖于任何单一政府，同时持有一座持续运营的度假村的份额。",
+        items: {
+          citizenship: {
+            title: "终身国籍，代代相传",
+            body: "加勒比国籍终身有效，并可传给后代。视岛国而定，一份申请可涵盖您的配偶、子女，以及受您供养的父母或祖父母——这使其成为一项传承资产，而不只是一份旅行证件。",
+          },
+          mobility: {
+            title: "通行 140 多个目的地",
+            body: "这些护照可免签或落地签前往 140 多个目的地，包括申根区、英国、新加坡和香港。格林纳达还与美国签有条约，是唯一拥有此条约的加勒比项目。",
+          },
+          assets: {
+            title: "拥有品牌度假村",
+            body: "获批项目并非空壳项目。它们由 Six Senses、InterContinental 和 Park Hyatt 运营，这意味着资产具备租金表现、转售市场，以及远超所在岛屿的品牌知名度。",
+          },
+          process: {
+            title: "历史最悠久的项目",
+            body: "圣基茨和尼维斯自 1984 年起运营该项目，多米尼克自 1993 年起。四十年的立法、国际审视和独立尽职调查机构，正是这些护照至今仍能通过新兴项目难以通过的审查的原因。",
+          },
+        },
+      },
+      gallery: {
+        eyebrow: "图集",
+        heading: "岛屿，以及在其上建起的一切",
+        body: "格林纳达的 La Sagesse 湾、多米尼克的 Cabrits、圣基茨的 Christophe Harbour——获批项目的真实面貌。",
+      },
+      signature: {
+        heading: "横跨三岛的标志性入籍投资",
+        body: "这里的获批项目由 Six Senses、InterContinental 和 Park Hyatt 运营——这些品牌自带租赁市场与转售市场。格林纳达、多米尼克和圣基茨各有立法与门槛，因此首要问题从来不是选哪套房，而是选哪个岛，我们会在向您展示任何房源之前先把这一点理清。",
+        button: "咨询加勒比投资入籍",
+      },
+      enquire: {
+        heading: "通过加勒比投资入籍项目获得全球出行自由",
+        body: "告诉我们您的目标，我们将为您推荐合适的岛国、该国获批的项目，以及切实可行的时间线。",
+      },
+      projects: {
+        heading: "政府批准项目",
+        body: "以下每个项目均已获得所在岛国项目的批准。门槛和房源因项目而异，并随立法变化，因此在作出任何承诺之前，我们会以书面形式确认两者。",
+      },
+      process: {
+        eyebrow: "办理流程",
+        heading: "从首次沟通到护照",
+        body: "五个阶段，由一个团队负责。任何岛国都不要求您亲自前往，大多数家庭在三到六个月内完成全部流程。",
+        steps: {
+          consultation: {
+            title: "咨询",
+            body: "格林纳达、多米尼克和圣基茨在门槛、受养人范围以及护照所能开启的机会上各不相同。在看任何一处房产之前，我们会先确定三者中哪一个真正适合您的家庭。",
+          },
+          selection: {
+            title: "选择项目",
+            body: "我们在您所选岛国的政府批准项目中筛选房源，并说明每一套对租金表现和日后转售意味着什么——而不只是是否符合资格。",
+          },
+          purchase: {
+            title: "预订与托管",
+            body: "资金存入指定的托管代理，而非直接支付给开发商，并按施工节点释放。如您不便出行，购房协议可凭授权书签署。",
+          },
+          application: {
+            title: "申请与尽职调查",
+            body: "由授权代理向岛国的入籍部门递交申请。随后由独立国际机构进行背景及资金来源审查，这一阶段决定了整体时间线。",
+          },
+          passport: {
+            title: "获批与护照",
+            body: "获批后，您可远程、在使馆或在岛上宣誓，申请中列明的每个人都将获发护照。度假村份额仍归您所有，持有期满后可以出售。",
+          },
+        },
+      },
+      faq: {
+        heading: "常见问题",
+        items: {
+          what: {
+            question: "什么是加勒比投资入籍？",
+            answer: "格林纳达、多米尼克及圣基茨和尼维斯各自依本国法律设立项目，向作出获批经济贡献的外国人授予国籍——即向国家基金捐款，或投资政府批准的房地产项目。圣基茨于 1984 年推出全球首个此类项目，使这些项目成为业内历史最悠久、受审视最严格的途径。",
+          },
+          options: {
+            question: "有哪些投资方式？",
+            answer: "每个岛国都提供两种途径：向国家发展基金作出不可退还的捐款，成本较低但没有任何回报；或投资约 200,000 美元起的获批房地产项目。房地产途径前期成本更高，但会为您留下一项持有期满后可出售的资产。Multi Mulk 专注于房地产途径。",
+          },
+          timeline: {
+            question: "整个流程需要多长时间？",
+            answer: "一般案件从申请到护照需要三到六个月。决定进度的是尽职调查阶段而非文书工作，因此我们在递交申请之前就备齐资金来源文件，而不是等到被问询时才准备。",
+          },
+          family: {
+            question: "哪些人可以纳入申请？",
+            answer: "所有岛国都涵盖您的配偶和受养子女；视项目而定，还可纳入受您供养的父母或祖父母，以及未婚的受养兄弟姐妹。格林纳达、多米尼克和圣基茨的规定各不相同，这往往决定了一个家庭应选择哪个项目。",
+          },
+          residency: {
+            question: "我需要前往或居住在加勒比吗？",
+            answer: "不需要。三个项目均无居住、最低停留、面试或语言考试要求，整个流程可远程完成。格林纳达完全无需到访；其他两国可在使馆或领事馆宣誓。",
+          },
+          benefits: {
+            question: "这些护照能给我带来什么？",
+            answer: "可免签或落地签前往 140 多个目的地，包括申根区、英国、新加坡和香港；终身国籍并可传给后代；三个国家均不对全球收入、资本利得或遗产征税。格林纳达护照持有人还可申请美国 E-2 投资者签证。",
+          },
+          dueDiligence: {
+            question: "申请人需要接受哪些审查？",
+            answer: "各国政府除本国入籍部门审核外，还委托独立的国际尽职调查机构核实身份、犯罪记录、制裁风险和资金来源。在欧盟和美国的压力下，审查标准已显著收紧，确有申请被拒。在您为一个案件花费任何费用之前，我们都会如实评估。",
+          },
+          resale: {
+            question: "之后可以出售房地产吗？",
+            answer: "可以，在持有期满后——通常为五年，但具体因岛国以及买方本人是否申请入籍而有所不同。许多获批项目在持有期内还会支付租金回报。出售不会影响您终身有效的国籍。",
+          },
+        },
+      },
+    },
+    turkiye: {
+      hero: {
+        heading: "土耳其投资入籍",
+        body: "一次符合条件的购房，即可让您、您的配偶及 18 岁以下子女获得国籍——入籍前后均无需在土耳其居住。",
+      },
+      intro: {
+        eyebrow: "简介",
+        heading: "以您真正拥有的房产入籍",
+        paragraphs: [
+          "土耳其是唯一一个能将普通购房直接转化为完整国籍的主要项目。无需捐款，也无需放弃任何东西：您购买一套不低于 400,000 美元门槛的住宅，持有三年，之后这笔投资仍归您所有并可出售，而国籍则终身属于您的家庭。",
+          "Multi Mulk 代理伊斯坦布尔两岸以及爱琴海和地中海沿岸的项目，每个项目在进入我们的房源组合之前都会对照这一门槛进行衡量。房产专家、入籍顾问和法律顾问作为一个团队协作，因此回答您第一个问题的人，也将是陪伴申请直至拿到护照的人。",
+        ],
+      },
+      stats: {
+        investment: "最低房产投资额",
+        timeline: "办理时间",
+        visaFree: "免签目的地",
+        holding: "持有期",
+      },
+      benefits: {
+        eyebrow: "项目优势",
+        heading: "土耳其国籍带来什么",
+        body: "在这里，国籍是一项有用的资产，而不是抽屉里的一份文件：出行自由、横跨欧亚的立足点，以及持续产生收益的房产。",
+        items: {
+          citizenship: {
+            title: "终身国籍，惠及家人",
+            body: "土耳其国籍终身有效，并可传给后代。一份申请即可涵盖您、您的配偶及 18 岁以下子女，入籍后出生的子女自出生即为土耳其公民。土耳其允许双重国籍，因此入籍无需放弃任何东西。",
+          },
+          mobility: {
+            title: "畅行欧亚",
+            body: "土耳其护照可免签或落地签前往 110 多个目的地；土耳其与美国的条约还为公民开辟了申请 E-2 投资者签证的途径，这是大多数项目无法提供的。伊斯坦布尔的两座机场让欧洲、海湾地区和中亚的大部分地区都在几小时航程之内。",
+          },
+          assets: {
+            title: "持续增值的住宅",
+            body: "门槛通过购买而非捐款达成。您获得真实市场中一套真实住宅的产权——可以自住、出租或留给子女——三年持有期满后，可按市场届时的价值出售。",
+          },
+          process: {
+            title: "快速且有法可依的流程",
+            body: "该项目以土耳其法律明文规定，而非个案审批，从估值到护照通常稳定在三到六个月。无需面试、无需语言考试，任何阶段都无需在土耳其居住。",
+          },
+        },
+      },
+      gallery: {
+        eyebrow: "图集",
+        heading: "两大洲交汇之地",
+        body: "伊斯坦布尔两岸、博德鲁姆的爱琴海、安塔利亚的地中海——符合条件的住宅所在之处。",
+      },
+      signature: {
+        heading: "横跨两岸的标志性入籍投资",
+        body: "土耳其是唯一一个以持有而非捐款达成门槛的主要项目，而且市场足够深厚，便于日后转售。伊斯坦布尔横跨两大洲，房价仅为欧洲同类首都的零头；海岸线从爱琴海延伸至地中海——因此在这里，一笔符合条件的购房往往在考虑护照之前，就已凭自身价值站得住脚。",
+        button: "咨询土耳其投资入籍",
+      },
+      enquire: {
+        heading: "通过土耳其投资入籍项目获得全球出行自由",
+        body: "告诉我们您的目标，我们将为您提供符合条件的住宅、购房价格之外的总成本，以及切实可行的时间线。",
+      },
+      projects: {
+        heading: "符合条件的项目",
+        body: "以下每套住宅按当前估值均达到或超过 400,000 美元门槛。合格价位的房源流转很快，因此在作出任何承诺之前，所有数字都会以官方估值报告为准进行确认。",
+      },
+      process: {
+        eyebrow: "办理流程",
+        heading: "从首次沟通到护照",
+        body: "五个阶段，由一个团队负责。大多数家庭在三到六个月内完成全部流程，全程无需踏足土耳其。",
+        steps: {
+          consultation: {
+            title: "咨询",
+            body: "我们讲清门槛、持有期、购房价格之外的费用和切实可行的时间线——如果该项目并不适合您的目标，我们也会直言相告。",
+          },
+          selection: {
+            title: "选房",
+            body: "我们按官方估值而非挂牌价筛选达到门槛的住宅，并安排实地或远程看房。",
+          },
+          purchase: {
+            title: "购买与地契",
+            body: "如您不便出行，您的律师可凭授权书完成过户。地契登记时会附上项目要求的三年禁售注记。",
+          },
+          application: {
+            title: "入籍申请",
+            body: "我们同时递交合规证明、居留许可和入籍申请，并提前备齐尽职调查文件，确保流程不会在窗口卡住。",
+          },
+          passport: {
+            title: "获批与护照",
+            body: "获批后，您及申请中列明的每位家庭成员都将获发护照。房产始终归您所有，三年期满后可自由出售。",
+          },
+        },
+      },
+      faq: {
+        heading: "常见问题",
+        items: {
+          what: {
+            question: "什么是土耳其投资入籍项目？",
+            answer: "这是一条写入土耳其法律的途径：外国人在土耳其购买不低于 400,000 美元的房产并持有三年，即可获得完整国籍。与捐款类项目不同，这笔投资是您拥有的资产，持有期满后可以出售，而国籍本身是永久的。",
+          },
+          options: {
+            question: "哪些投资方式符合条件？",
+            answer: "我们大多数客户选择房产途径，最低 400,000 美元，并以官方估值报告确认。土耳其法律还认可 500,000 美元的银行存款、政府债券购买或资本投资，均需持有三年。只有房产途径能让您在自己选择的市场中保留一项可用的资产。",
+          },
+          timeline: {
+            question: "整个流程需要多长时间？",
+            answer: "一般案件从购房到护照需要三到六个月。过户本身只需几天，大部分时间用于合规证明和入籍申请。案件往往因文件不全而停滞，因此我们在购房之前而非之后就准备好尽职调查文件。",
+          },
+          family: {
+            question: "哪些人可以纳入申请？",
+            answer: "您、您的配偶及 18 岁以下子女可通过一份申请、一笔门槛投资一并入籍。18 岁以上子女须以自己的投资单独申请。入籍后出生的子女自出生即为土耳其公民。",
+          },
+          residency: {
+            question: "我需要在土耳其居住或前往土耳其吗？",
+            answer: "不需要。入籍前后均无居住要求，也无维持国籍的最低停留时间，更无面试或语言考试。购房手续可由您的律师凭授权书办理，因此整个流程无需您离开家。",
+          },
+          benefits: {
+            question: "土耳其护照能给我带来什么？",
+            answer: "可免签或落地签前往 110 多个目的地；有权在土耳其生活、工作和学习；并可依据土耳其的条约申请美国 E-2 投资者签证。土耳其允许双重国籍，因此您可保留原有国籍。",
+          },
+          dueDiligence: {
+            question: "申请人需要接受哪些审查？",
+            answer: "申请人需接受犯罪记录、制裁名单及投资资金来源的审查。审查标准是实打实的，确有申请被拒，这正是该项目在重要银行和边境机构面前保持公信力的原因。在您作出承诺之前，我们会指出任何可能造成困难的问题。",
+          },
+          resale: {
+            question: "之后可以出售房产吗？",
+            answer: "可以。地契附有三年禁售注记；注记失效后，您可按市场价值出售、出租或继续持有该住宅。出售不会影响申请中列明的任何人的国籍——国籍终身有效。",
+          },
+        },
+      },
+    },
     eyebrow: "投资入籍",
     anchors: {
       introduction: "概述",
@@ -976,6 +1277,171 @@ const zh = {
     },
   },
   /** “下载宣传册”——按钮、其后的表单，以及宣传册所在的邮件。 */
+  roadshow: {
+    meta: {
+      title: "2026土耳其房产路演——拉合尔、伊斯兰堡、卡拉奇 | Multi Mulk",
+      description:
+        "预约与 Multi Mulk 的免费私人会面：拉合尔（11月11日）、伊斯兰堡（11月13日）或卡拉奇（11月15日），了解土耳其投资入籍及伊斯坦布尔精选项目。",
+    },
+    eyebrow: "2026土耳其–巴基斯坦房产路演",
+    heading: "在拉合尔、伊斯兰堡或卡拉奇与我们会面",
+    body: "一对一私人会面，介绍土耳其投资入籍、为家人取得第二本护照以及伊斯坦布尔精选项目——今年十一月，就在您的城市。",
+    pillars: ["土耳其公民身份", "第二本护照", "伊斯坦布尔房产"],
+    cta: "预约私人会面",
+    cities: {
+      lahore: { name: "拉合尔" },
+      islamabad: { name: "伊斯兰堡" },
+      karachi: { name: "卡拉奇" },
+    },
+    hours: "会面时间 {range}",
+    venueTbc: "确认时告知地点",
+    bookCity: "预约{city}",
+    cityClosed: "会面已结束",
+    citiesHeading: "三座城市，三天",
+    citiesBody:
+      "每次会面均为私人会面，约一小时。请选择城市和方便的时段，我们将通过电话或 WhatsApp 确认具体时间和地点。",
+    agendaEyebrow: "您的会面",
+    agendaHeading: "会面内容",
+    agenda: [
+      {
+        title: "您是否符合条件",
+        body: "通过购房获得土耳其公民身份的门槛为 {minimum}，须持有 {years} 年。我们首先根据规定评估您的情况。",
+      },
+      {
+        title: "全部费用",
+        body: "购房价格之外的费用：地契税、律师费、估价及政府收费——让您按真实总额做规划。",
+      },
+      {
+        title: "伊斯坦布尔精选项目",
+        body: "一份符合入籍条件的项目短名单，以及我们在推荐任何项目之前进行的地契和估价核查。",
+      },
+      {
+        title: "流程与时间",
+        body: "从预订到护照通常需要 {min}–{max} 个月，无须在土耳其居住——以及每一步您需要做什么。",
+      },
+    ],
+    factsHeading: "土耳其公民身份一览",
+    facts: {
+      minimum: "最低房产投资",
+      processing: "常规办理时间",
+      processingValue: "{min}–{max} 个月",
+      visaFree: "免签目的地",
+      family: "可随同申请",
+      familyValue: "配偶及 {age} 岁以下子女",
+      residence: "居住要求",
+      residenceValue: "无",
+    },
+    factsNote:
+      "数据最近一次审核于 {date}。项目规定可能变化，我们会在会面时逐项确认。",
+    stepsHeading: "流程",
+    steps: [
+      {
+        title: "登记",
+        body: "选择城市、时段和预算，只需一分钟。",
+      },
+      {
+        title: "我们确认",
+        body: "我们的团队将在一个工作日内致电或通过 WhatsApp 与您确认具体时间和地点。",
+      },
+      {
+        title: "私人会面",
+        body: "与顾问面谈约一小时，免费且无任何义务。",
+      },
+    ],
+    formHeading: "申请会面",
+    formBody: "会面免费、私密、无任何义务。每个城市名额有限。",
+    form: {
+      city: "城市和日期",
+      slot: "首选时段",
+      slotPlaceholder: "选择时段",
+      slots: {
+        morning: "上午",
+        afternoon: "下午",
+        evening: "傍晚",
+      },
+      budget: "投资预算",
+      budgetPlaceholder: "选择范围",
+      budgets: {
+        under400k: "40万美元以下",
+        "400kTo600k": "40万–60万美元",
+        "600kTo1m": "60万–100万美元",
+        over1m: "100万美元以上",
+      },
+      errors: {
+        choose: "请选择一项。",
+        closed: "该城市的会面已结束，请选择其他城市。",
+      },
+      consent:
+        "登记即表示您同意我们通过电话、WhatsApp 和电子邮件就路演及土耳其投资入籍与您联系。有关我们如何处理您的数据，请参阅隐私政策。",
+      submit: "提交会面申请",
+      submitting: "正在提交…",
+    },
+    faqHeading: "预约前的常见问题",
+    faqs: [
+      {
+        question: "参加需要付费吗？",
+        answer: "不需要。会面免费，也没有任何购买义务。",
+      },
+      {
+        question: "会面在哪里进行？",
+        answer: "在每个城市的市中心地点。我们会在确认时间时告知地址，以确保每次会面的私密性。",
+      },
+      {
+        question: "可以带家人一起来吗？",
+        answer: "可以，我们也鼓励这样做。您的配偶及 {age} 岁以下子女可一并纳入土耳其入籍申请，因此最好让所有参与决定的人都到场。",
+      },
+      {
+        question: "需要携带什么吗？",
+        answer: "没有必须携带的物品。如果您已有预算或心仪项目，欢迎带着问题前来；携带护照复印件可帮助我们当场核查资格。",
+      },
+      {
+        question: "这些日期我无法参加，怎么办？",
+        answer: "请通过 WhatsApp 或联系页面给我们留言，我们会在您方便的时间安排视频通话。",
+      },
+    ],
+    ended: {
+      heading: "2026路演已结束",
+      body: "感谢所有在拉合尔、伊斯兰堡和卡拉奇与我们会面的朋友。您仍可通过视频通话或电话与顾问交流。",
+      formHeading: "预约在线咨询",
+      formBody: "留下您的联系方式，顾问将与您联系安排时间。",
+    },
+    summary: {
+      heading: "您的申请",
+      city: "城市",
+      date: "日期",
+      time: "首选时段",
+      venue: "地点",
+    },
+    thanks: {
+      meta: {
+        title: "登记已收到 | 2026巴基斯坦路演 | Multi Mulk",
+        description: "您的路演会面申请已收到。",
+      },
+      eyebrow: "登记已收到",
+      heading: "谢谢——我们会尽快与您联系",
+      body: "我们的团队将在一个工作日内致电或通过 WhatsApp 确认具体时间和地点。申请副本正发送至您的邮箱。",
+      addToCalendar: "添加到日历",
+      googleCalendar: "Google 日历",
+      icsCalendar: "Apple / Outlook",
+      calendarTitle: "Multi Mulk——土耳其房产路演，{city}",
+      calendarDetails: "与 Multi Mulk 的私人会面。具体时间和地点将由我们的团队确认。",
+      whatsapp: "通过 WhatsApp 联系我们",
+      whatsappMessage: "您好 Multi Mulk，我已登记参加{city}的路演。",
+      exploreHeading: "在此期间",
+      exploreCitizenship: "土耳其投资入籍",
+      exploreProperties: "浏览伊斯坦布尔房产",
+      exploreGuide: "下载免费指南",
+      back: "返回路演页面",
+    },
+    email: {
+      subject: "您的路演会面申请——Multi Mulk",
+      greeting: "{name}，您好：",
+      body: "感谢您登记参加土耳其–巴基斯坦房产路演。以下是您申请的会面：",
+      next: "我们的团队成员将在一个工作日内致电或通过 WhatsApp 与您确认具体时间和地点。",
+      closing: "如需更改，直接回复此邮件即可。",
+    },
+  },
+
   brochure: {
     cta: "下载宣传册",
     heading: "{project} 宣传册",
@@ -998,6 +1464,7 @@ const zh = {
   },
   /** /properties/<slug> 上单套住宅的页面。 */
   resort: {
+    copy: {},
     about: "关于",
     highlights: "度假村亮点",
     location: "位置",
@@ -1016,6 +1483,14 @@ const zh = {
   },
 
   listing: {
+    galleryNext: "下一张",
+    galleryPrevious: "上一张",
+    galleryCounter: "{index} / {count}",
+    galleryMore: "+{count} 张",
+    galleryViewAll: {
+      one: "查看照片",
+      other: "查看全部 {count} 张照片",
+    },
     specs: "概览",
     about: "关于项目",
     gallery: "图库",
@@ -1042,6 +1517,727 @@ const zh = {
     pricingWhatsAppMessage:
       "您好 Multi Mulk，我想了解 {project} 的最新价格及可选方案。",
   },
-} satisfies PartialDictionary;
+
+  legal: {
+    pending: "本页面正在等待 Multi Mulk 提供最终文本。在此发布之前，如需了解现行条款，请发送邮件至 info@multimulk.com。",
+    updated: "最后修订：{date}",
+    headOffice: "总部",
+    copy: {},
+    credits: {
+      intro: "本站几乎所有照片均来自图库或公有领域，无需任何回报。少数照片采用知识共享（Creative Commons）许可，其许可要求在此注明来源。",
+      authorLabel: "摄影师",
+      sourceLabel: "来源",
+      licenceLabel: "许可",
+      shareAlike: "该许可为“相同方式共享”。本站使用的版本经过裁剪，属于演绎作品，因此以相同许可发布——您可按相同条款再次使用。",
+      rest: "其余图片均为 Pexels 图库、公有领域图片，或由项目方提供的照片。每个文件来源的完整记录均与文件一并保存。",
+    },
+  },
+
+  documents: {
+    meta: {
+      title: "资料库",
+      description: "下载 Multi Mulk 关于土耳其投资入籍、居留项目及与我们合作的指南、清单和演示文稿。",
+    },
+    eyebrow: "资源",
+    heading: "资料库",
+    body: "我们的指南、清单和演示文稿，均可免费下载：土耳其投资入籍如何运作、申请需要哪些材料，以及全球各项目如何比较。",
+    listHeading: "全部资料",
+    searchLabel: "搜索资料",
+    searchPlaceholder: "按标题或关键词搜索",
+    filter: "筛选",
+    filterLabel: "筛选资料",
+    filterCategory: "类别",
+    categories: {
+      citizenship: "土耳其入籍",
+      applications: "申请材料",
+      programmes: "全球项目",
+      company: "公司与合作伙伴",
+    },
+    pages: {
+      one: "{count} 页",
+      other: "{count} 页",
+    },
+    size: "PDF · {size} MB",
+    view: "查看",
+    download: "下载",
+    viewLabel: "查看 {title}（PDF，在新标签页中打开）",
+    downloadLabel: "下载 {title}（PDF，{size} MB）",
+    noMatch: "没有与“{query}”匹配的资料。",
+    empty: "{filter} 类别下暂无内容。",
+    items: {
+      "turkiye-citizenship-guide": {
+        title: "通过房地产投资获得土耳其国籍",
+        summary: "购房入籍如何运作，以及这笔投资如何通过租金收入和增值获得回报。",
+      },
+      "step-by-step-process-timeline-guide": {
+        title: "分步流程与时间线指南",
+        summary: "土耳其购房入籍从购买到护照的每个阶段，以及各阶段所需时间。",
+      },
+      "turkish-citizenship-application-stages": {
+        title: "土耳其入籍申请阶段",
+        summary: "一张总览表呈现申请各阶段：每一步发生什么，大约需要多长时间。",
+      },
+      "cbi-bank-deposit": {
+        title: "通过银行存款获得土耳其国籍",
+        summary: "政府批准的途径：在土耳其银行存入 500,000 美元，家人可一并入籍。",
+      },
+      "turkey-visa-document-checklist": {
+        title: "土耳其签证材料清单",
+        summary: "申请土耳其签证需携带的材料：申请表、护照、照片及证明文件。",
+      },
+      "turkish-citizenship-application-documents": {
+        title: "巴基斯坦公民入籍申请材料",
+        summary: "巴基斯坦申请人所需的个人及家庭文件，以及每份文件如何认证、翻译和公证。",
+      },
+      "global-citizenship-and-residency-programs": {
+        title: "全球入籍与居留项目",
+        summary: "比较欧盟、加勒比、大洋洲和中东地区的投资入籍与投资居留项目。",
+      },
+      "multi-mulk-company-profile": {
+        title: "Multi Mulk 公司简介",
+        summary: "我们是谁，以及我们为全球投资者在房地产、居留和入籍领域提供哪些服务。",
+      },
+      "multi-mulk-b2b": {
+        title: "Multi Mulk B2B 合作伙伴计划",
+        summary: "土耳其投资入籍，以及我们面向中介和顾问的合作伙伴计划。",
+      },
+    },
+  },
+
+  partners: {
+    meta: {
+      title: "与 Multi Mulk 合作 | 土耳其房地产与入籍",
+      description: "与 Multi Mulk 合作，在专属合作团队的支持下，为您的客户提供土耳其房地产投资和土耳其投资入籍服务。",
+    },
+    whatsappMessage: "您好 Multi Mulk，我想洽谈合作事宜。",
+    hero: {
+      eyebrow: "与 Multi Mulk 合作",
+      heading: "为现有客户提供更多服务",
+      subheading: "无需自建土耳其业务团队，即可在您的服务中加入土耳其房地产、土耳其投资入籍和国际居留解决方案。",
+      body: "您负责客户关系，Multi Mulk 提供专业服务该客户所需的市场渠道、精选投资机会、最新项目信息和专业支持。Multi Mulk 的合作旨在长期共赢，而非一次性交易。",
+      primary: "成为合作伙伴",
+      secondary: "联系我们的合作团队",
+      audience: "面向房地产中介、投资移民顾问、财富顾问、律师事务所及国际商业网络。",
+    },
+    why: {
+      heading: "为什么选择与 Multi Mulk 合作？",
+      intro: "Multi Mulk 为中介、顾问和咨询机构提供土耳其房地产投资和土耳其投资入籍领域的专业合作伙伴。合作伙伴将获得为国际客户提供优质服务所需的渠道、信息和支持。",
+      items: [
+        {
+          title: "获取精选投资机会",
+          body: "为客户提供已通过 Multi Mulk [资格、价值与退出审核](protection) 的土耳其房产，并搭配相关国际投资方案。",
+        },
+        {
+          title: "最新项目信息",
+          body: "使用最新的项目简介、价格、房源和销售资料，而非过时的价目表。",
+        },
+        {
+          title: "投资与入籍专业知识",
+          body: "当客户目标涉及土耳其国籍、居留或更广泛的投资规划时，Multi Mulk 的[房产专家、入籍顾问和法律顾问](team)将为洽谈提供支持。",
+        },
+        {
+          title: "专属合作支持",
+          body: "咨询和客户推荐直接对接 Multi Mulk 合作团队，无需在不相关的部门之间辗转。",
+        },
+        {
+          title: "客户全程支持",
+          body: "Multi Mulk 为每一次推荐提供支持，从初步咨询和机会评估，到选房、购买及相关咨询阶段。",
+        },
+        {
+          title: "国际市场覆盖",
+          body: "Multi Mulk 在[伊斯坦布尔、迪拜和拉合尔设有办公室](contact)，既了解土耳其房地产市场，也了解被其吸引的国际投资者。",
+        },
+      ],
+    },
+    who: {
+      heading: "谁可以与 Multi Mulk 合作？",
+      intro: "Multi Mulk 与客户对土耳其房产投资、土耳其国籍或国际居留感兴趣的专业公司及独立顾问合作。合作伙伴可位于土耳其境内或境外。",
+      items: [
+        {
+          title: "房地产中介与经纪人",
+          body: "向合适的客户推荐精选土耳其投资机会，拓展您的国际业务组合。",
+        },
+        {
+          title: "国际房产顾问",
+          body: "借助最新项目信息以及与 Multi Mulk 合作团队的直接联络，将土耳其纳入您覆盖的市场。",
+        },
+        {
+          title: "移民与入籍顾问",
+          body: "以与房产挂钩的土耳其入籍途径，补充您的移民或跨境流动服务。",
+        },
+        {
+          title: "财富管理机构、家族办公室与理财顾问",
+          body: "在符合客户整体财富策略时，引入房地产与国际身份规划方案。",
+        },
+        {
+          title: "律师事务所与企业服务机构",
+          body: "当客户在您的服务之外还需要协调一致的房产、投资、居留或入籍支持时，与我们携手合作。",
+        },
+        {
+          title: "移居与留学顾问",
+          body: "为跨国流动的客户及其家庭提供土耳其相关房产与居留解决方案。",
+        },
+        {
+          title: "商业顾问与国际网络",
+          body: "将有意投资土耳其的客户和会员，与当地专业合作伙伴对接。",
+        },
+        {
+          title: "推荐合作伙伴与独立顾问",
+          body: "推荐合格投资者，由 Multi Mulk 负责相关咨询与交易流程。",
+        },
+      ],
+      note: "合作伙伴在其自身执照和职业义务范围内开展工作。受监管的法律、金融或移民建议仅应由具备相应资质的专业人士提供。",
+    },
+    models: {
+      eyebrow: "合作机会",
+      heading: "与 Multi Mulk 合作的四种方式",
+      intro: "Multi Mulk 提供四种合作模式：土耳其房地产、土耳其入籍与投资推荐、国际入籍与居留，以及战略或机构合作。",
+      bestForLabel: "适合：",
+      items: {
+        "real-estate": {
+          title: "土耳其房地产合作",
+          bestFor: "房地产中介、经纪人、房产顾问及国际顾问。",
+          body: "适合客户有以下需求的合作伙伴：",
+          points: [
+            "出于投资、移居或第二居所目的[在土耳其购房](realEstate)",
+            "[投资伊斯坦布尔、博德鲁姆或安塔利亚的房产](search)",
+            "建立土耳其房地产投资组合",
+            "了解[符合土耳其入籍条件的房产](citizenshipGuide)",
+          ],
+          after: "Multi Mulk 提供精选项目渠道、最新房源与价格、项目简介和投资信息，并在交易全程提供支持。",
+          link: "注册成为房地产合作伙伴",
+        },
+        "citizenship-referral": {
+          title: "土耳其入籍与投资推荐合作",
+          bestFor: "移民及投资移民顾问、入籍顾问和财富管理专业人士。",
+          body: "适合国际客户对[土耳其投资入籍](turkiye)感兴趣的顾问和机构。Multi Mulk 通过其咨询网络协助协调相关房产与入籍流程，从选择合格房产到递交入籍申请。推荐方将在全程获悉进展。",
+          points: [],
+          after: "",
+          link: "洽谈推荐合作",
+        },
+        "citizenship-residency": {
+          title: "国际入籍与居留合作",
+          bestFor: "客户目光超越土耳其的精选专业合作伙伴。",
+          body: "适合客户考虑土耳其以外入籍或[居留方案](goldenVisa)的合作伙伴，包括通过 Multi Mulk 提供的符合条件的[加勒比投资入籍项目](caribbean)。Multi Mulk 与格林纳达、多米尼克及圣基茨和尼维斯的政府批准项目合作。项目是否适合，取决于每位客户的具体情况及当时的现行规定。",
+          points: [],
+          after: "",
+          link: "咨询入籍与居留合作",
+        },
+        strategic: {
+          title: "战略与机构合作",
+          bestFor: "房地产开发商、投资公司、家族办公室、国际机构、专业服务公司及企业网络。",
+          body: "适合希望与 Multi Mulk 开展更广泛、更系统合作的机构。视契合程度，合作可包括：",
+          points: [
+            "推荐安排与战略分销",
+            "市场进入合作",
+            "联合营销与联名教育内容",
+            "网络研讨会、投资者活动和路演，例如 Multi Mulk 在巴基斯坦举办的土耳其房产路演",
+            "研究合作",
+          ],
+          after: "",
+          link: "提出战略合作建议",
+        },
+      },
+      note: "具体商业条款取决于合作模式，并在任何客户推荐之前与每位合作伙伴单独商定。",
+    },
+    provides: {
+      eyebrow: "Multi Mulk 提供的支持",
+      heading: "助您更好地服务客户",
+      intro: "Multi Mulk 通过一个合作团队，为合作伙伴提供项目渠道、最新房源与价格、销售资料、投资信息、入籍与居留协调以及客户会面支持。",
+      items: [
+        {
+          title: "项目渠道",
+          body: "为国际买家精选的土耳其投资房产，从伊斯坦布尔市中心住宅到爱琴海和地中海沿岸项目。",
+        },
+        {
+          title: "最新房源与价格",
+          body: "最新房源情况、现行价格，以及适用时的项目动态。",
+        },
+        {
+          title: "合作伙伴销售资料",
+          body: "项目简介、核心参数、演示文稿、宣传册及经批准的视觉素材（如有）。",
+        },
+        {
+          title: "投资信息",
+          body: "房产、市场与投资信息，包括 Multi Mulk 公开发布的投资评分框架，帮助您清晰讲解每个机会。",
+        },
+        {
+          title: "入籍与居留协调",
+          body: "为目标包括土耳其国籍、居留或其他国际身份项目的客户提供协调支持。",
+        },
+        {
+          title: "客户会面支持",
+          body: "在适当情况下，协助咨询会、项目推介、线上会议及实地看房。",
+        },
+      ],
+      strip: {
+        title: "一个合作联络人，一段长期关系。",
+        body: "每位合作伙伴都与 Multi Mulk 合作团队中的一位核心联络人对接，负责协调、咨询和客户推荐。这段关系旨在远远超越单次推荐。",
+      },
+    },
+    process: {
+      heading: "与 Multi Mulk 的合作如何运作？",
+      intro: "与 Multi Mulk 的合作分为四步，从您的首次咨询到每次客户推荐的协同工作。",
+      steps: [
+        {
+          title: "登记意向",
+          body: "填写合作表格，向 Multi Mulk 介绍您的机构、客户以及您服务的市场。",
+        },
+        {
+          title: "合作洽谈",
+          body: "Multi Mulk 合作团队审阅您的申请，并与您商讨最合适的合作架构和商业条款。",
+        },
+        {
+          title: "推介机会",
+          body: "合作确立后，您使用约定的资料和流程，向合适的客户推介相关机会。",
+        },
+        {
+          title: "共同服务客户",
+          body: "Multi Mulk 与您协同，并在相关房产、投资、居留或入籍流程中为客户提供支持。",
+        },
+      ],
+      cta: "登记意向",
+    },
+    whyUs: {
+      heading: "为什么选择 Multi Mulk？",
+      subheading: "先咨询，后房源。",
+      body: "Multi Mulk 是一家国际房地产与入籍咨询机构，在土耳其、阿联酋和巴基斯坦设有办公室。我们的工作从投资者想要实现的目标出发；当某个项目或计划并不合适时，我们会直言相告。对合作伙伴而言，这种坦诚保护了您与客户建立的关系。",
+      principles: [
+        {
+          lead: "咨询优先。",
+          body: "根据客户目标匹配机会，而不是反过来。",
+        },
+        {
+          lead: "专为国际投资者打造。",
+          body: "面向外国人的土耳其房产是 Multi Mulk 的核心业务，因此团队熟悉海外买家会问的问题，从地契到持有期。",
+        },
+        {
+          lead: "房产与入籍一体化。",
+          body: "房产专家、入籍顾问和法律顾问作为一个团队工作，因此购房与入籍申请被视为同一个决定来处理。",
+        },
+        {
+          lead: "透明筛选。",
+          body: "Multi Mulk 公开其房产评估方法，包括 20 项尽职调查审核和加权投资评分。",
+        },
+        {
+          lead: "有条理的沟通。",
+          body: "每个案件由最贴近客户的团队主导，合作伙伴清楚每次推荐由谁负责。",
+        },
+        {
+          lead: "长期关系。",
+          body: "入籍案件需要数月，合格房产需持有多年，因此 Multi Mulk 着眼长远规划客户关系与合作伙伴关系。",
+        },
+      ],
+      link: "了解 Multi Mulk 如何评估房产",
+    },
+    form: {
+      heading: "探索与 Multi Mulk 的合作",
+      body: "请简要介绍您的业务和您服务的客户。我们的合作团队将审阅您的申请，并与您联系，商讨最合适的合作方式。",
+      name: "您的姓名与公司",
+      namePlaceholder: "您的全名和公司名称",
+      contact: "商务邮箱 / WhatsApp",
+      contactPlaceholder: "我们的合作团队应如何联系您？",
+      type: "您对哪种合作类型感兴趣？",
+      typePlaceholder: "选择合作类型",
+      types: {
+        "real-estate": "土耳其房地产合作",
+        "citizenship-referral": "土耳其入籍 / 投资推荐",
+        "citizenship-residency": "国际入籍与居留",
+        developer: "开发商 / 项目合作",
+        strategic: "战略 / 机构合作",
+        referral: "推荐合作",
+        "not-sure": "不确定——希望进一步沟通",
+      },
+      markets: "您目前服务哪些市场或客户群体？",
+      marketsPlaceholder: "例如：巴基斯坦、阿联酋、海湾国家、欧洲、亚洲、高净值投资者、购房者、移居客户等。",
+      message: "请简要说明您希望如何与 Multi Mulk 合作。",
+      messagePlaceholder: "介绍您的业务、客户以及您期望的合作类型。",
+      submit: "提交合作咨询",
+      privacy: "提交此表格即表示您同意 Multi Mulk 就您的合作咨询与您联系。有关您信息处理方式的详情，请参阅[隐私政策](privacy)。",
+      sentHeading: "谢谢。",
+      sentBody: "您的咨询已送达 Multi Mulk 合作团队，他们将与您联系，商讨后续步骤。",
+      errors: {
+        contact: "请输入邮箱地址，或带国家代码的 WhatsApp 号码（例如 +92 300 1234567）。",
+        type: "请选择合作类型。",
+      },
+    },
+    cta: {
+      heading: "当客户问起土耳其时，您已准备就绪",
+      body: "无论您是为国际投资者提供咨询、代表购房者，还是从事投资移民业务，Multi Mulk 都欢迎为您的机构和客户创造价值的系统化合作。与合作团队简短交流，即可判断是否契合。",
+      button: "开始合作洽谈",
+    },
+    faq: {
+      heading: "合作常见问题",
+      items: [
+        {
+          question: "谁可以成为 Multi Mulk 的合作伙伴？",
+          answer: "Multi Mulk 与客户对土耳其房地产投资、土耳其投资入籍或国际居留感兴趣的专业公司及独立顾问合作，包括房地产中介与经纪人、移民与入籍顾问、律师事务所、财富管理机构、家族办公室、移居服务公司、企业服务机构以及推荐合作伙伴。每项咨询都会单独审阅，以商定最合适的合作模式。",
+        },
+        {
+          question: "土耳其境外的房地产经纪人可以与 Multi Mulk 合作吗？",
+          answer: "可以。Multi Mulk 欢迎与土耳其境外、客户希望在土耳其购房的房地产经纪人、中介和房产顾问合作。海外合作伙伴将获得项目简介、最新价格与房源以及经批准的销售资料，Multi Mulk 伊斯坦布尔团队则支持每笔交易的本地环节。Multi Mulk 全程与推荐方保持协调。",
+        },
+        {
+          question: "我可以推荐对土耳其投资入籍感兴趣的客户吗？",
+          answer: "可以。移民顾问、入籍顾问及其他专业人士均可推荐对土耳其投资入籍（包括购房入籍）感兴趣的客户。Multi Mulk 通过其咨询网络协助协调相关房产与入籍流程。资格取决于每位客户的具体情况及申请时现行的项目规定，因此每个案件都会单独评估。",
+        },
+        {
+          question: "Multi Mulk 为合作伙伴提供哪些支持？",
+          answer: "Multi Mulk 为合作伙伴提供精选土耳其房地产项目渠道、最新房源与价格、项目简介、经批准的销售资料和投资信息。合作伙伴还可为寻求土耳其国籍或居留的客户获得协调支持，在适当情况下获得客户会面和看房协助，并在合作团队中拥有一位处理咨询和推荐的核心联络人。",
+        },
+        {
+          question: "如何开始与 Multi Mulk 合作？",
+          answer: "填写本页的合作表格。表格会询问您的姓名和公司、联系方式、感兴趣的合作类型、服务的市场以及希望如何合作。Multi Mulk 合作团队会审阅每项咨询，并与您联系商讨最合适的模式。商业条款取决于合作模式，并单独商定。",
+        },
+      ],
+    },
+  },
+
+  whatsapp: {
+    label: "您好！",
+    message: "您好 Multi Mulk，我想进一步了解你们的房产。",
+    aria: "通过 WhatsApp 与 Multi Mulk 聊天",
+  },
+
+  property: {
+    viewResidences: "查看住宅",
+    viewProgress: "查看施工进度",
+    residencesEyebrow: "寻找理想家园",
+    residencesHeading: "在售住宅",
+    residencesBody: {
+      one: "了解 {project} 目前推出的 {count} 套住宅。",
+      other: "了解 {project} 目前推出的 {count} 套住宅。",
+    },
+    residencesCount: {
+      one: "{count} 套住宅",
+      other: "{count} 套住宅",
+    },
+    residencesEmpty: "{project} 的住宅分期推出——请咨询当前房源情况。",
+    browseAll: "浏览全部住宅",
+    about: "项目介绍",
+    amenities: "配套设施",
+    architecture: "建筑理念",
+    earthquake: "抗震性能",
+    distancesEyebrow: "交通出行",
+    distancesHeading: "{project} 周边距离",
+    areaEyebrow: "所在区域",
+    areaOverview: "区位介绍",
+    marketEyebrow: "市场洞察",
+    marketPerformance: "住宅市场表现",
+    distanceGroups: {
+      "Cultural Hubs": "文化中心",
+      Airports: "机场",
+      Hospitals: "医院",
+      "Business Hubs": "商务中心",
+      Transportation: "交通",
+      Education: "教育",
+      Universities: "大学",
+      Schools: "学校",
+      "Shopping Centres": "购物中心",
+    },
+    otherDevelopments: "其他项目",
+    enquireEyebrow: "联系顾问",
+    enquireHeading: "咨询 {project}",
+    enquireSubject: "关于 {project} 的咨询",
+    enquireBody: "告诉我们您的需求，顾问将向您提供当前房源、价格及后续步骤。",
+    projects: {
+      "levent-residences": {
+        tagline: "伊斯坦布尔中心的地标地址",
+        overviewHeading: "每一套住宅，都是一幅城市全景。",
+      },
+      "bosphorus-heights": {
+        tagline: "俯瞰海峡的高处生活",
+        overviewHeading: "以水为框，以天为冠。",
+      },
+      "marmara-vista": {
+        tagline: "伊斯坦布尔西岸的海滨宁静",
+        overviewHeading: "空间、光线与开阔海景。",
+      },
+      "aegean-bay-residences": {
+        tagline: "博德鲁姆半岛的理想居所",
+        overviewHeading: "在爱琴海边醒来。",
+      },
+    },
+    highlights: {
+      "Central Connectivity": "交通便利",
+      "Citizenship Eligible": "符合入籍条件",
+      "City and Bosphorus Views": "城市与博斯普鲁斯海峡景观",
+      "Bosphorus Outlook": "博斯普鲁斯海峡景观",
+      "Heritage Quarter": "历史街区",
+      "Marmara Sea Views": "马尔马拉海景观",
+      "Family Neighbourhood": "家庭社区",
+      "Airport Access": "近机场",
+      "Bodrum Peninsula": "博德鲁姆半岛",
+      "Unmatched Coastal Living": "无与伦比的海滨生活",
+    },
+    stats: {
+      Quantity: "数量",
+      Floors: "楼层",
+      Location: "位置",
+      "Room Sizes": "户型面积",
+      Apartments: "公寓",
+      Townhouses: "联排别墅",
+      "Studio Apartments": "开间公寓",
+    },
+    statValues: {
+      "420 apartments": "420 套公寓",
+      "11 townhouses with 3 & 5 bedrooms": "11 套三居及五居联排别墅",
+      "Studio, 1, 2, 3 bedroom units": "开间、一居、两居、三居",
+      "512 sq. ft. - 6,600 sq. ft.": "512 - 6,600 平方英尺",
+      "165 total apartments": "共 165 套公寓",
+      "78 studio units": "78 套开间",
+      "87 one-bedroom units": "87 套一居室",
+      "Beyoğlu, İstanbul": "伊斯坦布尔贝伊奥卢",
+      "151 apartments": "151 套公寓",
+      "Studio, 1 & 2 bedroom units": "开间、一居及两居",
+      "479 sq. ft. - 1,709 sq. ft.": "479 - 1,709 平方英尺",
+      "Floor 1 - 15": "1 - 15 层",
+      "88 apartments": "88 套公寓",
+      "Studio to 3 bedrooms": "开间至三居",
+      "572 sq. ft. - 3,874 sq. ft.": "572 - 3,874 平方英尺",
+      "Bodrum, Muğla": "穆拉省博德鲁姆",
+    },
+    copy: {},
+    amenityItems: {
+      "Lobby & Concierge": "大堂与礼宾服务",
+      Lobby: "大堂",
+      Concierge: "礼宾服务",
+      "Spa & Hammam": "水疗与土耳其浴",
+      "Residents’ Lounge": "住户休息室",
+      "Fitness Centre": "健身中心",
+      Gym: "健身房",
+      "Landscaped Terrace": "景观露台",
+      "Secure Parking": "安保停车场",
+      "Indoor Pool": "室内泳池",
+      "Outdoor Pool": "室外泳池",
+      "Pool Terrace": "泳池露台",
+      "Rooftop Lounge": "屋顶休息区",
+      "Promenade Access": "直通滨海步道",
+      "Bay Access": "直通海湾",
+      "24/7 Security": "24 小时安保",
+      "Cinema Room": "影音室",
+      "Co-working Space": "共享办公空间",
+      "Private Elevator": "私人电梯",
+      "Retail & Dining": "零售与餐饮",
+      Sauna: "桑拿",
+      "Yoga Studio": "瑜伽室",
+      "Landscaped Gardens": "景观花园",
+      "Children’s Play Area": "儿童游乐区",
+      "Jogging Track": "慢跑道",
+      "Tennis Court": "网球场",
+      "Padel Court": "板式网球场",
+      "BBQ Area": "烧烤区",
+      "EV Charging": "电动车充电",
+      "Smart Home": "智能家居",
+      "Pet Friendly": "宠物友好",
+      "Beach Access": "直通海滩",
+      "Spa & Wellness": "水疗与康体",
+      "Green Spaces": "绿地",
+      "Walking Paths": "步行道",
+      "Dining Areas": "用餐区",
+      "Educational Facilities": "教育设施",
+      "Private Parking": "私人停车位",
+    },
+  },
+
+  team: {
+    hero: {
+      heading: "亲自负责您案件的人",
+      body: "Multi Mulk 有意保持小而精的规模。回答您第一个问题的人，就是陪伴申请走到最后的人，两者之间没有任何中转环节。",
+    },
+    leadership: {
+      eyebrow: "管理层",
+      heading: "具有全球视野的领导团队",
+      body: "统筹 Multi Mulk 的咨询业务、各地办公室及长期发展的战略领导。",
+    },
+    people_section: {
+      eyebrow: "我们的成员",
+      heading: "覆盖各职能的专业团队",
+      body: "运营、销售、客户咨询与数字媒体团队在迪拜、伊斯坦布尔和拉合尔协同工作，让每个案件由一家公司统一负责，而不是三个办公室各自为政。",
+    },
+    portraitAlt: "{name}，Multi Mulk {title}",
+    departments: {
+      executiveLeadership: "管理层",
+      growthDubai: "增长与迪拜运营",
+      turkeyOperations: "土耳其运营",
+      operations: "运营",
+      istanbulSales: "伊斯坦布尔销售",
+      sales: "销售",
+      clientAdvisory: "客户咨询",
+      digitalMedia: "数字媒体",
+      mediaProduction: "媒体制作",
+      humanResources: "人力资源",
+      legal: "法务",
+      education: "教育",
+      marketing: "市场营销",
+    },
+    people: {
+      "mohd-imad": [
+        "SEO 专员",
+      ],
+      afsheen: [
+        "内容创作者",
+      ],
+      "raazia-sanam": [
+        "投资顾问",
+      ],
+      shahid: [
+        "社交媒体副经理",
+      ],
+      "shaik-mohammed-aburuddin": [
+        "投资顾问",
+      ],
+      "souha-koudmani": [
+        "总经理",
+      ],
+      "hashim-hashimdan": [
+        "摄像师",
+      ],
+      "zeynep-nehir-karap": [
+        "投资顾问",
+      ],
+      "sajid-ali-haydar": [
+        "首席执行官（CEO）",
+      ],
+      "nader-djebbi": [
+        "首席增长官（CGO）",
+        "办公室经理（迪拜）",
+      ],
+      "seyhan-ozman": [
+        "行政专员",
+      ],
+      "nilofar-sadiq": [
+        "投资顾问",
+      ],
+      "zeeshan-haider": [
+        "视频剪辑师",
+      ],
+      "mahenur-azlem": [
+        "人力资源协调员",
+      ],
+      "mubark-ali": [
+        "投资顾问",
+      ],
+      "tariq-tahir": [
+        "高级投资顾问",
+      ],
+      "sobhi-al-sabhi": [
+        "高级投资顾问",
+      ],
+      "muhammad-mubashir": [
+        "投资顾问",
+      ],
+      "muhammet-kurtulus": [
+        "高级投资顾问",
+      ],
+      "maryam-shad": [
+        "社交媒体经理",
+      ],
+      "muhammad-jamal": [
+        "投资顾问",
+      ],
+      "sinan-sadikhov": [
+        "投资顾问",
+      ],
+      "kubra-senturk": [
+        "法律顾问",
+      ],
+      "elnaz-aminzadeh": [
+        "投资顾问",
+      ],
+      "alireza-akbari": [
+        "市场团队经理",
+      ],
+      "asad-ullah-saif": [
+        "高级投资顾问",
+      ],
+      "muhammad-ali-shahid": [
+        "投资顾问",
+      ],
+      "rizwan-aslam": [
+        "视频制作专员",
+      ],
+      "ayshe-ali-haydar": [
+        "投资顾问",
+      ],
+      "badar-naseem": [
+        "投资顾问",
+      ],
+      "iffah-mir": [
+        "平面设计师",
+      ],
+      "amina-ashraf": [
+        "内容开发专员",
+      ],
+      "faizan-asif": [
+        "网站 / SEO 专员",
+      ],
+      "sarmad-al-kaseer": [
+        "高级投资顾问",
+      ],
+    },
+    cta: {
+      heading: "与真正做事的人对话",
+      body: "告诉我们您的目标。在任何人要求您作出承诺之前，您会先得到我们的判断：目标能否实现、在标价之外还需花费多少，以及大约需要多长时间。",
+    },
+  },
+
+  freeGuide: {
+    meta: {
+      title: "免费指南 | 土耳其投资入籍 | Multi Mulk",
+      description: "下载 Multi Mulk 关于土耳其购房入籍的免费指南：购房途径如何运作、费用多少，以及流程对您有哪些要求。",
+    },
+    eyebrow: "免费指南",
+    heading: "通过房地产获得土耳其国籍",
+    body: "购房途径如何运作、总费用多少、申请对您有哪些要求——为决策而写，而非为点击而写。",
+    leadHeading: "指南内容",
+    leadBody: "二十四页内容，涵盖投资门槛、持有期、家属纳入，以及一笔购房如何通过租金收入和增值获得回报。",
+    includes: [
+      "购房入籍途径的分步说明",
+      "政府要求什么，不要求什么",
+      "如何从资格、价值和退出三方面评估项目",
+      "从购房到护照的时间线",
+    ],
+    formHeading: "发送指南给我",
+    formBody: "告诉我们发送到哪里。PDF 将即刻送达您的邮箱，只有在您需要时才会有顾问跟进。",
+    consent: "申请指南即表示您同意我们就土耳其投资入籍事宜与您联系。有关我们如何处理您数据的详情，请参阅我们的隐私政策。",
+    submit: "发送指南给我",
+    submitting: "发送中…",
+    sentHeading: "已发送",
+    sentBody: "我们已将指南发送至您的邮箱。如几分钟内未收到，请检查垃圾邮件文件夹。",
+    email: {
+      subject: "您的免费指南：{title}",
+      greeting: "尊敬的 {name}：",
+      body: "感谢您申请《{title}》。您的指南已准备就绪——请在下方下载。",
+      button: "下载指南",
+      closing: "Multi Mulk 团队成员将很快与您联系。如想了解某个项目或时间线，直接回复本邮件即可。",
+    },
+  },
+
+  calculatorResult: {
+    meta: {
+      title: "您的费用估算 | Multi Mulk",
+      description: "查看入籍或居留项目的全部费用——投资、服务费及政府收费——并将完整明细发送到您的邮箱。",
+    },
+    eyebrow: "计算结果",
+    heading: "您的全部费用估算",
+    body: "门槛是投资额，而非费用。调整项目和家庭人数，然后解锁完整明细。",
+    formHeading: "将明细发送到我的邮箱",
+    formBody: "留下您的信息，我们会将逐项估算发送至您的邮箱，并在本页为您解锁。",
+    unlockHint: "在旁边的表格中填写信息，即可解锁各项明细。",
+    cta: "将此估算发送到我的邮箱",
+    consent: "申请估算即表示您同意我们就您所选项目与您联系。有关我们如何处理您数据的详情，请参阅我们的隐私政策。",
+    submit: "将明细发送到我的邮箱",
+    submitting: "发送中…",
+    sentHeading: "明细已解锁",
+    sentBody: "各项明细已在上方显示，同一份估算也正在发送至您的邮箱。如几分钟内未收到，请检查垃圾邮件文件夹。",
+    email: {
+      subject: "您的费用估算：{programme}",
+      greeting: "尊敬的 {name}：",
+      body: "以下是您申请的 {programme} 全部费用估算。",
+      closing: "以上数字仅供规划参考，并非报价。Multi Mulk 团队成员将很快与您联系——如有任何问题，请直接回复本邮件。",
+    },
+  },
+};
 
 export default zh;

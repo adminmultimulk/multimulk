@@ -114,6 +114,43 @@ model Article {
   @@map("articles")
 }
 
+/// One piece of content in one language other than English.
+///
+/// Keyed by slug rather than by row id, so the static archive in
+/// `app/lib/knowledge.ts` and the dashboard's `articles` share one store: a
+/// translation does not care which of the two its English came from. A row is
+/// live the moment it exists — the page in that language renders it and
+/// advertises itself in `hreflang` — and review happens afterwards, recorded
+/// in `reviewedAt`. See `app/lib/cms/translations.ts`.
+model ContentTranslation {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  /// "article" today; "property" when listing prose follows.
+  kind           String
+  slug           String
+  /// A locale from `app/lib/i18n/config.ts`, never "en".
+  locale         String
+  title          String
+  excerpt        String    @default("")
+  /// The same blocks as the English, one for one — `scripts/translations.ts`
+  /// refuses a translation whose structure differs.
+  body           String[]
+  /// The migrated pieces' comparison grids, translated cell for cell.
+  tables         Json?
+  seoTitle       String?
+  seoDescription String?
+  /// Hash of the English this was translated from. When the English changes,
+  /// the translation is stale; it stays live, and `status` reports it.
+  sourceHash     String
+  reviewedAt     DateTime?
+  reviewedById   String?   @db.ObjectId
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([kind, slug, locale])
+  @@index([kind, locale])
+  @@map("content_translations")
+}
+
 /// One of the short cards on a listing's page. Embedded rather than a table:
 /// a highlight has no life of its own away from the listing it is on.
 type PropertyHighlight {

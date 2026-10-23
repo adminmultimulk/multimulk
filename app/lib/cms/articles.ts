@@ -8,7 +8,15 @@ import {
   sectionOf,
   type ArticleCategory,
 } from "@/app/lib/sections";
+import { getDictionary } from "@/app/lib/i18n";
+import { defaultLocale, locales, type Locale } from "@/app/lib/i18n/config";
 import { ARTICLES_TAG } from "./tags";
+import {
+  findTranslation,
+  translatedLocales,
+  translationSummaries,
+  type TranslationSummary,
+} from "./translations";
 
 /**
  * News & Insights, with everything written in the dashboard merged in.
@@ -103,18 +111,78 @@ export async function cmsArticles(): Promise<AnyArticle[]> {
  * that has been indexed for months should not change what it answers because
  * of a row inserted by hand.
  */
-export async function mergedArticles(): Promise<AnyArticle[]> {
+export async function mergedArticles(
+  locale: Locale = defaultLocale,
+): Promise<AnyArticle[]> {
   const fromDb = await cmsArticles();
   const taken = new Set(allArticles.map((a) => a.slug));
-  return [...allArticles, ...fromDb.filter((a) => !taken.has(a.slug))].sort(
-    (a, b) => b.date.localeCompare(a.date),
-  );
+  const merged = [
+    ...allArticles,
+    ...fromDb.filter((a) => !taken.has(a.slug)),
+  ].sort((a, b) => b.date.localeCompare(a.date));
+  if (locale === defaultLocale) return merged;
+
+  // Headlines and standfirsts only: a list never renders a body, and the
+  // index that carries these is deliberately small — see `translations.ts`.
+  const translated = await translationSummaries("article", locale);
+  return merged.map((article) => {
+    const copy = translated.get(article.slug);
+    return copy ? { ...article, ...summaryFields(copy) } : article;
+  });
 }
 
+function summaryFields(copy: TranslationSummary) {
+  return {
+    title: copy.title,
+    excerpt: copy.excerpt,
+    seoTitle: copy.seoTitle,
+    seoDescription: copy.seoDescription,
+  };
+}
+
+/**
+ * One piece, in `locale` where it has been translated and in English where it
+ * has not. Which of the two came back is for the caller to ask
+ * `articleLocales` — the page needs that answer for its canonical anyway.
+ */
 export async function findMergedArticle(
   slug: string,
+  locale: Locale = defaultLocale,
 ): Promise<AnyArticle | undefined> {
-  return (await mergedArticles()).find((article) => article.slug === slug);
+  const article = (await mergedArticles()).find((a) => a.slug === slug);
+  if (!article || locale === defaultLocale) return article;
+
+  const copy = await findTranslation("article", slug, locale);
+  if (!copy) return article;
+  return {
+    ...article,
+    ...summaryFields(copy),
+    body: copy.body,
+    tables: copy.tables ?? article.tables,
+  };
+}
+
+/**
+ * The languages a piece can be read in: English, every translation in the
+ * store, and — for the five originals — the copy staged in the dictionaries.
+ *
+ * This is what decides a page's canonical and `hreflang` set. A language
+ * outside it still renders, in English, and points its canonical at the
+ * English URL rather than claim to be a translation it is not.
+ */
+export async function articleLocales(
+  article: AnyArticle,
+): Promise<Locale[]> {
+  const stored = await translatedLocales("article", article.slug);
+  const staged: Locale[] = [];
+  if (article.origin === "original") {
+    for (const locale of locales) {
+      if (locale === defaultLocale || stored.includes(locale)) continue;
+      const t = await getDictionary(locale);
+      if (t.articles.copy[article.slug]?.body) staged.push(locale);
+    }
+  }
+  return [defaultLocale, ...stored, ...staged];
 }
 
 /**
@@ -134,8 +202,9 @@ export async function findMergedArticle(
 export async function relatedMerged(
   slug: string,
   count = 3,
+  locale: Locale = defaultLocale,
 ): Promise<AnyArticle[]> {
-  const all = await mergedArticles();
+  const all = await mergedArticles(locale);
   const current = all.find((a) => a.slug === slug);
   const others = all.filter((a) => a.slug !== slug);
   if (!current) return others.slice(0, count);

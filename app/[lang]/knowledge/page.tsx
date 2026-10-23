@@ -23,7 +23,7 @@ export default async function MediaCentrePage() {
    * four News & Insights sections are listed here, the index narrowing to one
    * by `?type=`, so the collection is every piece of them.
    */
-  const articles = await mergedArticles();
+  const articles = await mergedArticles(locale);
 
   return (
     <>

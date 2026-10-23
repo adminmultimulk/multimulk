@@ -7,3 +7,4 @@
  */
 export const ARTICLES_TAG = "cms-articles";
 export const PROPERTIES_TAG = "cms-properties";
+export const TRANSLATIONS_TAG = "cms-translations";

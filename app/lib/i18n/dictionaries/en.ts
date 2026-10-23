@@ -462,6 +462,8 @@ const en = {
   },
 
   routes: {
+    roadshow: "Pakistan Roadshow 2026",
+    roadshowThanks: "Thank You",
     documents: "Document Library",
     home: "Home",
     about: "About Us",
@@ -2027,6 +2029,7 @@ const en = {
         partnership: "Partner registration",
         guide: "Free guide request",
         calculator: "Calculator report request",
+        roadshow: "Pakistan roadshow registration",
       },
       /**
        * The acknowledgement emailed back to the enquirer, in their own
@@ -2141,6 +2144,181 @@ const en = {
    * contact form's — it is the same three fields and the same failures — so
    * only what is particular to a brochure is written here.
    */
+  /**
+   * /events/pakistan-roadshow-2026 — the Google Ads landing page for the
+   * November 2026 roadshow, its thank-you page and its confirmation email.
+   * Dates, hours and budgets live in `app/lib/roadshow.ts`; figures come from
+   * the Türkiye programme record and are filled in as `{placeholders}`.
+   */
+  roadshow: {
+    meta: {
+      title: "Türkiye Property Roadshow 2026 — Lahore, Islamabad, Karachi | Multi Mulk",
+      description:
+        "Book a free private meeting with Multi Mulk in Lahore (11 Nov), Islamabad (13 Nov) or Karachi (15 Nov) on Turkish citizenship by investment and selected İstanbul property.",
+    },
+    eyebrow: "Türkiye – Pakistan Property Roadshow 2026",
+    heading: "Meet Us in Lahore, Islamabad or Karachi",
+    body: "Private one-to-one meetings on Turkish citizenship by investment, a second passport for your family and selected İstanbul projects — in your city, this November.",
+    pillars: ["Turkish Citizenship", "Second Passport", "İstanbul Property"],
+    cta: "Book a Private Meeting",
+    cities: {
+      lahore: { name: "Lahore" },
+      islamabad: { name: "Islamabad" },
+      karachi: { name: "Karachi" },
+    },
+    hours: "Meetings {range}",
+    venueTbc: "Venue shared on confirmation",
+    bookCity: "Book in {city}",
+    cityClosed: "Meetings held",
+    citiesHeading: "Three Cities, Three Days",
+    citiesBody:
+      "Each meeting is private and lasts about an hour. Choose your city and the part of the day that suits you, and we will confirm your exact time and the venue by phone or WhatsApp.",
+    agendaEyebrow: "Your Meeting",
+    agendaHeading: "What We Will Cover",
+    agenda: [
+      {
+        title: "Whether you qualify",
+        body: "Turkish citizenship through real estate starts at {minimum}, held for {years} years. We check your situation against the rules before anything else.",
+      },
+      {
+        title: "What it costs all in",
+        body: "Beyond the purchase price: title-deed tax, legal fees, valuation and government charges — so the figure you plan around is the real one.",
+      },
+      {
+        title: "Selected İstanbul projects",
+        body: "A shortlist of citizenship-eligible developments, and the title-deed and valuation checks we run before recommending any of them.",
+      },
+      {
+        title: "The process and timeline",
+        body: "From reservation to passport in typically {min}–{max} months, with no requirement to live in Türkiye — and what you need to do at each step.",
+      },
+    ],
+    factsHeading: "Turkish Citizenship at a Glance",
+    facts: {
+      minimum: "Minimum property investment",
+      processing: "Typical processing",
+      processingValue: "{min}–{max} months",
+      visaFree: "Visa-free destinations",
+      family: "Who is included",
+      familyValue: "Spouse and children under {age}",
+      residence: "Residence requirement",
+      residenceValue: "None",
+    },
+    factsNote:
+      "Figures last reviewed {date}. Programme rules can change, so we confirm every figure at your meeting.",
+    stepsHeading: "How It Works",
+    steps: [
+      {
+        title: "Register",
+        body: "Choose your city, time of day and budget. It takes a minute.",
+      },
+      {
+        title: "We confirm",
+        body: "Our team calls or WhatsApps you within one working day with your exact time and the venue.",
+      },
+      {
+        title: "Meet privately",
+        body: "About an hour with an adviser, at no cost and with no obligation.",
+      },
+    ],
+    formHeading: "Request Your Meeting",
+    formBody:
+      "Meetings are free, private and without obligation. Places in each city are limited.",
+    form: {
+      city: "City and date",
+      slot: "Preferred time",
+      slotPlaceholder: "Choose a time of day",
+      slots: {
+        morning: "Morning",
+        afternoon: "Afternoon",
+        evening: "Evening",
+      },
+      budget: "Investment budget",
+      budgetPlaceholder: "Choose a range",
+      budgets: {
+        under400k: "Under $400,000",
+        "400kTo600k": "$400,000 – $600,000",
+        "600kTo1m": "$600,000 – $1,000,000",
+        over1m: "Over $1,000,000",
+      },
+      errors: {
+        choose: "Please choose one.",
+        closed: "Meetings in this city have finished. Please choose another.",
+      },
+      consent:
+        "By registering you consent to us contacting you by phone, WhatsApp and email about the roadshow and Turkish citizenship by investment. See our Privacy Policy for details on how we handle your data.",
+      submit: "Request My Meeting",
+      submitting: "Sending…",
+    },
+    faqHeading: "Questions Before You Book",
+    faqs: [
+      {
+        question: "Is there a cost to attend?",
+        answer: "No. The meeting is free, and there is no obligation to buy anything.",
+      },
+      {
+        question: "Where will the meeting take place?",
+        answer: "At a central venue in each city. We share the address when we confirm your time, which keeps every meeting private.",
+      },
+      {
+        question: "Can I bring my family?",
+        answer: "Yes, and we encourage it. Your spouse and children under {age} can be included in a Turkish citizenship application, so it helps to have everyone who will decide in the room.",
+      },
+      {
+        question: "Do I need to bring anything?",
+        answer: "Nothing is required. If you have a budget or a shortlist in mind, bring your questions; a copy of your passport helps us check eligibility on the spot.",
+      },
+      {
+        question: "I cannot make these dates. What can I do?",
+        answer: "Message us on WhatsApp or through our contact page and we will arrange a video call at a time that suits you.",
+      },
+    ],
+    ended: {
+      heading: "The 2026 Roadshow Has Ended",
+      body: "Thank you to everyone who met us in Lahore, Islamabad and Karachi. You can still speak to an adviser by video call or phone.",
+      formHeading: "Book an Online Consultation",
+      formBody:
+        "Leave your details and an adviser will contact you to arrange a time.",
+    },
+    summary: {
+      heading: "Your request",
+      city: "City",
+      date: "Date",
+      time: "Preferred time",
+      venue: "Venue",
+    },
+    thanks: {
+      meta: {
+        title: "Registration Received | Pakistan Roadshow 2026 | Multi Mulk",
+        description: "Your roadshow meeting request has been received.",
+      },
+      eyebrow: "Registration Received",
+      heading: "Thank You — We Will Be in Touch",
+      body: "Our team will call or WhatsApp you within one working day to confirm your exact time and the venue. A copy of your request is on its way to your email.",
+      addToCalendar: "Add to your calendar",
+      googleCalendar: "Google Calendar",
+      icsCalendar: "Apple / Outlook",
+      calendarTitle: "Multi Mulk — Türkiye Property Roadshow, {city}",
+      calendarDetails:
+        "Private meeting with Multi Mulk. The exact time and venue will be confirmed by our team.",
+      whatsapp: "Message Us on WhatsApp",
+      whatsappMessage:
+        "Hello Multi Mulk, I have registered for the roadshow in {city}.",
+      exploreHeading: "While You Wait",
+      exploreCitizenship: "Turkish Citizenship by Investment",
+      exploreProperties: "Browse İstanbul Properties",
+      exploreGuide: "Download the Free Guide",
+      back: "Back to the roadshow",
+    },
+    email: {
+      subject: "Your roadshow meeting request — Multi Mulk",
+      greeting: "Dear {name},",
+      body: "Thank you for registering for the Türkiye – Pakistan Property Roadshow. Here is the meeting you asked for:",
+      next: "A member of our team will call or WhatsApp you within one working day to confirm your exact time and the venue.",
+      closing: "If you need to change anything, simply reply to this email.",
+    },
+  },
+
   brochure: {
     cta: "Download Brochure",
     heading: "The {project} Brochure",

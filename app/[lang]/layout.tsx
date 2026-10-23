@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Manrope, Vazirmatn } from "next/font/google";
 import localFont from "next/font/local";
 import { notFound } from "next/navigation";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BrochureProvider } from "@/app/components/brochure";
@@ -10,7 +9,8 @@ import { EnquiryProvider } from "@/app/components/enquiry";
 import { WhatsAppButton } from "@/app/components/whatsapp-button";
 import { TawkChat } from "@/app/components/tawk-chat";
 import { ImageProtection } from "@/app/components/image-protection";
-import { analyticsEnabled, gaId } from "@/app/lib/analytics";
+import { GoogleTag } from "@/app/components/google-tag";
+import { adsId, analyticsEnabled, gaId } from "@/app/lib/analytics";
 import {
   dirFor,
   hreflangFor,
@@ -188,7 +188,7 @@ export default async function RootLayout({
             Analytics above — only reports from a Vercel deployment. */}
         <SpeedInsights />
       </body>
-      {analyticsEnabled && <GoogleAnalytics gaId={gaId} />}
+      {analyticsEnabled && <GoogleTag ids={[gaId, adsId]} />}
     </html>
   );
 }

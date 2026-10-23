@@ -161,7 +161,7 @@ async function writePost({
   // listing it found on its own is not refused.
   const routes = allRoutePaths().filter((route) => !route.path.includes(":"));
   const internalPaths = routes
-    .filter((route) => !["article", "development", "legal", "author", "documents", "partners"].includes(route.id))
+    .filter((route) => !["article", "development", "legal", "author", "documents", "partners", "roadshow", "roadshowThanks"].includes(route.id))
     .map((route) => route.path);
   const linkable = new Set([
     ...routes.map((route) => route.path),
