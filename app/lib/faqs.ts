@@ -13,6 +13,7 @@
  */
 
 import { DEFAULT_REVIEW_DAYS, type LegalReview } from "./review";
+import { absoluteUrl } from "./site";
 
 export type FaqTopic =
   | "eligibility"
@@ -56,7 +57,12 @@ const sourced = (label: string, url: string): LegalReview => ({
   reviewEveryDays: DEFAULT_REVIEW_DAYS,
 });
 
-const MM = (slug: string) => `https://multimulk.com/${slug}/`;
+/**
+ * One of our own articles, at the address it answers on now. The legacy
+ * `multimulk.com/<slug>/` form still works, but only through three redirects,
+ * and every link to it is one more URL Search Console reports as a redirect.
+ */
+const MM = (slug: string) => absoluteUrl(`/en/knowledge/${slug}`);
 
 /**
  * Answers are written to end. A question answered with "it depends, contact

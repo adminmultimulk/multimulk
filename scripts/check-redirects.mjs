@@ -19,6 +19,29 @@ registerHooks(hooks);
 const { legacyRedirects, legacyGone } = await import(
   new URL("../app/lib/legacy-redirects.ts", import.meta.url).href
 );
+const { allRoutePaths } = await import(
+  new URL("../app/lib/routes.ts", import.meta.url).href
+);
+
+/*
+ * A redirect is only as good as where it lands. Eight of these once pointed
+ * at pages that were never built, so the legacy URL 308'd into a 404 and
+ * Search Console counted both. Targets are checked against the route
+ * registry; articles are skipped, because those published from the dashboard
+ * live in the database and the registry cannot see them.
+ */
+const knownPaths = new Set(allRoutePaths().map((route) => route.path));
+const deadTargets = legacyRedirects.filter(({ to }) => {
+  const path = to.split(/[?#]/)[0];
+  return !path.startsWith("/knowledge/") && !knownPaths.has(path);
+});
+
+if (deadTargets.length) {
+  console.log(`${deadTargets.length} redirect(s) into a page that does not exist:`);
+  for (const { from, to } of deadTargets) console.log(`  ${from} -> ${to}`);
+  console.log();
+  if (process.argv.includes("--check")) process.exitCode = 1;
+}
 
 const SITEMAP = "https://multimulk.com/sitemap.xml";
 const LOCAL = process.env.LOCAL_ORIGIN ?? "http://localhost:3000";

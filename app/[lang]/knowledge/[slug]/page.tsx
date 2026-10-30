@@ -233,7 +233,7 @@ export default async function ArticlePage({
                   </span>
                 </p>
 
-                <ArticleBody body={article.body} tables={article.tables} />
+                <ArticleBody body={article.body} tables={article.tables} locale={locale} />
 
                 {article.readMore ? (
                   <a

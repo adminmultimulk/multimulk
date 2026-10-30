@@ -273,7 +273,7 @@ export async function ListingPage({ listing }: { listing: Listing }) {
                         and rendered through the same components — so bold, a
                         list or a link means here what it means there. */}
                     <div className="mt-6 max-w-[500px]">
-                      <ArticleBody body={toBlocks(listing.description)} />
+                      <ArticleBody body={toBlocks(listing.description)} locale={locale} />
                     </div>
                   </div>
                 ) : null}

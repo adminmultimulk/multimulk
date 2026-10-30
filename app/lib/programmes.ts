@@ -34,6 +34,7 @@
 
 import { getFigure, type FigureId } from "./figures";
 import { DEFAULT_REVIEW_DAYS, type LegalReview } from "./review";
+import { absoluteUrl } from "./site";
 
 /** ISO 3166-1 alpha-2, lowercased. Also the `/countries/<code>` slug. */
 export type CountryCode =
@@ -175,13 +176,13 @@ const reviewed = (
 
 const CARIBBEAN_SOURCE = {
   label: "Multi Mulk — Which second-passport programme is right for you (2026)",
-  url: "https://multimulk.com/looking-for-a-second-passport-which-program-is-right-for-you-in-2026/",
+  url: absoluteUrl("/en/knowledge/looking-for-a-second-passport-which-program-is-right-for-you-in-2026"),
   retrievedOn: "2026-09-02",
 };
 
 const COMPARISON_SOURCE = {
   label: "Multi Mulk — Türkiye vs Malta vs Portugal, side by side (2026)",
-  url: "https://multimulk.com/turkey-vs-malta-vs-portugal-citizenship-in-2026-a-side-by-side-for-serious-investors/",
+  url: absoluteUrl("/en/knowledge/turkey-vs-malta-vs-portugal-citizenship-in-2026-a-side-by-side-for-serious-investors"),
   retrievedOn: "2026-09-02",
 };
 

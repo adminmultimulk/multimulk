@@ -80,7 +80,7 @@ export default async function FaqPage({
                 {faq.answer[0]}
               </p>
 
-              <ArticleBody body={faq.answer.slice(1)} />
+              <ArticleBody body={faq.answer.slice(1)} locale={locale} />
 
               {faq.review ? (
                 <LastReviewed review={faq.review} className="mt-10" />

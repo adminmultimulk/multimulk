@@ -28,29 +28,37 @@ export type LegacyRedirect = { from: string; to: string };
  * and the new one is pillar-first, so these are mapped by hand — there is no
  * rule that derives one from the other.
  */
+/*
+ * Every target here must be a page that answers 200 and may be indexed —
+ * `check:redirects` fails on one that is not in the route registry. A
+ * filtered search is not such a page: `robots.txt` disallows any
+ * `search-property` URL with a query, so a redirect into one hands Google a
+ * URL it may not fetch, and the legacy URL's ranking goes nowhere.
+ */
 const pages: LegacyRedirect[] = [
   { from: "/turkey/turkey-citizenship-by-investment", to: "/citizenship-by-investment/turkiye" },
   {
     from: "/turkey/turkey-citizenship-by-investment/bank-deposit-route",
-    to: "/citizenship-by-investment/turkiye/bank-deposit",
+    to: "/citizenship-by-investment/turkiye",
   },
-  { from: "/turkey/turkey-real-estate", to: "/real-estate/turkiye" },
-  { from: "/turkey/turkey-real-estate/ready-properties", to: "/search-property?location=T%C3%BCrkiye" },
-  { from: "/turkey/turkey-real-estate/off-plan-properties", to: "/search-property?location=T%C3%BCrkiye" },
-  { from: "/turkey", to: "/countries/turkiye" },
+  { from: "/turkey/turkey-real-estate", to: "/real-estate" },
+  { from: "/turkey/turkey-real-estate/ready-properties", to: "/search-property" },
+  { from: "/turkey/turkey-real-estate/off-plan-properties", to: "/search-property" },
+  { from: "/turkey", to: "/countries/tr" },
 
   { from: "/uae/golden-visa", to: "/golden-visa/uae" },
-  { from: "/uae/real-estate-investment", to: "/real-estate/uae" },
-  { from: "/uae/real-estate-investment/ready-properties", to: "/search-property?location=UAE" },
-  { from: "/uae/real-estate-investment/off-plan-properties", to: "/search-property?location=UAE" },
-  { from: "/uae", to: "/countries/uae" },
+  { from: "/uae/real-estate-investment", to: "/real-estate" },
+  { from: "/uae/real-estate-investment/ready-properties", to: "/search-property" },
+  { from: "/uae/real-estate-investment/off-plan-properties", to: "/search-property" },
+  { from: "/uae", to: "/countries/ae" },
 
   { from: "/eu/residency-by-investment", to: "/golden-visa" },
   { from: "/eu/portugal", to: "/golden-visa/portugal" },
   { from: "/eu/greece", to: "/golden-visa/greece" },
-  { from: "/eu/malta", to: "/golden-visa/malta" },
-  { from: "/eu/spain", to: "/golden-visa/spain" },
-  { from: "/eu/cyprus", to: "/golden-visa/cyprus" },
+  // Malta, Spain and Cyprus have no golden-visa page of their own.
+  { from: "/eu/malta", to: "/countries/mt" },
+  { from: "/eu/spain", to: "/golden-visa" },
+  { from: "/eu/cyprus", to: "/golden-visa" },
   { from: "/eu", to: "/golden-visa" },
 
   { from: "/caribbean/citizenship-by-investment", to: "/citizenship-by-investment/caribbean" },

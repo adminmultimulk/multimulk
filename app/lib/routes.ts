@@ -264,13 +264,19 @@ export const routes: Readonly<Record<RouteId, RouteDef>> = {
     // Only signed-off programmes are enumerated, so an unreviewed one is
     // reachable for internal review but never listed or indexed — the same
     // arrangement as a `preview` locale.
-    enumerate: () =>
-      programmes
+    //
+    // The Caribbean is a region, not a programme, so it is not in
+    // `programmes` — but it has a full page of its own and has to be listed
+    // by hand, or it is an indexable page the sitemap never mentions.
+    enumerate: () => [
+      { values: { programme: "caribbean" } },
+      ...programmes
         .filter((p) => p.category === "citizenship" && isPublishable(p))
         .map((p) => ({
           values: { programme: p.slug },
           lastModified: p.review.reviewedOn,
         })),
+    ],
     sitemap: { include: true, priority: 0.9, changeFrequency: "monthly" },
     regulated: true,
     schema: ["Service", "FAQPage"],

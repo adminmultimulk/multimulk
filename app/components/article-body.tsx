@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { localeHref, type Locale } from "@/app/lib/i18n/config";
+import { legacyRedirects } from "@/app/lib/legacy-redirects";
 import {
   parseBlocks,
   parseInline,
@@ -8,6 +10,64 @@ import {
 } from "@/app/lib/rich-text";
 
 type CalloutBlock = Extract<Block, { kind: "callout" }>;
+
+const legacy = new Map(legacyRedirects.map(({ from, to }) => [from, to]));
+
+/**
+ * A site path as this page's language spells it.
+ *
+ * Writers link the way they think of the site — `/contact-us`,
+ * `/knowledge/<slug>` — and left alone every one of those is a 307 through
+ * the locale proxy, which Search Console reports URL by URL as "Page with
+ * redirect". A path the legacy site used is resolved first, because
+ * prefixing it would turn a working redirect into a 404.
+ */
+function sitePath(href: string, locale: Locale): string {
+  if (!href.startsWith("/") || href.startsWith("//")) return href;
+  const [, path, suffix] = /^([^?#]*)(.*)$/.exec(href)!;
+  const bare = path.replace(/\/+$/, "") || "/";
+  return localeHref(locale, (legacy.get(bare) ?? bare) + suffix);
+}
+
+function localizeInline(nodes: Inline[], locale: Locale): Inline[] {
+  return nodes.map((node) => {
+    switch (node.kind) {
+      case "link":
+        return {
+          ...node,
+          href: sitePath(node.href, locale),
+          children: localizeInline(node.children, locale),
+        };
+      case "strong":
+      case "em":
+        return { ...node, children: localizeInline(node.children, locale) };
+      default:
+        return node;
+    }
+  });
+}
+
+function localizeBlock(block: Block, locale: Locale): Block {
+  const run = (nodes: Inline[]) => localizeInline(nodes, locale);
+  switch (block.kind) {
+    case "heading":
+    case "paragraph":
+    case "quote":
+      return { ...block, content: run(block.content) };
+    case "list":
+      return { ...block, items: block.items.map(run) };
+    case "callout":
+      return { ...block, paragraphs: block.paragraphs.map(run) };
+    case "table":
+      return {
+        ...block,
+        head: block.head.map(run),
+        rows: block.rows.map((row) => row.map(run)),
+      };
+    default:
+      return block;
+  }
+}
 
 /**
  * An article's prose.
@@ -25,15 +85,23 @@ type CalloutBlock = Extract<Block, { kind: "callout" }>;
  * The migrated pieces' comparison tables stay a separate prop: those grids are
  * where most of the value in those articles sits, and they were extracted
  * before the body grammar could hold a table.
+ *
+ * Pass `locale` on a public page so links to site paths gain its prefix. The
+ * dashboard's previews leave it out and show the links as written.
  */
 export function ArticleBody({
   body,
   tables,
+  locale,
 }: {
   body: readonly string[];
   tables?: readonly string[][][];
+  locale?: Locale;
 }) {
-  const blocks = parseBlocks(body);
+  const parsed = parseBlocks(body);
+  const blocks = locale
+    ? parsed.map((block) => localizeBlock(block, locale))
+    : parsed;
 
   return (
     <>

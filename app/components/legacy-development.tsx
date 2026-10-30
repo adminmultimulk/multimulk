@@ -96,7 +96,7 @@ export async function LegacyDevelopmentPage({
                 </p>
               ) : null}
 
-              <ArticleBody body={development.body} />
+              <ArticleBody body={development.body} locale={locale} />
 
               <Link
                 href={searchPath({ currency: "USD" })}
