@@ -76,6 +76,7 @@ const tr: Dictionary = {
 
   common: {
     getInTouch: "İletişime Geçin",
+    becomePartner: "İş Ortağımız Olun",
     learnMore: "Daha Fazla",
     viewAll: "Tümünü Gör",
     readMore: "Devamını Oku",

@@ -84,6 +84,7 @@ const fr: Dictionary = {
 
   common: {
     getInTouch: "Nous contacter",
+    becomePartner: "Devenir notre partenaire",
     learnMore: "En savoir plus",
     viewAll: "Tout voir",
     readMore: "Lire la suite",

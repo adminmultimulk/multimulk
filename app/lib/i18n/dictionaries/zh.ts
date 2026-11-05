@@ -79,6 +79,7 @@ const zh: Dictionary = {
 
   common: {
     getInTouch: "联系我们",
+    becomePartner: "成为我们的合作伙伴",
     learnMore: "了解更多",
     viewAll: "查看全部",
     readMore: "阅读全文",
