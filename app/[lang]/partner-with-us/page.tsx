@@ -669,13 +669,13 @@ export default async function PartnerPage() {
                     {copy.hero.secondary}
                   </a>
                   <a
-                    href={`mailto:${contact.email}`}
+                    href={`mailto:${contact.partnershipEmail}`}
                     className="flex items-center gap-4 border border-ink/12 px-5 py-4 text-[13.5px] text-ink transition-colors hover:border-forest"
                   >
                     <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-mist text-forest">
                       <Mail className="w-4" />
                     </span>
-                    <span className="num">{contact.email}</span>
+                    <span className="num">{contact.partnershipEmail}</span>
                   </a>
                 </div>
               </div>

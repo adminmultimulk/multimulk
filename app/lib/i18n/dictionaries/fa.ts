@@ -80,7 +80,7 @@ const fa: Dictionary = {
 
   common: {
     getInTouch: "تماس بگیرید",
-    becomePartner: "همکار ما شوید",
+    becomePartner: "همکار شوید",
     learnMore: "بیشتر بدانید",
     viewAll: "مشاهده همه",
     readMore: "ادامه مطلب",

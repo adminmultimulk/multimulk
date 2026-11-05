@@ -708,6 +708,8 @@ export const footerAboutItems = [
 
 export const contact = {
   email: "info@multimulk.com",
+  /** Shown beside the partnership FAQ, where the enquiry is from a business. */
+  partnershipEmail: "b2b@multimulk.com",
   /** Dubai first: it is the head office, and the order is read as a hierarchy. */
   phones: [
     { key: "UAE" as const, number: "+971 50 169 4283" },

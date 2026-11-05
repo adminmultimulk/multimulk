@@ -91,7 +91,7 @@ const en = {
   /** Strings that recur across more than one section. */
   common: {
     getInTouch: "Get in Touch",
-    becomePartner: "Become Our Partner",
+    becomePartner: "Become a partner",
     learnMore: "Learn More",
     viewAll: "View All",
     readMore: "Read More",

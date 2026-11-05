@@ -88,7 +88,7 @@ const ru: Dictionary = {
 
   common: {
     getInTouch: "Связаться с нами",
-    becomePartner: "Стать нашим партнёром",
+    becomePartner: "Стать партнёром",
     learnMore: "Подробнее",
     viewAll: "Смотреть все",
     readMore: "Читать далее",

@@ -86,7 +86,7 @@ const ur: Dictionary = {
 
   common: {
     getInTouch: "رابطہ کریں",
-    becomePartner: "ہمارے پارٹنر بنیں",
+    becomePartner: "پارٹنر بنیں",
     learnMore: "مزید جانیے",
     viewAll: "سب دیکھیں",
     readMore: "مزید پڑھیے",

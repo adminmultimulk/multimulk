@@ -90,7 +90,7 @@ const ar: Dictionary = {
 
   common: {
     getInTouch: "تواصل معنا",
-    becomePartner: "كن شريكًا لنا",
+    becomePartner: "كن شريكًا",
     learnMore: "اعرف المزيد",
     viewAll: "عرض الكل",
     readMore: "اقرأ المزيد",
