@@ -2169,9 +2169,6 @@ const zh: Dictionary = {
       "amina-ashraf": [
         "内容开发专员",
       ],
-      "faizan-asif": [
-        "网站 / SEO 专员",
-      ],
       "sarmad-al-kaseer": [
         "高级投资顾问",
       ],

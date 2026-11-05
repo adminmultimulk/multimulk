@@ -1979,7 +1979,6 @@ const en = {
       "badar-naseem": ["Investment Advisor"],
       "iffah-mir": ["Graphic Designer"],
       "amina-ashraf": ["Content Developer"],
-      "faizan-asif": ["Website/SEO Specialist"],
       "sarmad-al-kaseer": ["Senior Investment Advisor"],
     },
     cta: {

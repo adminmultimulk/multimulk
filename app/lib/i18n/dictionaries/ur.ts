@@ -1210,7 +1210,6 @@ const ur: Dictionary = {
       "badar-naseem": ["سرمایہ کاری کنسلٹنٹ"],
       "iffah-mir": ["گرافک ڈیزائنر"],
       "amina-ashraf": ["کانٹینٹ ڈویلپر"],
-      "faizan-asif": ["ویب سائٹ/ایس ای او اسپیشلسٹ"],
       "sarmad-al-kaseer": ["سینئر سرمایہ کاری کنسلٹنٹ"],
     },
     cta: {

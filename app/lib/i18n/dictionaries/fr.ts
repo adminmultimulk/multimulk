@@ -1579,7 +1579,6 @@ const fr: Dictionary = {
       "badar-naseem": ["Conseiller en investissement"],
       "iffah-mir": ["Graphiste"],
       "amina-ashraf": ["Conceptrice de contenu"],
-      "faizan-asif": ["Spécialiste site web et SEO"],
       "sarmad-al-kaseer": ["Conseiller principal en investissement"],
     },
     cta: {

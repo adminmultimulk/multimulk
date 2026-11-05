@@ -2172,9 +2172,6 @@ const tr: Dictionary = {
       "amina-ashraf": [
         "İçerik Geliştirici",
       ],
-      "faizan-asif": [
-        "Web Sitesi / SEO Uzmanı",
-      ],
       "sarmad-al-kaseer": [
         "Kıdemli Yatırım Danışmanı",
       ],

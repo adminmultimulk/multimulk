@@ -2176,9 +2176,6 @@ const fa: Dictionary = {
       "amina-ashraf": [
         "توسعه‌دهنده محتوا",
       ],
-      "faizan-asif": [
-        "متخصص وب‌سایت و سئو",
-      ],
       "sarmad-al-kaseer": [
         "مشاور ارشد سرمایه‌گذاری",
       ],

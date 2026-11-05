@@ -243,12 +243,6 @@ export const teamPeople: TeamPerson[] = [
     image: "/images/team/shaik-mohammed-aburuddin-2.webp",
   },
   {
-    slug: "faizan-asif",
-    name: "Faizan Asif",
-    department: "digitalMedia",
-    image: "/images/team/faizan-asif-2.webp",
-  },
-  {
     slug: "iffah-mir",
     name: "Iffah Mir",
     department: "digitalMedia",

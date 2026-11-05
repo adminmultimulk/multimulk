@@ -1243,7 +1243,6 @@ const ar: Dictionary = {
       "badar-naseem": ["مستشار استثماري"],
       "iffah-mir": ["مصمّمة جرافيك"],
       "amina-ashraf": ["مطوّرة محتوى"],
-      "faizan-asif": ["أخصائي المواقع وتحسين محركات البحث"],
       "sarmad-al-kaseer": ["مستشار استثماري أول"],
     },
     cta: {
